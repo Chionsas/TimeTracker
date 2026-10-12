@@ -314,6 +314,7 @@ class Config:
         "es": "Español",
         "pt": "Português",
         "no": "Norsk",
+        "lt": "Lietuvių",
         "ar": "العربية",
         "he": "עברית",
     }
