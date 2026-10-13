@@ -7325,7 +7325,7 @@ msgstr "Administravimas"
 
 #: app/templates/admin/api_tokens.html:15
 msgid "Manage REST API authentication tokens"
-msgstr "Tvarkyk REST API autentifikavimo prieigos raktus"
+msgstr "REST API autentifikavimo prieigos raktų tvarkymas"
 
 #: app/templates/admin/api_tokens.html:27 app/templates/main/help.html:40
 #: app/templates/main/help.html:698
@@ -8411,7 +8411,7 @@ msgstr "Žaidybinimo administravimas"
 
 #: app/templates/admin/gamification.html:9
 msgid "Manage badges and leaderboards"
-msgstr "Tvarkyk ženklelius ir lyderių lenteles"
+msgstr "Ženklelių ir lyderių lentelių tvarkymas"
 
 #: app/templates/admin/gamification.html:13
 #: app/templates/main/dashboard.html:441
@@ -9244,7 +9244,7 @@ msgstr "OIDC nustatymai"
 
 #: app/templates/admin/oidc_debug.html:15
 msgid "Inspect configuration, provider metadata and OIDC users"
-msgstr "Peržiūrėk konfigūraciją, tiekėjo metaduomenis ir OIDC naudotojus"
+msgstr "Konfigūracijos, tiekėjo metaduomenų ir OIDC naudotojų peržiūra"
 
 #: app/templates/admin/oidc_debug.html:17
 #: app/templates/admin/oidc_setup_wizard.html:10
@@ -9903,9 +9903,7 @@ msgstr "Darbo užmokesčio eksporto šablonai"
 
 #: app/templates/admin/payroll_templates.html:9
 msgid "Configure column sets and grouping for payroll downloads"
-msgstr ""
-"Konfigūruok stulpelių rinkinius ir grupavimą darbo užmokesčio duomenims "
-"atsisiųsti"
+msgstr "Stulpelių rinkiniai ir grupavimas darbo užmokesčio duomenims atsisiųsti"
 
 #: app/templates/admin/payroll_templates.html:13
 msgid "Existing Templates"
@@ -12270,7 +12268,7 @@ msgstr "Sukurti savo lauko apibrėžtį"
 
 #: app/templates/admin/custom_field_definitions/form.html:14
 msgid "Define a global custom field that can be used across all clients"
-msgstr "Apibrėžk visuotinį savą lauką, kurį galima naudoti visiems klientams"
+msgstr "Visuotinis savas laukas, tinkamas naudoti visiems klientams"
 
 #: app/templates/admin/custom_field_definitions/form.html:24
 #: app/templates/admin/custom_field_definitions/list.html:24
@@ -12348,7 +12346,7 @@ msgstr "Klientų formose rodomi tik aktyvūs laukai"
 
 #: app/templates/admin/custom_field_definitions/list.html:13
 msgid "Manage global custom field definitions for clients"
-msgstr "Tvarkyk visuotines klientų savų laukų apibrėžtis"
+msgstr "Visuotinių klientų savų laukų apibrėžčių tvarkymas"
 
 #: app/templates/admin/custom_field_definitions/list.html:15
 #: app/templates/admin/custom_field_definitions/list.html:80
@@ -12825,7 +12823,7 @@ msgstr "Sukurti nuorodos šabloną"
 
 #: app/templates/admin/link_templates/form.html:14
 msgid "Configure URL template for client custom fields"
-msgstr "Konfigūruok URL šabloną klientų saviems laukams"
+msgstr "Klientų savų laukų URL šablono konfigūravimas"
 
 #: app/templates/admin/link_templates/form.html:24
 #: app/templates/project_templates/create.html:20
@@ -12893,7 +12891,7 @@ msgstr "Klientų puslapiuose rodomi tik aktyvūs šablonai"
 
 #: app/templates/admin/link_templates/list.html:13
 msgid "Manage URL templates for client custom fields"
-msgstr "Tvarkyk URL šablonus klientų saviems laukams"
+msgstr "Klientų savų laukų URL šablonų tvarkymas"
 
 #: app/templates/admin/link_templates/list.html:68
 msgid "Are you sure you want to delete this link template?"
@@ -13044,7 +13042,7 @@ msgstr "Sukurti vaidmenį"
 
 #: app/templates/admin/roles/list.html:13
 msgid "Manage roles and their permissions"
-msgstr "Tvarkyk vaidmenis ir jų leidimus"
+msgstr "Vaidmenų ir jų leidimų tvarkymas"
 
 #: app/templates/admin/roles/list.html:17
 msgid "View Permissions"
@@ -13265,7 +13263,7 @@ msgstr "Redaguoti webhook"
 
 #: app/templates/admin/webhooks/form.html:14
 msgid "Configure webhook for integrations"
-msgstr "Konfigūruok webhook integracijoms"
+msgstr "Webhook konfigūravimas integracijoms"
 
 #: app/templates/admin/webhooks/form.html:36
 #: app/templates/integrations/_connector_cards.html:114
@@ -13323,7 +13321,7 @@ msgstr ""
 
 #: app/templates/admin/webhooks/list.html:13
 msgid "Manage webhook integrations"
-msgstr "Tvarkyk webhook integracijas"
+msgstr "Webhook integracijų tvarkymas"
 
 #: app/templates/admin/webhooks/list.html:25
 #: app/templates/admin/webhooks/list.html:41
@@ -13503,7 +13501,7 @@ msgstr "Eksportuoti diagramas"
 
 #: app/templates/analytics/dashboard.html:31
 msgid "Key metrics and insights about your time tracking"
-msgstr "Pagrindiniai tavo laiko apskaitos rodikliai ir įžvalgos"
+msgstr "Pagrindiniai laiko apskaitos rodikliai ir įžvalgos"
 
 #: app/templates/analytics/dashboard.html:58
 #: app/templates/analytics/dashboard_improved.html:62
@@ -13785,7 +13783,7 @@ msgstr "Laiko įrašų patvirtinimai"
 #: app/templates/approvals/list.html:14
 #: app/templates/client_portal/approvals.html:15
 msgid "Review and approve time entries"
-msgstr "Peržiūrėk ir patvirtink laiko įrašus"
+msgstr "Laiko įrašų peržiūra ir patvirtinimas"
 
 #: app/templates/approvals/list.html:23
 #: app/templates/client_portal/widgets/pending_actions.html:9
@@ -13954,7 +13952,7 @@ msgstr "Patvirtinimo informacija"
 
 #: app/templates/approvals/view.html:15
 msgid "Review time entry approval request"
-msgstr "Peržiūrėk laiko įrašo patvirtinimo prašymą"
+msgstr "Laiko įrašo patvirtinimo prašymo peržiūra"
 
 #: app/templates/approvals/view.html:23
 #: app/templates/reports/unpaid_hours_report.html:114
@@ -14008,7 +14006,7 @@ msgstr "Audito žurnalai"
 
 #: app/templates/audit_logs/list.html:14
 msgid "Track who changed what and when"
-msgstr "Stebėk, kas, ką ir kada pakeitė"
+msgstr "Pakeitimų istorija: kas, ką ir kada pakeitė"
 
 #: app/templates/audit_logs/list.html:19
 #: app/templates/projects/time_entries_overview.html:28
@@ -14417,7 +14415,7 @@ msgstr "Biudžeto įspėjimai ir prognozavimas"
 
 #: app/templates/budget/dashboard.html:13
 msgid "Monitor project budgets and forecast completion"
-msgstr "Stebėk projektų biudžetus ir prognozuok užbaigimą"
+msgstr "Projektų biudžetų stebėsena ir užbaigimo prognozė"
 
 #: app/templates/budget/dashboard.html:30
 msgid "Unacknowledged Alerts"
@@ -14942,7 +14940,7 @@ msgstr "Kalendorius"
 
 #: app/templates/calendar/view.html:18
 msgid "View and manage your events, tasks, and time entries"
-msgstr "Peržiūrėk ir tvarkyk savo įvykius, užduotis ir laiko įrašus"
+msgstr "Įvykių, užduočių ir laiko įrašų peržiūra ir tvarkymas"
 
 #: app/templates/calendar/view.html:41 app/templates/timer/calendar.html:34
 #: app/templates/user/settings.html:647
@@ -15062,7 +15060,7 @@ msgstr "Nepavyko įkelti priedo"
 
 #: app/templates/chat/index.html:14
 msgid "Communicate with your team"
-msgstr "Bendrauk su savo komanda"
+msgstr "Bendravimas su komanda"
 
 #: app/templates/chat/index.html:22
 #: app/templates/components/persistent_chat_widget.html:53
@@ -15512,7 +15510,7 @@ msgstr "Nepavyko išsaugoti."
 
 #: app/templates/client_portal/documents.html:15
 msgid "View and download project documents"
-msgstr "Peržiūrėk ir atsisiųsk projektų dokumentus"
+msgstr "Projektų dokumentų peržiūra ir atsisiuntimas"
 
 #: app/templates/client_portal/documents.html:41
 msgid "Client Document"
@@ -15967,7 +15965,7 @@ msgstr "Pateikti problemą"
 
 #: app/templates/client_portal/notifications.html:15
 msgid "Stay updated on your projects and invoices"
-msgstr "Sek savo projektų ir sąskaitų faktūrų naujienas"
+msgstr "Projektų ir sąskaitų faktūrų naujienos"
 
 #: app/templates/client_portal/notifications.html:41
 #: app/templates/client_portal/widgets/pending_actions.html:24
@@ -16432,8 +16430,8 @@ msgstr "Atgal į klientus"
 #: app/templates/clients/create.html:10
 msgid "Add a new client to manage related projects and billing."
 msgstr ""
-"Pridėk naują klientą, kad galėtum tvarkyti susijusius projektus ir "
-"atsiskaitymus."
+"Naujo kliento pridėjimas susijusiems projektams ir atsiskaitymams "
+"tvarkyti."
 
 #: app/templates/clients/create.html:21 app/templates/clients/edit.html:21
 #: app/templates/components/inline_create_client_modal.html:23
@@ -17931,7 +17929,7 @@ msgstr "Išsaugoti sandorį"
 
 #: app/templates/deals/list.html:14
 msgid "Manage your sales pipeline"
-msgstr "Tvarkyk savo pardavimų srautą"
+msgstr "Pardavimų srauto tvarkymas"
 
 #: app/templates/deals/list.html:16 app/templates/deals/pipeline.html:17
 msgid "New Deal"
@@ -18206,7 +18204,7 @@ msgstr "Išlaidų kategorijos"
 
 #: app/templates/expense_categories/list.html:12
 msgid "Manage expense categories and budgets"
-msgstr "Tvarkyk išlaidų kategorijas ir biudžetus"
+msgstr "Išlaidų kategorijų ir biudžetų tvarkymas"
 
 #: app/templates/expense_categories/list.html:14
 msgid "New Category"
@@ -18304,7 +18302,7 @@ msgstr "Išlaidų patvirtinimai"
 
 #: app/templates/expenses/approvals.html:9
 msgid "Review pending expense submissions"
-msgstr "Peržiūrėk laukiančias patvirtinimo išlaidas"
+msgstr "Laukiančių patvirtinimo išlaidų peržiūra"
 
 #: app/templates/expenses/approvals.html:14
 #: app/templates/expenses/approvals.html:56
@@ -18420,7 +18418,9 @@ msgstr "Nuskaityti kvitą"
 
 #: app/templates/expenses/scan_receipt.html:8
 msgid "Upload a receipt image or PDF and extract expense details with OCR"
-msgstr "Įkelk kvito vaizdą arba PDF – OCR atpažins išlaidų informaciją"
+msgstr ""
+"Kvito vaizdo arba PDF įkėlimas ir išlaidų informacijos nuskaitymas OCR "
+"būdu"
 
 #: app/templates/expenses/scan_receipt.html:21
 msgid "OCR is not available"
@@ -18551,8 +18551,8 @@ msgid ""
 "Import data from other time trackers or export your data for GDPR "
 "compliance and backups"
 msgstr ""
-"Importuok duomenis iš kitų laiko apskaitos programų arba eksportuok savo "
-"duomenis BDAR atitikčiai ir atsarginėms kopijoms"
+"Duomenų importavimas iš kitų laiko apskaitos programų arba eksportavimas "
+"BDAR atitikčiai ir atsarginėms kopijoms"
 
 #: app/templates/import_export/index.html:24
 msgid "Import Data"
@@ -18996,7 +18996,7 @@ msgstr "ActivityWatch gautieji"
 
 #: app/templates/integrations/activitywatch_inbox.html:9
 msgid "Approve or discard imported activities"
-msgstr "Patvirtink arba atmesk importuotas veiklas"
+msgstr "Importuotų veiklų patvirtinimas arba atmetimas"
 
 #: app/templates/integrations/activitywatch_inbox.html:12
 #: app/templates/integrations/activitywatch_setup.html:148
@@ -19018,7 +19018,7 @@ msgstr "ActivityWatch taisyklės"
 
 #: app/templates/integrations/activitywatch_rules.html:9
 msgid "Map apps and URLs to projects"
-msgstr "Susiek programas ir URL su projektais"
+msgstr "Programų ir URL susiejimas su projektais"
 
 #: app/templates/integrations/activitywatch_rules.html:13
 msgid "Review inbox"
@@ -19066,8 +19066,8 @@ msgid ""
 "Import window and web activity from ActivityWatch (aw-server) as "
 "automatic time entries"
 msgstr ""
-"Importuok langų ir žiniatinklio veiklą iš ActivityWatch (aw-server) kaip "
-"automatinius laiko įrašus"
+"Langų ir žiniatinklio veiklos importavimas iš ActivityWatch (aw-server) "
+"kaip automatinių laiko įrašų"
 
 #: app/templates/integrations/activitywatch_setup.html:25
 #: app/templates/integrations/caldav_setup.html:25
@@ -19233,8 +19233,8 @@ msgstr "CalDAV kalendoriaus sąranka"
 #: app/templates/integrations/caldav_setup.html:15
 msgid "Connect to a CalDAV server (e.g., Zimbra) to import calendar events"
 msgstr ""
-"Prisijunk prie CalDAV serverio (pvz., Zimbra), kad importuotum "
-"kalendoriaus įvykius"
+"Prisijungimas prie CalDAV serverio (pvz., Zimbra) kalendoriaus įvykiams "
+"importuoti"
 
 #: app/templates/integrations/caldav_setup.html:29
 msgid "CalDAV Server URL"
@@ -21000,7 +21000,7 @@ msgstr "Naujas pirkimo užsakymas"
 
 #: app/templates/inventory/purchase_orders/form.html:15
 msgid "Update purchase order details"
-msgstr "Atnaujink pirkimo užsakymo informaciją"
+msgstr "Pirkimo užsakymo informacijos atnaujinimas"
 
 #: app/templates/inventory/purchase_orders/form.html:15
 msgid "Create a new purchase order to a supplier"
@@ -21799,7 +21799,7 @@ msgstr "Sukurti sąskaitą faktūrą"
 
 #: app/templates/invoices/create.html:8
 msgid "Generate a new invoice for a project and client"
-msgstr "Sukurk naują sąskaitą faktūrą projektui ir klientui"
+msgstr "Nauja sąskaita faktūra projektui ir klientui"
 
 #: app/templates/invoices/create.html:19 app/templates/issues/view.html:68
 #: app/templates/main/dashboard.html:582
@@ -21864,7 +21864,7 @@ msgstr "Redaguoti sąskaitą faktūrą"
 
 #: app/templates/invoices/edit.html:13
 msgid "Update invoice details, items, and terms"
-msgstr "Atnaujink sąskaitos faktūros informaciją, eilutes ir sąlygas"
+msgstr "Sąskaitos faktūros informacijos, eilučių ir sąlygų atnaujinimas"
 
 #: app/templates/invoices/edit.html:85
 msgid ""
@@ -22625,7 +22625,7 @@ msgstr "Tvarkyti stulpelius"
 
 #: app/templates/kanban/board.html:56
 msgid "Drag tasks between columns to update their status"
-msgstr "Vilk užduotis tarp stulpelių, kad pakeistum jų būseną"
+msgstr "Užduočių būsenos keitimas vilkant jas tarp stulpelių"
 
 #: app/templates/kanban/board.html:61
 msgid "Kanban board"
@@ -28589,7 +28589,7 @@ msgstr "Sukurti pasiūlymo šabloną"
 
 #: app/templates/quotes/template_form.html:8
 msgid "Define reusable defaults for new quotes"
-msgstr "Nustatyk numatytąsias reikšmes, kurias naudosi naujiems pasiūlymams"
+msgstr "Numatytosios naujų pasiūlymų reikšmės"
 
 #: app/templates/quotes/template_form.html:27
 msgid "e.g., Standard consulting quote"
@@ -28790,7 +28790,7 @@ msgstr "Atnaujinti periodinę sąskaitą"
 
 #: app/templates/recurring_invoices/list.html:12
 msgid "Automate invoice generation for subscription-based billing"
-msgstr "Automatizuok sąskaitų generavimą prenumeratoms"
+msgstr "Automatinis sąskaitų faktūrų generavimas prenumeratoms"
 
 #: app/templates/recurring_invoices/view.html:22
 #: app/templates/recurring_tasks/view.html:27
@@ -28871,7 +28871,7 @@ msgstr "Sukurti periodinę užduotį"
 #: app/templates/recurring_tasks/create.html:15
 #: app/templates/recurring_tasks/form.html:15
 msgid "Set up automated task creation"
-msgstr "Nustatyk automatinį užduočių kūrimą"
+msgstr "Automatinio užduočių kūrimo nustatymas"
 
 #: app/templates/recurring_tasks/edit.html:4
 #: app/templates/recurring_tasks/edit.html:15
@@ -29256,7 +29256,9 @@ msgstr "Numatyta ir faktinė trukmė"
 
 #: app/templates/reports/estimates_vs_actuals.html:13
 msgid "Compare estimated hours on tasks and projects with time logged"
-msgstr "Palygink užduotims ir projektams numatytas valandas su užregistruotu laiku"
+msgstr ""
+"Užduotims ir projektams numatytų valandų palyginimas su užregistruotu "
+"laiku"
 
 #: app/templates/reports/estimates_vs_actuals.html:33
 msgid "By project"
@@ -30476,7 +30478,9 @@ msgstr "Atgal į užduotis"
 msgid ""
 "Add a new task to your project to break down work into manageable "
 "components"
-msgstr "Pridėk naują užduotį prie projekto, kad suskaidytum darbą į valdomas dalis"
+msgstr ""
+"Naujos užduoties pridėjimas prie projekto — darbo skaidymas į valdomas "
+"dalis"
 
 #: app/templates/tasks/create.html:27 app/templates/tasks/edit.html:34
 msgid "Enter a descriptive task name"
@@ -30794,7 +30798,7 @@ msgstr "Pradelstos užduotys"
 
 #: app/templates/tasks/overdue.html:20
 msgid "Requires immediate attention"
-msgstr "Reikia neatidėliotino dėmesio"
+msgstr "Būtinas neatidėliotinas dėmesys"
 
 #: app/templates/tasks/overdue.html:20
 msgid "items"
@@ -31668,7 +31672,7 @@ msgstr "Susikaupimas / Pomodoro"
 
 #: app/templates/timer/focus.html:13 app/templates/timer/timer_page.html:309
 msgid "Work in focused cycles with short breaks"
-msgstr "Dirbk susikaupimo ciklais su trumpomis pertraukomis"
+msgstr "Darbas susikaupimo ciklais su trumpomis pertraukomis"
 
 #: app/templates/timer/focus.html:36 app/templates/timer/focus.html:215
 #: app/templates/timer/timer_page.html:320
@@ -31760,7 +31764,7 @@ msgstr "Registruoti laiką rankiniu būdu"
 
 #: app/templates/timer/manual_entry.html:14
 msgid "Create a copy of a previous entry with new times"
-msgstr "Sukurk ankstesnio įrašo kopiją su naujais laikais"
+msgstr "Ankstesnio įrašo kopija su naujais laikais"
 
 #: app/templates/timer/manual_entry.html:14
 msgid "Create a new time entry"
@@ -31851,7 +31855,7 @@ msgstr "Sugeneruota"
 
 #: app/templates/timer/time_entries_overview.html:15
 msgid "View and manage all time entries"
-msgstr "Peržiūrėk ir tvarkyk visus laiko įrašus"
+msgstr "Visų laiko įrašų peržiūra ir tvarkymas"
 
 #: app/templates/timer/time_entries_overview.html:24
 msgid "Paid Hours"
@@ -31910,7 +31914,7 @@ msgstr "laiko įrašą (-us)"
 
 #: app/templates/timer/timer_page.html:13
 msgid "Track your time with a visual timer"
-msgstr "Apskaityk laiką su vaizdiniu laikmačiu"
+msgstr "Laiko apskaita su vaizdiniu laikmačiu"
 
 #: app/templates/timer/timer_page.html:21
 msgid "Clock in/out for your working day (separate from project time)"
@@ -31970,7 +31974,7 @@ msgstr "Peržiūrėti įrašą"
 
 #: app/templates/timer/view_timer.html:15
 msgid "View time entry details"
-msgstr "Peržiūrėk laiko įrašo informaciją"
+msgstr "Laiko įrašo informacija"
 
 #: app/templates/timer/view_timer.html:67
 msgid "Project & Client"
@@ -32651,7 +32655,7 @@ msgstr "Savaitės laiko tikslai"
 
 #: app/templates/weekly_goals/index.html:14
 msgid "Set and track your weekly hour targets"
-msgstr "Nustatyk ir stebėk savaitės valandų tikslus"
+msgstr "Savaitės valandų tikslų nustatymas ir stebėsena"
 
 #: app/templates/weekly_goals/index.html:16
 msgid "New Goal"
@@ -33016,8 +33020,8 @@ msgstr "Darbo eigų automatizavimas"
 #: app/templates/workflows/list.html:12
 msgid "Automate actions when tasks, time entries, or invoices change"
 msgstr ""
-"Automatizuok veiksmus, kai pasikeičia užduotys, laiko įrašai ar sąskaitos"
-" faktūros"
+"Veiksmų automatizavimas pasikeitus užduotims, laiko įrašams ar sąskaitoms"
+" faktūroms"
 
 #: app/templates/workflows/list.html:15
 msgid "From Template"
@@ -33060,7 +33064,7 @@ msgstr "Darbo eigų šablonai"
 
 #: app/templates/workflows/templates_list.html:15
 msgid "Start from a preset automation rule"
-msgstr "Pradėk nuo paruoštos automatizavimo taisyklės"
+msgstr "Paruoštos automatizavimo taisyklės pradžiai"
 
 #: app/templates/workflows/templates_list.html:17
 msgid "New Template"
