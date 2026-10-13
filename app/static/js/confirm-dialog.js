@@ -44,8 +44,8 @@
     var options = opts || {};
     return {
       title: options.title != null ? String(options.title) : '',
-      confirmText: options.confirmText || options.okText || 'OK',
-      cancelText: options.cancelText || 'Cancel',
+      confirmText: options.confirmText || options.okText || gettext('OK'),
+      cancelText: options.cancelText || gettext('Cancel'),
       variant: options.variant || 'primary',
       mode: options.mode || 'confirm',
       html: Boolean(options.html),
@@ -100,7 +100,7 @@
       var backdrop = document.createElement('button');
       backdrop.type = 'button';
       backdrop.className = 'absolute inset-0 bg-black/50 dark:bg-black/60 cursor-default';
-      backdrop.setAttribute('aria-label', 'Close dialog');
+      backdrop.setAttribute('aria-label', gettext('Close dialog'));
       backdrop.tabIndex = -1;
 
       var panel = document.createElement('div');
@@ -262,7 +262,7 @@
 
   function ttAlert(message, options) {
     try {
-      var opts = Object.assign({ confirmText: 'OK', mode: 'alert' }, options || {}, { mode: 'alert' });
+      var opts = Object.assign({ confirmText: gettext('OK'), mode: 'alert' }, options || {}, { mode: 'alert' });
       return openDialog(message, opts).then(function () {});
     } catch (_) {
       try {

@@ -14,7 +14,7 @@
                 minChars: options.minChars || 2,
                 debounceDelay: options.debounceDelay || 300,
                 maxResults: options.maxResults || 10,
-                placeholder: options.placeholder || 'Search...',
+                placeholder: options.placeholder || gettext('Search...'),
                 categories: options.categories || ['all'],
                 onSelect: options.onSelect || null,
                 enableRecent: options.enableRecent !== false,
@@ -67,7 +67,7 @@
             const actions = document.createElement('div');
             actions.className = 'search-actions';
             actions.innerHTML = `
-                <button type="button" class="search-clear-btn" style="display: none;" aria-label="{{ _('Clear search') if false else 'Clear search' }}">
+                <button type="button" class="search-clear-btn" style="display: none;" aria-label="${gettext('Clear search')}">
                     <i class="fas fa-xmark"></i>
                 </button>
                 <span class="search-kbd">Ctrl+/</span>
@@ -297,7 +297,7 @@
 
             let html = `
                 <div class="search-section">
-                    <div class="search-section-title">Recent Searches</div>
+                    <div class="search-section-title">${gettext('Recent Searches')}</div>
                     <div class="search-recent">
             `;
 
@@ -313,7 +313,7 @@
             html += `
                     </div>
                     <div class="search-recent-clear">
-                        <button type="button" id="clear-recent-btn">Clear Recent</button>
+                        <button type="button" id="clear-recent-btn">${gettext('Clear Recent')}</button>
                     </div>
                 </div>
             `;
@@ -344,7 +344,7 @@
             this.autocomplete.innerHTML = `
                 <div class="search-no-results">
                     <i class="fas fa-search"></i>
-                    <p>No results found for "${this.escapeHTML(query)}"</p>
+                    <p>${gettext('No results found for "%(query)s"', {query: this.escapeHTML(query)})}</p>
                 </div>
             `;
             this.showAutocomplete();
@@ -354,7 +354,7 @@
             this.autocomplete.innerHTML = `
                 <div class="search-no-results">
                     <i class="fas fa-exclamation-triangle"></i>
-                    <p>Something went wrong. Please try again.</p>
+                    <p>${gettext('Something went wrong. Please try again.')}</p>
                 </div>
             `;
             this.showAutocomplete();

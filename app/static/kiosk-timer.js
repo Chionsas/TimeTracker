@@ -112,14 +112,14 @@ async function updateTimerDisplay(useCache = false) {
             if (timerControls) {
                 timerControls.innerHTML = `
                     <div class="bg-background-light dark:bg-gray-700 rounded-xl p-10 mb-6 text-center border-2 border-border-light dark:border-border-dark">
-                        <p class="font-semibold text-xl mb-4 text-text-light dark:text-text-dark">Active Timer</p>
+                        <p class="font-semibold text-xl mb-4 text-text-light dark:text-text-dark">${gettext('Active Timer')}</p>
                         <p class="text-5xl font-bold text-primary mb-4 font-mono" id="timer-display">${timeString}</p>
                         <p class="text-xl text-text-light dark:text-text-dark mb-2 font-medium">${data.timer.project_name || ''}</p>
                         ${data.timer.task_name ? `<p class="text-text-muted-light dark:text-text-muted-dark">${data.timer.task_name}</p>` : ''}
                     </div>
                     <button onclick="stopTimer()" class="btn btn-danger w-full py-4 text-lg font-semibold rounded-lg">
                         <i class="fas fa-stop mr-2"></i>
-                        Stop Timer
+                        ${gettext('Stop Timer')}
                     </button>
                 `;
             }
@@ -127,7 +127,7 @@ async function updateTimerDisplay(useCache = false) {
             cachedTimerData = null; // Clear cache when timer stops
             timerDisplay.innerHTML = `
                 <i class="fas fa-clock text-text-muted-light dark:text-text-muted-dark"></i>
-                <span class="text-text-muted-light dark:text-text-muted-dark font-medium">No active timer</span>
+                <span class="text-text-muted-light dark:text-text-muted-dark font-medium">${gettext('No active timer')}</span>
             `;
             
             // Update timer controls section - show start timer form
@@ -165,36 +165,36 @@ async function updateTimerDisplay(useCache = false) {
                                 `<option value="${p.id}">${p.name}</option>`
                             ).join('');
                         } else {
-                            projectOptions = '<option value="" disabled>No projects available</option>';
+                            projectOptions = '<option value="" disabled>' + gettext('No projects available') + '</option>';
                         }
                         
                         timerControls.innerHTML = `
                             <form id="timer-form" class="space-y-6">
                                 <div>
-                                    <label for="timer-project" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Project <span class="text-red-500">*</span></label>
-                                    <select id="timer-project" class="form-input w-full text-lg" data-searchable-select="project" data-search-placeholder="Type to search projects…" required>
-                                        <option value="">Select project...</option>
+                                    <label for="timer-project" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">${gettext('Project')} <span class="text-red-500">*</span></label>
+                                    <select id="timer-project" class="form-input w-full text-lg" data-searchable-select="project" data-search-placeholder="${gettext('Type to search projects…')}" required>
+                                        <option value="">${gettext('Select project...')}</option>
                                         ${projectOptions}
                                     </select>
-                                    ${projects.length === 0 ? '<p class="text-xs text-yellow-600 dark:text-yellow-400 mt-1.5 flex items-center gap-1"><i class="fas fa-exclamation-triangle"></i>No active projects found. Please create a project first.</p>' : ''}
+                                    ${projects.length === 0 ? '<p class="text-xs text-yellow-600 dark:text-yellow-400 mt-1.5 flex items-center gap-1"><i class="fas fa-exclamation-triangle"></i>' + gettext('No active projects found. Please create a project first.') + '</p>' : ''}
                                 </div>
                                 
                                 <div>
-                                    <label for="timer-task" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Task <span class="text-gray-500 dark:text-gray-400 font-normal">(Optional)</span></label>
-                                    <select id="timer-task" class="form-input w-full text-lg" data-searchable-select="task" data-filter-by="timer-project" data-search-placeholder="Type to search tasks…" disabled>
-                                        <option value="">No task</option>
+                                    <label for="timer-task" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">${gettext('Task')} <span class="text-gray-500 dark:text-gray-400 font-normal">${gettext('(Optional)')}</span></label>
+                                    <select id="timer-task" class="form-input w-full text-lg" data-searchable-select="task" data-filter-by="timer-project" data-search-placeholder="${gettext('Type to search tasks…')}" disabled>
+                                        <option value="">${gettext('No task')}</option>
                                     </select>
-                                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1.5">Tasks will load after selecting a project</p>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1.5">${gettext('Tasks will load after selecting a project')}</p>
                                 </div>
                                 
                                 <div>
-                                    <label for="timer-notes" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Notes <span class="text-gray-500 dark:text-gray-400 font-normal">(Optional)</span></label>
-                                    <textarea id="timer-notes" class="w-full bg-gray-50 dark:bg-gray-900 border-2 border-gray-300 dark:border-gray-600 rounded-xl px-4 py-3 text-gray-900 dark:text-white focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 transition-all resize-none" rows="4" placeholder="What are you working on?"></textarea>
+                                    <label for="timer-notes" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">${gettext('Notes')} <span class="text-gray-500 dark:text-gray-400 font-normal">${gettext('(Optional)')}</span></label>
+                                    <textarea id="timer-notes" class="w-full bg-gray-50 dark:bg-gray-900 border-2 border-gray-300 dark:border-gray-600 rounded-xl px-4 py-3 text-gray-900 dark:text-white focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 transition-all resize-none" rows="4" placeholder="${gettext('What are you working on?')}"></textarea>
                                 </div>
                                 
                                 <button type="submit" class="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-4 px-6 rounded-xl transition-colors shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30 flex items-center justify-center gap-2">
                                     <i class="fas fa-play"></i>
-                                    Start Timer
+                                    ${gettext('Start Timer')}
                                 </button>
                             </form>
                         `;
@@ -218,7 +218,7 @@ async function updateTimerDisplay(useCache = false) {
                                     const projectId = this.value;
                                     
                                     // Reset task select
-                                    taskSelect.innerHTML = '<option value="">No task</option>';
+                                    taskSelect.innerHTML = '<option value="">' + gettext('No task') + '</option>';
                                     taskSelect.disabled = true;
                                     if (window.ttEnhanceSearchableSelects) window.ttEnhanceSearchableSelects();
                                     
@@ -261,7 +261,7 @@ async function updateTimerDisplay(useCache = false) {
                         }
                         // Only show error message if timer controls exist and we haven't shown an error recently
                         if (timerControls && (!window._lastProjectErrorShown || (now - window._lastProjectErrorShown) > 60000)) {
-                            timerControls.innerHTML = '<div class="text-red-600 dark:text-red-400 p-4 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800"><i class="fas fa-exclamation-triangle mr-2"></i>Error loading projects. Please refresh the page.</div>';
+                            timerControls.innerHTML = '<div class="text-red-600 dark:text-red-400 p-4 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800"><i class="fas fa-exclamation-triangle mr-2"></i>' + gettext('Error loading projects. Please refresh the page.') + '</div>';
                             window._lastProjectErrorShown = now;
                         }
                     });
@@ -282,7 +282,7 @@ async function startTimer() {
     const notes = document.getElementById('timer-notes')?.value || '';
 
     if (!projectId) {
-        showError('Please select a project');
+        showError(gettext('Please select a project'));
         return;
     }
     
@@ -295,7 +295,7 @@ async function startTimer() {
     if (submitBtn) {
         submitBtn.disabled = true;
         if (submitIcon) submitIcon.classList.add('hidden');
-        if (submitText) submitText.textContent = 'Starting...';
+        if (submitText) submitText.textContent = gettext('Starting...');
         if (submitSpinner) submitSpinner.classList.remove('hidden');
     }
 
@@ -317,11 +317,11 @@ async function startTimer() {
 
         if (!response.ok) {
             const error = await response.json();
-            throw new Error(error.error || 'Failed to start timer');
+            throw new Error(error.error || gettext('Failed to start timer'));
         }
 
         const data = await response.json();
-        showSuccess(data.message || 'Timer started successfully');
+        showSuccess(data.message || gettext('Timer started successfully'));
         
         // Clear cache and update display immediately
         cachedTimerData = null;
@@ -339,13 +339,13 @@ async function startTimer() {
         }, 500);
     } catch (error) {
         console.error('Start timer error:', error);
-        showError(error.message || 'Failed to start timer');
+        showError(error.message || gettext('Failed to start timer'));
     } finally {
         // Reset loading state
         if (submitBtn) {
             submitBtn.disabled = false;
             if (submitIcon) submitIcon.classList.remove('hidden');
-            if (submitText) submitText.textContent = 'Start Timer';
+            if (submitText) submitText.textContent = gettext('Start Timer');
             if (submitSpinner) submitSpinner.classList.add('hidden');
         }
     }
@@ -358,14 +358,14 @@ async function stopTimer() {
     // Use showConfirm if available, otherwise use native confirm
     let confirmed = false;
     if (window.showConfirm) {
-        confirmed = await window.showConfirm('Stop the active timer?', {
-            title: 'Stop Timer',
-            confirmText: 'Stop',
-            cancelText: 'Cancel',
+        confirmed = await window.showConfirm(gettext('Stop the active timer?'), {
+            title: gettext('Stop Timer'),
+            confirmText: gettext('Stop'),
+            cancelText: gettext('Cancel'),
             variant: 'warning'
         });
     } else {
-        confirmed = confirm('Stop the active timer?');
+        confirmed = confirm(gettext('Stop the active timer?'));
     }
     
     if (!confirmed) {
@@ -381,7 +381,7 @@ async function stopTimer() {
     if (stopBtn) {
         stopBtn.disabled = true;
         if (stopIcon) stopIcon.classList.add('hidden');
-        if (stopText) stopText.textContent = 'Stopping...';
+        if (stopText) stopText.textContent = gettext('Stopping...');
         if (stopSpinner) stopSpinner.classList.remove('hidden');
     }
 
@@ -398,11 +398,11 @@ async function stopTimer() {
 
         if (!response.ok) {
             const error = await response.json();
-            throw new Error(error.error || 'Failed to stop timer');
+            throw new Error(error.error || gettext('Failed to stop timer'));
         }
 
         const data = await response.json();
-        showSuccess(data.message || 'Timer stopped successfully');
+        showSuccess(data.message || gettext('Timer stopped successfully'));
         
         // Clear cache and update display immediately
         cachedTimerData = null;
@@ -414,13 +414,13 @@ async function stopTimer() {
         }, 500);
     } catch (error) {
         console.error('Stop timer error:', error);
-        showError(error.message || 'Failed to stop timer');
+        showError(error.message || gettext('Failed to stop timer'));
     } finally {
         // Reset loading state
         if (stopBtn) {
             stopBtn.disabled = false;
             if (stopIcon) stopIcon.classList.remove('hidden');
-            if (stopText) stopText.textContent = 'Stop Timer';
+            if (stopText) stopText.textContent = gettext('Stop Timer');
             if (stopSpinner) stopSpinner.classList.add('hidden');
         }
     }
@@ -435,7 +435,7 @@ function showError(message) {
         window.showToast(message, 'error');
     } else {
         // Fallback to alert
-        alert('Error: ' + message);
+        alert(gettext('Error: %(message)s', {message: message}));
     }
 }
 
@@ -448,7 +448,7 @@ function showSuccess(message) {
         window.showToast(message, 'success');
     } else {
         // Fallback to alert
-        alert('Success: ' + message);
+        alert(gettext('Success: %(message)s', {message: message}));
     }
 }
 

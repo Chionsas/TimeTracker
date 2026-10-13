@@ -80,7 +80,7 @@
 
         if (title) {
           title.textContent =
-            String.fromCodePoint(0x1f680) + " New version available: " + data.latest_version;
+            String.fromCodePoint(0x1f680) + " " + gettext("New version available: %(version)s", {version: data.latest_version});
         }
 
         if (published) {

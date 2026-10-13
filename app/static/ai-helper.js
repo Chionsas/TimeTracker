@@ -48,7 +48,7 @@
     });
     const data = await response.json().catch(function () { return {}; });
     if (!response.ok || data.ok === false || data.success === false) {
-      throw new Error(data.error || data.message || "Request failed");
+      throw new Error(data.error || data.message || gettext("Request failed"));
     }
     return data;
   }
@@ -61,15 +61,15 @@
       const response = await fetch("/api/ai/context-preview", { credentials: "same-origin" });
       const data = await response.json().catch(function () { return {}; });
       if (!response.ok || data.ok === false) {
-        contextEl.textContent = data.error || "AI helper is not configured.";
+        contextEl.textContent = data.error || gettext("AI helper is not configured.");
         return;
       }
       contextEl.textContent = JSON.stringify(data.context || {}, null, 2);
       if (providerEl && data.provider) {
-        providerEl.textContent = "Provider: " + data.provider.provider + " · Model: " + data.provider.model;
+        providerEl.textContent = gettext("Provider: %(provider)s · Model: %(model)s", {provider: data.provider.provider, model: data.provider.model});
       }
     } catch (err) {
-      contextEl.textContent = "Could not load AI context preview.";
+      contextEl.textContent = gettext("Could not load AI context preview.");
     }
   }
 
@@ -84,24 +84,24 @@
     root.classList.remove("hidden");
     const heading = document.createElement("p");
     heading.className = "text-sm font-semibold text-text-light dark:text-text-dark";
-    heading.textContent = "Suggested actions";
+    heading.textContent = gettext("Suggested actions");
     root.appendChild(heading);
     actions.forEach(function (action) {
       const row = document.createElement("div");
       row.className = "rounded-lg border border-border-light dark:border-border-dark p-3 flex items-start justify-between gap-3";
-      const label = action.label || action.type || "Action";
+      const label = action.label || action.type || gettext("Action");
       row.innerHTML = '<div class="min-w-0"><p class="text-sm font-medium">' + escapeHtml(label) +
         '</p><pre class="mt-1 text-xs text-text-muted-light dark:text-text-muted-dark whitespace-pre-wrap overflow-auto max-h-28">' +
         escapeHtml(JSON.stringify(action.payload || {}, null, 2)) + "</pre></div>";
       const btn = document.createElement("button");
       btn.type = "button";
       btn.className = "shrink-0 px-3 py-1.5 rounded-lg bg-primary text-white text-sm";
-      btn.textContent = "Confirm";
+      btn.textContent = gettext("Confirm");
       btn.addEventListener("click", async function () {
         btn.disabled = true;
         try {
           const result = await postJson("/api/ai/actions/confirm", { action: action });
-          addMessage("assistant", "Action completed: " + (result.type || action.type));
+          addMessage("assistant", gettext("Action completed: %(action)s", {action: result.type || action.type}));
           root.classList.add("hidden");
           root.innerHTML = "";
         } catch (err) {
@@ -144,15 +144,15 @@
       if (!text) return;
       prompt.value = "";
       addMessage("user", text);
-      setStatus("Thinking...");
+      setStatus(gettext("Thinking..."));
       try {
         const data = await postJson("/api/ai/chat", { prompt: text });
-        addMessage("assistant", data.reply || "No response.");
+        addMessage("assistant", data.reply || gettext("No response."));
         renderActions(data.actions || []);
         setStatus("");
       } catch (err) {
-        addMessage("assistant", err.message || "AI helper failed.");
-        setStatus(err.message || "AI helper failed.", true);
+        addMessage("assistant", err.message || gettext("AI helper failed."));
+        setStatus(err.message || gettext("AI helper failed."), true);
       }
     });
   });

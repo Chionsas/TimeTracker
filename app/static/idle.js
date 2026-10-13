@@ -356,7 +356,7 @@
     if (runningMs < getLongEntryThresholdMs()) return;
     longEntryNudgeShown = true;
     const hours = (runningMs / (60 * 60 * 1000)).toFixed(1);
-    const msg = 'Your timer has been running for ' + hours + ' hours. Did you forget to stop it?';
+    const msg = gettext('Your timer has been running for %(hours)s hours. Did you forget to stop it?', {hours: hours});
     buildReminderToast(
       'amber',
       escapeHtml(msg),
@@ -570,7 +570,7 @@
       const note = findNotification(payload, 'no_tracking_today');
       if (note){
         noTimerNudgeShown = true;
-        const msg = escapeHtml(note.message || 'You have not tracked anything today.');
+        const msg = escapeHtml(note.message || gettext('You have not tracked anything today.'));
         buildReminderToast(
           'blue',
           msg,
@@ -588,7 +588,7 @@
       const note = findNotification(payload, 'end_of_day_reminder');
       if (note){
         endOfDayNudgeShown = true;
-        const msg = escapeHtml(note.message || "It's nearly end of day.");
+        const msg = escapeHtml(note.message || gettext("It's nearly end of day."));
         buildReminderToast(
           'green',
           msg,
@@ -616,7 +616,7 @@
     const note = findNotification(payload, 'break_reminder');
     if (!note) return;
     breakNudgeShown = true;
-    const msg = escapeHtml(note.message || 'Time for a break.');
+    const msg = escapeHtml(note.message || gettext('Time for a break.'));
     buildReminderToast(
       'purple',
       msg,

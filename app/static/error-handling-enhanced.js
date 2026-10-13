@@ -158,6 +158,11 @@ class EnhancedErrorHandler {
             'The server is temporarily unavailable',
             'Unable to connect to the server',
             'Request timeout',
+            // Same toasts when shown in the user's language
+            gettext('Service temporarily unavailable. Please try again in a few moments.'),
+            gettext('The server is temporarily unavailable. Please try again later.'),
+            gettext('Unable to connect to the server. Please check your internet connection.'),
+            gettext('Request timeout. Please try again.'),
         ];
         const toasts = Array.from(window.toastManager.container.children || []);
         toasts.forEach((el) => {
@@ -200,8 +205,8 @@ class EnhancedErrorHandler {
     showOnlineIndicator() {
         if (window.toastManager) {
             window.toastManager.success(
-                'Connection restored. Processing queued operations...',
-                'Back Online',
+                gettext('Connection restored. Processing queued operations...'),
+                gettext('Back Online'),
                 3000
             );
         }
@@ -217,7 +222,7 @@ class EnhancedErrorHandler {
         indicator.innerHTML = `
             <div class="offline-indicator-content">
                 <i class="fas fa-wifi-slash"></i>
-                <span>You're offline. Some features may be limited.</span>
+                <span>${gettext("You're offline. Some features may be limited.")}</span>
                 <span class="offline-queue-count" id="offline-queue-count"></span>
             </div>
         `;
@@ -373,7 +378,7 @@ class EnhancedErrorHandler {
     async handleFetchError(response, url, options) {
         // Clone the response before reading it, so the caller can still read it
         const clonedResponse = response.clone();
-        const errorData = await clonedResponse.json().catch(() => ({ error: 'Unknown error' }));
+        const errorData = await clonedResponse.json().catch(() => ({ error: gettext('Unknown error') }));
         const userFriendlyMessage = this.getUserFriendlyMessage(response.status, errorData);
         
         // Show error notification with retry option
@@ -420,8 +425,8 @@ class EnhancedErrorHandler {
         
         if (attempts >= this.maxRetries) {
             this.showError(
-                'Maximum retry attempts reached. Please try again later or contact support.',
-                'Retry Failed'
+                gettext('Maximum retry attempts reached. Please try again later or contact support.'),
+                gettext('Retry Failed')
             );
             return null;
         }
@@ -449,21 +454,21 @@ class EnhancedErrorHandler {
      * User-Friendly Error Messages
      */
     getUserFriendlyMessage(status, errorData) {
-        const errorMessage = errorData?.error || errorData?.message || 'An error occurred';
+        const errorMessage = errorData?.error || errorData?.message || gettext('An error occurred');
         
         const messages = {
-            0: 'Unable to connect to the server. Please check your internet connection.',
-            400: 'Invalid request. Please check your input and try again.',
-            401: 'You need to log in to access this feature.',
-            403: 'You don\'t have permission to perform this action.',
-            404: 'The requested resource was not found.',
-            409: 'This action conflicts with existing data. Please refresh and try again.',
-            422: 'Validation error. Please check your input.',
-            429: 'Too many requests. Please wait a moment and try again.',
-            500: 'A server error occurred. Our team has been notified.',
-            502: 'The server is temporarily unavailable. Please try again later.',
-            503: 'Service temporarily unavailable. Please try again in a few moments.',
-            504: 'Request timeout. Please try again.'
+            0: gettext('Unable to connect to the server. Please check your internet connection.'),
+            400: gettext('Invalid request. Please check your input and try again.'),
+            401: gettext('You need to log in to access this feature.'),
+            403: gettext("You don't have permission to perform this action."),
+            404: gettext('The requested resource was not found.'),
+            409: gettext('This action conflicts with existing data. Please refresh and try again.'),
+            422: gettext('Validation error. Please check your input.'),
+            429: gettext('Too many requests. Please wait a moment and try again.'),
+            500: gettext('A server error occurred. Our team has been notified.'),
+            502: gettext('The server is temporarily unavailable. Please try again later.'),
+            503: gettext('Service temporarily unavailable. Please try again in a few moments.'),
+            504: gettext('Request timeout. Please try again.')
         };
         
         // Try to get specific message from server
@@ -472,7 +477,7 @@ class EnhancedErrorHandler {
         }
         
         // Fallback to status-based message
-        return messages[status] || `An error occurred (${status}). ${errorMessage}`;
+        return messages[status] || gettext('An error occurred (%(status)s). %(message)s', {status: status, message: errorMessage});
     }
 
     /**
@@ -491,7 +496,7 @@ class EnhancedErrorHandler {
         
         // Create error toast with retry
         if (window.toastManager) {
-            const toastId = window.toastManager.error(message, 'Error', 0);
+            const toastId = window.toastManager.error(message, gettext('Error'), 0);
             
             // Find toast element by ID
             const toastElement = window.toastManager.container.querySelector(
@@ -507,22 +512,22 @@ class EnhancedErrorHandler {
                 const retryBtn = document.createElement('button');
                 retryBtn.className = 'error-retry-btn';
                 retryBtn.type = 'button';
-                retryBtn.setAttribute('aria-label', 'Retry');
-                retryBtn.textContent = 'Retry';
+                retryBtn.setAttribute('aria-label', gettext('Retry'));
+                retryBtn.textContent = gettext('Retry');
                 retryBtn.onclick = async () => {
                     retryBtn.disabled = true;
-                    retryBtn.textContent = 'Retrying...';
+                    retryBtn.textContent = gettext('Retrying...');
                     
                     try {
                         await retryCallback();
                         window.toastManager.dismiss(toastId);
-                        window.toastManager.success('Operation completed successfully', 'Success');
+                        window.toastManager.success(gettext('Operation completed successfully'), gettext('Success'));
                     } catch (error) {
                         retryBtn.disabled = false;
-                        retryBtn.textContent = 'Retry';
+                        retryBtn.textContent = gettext('Retry');
                         window.toastManager.error(
                             this.getUserFriendlyMessage(0, error),
-                            'Retry Failed'
+                            gettext('Retry Failed')
                         );
                     }
                 };
@@ -554,7 +559,7 @@ class EnhancedErrorHandler {
         return null;
     }
 
-    showError(message, title = 'Error') {
+    showError(message, title = gettext('Error')) {
         if (this.isDuplicateError(message)) {
             console.warn('Duplicate error suppressed:', message);
             return;
@@ -604,7 +609,7 @@ class EnhancedErrorHandler {
             case 0:
                 // Connection errors - offer refresh option
                 options.push({
-                    label: 'Refresh',
+                    label: gettext('Refresh'),
                     action: () => {
                         window.location.reload();
                     }
@@ -612,7 +617,7 @@ class EnhancedErrorHandler {
                 break;
             case 401:
                 options.push({
-                    label: 'Go to Login',
+                    label: gettext('Go to Login'),
                     action: () => {
                         window.location.href = '/auth/login';
                     }
@@ -620,7 +625,7 @@ class EnhancedErrorHandler {
                 break;
             case 403:
                 options.push({
-                    label: 'Go to Dashboard',
+                    label: gettext('Go to Dashboard'),
                     action: () => {
                         window.location.href = '/main/dashboard';
                     }
@@ -628,13 +633,13 @@ class EnhancedErrorHandler {
                 break;
             case 404:
                 options.push({
-                    label: 'Go to Dashboard',
+                    label: gettext('Go to Dashboard'),
                     action: () => {
                         window.location.href = '/main/dashboard';
                     }
                 });
                 options.push({
-                    label: 'Go Back',
+                    label: gettext('Go Back'),
                     action: () => {
                         window.history.back();
                     }
@@ -645,7 +650,7 @@ class EnhancedErrorHandler {
             case 503:
             case 504:
                 options.push({
-                    label: 'Refresh',
+                    label: gettext('Refresh'),
                     action: () => {
                         window.location.reload();
                     }
@@ -770,7 +775,7 @@ class EnhancedErrorHandler {
         if (countElement) {
             const count = this.offlineQueue.length;
             if (count > 0) {
-                countElement.textContent = `(${count} pending)`;
+                countElement.textContent = gettext('(%(count)s pending)', {count: count});
                 countElement.style.display = 'inline';
             } else {
                 countElement.style.display = 'none';
@@ -808,7 +813,7 @@ class EnhancedErrorHandler {
             return;
         }
 
-        const userFriendlyMessage = 'An unexpected error occurred. Please refresh the page or contact support if the problem persists.';
+        const userFriendlyMessage = gettext('An unexpected error occurred. Please refresh the page or contact support if the problem persists.');
         
         // Check if we've shown this error recently
         if (this.isDuplicateError(userFriendlyMessage)) {
@@ -822,7 +827,7 @@ class EnhancedErrorHandler {
             return;
         }
         
-        this.showError(userFriendlyMessage, 'Application Error');
+        this.showError(userFriendlyMessage, gettext('Application Error'));
         
         // Log to console for debugging
         console.error('JavaScript Error:', {
@@ -838,7 +843,7 @@ class EnhancedErrorHandler {
             return;
         }
 
-        const userFriendlyMessage = 'An operation failed unexpectedly. Please try again or contact support if the problem persists.';
+        const userFriendlyMessage = gettext('An operation failed unexpectedly. Please try again or contact support if the problem persists.');
         
         // Check if we've shown this error recently
         if (this.isDuplicateError(userFriendlyMessage)) {
@@ -847,7 +852,7 @@ class EnhancedErrorHandler {
             return;
         }
         
-        this.showError(userFriendlyMessage, 'Operation Failed');
+        this.showError(userFriendlyMessage, gettext('Operation Failed'));
         
         // Log to console for debugging
         console.error('Unhandled Rejection:', reason);
@@ -879,8 +884,8 @@ class EnhancedErrorHandler {
         if (missing.length > 0) {
             console.warn('Missing features:', missing);
             this.showError(
-                `Some features may not work properly: ${missing.join(', ')}. Please update your browser.`,
-                'Browser Compatibility'
+                gettext('Some features may not work properly: %(features)s. Please update your browser.', {features: missing.join(', ')}),
+                gettext('Browser Compatibility')
             );
         }
         

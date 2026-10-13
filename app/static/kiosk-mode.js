@@ -103,7 +103,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const timerDisplay = document.getElementById('kiosk-timer-display');
         if (timerDisplay && timerDisplay.textContent.includes(':')) {
             e.preventDefault();
-            e.returnValue = 'You have an active timer. Are you sure you want to leave?';
+            e.returnValue = gettext('You have an active timer. Are you sure you want to leave?');
             return e.returnValue;
         }
     });
@@ -175,10 +175,10 @@ async function initAutoLogout() {
         inactivityTimeout = setTimeout(async () => {
             clearTimeout(warningTimeout);
             if (window.showConfirm) {
-                const confirmed = await window.showConfirm('You have been inactive. Logout now?', {
-                    title: 'Auto-logout',
-                    confirmText: 'Logout',
-                    cancelText: 'Stay',
+                const confirmed = await window.showConfirm(gettext('You have been inactive. Logout now?'), {
+                    title: gettext('Auto-logout'),
+                    confirmText: gettext('Logout'),
+                    cancelText: gettext('Stay'),
                     variant: 'warning'
                 });
                 if (confirmed) {
@@ -188,7 +188,7 @@ async function initAutoLogout() {
                 }
             } else {
                 // Fallback to native confirm
-                if (confirm('You have been inactive. Logout now?')) {
+                if (confirm(gettext('You have been inactive. Logout now?'))) {
                     window.location.href = '/kiosk/logout';
                 } else {
                     resetInactivityTimer(); // Reset if user cancels

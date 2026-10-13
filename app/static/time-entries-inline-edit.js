@@ -102,9 +102,9 @@
 
   function toastError(msg) {
     if (window.toastManager && typeof window.toastManager.error === 'function') {
-      window.toastManager.error(msg || 'Error', 'Error', 4000);
+      window.toastManager.error(msg || gettext('Error'), gettext('Error'), 4000);
     } else {
-      alert(msg || 'Error');
+      alert(msg || gettext('Error'));
     }
   }
 
@@ -114,7 +114,7 @@
       '<button type="button" class="time-entry-inline-target inline-flex max-w-full cursor-pointer rounded border border-transparent px-1 py-0.5 text-left hover:border-border-light hover:bg-background-light dark:hover:border-border-dark dark:hover:bg-background-dark" data-inline-field="notes" tabindex="0" title="">' +
       '<span class="time-entry-inline-display block max-w-xs truncate"></span></button>';
     var btn = td.querySelector('button');
-    if (btn) btn.setAttribute('title', 'Click to edit');
+    if (btn) btn.setAttribute('title', gettext('Click to edit'));
     var disp = td.querySelector('.time-entry-inline-display');
     if (disp) disp.textContent = displayText;
   }
@@ -126,7 +126,7 @@
       '<button type="button" class="time-entry-inline-target inline-flex max-w-full cursor-pointer rounded border border-transparent px-1 py-0.5 text-left hover:border-border-light hover:bg-background-light dark:hover:border-border-dark dark:hover:bg-background-dark" data-inline-field="duration" tabindex="0" title="">' +
       '<span class="time-entry-inline-display"></span></button>';
     var btn = durCell.querySelector('button');
-    if (btn) btn.setAttribute('title', 'Click to edit');
+    if (btn) btn.setAttribute('title', gettext('Click to edit'));
     var disp = durCell.querySelector('.time-entry-inline-display');
     if (disp) disp.textContent = formatted;
   }
@@ -162,7 +162,7 @@
         activeEditor = null;
       })
       .catch(function (err) {
-        toastError(err.message || 'Could not save notes');
+        toastError(err.message || gettext('Could not save notes'));
         restoreNotesButton(td, originalDisplay, originalNotes);
         activeEditor = null;
       });
@@ -171,14 +171,14 @@
   function finishDurationEdit(td, input, entryId, originalFormatted, meta) {
     var secs = parseDurationToSeconds(input.value);
     if (isNaN(secs) || secs < 0) {
-      toastError('Invalid duration');
+      toastError(gettext('Invalid duration'));
       restoreDurationButton(td, originalFormatted);
       activeEditor = null;
       return;
     }
     var parts = parseLocalParts(meta.startLocal);
     if (!parts) {
-      toastError('Missing start time');
+      toastError(gettext('Missing start time'));
       restoreDurationButton(td, originalFormatted);
       activeEditor = null;
       return;
@@ -217,7 +217,7 @@
         activeEditor = null;
       })
       .catch(function (err) {
-        toastError(err.message || 'Could not save duration');
+        toastError(err.message || gettext('Could not save duration'));
         restoreDurationButton(td, originalFormatted);
         activeEditor = null;
       });

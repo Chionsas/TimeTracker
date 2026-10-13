@@ -675,15 +675,15 @@ class OnboardingManager {
                 </span>
                 <div class="onboarding-tooltip-buttons">
                     <button class="onboarding-btn onboarding-btn-skip" data-action="skip">
-                        Skip Tour
+                        ${gettext('Skip Tour')}
                     </button>
                     ${index > 0 ? `
                         <button class="onboarding-btn onboarding-btn-skip" data-action="previous">
-                            <i class="fas fa-arrow-left mr-1"></i> Back
+                            <i class="fas fa-arrow-left mr-1"></i> ${gettext('Back')}
                         </button>
                     ` : ''}
                     <button class="onboarding-btn onboarding-btn-primary" data-action="next">
-                        ${isLast ? 'Finish' : 'Next'} <i class="fas fa-arrow-right ml-1"></i>
+                        ${isLast ? gettext('Finish') : gettext('Next')} <i class="fas fa-arrow-right ml-1"></i>
                     </button>
                 </div>
             </div>
@@ -758,11 +758,11 @@ class OnboardingManager {
         }
         
         const confirmed = await showConfirm(
-            'Are you sure you want to skip the tour? You can restart it later from the Help menu.',
+            gettext('Are you sure you want to skip the tour? You can restart it later from the Help menu.'),
             {
-                title: 'Skip Tour',
-                confirmText: 'Skip',
-                cancelText: 'Continue Tour',
+                title: gettext('Skip Tour'),
+                confirmText: gettext('Skip'),
+                cancelText: gettext('Continue Tour'),
                 variant: 'warning'
             }
         );
@@ -824,7 +824,7 @@ class OnboardingManager {
 
         // Show success message
         if (window.toastManager) {
-            window.toastManager.success('Tour completed! You\'re all set to start tracking time.');
+            window.toastManager.success(gettext("Tour completed! You're all set to start tracking time."));
         }
 
         // Trigger completion callback if provided
@@ -852,86 +852,86 @@ class OnboardingManager {
 const defaultTourSteps = [
     {
         target: '#sidebar',
-        title: 'Welcome to TimeTracker! 👋',
-        content: 'Let\'s take a quick tour to help you get started. This is your main navigation where you can access all features. <strong>Tip:</strong> Click the arrow icon to collapse or expand the sidebar and maximize your workspace. You can also press <kbd>Ctrl</kbd>/<kbd>Cmd</kbd>+<kbd>B</kbd> to toggle it.',
+        title: gettext('Welcome to TimeTracker! 👋'),
+        content: gettext("Let's take a quick tour to help you get started. This is your main navigation where you can access all features. <strong>Tip:</strong> Click the arrow icon to collapse or expand the sidebar and maximize your workspace. You can also press <kbd>Ctrl</kbd>/<kbd>Cmd</kbd>+<kbd>B</kbd> to toggle it."),
         position: 'right'
     },
     {
         target: 'a[href*="dashboard"]',
-        title: 'Dashboard',
-        content: 'Your command center! View today\'s hours, active timers, recent entries, top projects, and activity timeline. <strong>Pro tip:</strong> Customize widgets to see what matters most to you. You can also see your time tracking at a glance without navigating away.',
+        title: gettext('Dashboard'),
+        content: gettext("Your command center! View today's hours, active timers, recent entries, top projects, and activity timeline. <strong>Pro tip:</strong> Customize widgets to see what matters most to you. You can also see your time tracking at a glance without navigating away."),
         position: 'right'
     },
     {
         target: 'a[href*="timer"]',
-        title: 'Time Tracking',
-        content: 'Start timers or manually log your time. <strong>Key features:</strong><br>• Timers run server-side (even if browser closes!)<br>• Press <kbd>T</kbd> to quickly toggle timer<br>• Use bulk entry for multiple days<br>• Save time entry templates for recurring work<br>• Idle detection auto-pauses after inactivity',
+        title: gettext('Time Tracking'),
+        content: gettext('Start timers or manually log your time. <strong>Key features:</strong><br>• Timers run server-side (even if browser closes!)<br>• Press <kbd>T</kbd> to quickly toggle timer<br>• Use bulk entry for multiple days<br>• Save time entry templates for recurring work<br>• Idle detection auto-pauses after inactivity'),
         position: 'right'
     },
     {
         target: 'a[href*="projects"]',
-        title: 'Projects',
-        content: 'Organize your work with projects. <strong>What you can do:</strong><br>• Link projects to clients for billing<br>• Set hourly rates per project<br>• Track billable vs non-billable hours<br>• Monitor project budgets and costs<br>• Add project descriptions with Markdown<br>• Archive completed projects',
+        title: gettext('Projects'),
+        content: gettext('Organize your work with projects. <strong>What you can do:</strong><br>• Link projects to clients for billing<br>• Set hourly rates per project<br>• Track billable vs non-billable hours<br>• Monitor project budgets and costs<br>• Add project descriptions with Markdown<br>• Archive completed projects'),
         position: 'right'
     },
     {
         target: 'a[href*="clients"]',
-        title: 'Clients',
-        content: 'Manage your clients and their information. Store contact details, billing rates, and company information. Clients are automatically linked to projects for streamlined invoicing and reporting.',
+        title: gettext('Clients'),
+        content: gettext('Manage your clients and their information. Store contact details, billing rates, and company information. Clients are automatically linked to projects for streamlined invoicing and reporting.'),
         position: 'right'
     },
     {
         target: 'a[href*="tasks"]',
-        title: 'Tasks',
-        content: 'Break down projects into manageable tasks. <strong>Features:</strong><br>• Track time against specific tasks<br>• Set priorities and due dates<br>• Assign tasks to team members<br>• Monitor progress with status tracking<br>• Use estimates vs actuals for planning<br>• Add comments for collaboration',
+        title: gettext('Tasks'),
+        content: gettext('Break down projects into manageable tasks. <strong>Features:</strong><br>• Track time against specific tasks<br>• Set priorities and due dates<br>• Assign tasks to team members<br>• Monitor progress with status tracking<br>• Use estimates vs actuals for planning<br>• Add comments for collaboration'),
         position: 'right'
     },
     {
         target: 'a[href*="kanban"]',
-        title: 'Kanban Board',
-        content: 'Visual task management with drag-and-drop! Move tasks between columns (To Do, In Progress, Review, Done) to track progress. Perfect for agile workflows and visual project management. <strong>Power feature:</strong> Customize columns to match your workflow.',
+        title: gettext('Kanban Board'),
+        content: gettext('Visual task management with drag-and-drop! Move tasks between columns (To Do, In Progress, Review, Done) to track progress. Perfect for agile workflows and visual project management. <strong>Power feature:</strong> Customize columns to match your workflow.'),
         position: 'right'
     },
     {
         target: 'a[href*="calendar"]',
-        title: 'Calendar View',
-        content: 'Visualize your time entries on a calendar. See your schedule at a glance, spot gaps, and plan your time more effectively. Drag and drop entries to reschedule them quickly.',
+        title: gettext('Calendar View'),
+        content: gettext('Visualize your time entries on a calendar. See your schedule at a glance, spot gaps, and plan your time more effectively. Drag and drop entries to reschedule them quickly.'),
         position: 'right'
     },
     {
         target: 'a[href*="reports"]',
-        title: 'Reports & Analytics',
-        content: 'Gain insights into your time usage. <strong>Available reports:</strong><br>• Time breakdown by project, user, or date<br>• Billable vs non-billable analysis<br>• Export to PDF or CSV<br>• Custom date ranges<br>• Save filters for quick access<br>• Visual charts and graphs',
+        title: gettext('Reports & Analytics'),
+        content: gettext('Gain insights into your time usage. <strong>Available reports:</strong><br>• Time breakdown by project, user, or date<br>• Billable vs non-billable analysis<br>• Export to PDF or CSV<br>• Custom date ranges<br>• Save filters for quick access<br>• Visual charts and graphs'),
         position: 'right'
     },
     {
         target: 'a[href*="invoices"]',
-        title: 'Invoicing',
-        content: 'Generate professional invoices from your tracked time. <strong>Features:</strong><br>• Auto-generate from time entries<br>• Add custom line items and expenses<br>• Tax calculations<br>• PDF export with branding<br>• Track payment status<br>• Send invoices to clients',
+        title: gettext('Invoicing'),
+        content: gettext('Generate professional invoices from your tracked time. <strong>Features:</strong><br>• Auto-generate from time entries<br>• Add custom line items and expenses<br>• Tax calculations<br>• PDF export with branding<br>• Track payment status<br>• Send invoices to clients'),
         position: 'right'
     },
     {
         target: 'a[href*="analytics"]',
-        title: 'Analytics Dashboard',
-        content: 'Deep insights into your productivity and time patterns. View trends, project analytics, and performance metrics. Identify your most productive times and optimize your workflow.',
+        title: gettext('Analytics Dashboard'),
+        content: gettext('Deep insights into your productivity and time patterns. View trends, project analytics, and performance metrics. Identify your most productive times and optimize your workflow.'),
         position: 'right'
     },
     {
         target: '#header-search',
-        title: 'Global Search',
-        content: 'Quickly find anything! Search across projects, tasks, clients, and time entries. <strong>Keyboard shortcut:</strong> Press <kbd>Ctrl+/</kbd> (or <kbd>Cmd+/</kbd> on Mac) to focus the search bar instantly.',
+        title: gettext('Global Search'),
+        content: gettext('Quickly find anything! Search across projects, tasks, clients, and time entries. <strong>Keyboard shortcut:</strong> Press <kbd>Ctrl+/</kbd> (or <kbd>Cmd+/</kbd> on Mac) to focus the search bar instantly.'),
         position: 'bottom'
     },
     {
         target: 'button[onclick*="openCommandPalette"]',
-        title: 'Command Palette',
-        content: 'Power user feature! Press <kbd>Ctrl+K</kbd> (or <kbd>Cmd+K</kbd> on Mac) to open the command palette. Navigate to any feature, execute actions, and access shortcuts without using your mouse. <strong>Try it:</strong> Press <kbd>Ctrl+K</kbd> now!',
+        title: gettext('Command Palette'),
+        content: gettext('Power user feature! Press <kbd>Ctrl+K</kbd> (or <kbd>Cmd+K</kbd> on Mac) to open the command palette. Navigate to any feature, execute actions, and access shortcuts without using your mouse. <strong>Try it:</strong> Press <kbd>Ctrl+K</kbd> now!'),
         position: 'bottom'
     },
     {
         target: '#theme-toggle',
-        title: 'Theme Toggle',
-        content: 'Switch between light and dark mode. Your preference is saved automatically. <strong>Keyboard shortcut:</strong> Press <kbd>Ctrl+Shift+L</kbd> to toggle themes quickly.',
+        title: gettext('Theme Toggle'),
+        content: gettext('Switch between light and dark mode. Your preference is saved automatically. <strong>Keyboard shortcut:</strong> Press <kbd>Ctrl+Shift+L</kbd> to toggle themes quickly.'),
         position: 'bottom'
     }
 ];

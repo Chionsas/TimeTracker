@@ -107,7 +107,7 @@
     function validateStep1() {
         const host = document.getElementById('LDAP_HOST').value.trim();
         if (!host) {
-            showError('LDAP_HOST', 'Host is required');
+            showError('LDAP_HOST', gettext('Host is required'));
             return false;
         }
         return true;
@@ -115,11 +115,11 @@
 
     function validateStep2() {
         if (!document.getElementById('LDAP_BIND_DN').value.trim()) {
-            showError('LDAP_BIND_DN', 'Bind DN is required');
+            showError('LDAP_BIND_DN', gettext('Bind DN is required'));
             return false;
         }
         if (!document.getElementById('LDAP_BIND_PASSWORD').value) {
-            showError('LDAP_BIND_PASSWORD', 'Bind password is required');
+            showError('LDAP_BIND_PASSWORD', gettext('Bind password is required'));
             return false;
         }
         return true;
@@ -127,11 +127,11 @@
 
     function validateStep3() {
         if (!document.getElementById('LDAP_BASE_DN').value.trim()) {
-            showError('LDAP_BASE_DN', 'Base DN is required');
+            showError('LDAP_BASE_DN', gettext('Base DN is required'));
             return false;
         }
         if (!document.getElementById('LDAP_USER_LOGIN_ATTR').value.trim()) {
-            showError('LDAP_USER_LOGIN_ATTR', 'Login attribute is required');
+            showError('LDAP_USER_LOGIN_ATTR', gettext('Login attribute is required'));
             return false;
         }
         return true;
@@ -140,7 +140,7 @@
     function validateStep4() {
         const m = document.getElementById('auth_method').value;
         if (m !== 'ldap' && m !== 'all') {
-            showError('auth_method', 'Choose ldap or all');
+            showError('auth_method', gettext('Choose ldap or all'));
             return false;
         }
         return true;
@@ -217,9 +217,9 @@
         if (prevBtn) prevBtn.classList.toggle('hidden', currentStep === 1);
         if (nextBtn) {
             if (currentStep === totalSteps) {
-                nextBtn.innerHTML = '<i class="fas fa-check mr-2"></i>Finish';
+                nextBtn.innerHTML = '<i class="fas fa-check mr-2"></i>' + gettext('Finish');
             } else {
-                nextBtn.innerHTML = 'Next<i class="fas fa-arrow-right ml-2"></i>';
+                nextBtn.innerHTML = gettext('Next') + '<i class="fas fa-arrow-right ml-2"></i>';
             }
         }
 
@@ -238,11 +238,11 @@
         const btn = document.getElementById('ldap-test-connection-btn');
         const originalText = btn.innerHTML;
         btn.disabled = true;
-        btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Testing...';
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>' + gettext('Testing...');
 
         const resultsDiv = document.getElementById('ldap-connection-test-results');
         resultsDiv.innerHTML =
-            '<div class="p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg"><p class="text-sm text-blue-800 dark:text-blue-200"><i class="fas fa-spinner fa-spin mr-2"></i>Testing...</p></div>';
+            '<div class="p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg"><p class="text-sm text-blue-800 dark:text-blue-200"><i class="fas fa-spinner fa-spin mr-2"></i>' + gettext('Testing...') + '</p></div>';
 
         try {
             const response = await fetch(urls.test, {
@@ -254,7 +254,7 @@
             connectionTestResult = result;
             displayConnectionResults(result);
         } catch (err) {
-            connectionTestResult = { success: false, message: 'Network error: ' + err.message, user_count: null };
+            connectionTestResult = { success: false, message: gettext('Network error: %(error)s', {error: err.message}), user_count: null };
             displayConnectionResults(connectionTestResult);
         } finally {
             btn.disabled = false;
@@ -275,15 +275,13 @@
             const cnt =
                 result.user_count != null
                     ? '<p class="mt-2 text-sm">' +
-                      escapeHtml(String(result.user_count)) +
-                      ' ' +
-                      (result.user_count === 1 ? 'user entry' : 'user entries') +
-                      ' (sample count under user search base).</p>'
+                      ngettext('%(num)s user entry (sample count under user search base).', '%(num)s user entries (sample count under user search base).', result.user_count) +
+                      '</p>'
                     : '';
             resultsDiv.innerHTML =
                 '<div class="p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">' +
                 '<p class="text-sm text-green-800 dark:text-green-200"><i class="fas fa-check-circle mr-2"></i>' +
-                escapeHtml(result.message || 'OK') +
+                escapeHtml(result.message || gettext('OK')) +
                 '</p>' +
                 cnt +
                 '</div>';
@@ -291,7 +289,7 @@
             resultsDiv.innerHTML =
                 '<div class="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">' +
                 '<p class="text-sm text-red-800 dark:text-red-200"><i class="fas fa-exclamation-triangle mr-2"></i>' +
-                escapeHtml(result.message || result.error || 'Connection failed') +
+                escapeHtml(result.message || result.error || gettext('Connection failed')) +
                 '</p></div>';
         }
     }
@@ -303,7 +301,7 @@
         const btn = document.getElementById('ldap-generate-config-btn');
         const originalText = btn.innerHTML;
         btn.disabled = true;
-        btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Generating...';
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>' + gettext('Generating...');
 
         const payload = collectPayload();
 
@@ -315,7 +313,7 @@
             });
             const valJson = await valRes.json();
             if (!valJson.valid) {
-                const msg = (valJson.errors && valJson.errors[0] && valJson.errors[0].message) || 'Validation failed';
+                const msg = (valJson.errors && valJson.errors[0] && valJson.errors[0].message) || gettext('Validation failed');
                 ttAlert(msg);
                 return;
             }
@@ -330,10 +328,10 @@
                 generatedConfig = result;
                 displayConfigResults(result);
             } else {
-                ttAlert(result.error || 'Failed to generate configuration');
+                ttAlert(result.error || gettext('Failed to generate configuration'));
             }
         } catch (err) {
-            ttAlert('Network error: ' + err.message);
+            ttAlert(gettext('Network error: %(error)s', {error: err.message}));
         } finally {
             btn.disabled = false;
             btn.innerHTML = originalText;
@@ -356,7 +354,7 @@
         if (navigator.clipboard && navigator.clipboard.writeText) {
             navigator.clipboard.writeText(text).then(function () {
                 const originalText = button.innerHTML;
-                button.innerHTML = '<i class="fas fa-check mr-1"></i>Copied!';
+                button.innerHTML = '<i class="fas fa-check mr-1"></i>' + gettext('Copied!');
                 button.classList.add('bg-green-500');
                 setTimeout(function () {
                     button.innerHTML = originalText;

@@ -682,19 +682,19 @@ class OfflineSyncManager {
             if (!isOnline) {
                 indicator.classList.remove('hidden');
                 indicator.className = indicator.className.replace(/bg-\w+-\d+ dark:bg-\w+-\d+/, 'bg-yellow-500 dark:bg-yellow-600');
-                if (indicatorText) indicatorText.textContent = 'You are offline. Changes will sync when you reconnect.';
+                if (indicatorText) indicatorText.textContent = gettext('You are offline. Changes will sync when you reconnect.');
                 if (indicatorIcon) indicatorIcon.className = 'fas fa-wifi-slash';
                 if (syncButton) syncButton.style.display = 'none';
             } else if (hasPending && !isSyncing) {
                 indicator.classList.remove('hidden');
                 indicator.className = indicator.className.replace(/bg-\w+-\d+ dark:bg-\w+-\d+/, 'bg-blue-500 dark:bg-blue-600');
-                if (indicatorText) indicatorText.textContent = `${this.pendingSyncCount} item(s) pending sync.`;
+                if (indicatorText) indicatorText.textContent = gettext('%(count)s item(s) pending sync.', {count: this.pendingSyncCount});
                 if (indicatorIcon) indicatorIcon.className = 'fas fa-clock';
                 if (syncButton) syncButton.style.display = 'inline-block';
             } else if (isSyncing) {
                 indicator.classList.remove('hidden');
                 indicator.className = indicator.className.replace(/bg-\w+-\d+ dark:bg-\w+-\d+/, 'bg-blue-500 dark:bg-blue-600');
-                if (indicatorText) indicatorText.textContent = 'Syncing...';
+                if (indicatorText) indicatorText.textContent = gettext('Syncing...');
                 if (indicatorIcon) indicatorIcon.className = 'fas fa-sync-alt fa-spin';
                 if (syncButton) syncButton.style.display = 'none';
             } else {

@@ -191,7 +191,7 @@ class EnhancedOnboardingManager {
             const trigger = document.createElement('span');
             trigger.className = 'tooltip-trigger';
             trigger.innerHTML = '<i class="fas fa-question-circle"></i>';
-            trigger.setAttribute('aria-label', 'Help');
+            trigger.setAttribute('aria-label', gettext('Help'));
             
             // Create popup
             const popup = document.createElement('div');
@@ -264,7 +264,7 @@ class EnhancedOnboardingManager {
         const helpBtn = document.createElement('button');
         helpBtn.className = 'contextual-help-btn';
         helpBtn.innerHTML = '<i class="fas fa-question"></i>';
-        helpBtn.setAttribute('aria-label', 'Get help');
+        helpBtn.setAttribute('aria-label', gettext('Get help'));
         helpBtn.onclick = (e) => {
             e.stopPropagation();
             this.showContextualHelp(helpId);
@@ -284,48 +284,48 @@ class EnhancedOnboardingManager {
     getHelpContent(helpId) {
         const helpContent = {
             'kanban-help': {
-                title: 'Kanban Board Help',
+                title: gettext('Kanban Board Help'),
                 content: `
-                    <p><strong>Drag and Drop:</strong> Move tasks between columns by dragging them.</p>
-                    <p><strong>Task Details:</strong> Click on a task card to view and edit details.</p>
-                    <p><strong>Quick Actions:</strong> Use the icons on task cards for quick actions like starting a timer.</p>
-                    <p><strong>Filtering:</strong> Use the filter options to find specific tasks.</p>
+                    <p>${gettext('<strong>Drag and Drop:</strong> Move tasks between columns by dragging them.')}</p>
+                    <p>${gettext('<strong>Task Details:</strong> Click on a task card to view and edit details.')}</p>
+                    <p>${gettext('<strong>Quick Actions:</strong> Use the icons on task cards for quick actions like starting a timer.')}</p>
+                    <p>${gettext('<strong>Filtering:</strong> Use the filter options to find specific tasks.')}</p>
                 `
             },
             'time-entry-help': {
-                title: 'Time Entry Help',
+                title: gettext('Time Entry Help'),
                 content: `
-                    <p><strong>Start Timer:</strong> Select a project and click Start to begin tracking time.</p>
-                    <p><strong>Manual Entry:</strong> Fill in the form to log time manually.</p>
-                    <p><strong>Bulk Entry:</strong> Use bulk entry to create multiple entries at once.</p>
-                    <p><strong>Notes:</strong> Add notes to track what you worked on.</p>
+                    <p>${gettext('<strong>Start Timer:</strong> Select a project and click Start to begin tracking time.')}</p>
+                    <p>${gettext('<strong>Manual Entry:</strong> Fill in the form to log time manually.')}</p>
+                    <p>${gettext('<strong>Bulk Entry:</strong> Use bulk entry to create multiple entries at once.')}</p>
+                    <p>${gettext('<strong>Notes:</strong> Add notes to track what you worked on.')}</p>
                 `
             },
             'reports-help': {
-                title: 'Reports Help',
+                title: gettext('Reports Help'),
                 content: `
-                    <p><strong>Date Range:</strong> Select a date range to filter your reports.</p>
-                    <p><strong>Export:</strong> Export reports to PDF or CSV for sharing.</p>
-                    <p><strong>Filters:</strong> Use filters to narrow down your data.</p>
-                    <p><strong>Charts:</strong> Visualize your time data with interactive charts.</p>
+                    <p>${gettext('<strong>Date Range:</strong> Select a date range to filter your reports.')}</p>
+                    <p>${gettext('<strong>Export:</strong> Export reports to PDF or CSV for sharing.')}</p>
+                    <p>${gettext('<strong>Filters:</strong> Use filters to narrow down your data.')}</p>
+                    <p>${gettext('<strong>Charts:</strong> Visualize your time data with interactive charts.')}</p>
                 `
             },
             'analytics-help': {
-                title: 'Analytics Help',
+                title: gettext('Analytics Help'),
                 content: `
-                    <p><strong>Overview:</strong> Get insights into your time tracking patterns.</p>
-                    <p><strong>Trends:</strong> View trends over time to identify patterns.</p>
-                    <p><strong>Project Analytics:</strong> See how time is distributed across projects.</p>
-                    <p><strong>Productivity:</strong> Track your productivity metrics.</p>
+                    <p>${gettext('<strong>Overview:</strong> Get insights into your time tracking patterns.')}</p>
+                    <p>${gettext('<strong>Trends:</strong> View trends over time to identify patterns.')}</p>
+                    <p>${gettext('<strong>Project Analytics:</strong> See how time is distributed across projects.')}</p>
+                    <p>${gettext('<strong>Productivity:</strong> Track your productivity metrics.')}</p>
                 `
             },
             'invoice-help': {
-                title: 'Invoice Help',
+                title: gettext('Invoice Help'),
                 content: `
-                    <p><strong>Create Invoice:</strong> Generate invoices from time entries or create manually.</p>
-                    <p><strong>Template:</strong> Customize invoice templates in settings.</p>
-                    <p><strong>PDF Export:</strong> Export invoices as PDF for sending to clients.</p>
-                    <p><strong>Payment Tracking:</strong> Track payments and invoice status.</p>
+                    <p>${gettext('<strong>Create Invoice:</strong> Generate invoices from time entries or create manually.')}</p>
+                    <p>${gettext('<strong>Template:</strong> Customize invoice templates in settings.')}</p>
+                    <p>${gettext('<strong>PDF Export:</strong> Export invoices as PDF for sending to clients.')}</p>
+                    <p>${gettext('<strong>Payment Tracking:</strong> Track payments and invoice status.')}</p>
                 `
             }
         };
@@ -350,7 +350,7 @@ class EnhancedOnboardingManager {
                 </div>
                 <div class="mt-6 flex justify-end">
                     <button onclick="this.closest('.fixed').remove()" class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90">
-                        Close
+                        ${gettext('Close')}
                     </button>
                 </div>
             </div>
@@ -366,32 +366,32 @@ class EnhancedOnboardingManager {
         const powerFeatures = [
             {
                 selector: '[data-feature="keyboard-shortcuts"]',
-                name: 'Keyboard Shortcuts',
-                description: 'Press Ctrl+K to open the command palette with keyboard shortcuts',
+                name: gettext('Keyboard Shortcuts'),
+                description: gettext('Press Ctrl+K to open the command palette with keyboard shortcuts'),
                 badge: true
             },
             {
                 selector: '[data-feature="bulk-actions"]',
-                name: 'Bulk Actions',
-                description: 'Select multiple items to perform bulk operations',
+                name: gettext('Bulk Actions'),
+                description: gettext('Select multiple items to perform bulk operations'),
                 badge: true
             },
             {
                 selector: '[data-feature="saved-filters"]',
-                name: 'Saved Filters',
-                description: 'Save frequently used filters for quick access',
+                name: gettext('Saved Filters'),
+                description: gettext('Save frequently used filters for quick access'),
                 badge: true
             },
             {
                 selector: '[data-feature="time-templates"]',
-                name: 'Time Entry Templates',
-                description: 'Create templates for recurring time entries',
+                name: gettext('Time Entry Templates'),
+                description: gettext('Create templates for recurring time entries'),
                 badge: true
             },
             {
                 selector: '[data-feature="kanban"]',
-                name: 'Kanban Board',
-                description: 'Visual task management with drag-and-drop',
+                name: gettext('Kanban Board'),
+                description: gettext('Visual task management with drag-and-drop'),
                 badge: true
             }
         ];
@@ -526,98 +526,98 @@ class EnhancedOnboardingManager {
         return [
             {
                 target: '#sidebar',
-                title: 'Welcome to TimeTracker! 👋',
-                content: 'Let\'s take a quick tour to help you get started. This is your main navigation where you can access all features. <strong>Tip:</strong> Click the arrow icon to collapse the sidebar and maximize your workspace.',
+                title: gettext('Welcome to TimeTracker! 👋'),
+                content: gettext("Let's take a quick tour to help you get started. This is your main navigation where you can access all features. <strong>Tip:</strong> Click the arrow icon to collapse the sidebar and maximize your workspace."),
                 position: 'right'
             },
             {
                 target: 'a[href*="dashboard"]',
-                title: 'Dashboard',
-                content: 'Your command center! View today\'s hours, active timers, recent entries, top projects, and activity timeline. <strong>Pro tip:</strong> Customize widgets to see what matters most to you. All your time tracking data is visible at a glance.',
+                title: gettext('Dashboard'),
+                content: gettext("Your command center! View today's hours, active timers, recent entries, top projects, and activity timeline. <strong>Pro tip:</strong> Customize widgets to see what matters most to you. All your time tracking data is visible at a glance."),
                 position: 'right'
             },
             {
                 target: 'a[href*="timer"]',
-                title: 'Time Tracking',
-                content: 'Start timers or manually log your time. <strong>Key features:</strong><br>• Timers run server-side (even if browser closes!)<br>• Press <kbd>T</kbd> to quickly toggle timer<br>• Use bulk entry for multiple days<br>• Save time entry templates for recurring work<br>• Idle detection auto-pauses after inactivity<br>• Manual entry with notes and tags',
+                title: gettext('Time Tracking'),
+                content: gettext('Start timers or manually log your time. <strong>Key features:</strong><br>• Timers run server-side (even if browser closes!)<br>• Press <kbd>T</kbd> to quickly toggle timer<br>• Use bulk entry for multiple days<br>• Save time entry templates for recurring work<br>• Idle detection auto-pauses after inactivity<br>• Manual entry with notes and tags'),
                 position: 'right'
             },
             {
                 target: 'a[href*="projects"]',
-                title: 'Projects',
-                content: 'Organize your work with projects. <strong>What you can do:</strong><br>• Link projects to clients for billing<br>• Set hourly rates per project<br>• Track billable vs non-billable hours<br>• Monitor project budgets and costs<br>• Add project descriptions with Markdown<br>• Archive completed projects',
+                title: gettext('Projects'),
+                content: gettext('Organize your work with projects. <strong>What you can do:</strong><br>• Link projects to clients for billing<br>• Set hourly rates per project<br>• Track billable vs non-billable hours<br>• Monitor project budgets and costs<br>• Add project descriptions with Markdown<br>• Archive completed projects'),
                 position: 'right'
             },
             {
                 target: 'a[href*="clients"]',
-                title: 'Clients',
-                content: 'Manage your clients and their information. Store contact details, billing rates, and company information. Clients are automatically linked to projects for streamlined invoicing and reporting.',
+                title: gettext('Clients'),
+                content: gettext('Manage your clients and their information. Store contact details, billing rates, and company information. Clients are automatically linked to projects for streamlined invoicing and reporting.'),
                 position: 'right'
             },
             {
                 target: 'a[href*="tasks"]',
-                title: 'Tasks',
-                content: 'Break down projects into manageable tasks. <strong>Features:</strong><br>• Track time against specific tasks<br>• Set priorities and due dates<br>• Assign tasks to team members<br>• Monitor progress with status tracking<br>• Use estimates vs actuals for planning<br>• Add comments for collaboration',
+                title: gettext('Tasks'),
+                content: gettext('Break down projects into manageable tasks. <strong>Features:</strong><br>• Track time against specific tasks<br>• Set priorities and due dates<br>• Assign tasks to team members<br>• Monitor progress with status tracking<br>• Use estimates vs actuals for planning<br>• Add comments for collaboration'),
                 position: 'right'
             },
             {
                 target: 'a[href*="kanban"]',
-                title: 'Kanban Board',
-                content: 'Visual task management with drag-and-drop! Move tasks between columns (To Do, In Progress, Review, Done) to track progress. Perfect for agile workflows. <strong>Power feature:</strong> Customize columns to match your workflow.',
+                title: gettext('Kanban Board'),
+                content: gettext('Visual task management with drag-and-drop! Move tasks between columns (To Do, In Progress, Review, Done) to track progress. Perfect for agile workflows. <strong>Power feature:</strong> Customize columns to match your workflow.'),
                 position: 'right'
             },
             {
                 target: 'a[href*="calendar"]',
-                title: 'Calendar View',
-                content: 'Visualize your time entries on a calendar. See your schedule at a glance, spot gaps, and plan your time more effectively. Drag and drop entries to reschedule them quickly.',
+                title: gettext('Calendar View'),
+                content: gettext('Visualize your time entries on a calendar. See your schedule at a glance, spot gaps, and plan your time more effectively. Drag and drop entries to reschedule them quickly.'),
                 position: 'right'
             },
             {
                 target: 'a[href*="reports"]',
-                title: 'Reports & Analytics',
-                content: 'Gain insights into your time usage. <strong>Available reports:</strong><br>• Time breakdown by project, user, or date<br>• Billable vs non-billable analysis<br>• Export to PDF or CSV<br>• Custom date ranges<br>• Save filters for quick access<br>• Visual charts and graphs',
+                title: gettext('Reports & Analytics'),
+                content: gettext('Gain insights into your time usage. <strong>Available reports:</strong><br>• Time breakdown by project, user, or date<br>• Billable vs non-billable analysis<br>• Export to PDF or CSV<br>• Custom date ranges<br>• Save filters for quick access<br>• Visual charts and graphs'),
                 position: 'right'
             },
             {
                 target: 'a[href*="invoices"]',
-                title: 'Invoicing',
-                content: 'Generate professional invoices from your tracked time. <strong>Features:</strong><br>• Auto-generate from time entries<br>• Add custom line items and expenses<br>• Tax calculations<br>• PDF export with branding<br>• Track payment status<br>• Send invoices to clients',
+                title: gettext('Invoicing'),
+                content: gettext('Generate professional invoices from your tracked time. <strong>Features:</strong><br>• Auto-generate from time entries<br>• Add custom line items and expenses<br>• Tax calculations<br>• PDF export with branding<br>• Track payment status<br>• Send invoices to clients'),
                 position: 'right'
             },
             {
                 target: 'a[href*="analytics"]',
-                title: 'Analytics Dashboard',
-                content: 'Deep insights into your productivity and time patterns. View trends, project analytics, and performance metrics. Identify your most productive times and optimize your workflow.',
+                title: gettext('Analytics Dashboard'),
+                content: gettext('Deep insights into your productivity and time patterns. View trends, project analytics, and performance metrics. Identify your most productive times and optimize your workflow.'),
                 position: 'right'
             },
             {
                 target: 'a[href*="time_entry_templates"]',
-                title: 'Time Entry Templates',
-                content: 'Save time with templates! Create reusable time entry templates for common tasks. Perfect for recurring work, meetings, or standard activities. Just select a template and fill in the details.',
+                title: gettext('Time Entry Templates'),
+                content: gettext('Save time with templates! Create reusable time entry templates for common tasks. Perfect for recurring work, meetings, or standard activities. Just select a template and fill in the details.'),
                 position: 'right'
             },
             {
                 target: 'a[href*="saved_filters"]',
-                title: 'Saved Filters',
-                content: 'Speed up your workflow! Save frequently used filters for reports, tasks, and time entries. Access your saved filters instantly instead of recreating them each time.',
+                title: gettext('Saved Filters'),
+                content: gettext('Speed up your workflow! Save frequently used filters for reports, tasks, and time entries. Access your saved filters instantly instead of recreating them each time.'),
                 position: 'right'
             },
             {
                 target: '#header-search',
-                title: 'Global Search',
-                content: 'Quickly find anything! Search across projects, tasks, clients, and time entries. <strong>Keyboard shortcut:</strong> Press <kbd>Ctrl+/</kbd> (or <kbd>Cmd+/</kbd> on Mac) to focus the search bar instantly.',
+                title: gettext('Global Search'),
+                content: gettext('Quickly find anything! Search across projects, tasks, clients, and time entries. <strong>Keyboard shortcut:</strong> Press <kbd>Ctrl+/</kbd> (or <kbd>Cmd+/</kbd> on Mac) to focus the search bar instantly.'),
                 position: 'bottom'
             },
             {
                 target: 'button[onclick*="openCommandPalette"]',
-                title: 'Command Palette',
-                content: 'Power user feature! Press <kbd>Ctrl+K</kbd> (or <kbd>Cmd+K</kbd> on Mac) to open the command palette. Navigate to any feature, execute actions, and access shortcuts without using your mouse. <strong>Try it:</strong> Press <kbd>Ctrl+K</kbd> now!',
+                title: gettext('Command Palette'),
+                content: gettext('Power user feature! Press <kbd>Ctrl+K</kbd> (or <kbd>Cmd+K</kbd> on Mac) to open the command palette. Navigate to any feature, execute actions, and access shortcuts without using your mouse. <strong>Try it:</strong> Press <kbd>Ctrl+K</kbd> now!'),
                 position: 'bottom'
             },
             {
                 target: '#theme-toggle',
-                title: 'Theme Toggle',
-                content: 'Switch between light and dark mode. Your preference is saved automatically. <strong>Keyboard shortcut:</strong> Press <kbd>Ctrl+Shift+L</kbd> to toggle themes quickly.',
+                title: gettext('Theme Toggle'),
+                content: gettext('Switch between light and dark mode. Your preference is saved automatically. <strong>Keyboard shortcut:</strong> Press <kbd>Ctrl+Shift+L</kbd> to toggle themes quickly.'),
                 position: 'bottom'
             }
         ];

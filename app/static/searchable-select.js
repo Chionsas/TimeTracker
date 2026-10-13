@@ -16,14 +16,14 @@
   'use strict';
 
   var DEFAULT_CREATE_LABEL = {
-    client: 'Create client',
-    project: 'Create project',
-    task: 'Create task',
+    client: gettext('Create client'),
+    project: gettext('Create project'),
+    task: gettext('Create task'),
   };
 
   function getCreateLabel(kind) {
     var labels = window.ttCreateLabels || {};
-    return labels[kind] || DEFAULT_CREATE_LABEL[kind] || 'Create';
+    return labels[kind] || DEFAULT_CREATE_LABEL[kind] || gettext('Create');
   }
 
   function getCreatePermission(select) {
@@ -219,7 +219,7 @@
     input.setAttribute('aria-expanded', 'false');
     input.setAttribute('aria-autocomplete', 'list');
     input.setAttribute('aria-controls', listId);
-    input.placeholder = select.getAttribute('data-search-placeholder') || 'Type to search…';
+    input.placeholder = select.getAttribute('data-search-placeholder') || gettext('Type to search…');
     input.value = selectedLabel(select);
     input.disabled = select.disabled;
 
@@ -280,7 +280,7 @@
       if (filtered.length === 0 && !(canCreate && q)) {
         var empty = document.createElement('li');
         empty.className = 'tt-searchable-empty';
-        empty.textContent = 'No matches';
+        empty.textContent = gettext('No matches');
         list.appendChild(empty);
       }
 

@@ -162,7 +162,7 @@
             duration: 8000,
             dismissible: true,
             actionLink: '__support_modal__',
-            actionLabel: (cfg && cfg.i18n && cfg.i18n.supportAction) || 'Support'
+            actionLabel: (cfg && cfg.i18n && cfg.i18n.supportAction) || gettext('Support')
         });
         postTrack(cfg, 'prompt_shown', { variant: variant, source: source || 'toast' });
     }
@@ -193,8 +193,8 @@
                     if (!data || !data.show) return;
                     var msg =
                         (cfg.i18n && cfg.i18n.longSessionToast) ||
-                        "You've been tracking for a while today. TimeTracker is free because of supporters like you.";
-                    var act = (cfg.i18n && cfg.i18n.supportAction) || 'Support';
+                        gettext("You've been tracking for a while today. TimeTracker is free because of supporters like you.");
+                    var act = (cfg.i18n && cfg.i18n.supportAction) || gettext('Support');
                     if (window.toastManager && typeof window.toastManager.show === 'function') {
                         window.toastManager.show({
                             message: msg,
@@ -227,13 +227,13 @@
             'https://timetracker.drytrix.com/support.html';
         var bmcUrl =
             'https://buymeacoffee.com/DryTrix?utm_source=timetracker&utm_medium=milestone_toast&utm_campaign=support';
-        var title = raw.title || raw.message || 'Milestone reached!';
+        var title = raw.title || raw.message || gettext('Milestone reached!');
         var message =
             raw.message ||
-            'Consider buying a key to remove prompts and support future development.';
-        var keyLabel = raw.keyLabel || 'Get key (€25)';
-        var bmcLabel = raw.bmcLabel || 'Buy a coffee';
-        var dismissLabel = raw.dismissLabel || 'Maybe later';
+            gettext('Consider buying a key to remove prompts and support future development.');
+        var keyLabel = raw.keyLabel || gettext('Get key (€25)');
+        var bmcLabel = raw.bmcLabel || gettext('Buy a coffee');
+        var dismissLabel = raw.dismissLabel || gettext('Maybe later');
 
         var overlay = document.createElement('div');
         overlay.id = 'supportMilestoneCelebration';
@@ -350,7 +350,7 @@
                         function () {
                             if (window.toastManager) {
                                 window.toastManager.show(
-                                    (cfg.i18n && cfg.i18n.shareSuccess) || 'Copied',
+                                    (cfg.i18n && cfg.i18n.shareSuccess) || gettext('Copied'),
                                     'success'
                                 );
                             }
@@ -358,7 +358,7 @@
                         function () {
                             if (window.toastManager) {
                                 window.toastManager.show(
-                                    (cfg.i18n && cfg.i18n.shareFail) || 'Copy failed',
+                                    (cfg.i18n && cfg.i18n.shareFail) || gettext('Copy failed'),
                                     'error'
                                 );
                             }
@@ -393,7 +393,7 @@
         var cfg = parseSupportConfig();
         if (!cfg) return;
         cfg.i18n = cfg.i18n || {};
-        cfg.i18n.supportAction = cfg.i18n.supportAction || 'Support';
+        cfg.i18n.supportAction = cfg.i18n.supportAction || gettext('Support');
         wireTierLinks(cfg);
         wireModalDom(cfg);
         layoutPromptFromConfig(cfg);

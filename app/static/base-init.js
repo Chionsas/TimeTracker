@@ -45,7 +45,7 @@
         var meta = document.querySelector('meta[name="csrf-token"]');
       var token = (meta && meta.getAttribute('content')) || '';
         var stopRes = await fetch(urls.stopTimer, { method: 'POST', headers: { 'X-CSRF-Token': token }, credentials: 'same-origin' });
-        if (stopRes.ok && window.toastManager && window.toastManager.info) window.toastManager.info('Timer stopped');
+        if (stopRes.ok && window.toastManager && window.toastManager.info) window.toastManager.info(gettext('Timer stopped'));
         window.location.href = urls.dashboard;
       } else {
         window.location.href = urls.manualEntry;

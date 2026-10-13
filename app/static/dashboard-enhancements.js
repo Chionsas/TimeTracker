@@ -176,7 +176,7 @@
             empty.className = 'text-center py-8 text-text-muted-light dark:text-text-muted-dark';
             empty.innerHTML = '<i class="fas fa-inbox text-4xl mb-4 opacity-50"></i>';
             const p = document.createElement('p');
-            p.textContent = 'No recent activity';
+            p.textContent = gettext('No recent activity');
             empty.appendChild(p);
             activityTimeline.appendChild(empty);
             return;
@@ -204,7 +204,7 @@
             textCol.className = 'flex-1';
             const desc = document.createElement('p');
             desc.className = 'text-sm text-text-light dark:text-text-dark';
-            desc.textContent = activity.description || 'Activity';
+            desc.textContent = activity.description || gettext('Activity');
             const when = document.createElement('p');
             when.className = 'text-xs text-text-muted-light dark:text-text-muted-dark';
             when.textContent = timeAgo;
@@ -263,13 +263,13 @@
         const diffDays = Math.floor(diffMs / 86400000);
 
         if (diffMins < 1) {
-            return 'Just now';
+            return gettext('Just now');
         } else if (diffMins < 60) {
-            return `${diffMins} minute${diffMins > 1 ? 's' : ''} ago`;
+            return ngettext('%(num)s minute ago', '%(num)s minutes ago', diffMins);
         } else if (diffHours < 24) {
-            return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
+            return ngettext('%(num)s hour ago', '%(num)s hours ago', diffHours);
         } else if (diffDays < 7) {
-            return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
+            return ngettext('%(num)s day ago', '%(num)s days ago', diffDays);
         } else {
             return window.formatUserDate ? window.formatUserDate(date) : date.toLocaleDateString();
         }
@@ -292,7 +292,7 @@
         if (dashboard) {
             const indicator = document.createElement('div');
             indicator.className = 'real-time-indicator';
-            indicator.innerHTML = '<span>Live</span>';
+            indicator.innerHTML = '<span>' + gettext('Live') + '</span>';
             dashboard.insertBefore(indicator, dashboard.firstChild);
         }
 
@@ -366,7 +366,7 @@
             if (todayOvertimeEl && data.standard_hours_per_day !== undefined) {
                 if (data.today_overtime_hours > 0) {
                     todayOvertimeEl.style.display = '';
-                    todayOvertimeEl.innerHTML = '<span class="font-medium">+ ' + Number(data.today_overtime_hours).toFixed(2) + 'h overtime</span>';
+                    todayOvertimeEl.innerHTML = '<span class="font-medium">' + gettext('+ %(hours)sh overtime', {hours: Number(data.today_overtime_hours).toFixed(2)}) + '</span>';
                 } else {
                     todayOvertimeEl.innerHTML = '<span class="text-blue-600/70 dark:text-blue-400/70">' + Number(data.today_hours).toFixed(2) + 'h / ' + Number(data.standard_hours_per_day).toFixed(1) + 'h</span>';
                     todayOvertimeEl.style.display = data.today_hours > 0 ? '' : 'none';
@@ -376,7 +376,7 @@
             if (weekOvertimeEl && data.week_overtime_hours !== undefined) {
                 if (data.week_overtime_hours > 0) {
                     weekOvertimeEl.style.display = '';
-                    weekOvertimeEl.innerHTML = '<span class="font-medium">+ ' + Number(data.week_overtime_hours).toFixed(2) + 'h overtime</span>';
+                    weekOvertimeEl.innerHTML = '<span class="font-medium">' + gettext('+ %(hours)sh overtime', {hours: Number(data.week_overtime_hours).toFixed(2)}) + '</span>';
                 } else {
                     weekOvertimeEl.style.display = 'none';
                 }
@@ -524,14 +524,14 @@
                     labels: labels,
                     datasets: [
                         {
-                            label: root.getAttribute('data-legend-this') || 'This week',
+                            label: root.getAttribute('data-legend-this') || gettext('This week'),
                             data: thisWeekHours,
                             backgroundColor: 'rgba(59, 130, 246, 0.85)',
                             borderColor: 'rgb(59, 130, 246)',
                             borderWidth: 1
                         },
                         {
-                            label: root.getAttribute('data-legend-last') || 'Last week',
+                            label: root.getAttribute('data-legend-last') || gettext('Last week'),
                             data: lastWeekHours,
                             backgroundColor: 'rgba(156, 163, 175, 0.55)',
                             borderColor: 'rgba(107, 114, 128, 0.9)',
@@ -574,8 +574,8 @@
             if (summaryEl) {
                 var total = Number(cur.total_hours) || 0;
                 var pct = data.change_percent;
-                var hrsSuffix = root.getAttribute('data-hrs-suffix') || 'hrs this week';
-                var vs = root.getAttribute('data-vs-last-week') || 'vs last week';
+                var hrsSuffix = root.getAttribute('data-hrs-suffix') || gettext('hrs this week');
+                var vs = root.getAttribute('data-vs-last-week') || gettext('vs last week');
                 var naPct = root.getAttribute('data-no-prior-pct') || '—';
 
                 summaryEl.className = 'text-sm font-medium mb-3 text-text-light dark:text-text-dark';
@@ -618,7 +618,7 @@
             console.error('Week comparison load error', e);
             if (sk) sk.classList.add('hidden');
             if (isFirst && errEl) {
-                errEl.textContent = root.getAttribute('data-error-msg') || 'Error';
+                errEl.textContent = root.getAttribute('data-error-msg') || gettext('Error');
                 errEl.classList.remove('hidden');
             }
         }
@@ -635,7 +635,7 @@
 
         if (loadingEl) {
             loadingEl.classList.remove('hidden');
-            loadingEl.textContent = root.getAttribute('data-loading-msg') || 'Loading…';
+            loadingEl.textContent = root.getAttribute('data-loading-msg') || gettext('Loading…');
         }
         if (emptyEl) emptyEl.classList.add('hidden');
         if (contentEl) contentEl.classList.add('hidden');

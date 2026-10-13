@@ -78,7 +78,7 @@
         const authMethod = document.getElementById('auth_method').value;
 
         if (!issuer) {
-            showError('issuer', 'Issuer URL is required');
+            showError('issuer', gettext('Issuer URL is required'));
             return false;
         }
 
@@ -86,26 +86,26 @@
         try {
             const url = new URL(issuer);
             if (!['http:', 'https:'].includes(url.protocol)) {
-                showError('issuer', 'URL must use http or https');
+                showError('issuer', gettext('URL must use http or https'));
                 return false;
             }
         } catch (e) {
-            showError('issuer', 'Invalid URL format');
+            showError('issuer', gettext('Invalid URL format'));
             return false;
         }
 
         if (!clientId) {
-            showError('client_id', 'Client ID is required');
+            showError('client_id', gettext('Client ID is required'));
             return false;
         }
 
         if (!clientSecret) {
-            showError('client_secret', 'Client Secret is required');
+            showError('client_secret', gettext('Client Secret is required'));
             return false;
         }
 
         if (!authMethod || !['oidc', 'both'].includes(authMethod)) {
-            showError('auth_method', 'Authentication method is required');
+            showError('auth_method', gettext('Authentication method is required'));
             return false;
         }
 
@@ -116,13 +116,13 @@
     async function validateStep2() {
         // Step 2 validation is handled by connection test
         if (!connectionTestResult) {
-            ttAlert('Please test the connection before proceeding.');
+            ttAlert(gettext('Please test the connection before proceeding.'));
             return false;
         }
         if (!connectionTestResult.success) {
             return await ttConfirm(
-                'Connection test failed. You can still proceed, but OIDC may not work correctly. Continue anyway?',
-                { variant: 'warning', confirmText: 'Continue' }
+                gettext('Connection test failed. You can still proceed, but OIDC may not work correctly. Continue anyway?'),
+                { variant: 'warning', confirmText: gettext('Continue') }
             );
         }
         return true;
@@ -202,10 +202,10 @@
 
         // Update navigation buttons
         document.getElementById('prev-btn').classList.toggle('hidden', currentStep === 1);
-        document.getElementById('next-btn').textContent = currentStep === totalSteps ? 'Finish' : 'Next →';
+        document.getElementById('next-btn').textContent = currentStep === totalSteps ? gettext('Finish') : gettext('Next →');
         document.getElementById('next-btn').innerHTML = currentStep === totalSteps 
-            ? '<i class="fas fa-check mr-2"></i>Finish'
-            : 'Next<i class="fas fa-arrow-right ml-2"></i>';
+            ? '<i class="fas fa-check mr-2"></i>' + gettext('Finish')
+            : gettext('Next') + '<i class="fas fa-arrow-right ml-2"></i>';
 
         // Special handling for step 2
         if (currentStep === 2 && connectionTestResult) {
@@ -222,17 +222,17 @@
         const issuer = document.getElementById('issuer').value.trim();
         
         if (!issuer) {
-            ttAlert('Please enter an Issuer URL first.');
+            ttAlert(gettext('Please enter an Issuer URL first.'));
             return;
         }
 
         const btn = document.getElementById('test-connection-btn');
         const originalText = btn.innerHTML;
         btn.disabled = true;
-        btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Testing...';
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>' + gettext('Testing...');
 
         const resultsDiv = document.getElementById('connection-test-results');
-        resultsDiv.innerHTML = '<div class="p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg"><p class="text-sm text-blue-800 dark:text-blue-200"><i class="fas fa-spinner fa-spin mr-2"></i>Testing connection...</p></div>';
+        resultsDiv.innerHTML = '<div class="p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg"><p class="text-sm text-blue-800 dark:text-blue-200"><i class="fas fa-spinner fa-spin mr-2"></i>' + gettext('Testing connection...') + '</p></div>';
 
         try {
             const response = await fetch('/admin/oidc/setup-wizard/test-connection', {
@@ -249,7 +249,7 @@
         } catch (error) {
             connectionTestResult = {
                 success: false,
-                error: 'Network error: ' + error.message
+                error: gettext('Network error: %(error)s', {error: error.message})
             };
             displayConnectionResults(connectionTestResult);
         } finally {
@@ -268,7 +268,7 @@
                 <div class="p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg mb-4">
                     <p class="text-sm text-green-800 dark:text-green-200">
                         <i class="fas fa-check-circle mr-2"></i>
-                        Connection successful! DNS resolved and metadata endpoint is accessible.
+                        ${gettext('Connection successful! DNS resolved and metadata endpoint is accessible.')}
                     </p>
                 </div>
             `;
@@ -280,21 +280,21 @@
         } else {
             let errorDetails = '';
             if (!result.dns_resolved) {
-                errorDetails += '<p class="mt-2"><strong>DNS Resolution:</strong> Failed to resolve ' + result.hostname + '</p>';
+                errorDetails += '<p class="mt-2"><strong>' + gettext('DNS Resolution:') + '</strong> ' + gettext('Failed to resolve %(host)s', {host: result.hostname}) + '</p>';
             }
             if (result.error) {
-                errorDetails += '<p class="mt-2"><strong>Error:</strong> ' + escapeHtml(result.error) + '</p>';
+                errorDetails += '<p class="mt-2"><strong>' + gettext('Error:') + '</strong> ' + escapeHtml(result.error) + '</p>';
             }
 
             resultsDiv.innerHTML = `
                 <div class="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg mb-4">
                     <p class="text-sm text-red-800 dark:text-red-200">
                         <i class="fas fa-exclamation-triangle mr-2"></i>
-                        Connection test failed.
+                        ${gettext('Connection test failed.')}
                     </p>
                     ${errorDetails}
                     <p class="mt-2 text-xs">
-                        See <a href="/docs/TROUBLESHOOTING_OIDC_DNS.html" target="_blank" class="underline">troubleshooting guide</a> for solutions.
+                        ${gettext('See %(link)s for solutions.', {link: '<a href="/docs/TROUBLESHOOTING_OIDC_DNS.html" target="_blank" class="underline">' + gettext('troubleshooting guide') + '</a>'})}
                     </p>
                 </div>
             `;
@@ -323,7 +323,7 @@
         const btn = document.getElementById('generate-config-btn');
         const originalText = btn.innerHTML;
         btn.disabled = true;
-        btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Generating...';
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>' + gettext('Generating...');
 
         try {
             const response = await fetch('/admin/oidc/setup-wizard/generate-config', {
@@ -339,10 +339,10 @@
                 generatedConfig = result;
                 displayConfigResults(result);
             } else {
-                ttAlert('Failed to generate configuration: ' + (result.error || 'Unknown error'));
+                ttAlert(gettext('Failed to generate configuration: %(error)s', {error: result.error || gettext('Unknown error')}));
             }
         } catch (error) {
-            ttAlert('Network error: ' + error.message);
+            ttAlert(gettext('Network error: %(error)s', {error: error.message}));
         } finally {
             btn.disabled = false;
             btn.innerHTML = originalText;
@@ -369,7 +369,7 @@
         if (navigator.clipboard && navigator.clipboard.writeText) {
             navigator.clipboard.writeText(text).then(() => {
                 const originalText = button.innerHTML;
-                button.innerHTML = '<i class="fas fa-check mr-1"></i>Copied!';
+                button.innerHTML = '<i class="fas fa-check mr-1"></i>' + gettext('Copied!');
                 button.classList.add('bg-green-500');
                 setTimeout(() => {
                     button.innerHTML = originalText;
@@ -377,7 +377,7 @@
                 }, 2000);
             }).catch(err => {
                 console.error('Failed to copy:', err);
-                ttAlert('Failed to copy to clipboard');
+                ttAlert(gettext('Failed to copy to clipboard'));
             });
         } else {
             // Fallback for older browsers
@@ -390,12 +390,12 @@
             try {
                 document.execCommand('copy');
                 const originalText = button.innerHTML;
-                button.innerHTML = '<i class="fas fa-check mr-1"></i>Copied!';
+                button.innerHTML = '<i class="fas fa-check mr-1"></i>' + gettext('Copied!');
                 setTimeout(() => {
                     button.innerHTML = originalText;
                 }, 2000);
             } catch (err) {
-                ttAlert('Failed to copy to clipboard');
+                ttAlert(gettext('Failed to copy to clipboard'));
             }
             document.body.removeChild(textarea);
         }

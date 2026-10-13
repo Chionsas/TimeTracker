@@ -72,7 +72,7 @@ class PWAEnhancements {
         this.hideOfflineIndicator();
         
         // Show online notification
-        this.showNotification('You\'re back online!', 'Your data will sync automatically.');
+        this.showNotification(gettext("You're back online!"), gettext('Your data will sync automatically.'));
         
         // Trigger background sync
         if (this.serviceWorkerRegistration && this.serviceWorkerRegistration.sync) {
@@ -97,7 +97,7 @@ class PWAEnhancements {
             indicator = document.createElement('div');
             indicator.id = 'offline-indicator';
             indicator.className = 'fixed top-0 left-0 right-0 bg-yellow-500 text-white text-center py-2 z-50';
-            indicator.innerHTML = '<i class="fas fa-wifi-slash mr-2"></i>You are offline. Some features may be limited.';
+            indicator.innerHTML = '<i class="fas fa-wifi-slash mr-2"></i>' + gettext('You are offline. Some features may be limited.');
             document.body.insertBefore(indicator, document.body.firstChild);
         }
         indicator.style.display = 'block';
@@ -138,7 +138,7 @@ class PWAEnhancements {
         const button = document.createElement('button');
         button.id = 'pwa-install-button';
         button.className = 'fixed bottom-4 right-4 bg-primary text-white px-4 py-2 rounded-lg shadow-lg hover:bg-primary/90 z-50';
-        button.innerHTML = '<i class="fas fa-download mr-2"></i>Install App';
+        button.innerHTML = '<i class="fas fa-download mr-2"></i>' + gettext('Install App');
         
         button.addEventListener('click', async () => {
             deferredPrompt.prompt();
@@ -424,8 +424,8 @@ class PWAEnhancements {
     showUpdateNotification() {
         if (window.toastManager && typeof window.toastManager.show === 'function') {
             const toastId = window.toastManager.show({
-                message: 'New version available!',
-                title: 'Update available',
+                message: gettext('New version available!'),
+                title: gettext('Update available'),
                 type: 'info',
                 duration: 0
             });
@@ -433,9 +433,9 @@ class PWAEnhancements {
             if (toastEl) {
                 const btn = document.createElement('button');
                 btn.type = 'button';
-                btn.textContent = 'Reload';
+                btn.textContent = gettext('Reload');
                 btn.className = 'ml-2 px-3 py-1 bg-primary text-white rounded hover:bg-primary/90';
-                btn.setAttribute('aria-label', 'Reload page to apply update');
+                btn.setAttribute('aria-label', gettext('Reload page to apply update'));
                 btn.onclick = () => window.location.reload();
                 const content = toastEl.querySelector('.tt-toast-content') || toastEl.querySelector('.toast-content');
                 if (content) content.appendChild(btn);
@@ -448,10 +448,10 @@ class PWAEnhancements {
         notification.innerHTML = `
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="font-semibold">Update Available</p>
-                    <p class="text-sm">A new version is available. Refresh to update.</p>
+                    <p class="font-semibold">${gettext('Update Available')}</p>
+                    <p class="text-sm">${gettext('A new version is available. Refresh to update.')}</p>
                 </div>
-                <button type="button" class="ml-4 bg-white text-blue-600 px-3 py-1 rounded hover:bg-gray-100">Reload</button>
+                <button type="button" class="ml-4 bg-white text-blue-600 px-3 py-1 rounded hover:bg-gray-100">${gettext('Reload')}</button>
             </div>
         `;
         notification.querySelector('button').addEventListener('click', () => window.location.reload());

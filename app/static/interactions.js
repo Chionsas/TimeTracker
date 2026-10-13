@@ -246,7 +246,7 @@
                 
                 const updateCounter = () => {
                     const remaining = maxLength - input.value.length;
-                    counter.textContent = `${remaining} characters remaining`;
+                    counter.textContent = gettext('%(count)s characters remaining', {count: remaining});
                     if (remaining < 10) {
                         counter.classList.add('text-warning');
                     } else {
@@ -304,7 +304,7 @@
     /**
      * Create loading overlay
      */
-    function createLoadingOverlay(text = 'Loading...') {
+    function createLoadingOverlay(text = gettext('Loading...')) {
         const overlay = document.createElement('div');
         overlay.className = 'loading-overlay';
         overlay.innerHTML = `
