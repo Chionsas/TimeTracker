@@ -23483,7 +23483,7 @@ msgstr "Laikmačių paleidimas ir sustabdymas su projekto ir užduoties susiejim
 
 #: app/templates/main/about.html:88
 msgid "Manual time entry with notes and tags"
-msgstr "Rankinis laiko įvedimas su pastabomis ir žymėmis"
+msgstr "Rankinis laiko įvedimas su pastabomis ir žymomis"
 
 #: app/templates/main/about.html:89
 msgid "Client and project organization"
@@ -24398,7 +24398,7 @@ msgstr ""
 
 #: app/templates/main/dashboard.html:1144
 msgid "Tags (optional)"
-msgstr "Žymės (nebūtina)"
+msgstr "Žymos (nebūtina)"
 
 #: app/templates/main/dashboard.html:1145
 msgid "e.g. meeting, dev, admin"
@@ -24406,7 +24406,7 @@ msgstr "pvz., susitikimas, kūrimas, administravimas"
 
 #: app/templates/main/dashboard.html:1152
 msgid "Comma-separated; recent tags shown as suggestions."
-msgstr "Atskirk kableliais; paskutinės naudotos žymės rodomos kaip pasiūlymai."
+msgstr "Atskirk kableliais; paskutinės naudotos žymos rodomos kaip pasiūlymai."
 
 #: app/templates/main/dashboard.html:1164
 #: app/templates/timer/timer_page.html:250
@@ -24919,7 +24919,7 @@ msgstr "Pridėk pastabų apie tai, ką dirbi (nebūtina)"
 
 #: app/templates/main/help.html:128
 msgid "Add tags separated by commas (optional)"
-msgstr "Pridėk žymes, atskirtas kableliais (nebūtina)"
+msgstr "Pridėk žymas, atskirtas kableliais (nebūtina)"
 
 #: app/templates/main/help.html:129
 msgid "Click \"Start Timer\""
@@ -25009,7 +25009,7 @@ msgstr "Aprašymas / pastabos"
 
 #: app/templates/main/help.html:163
 msgid "Tags for categorization"
-msgstr "Žymės kategorizavimui"
+msgstr "Žymos kategorizavimui"
 
 #: app/templates/main/help.html:164
 msgid "Billable status override"
@@ -26044,7 +26044,7 @@ msgid ""
 msgstr ""
 "Taip, bet kurį laiko įrašą gali redaguoti – laiko įrašų sąraše spustelėk "
 "redagavimo mygtuką. Gali keisti projektą, pradžios / pabaigos laiką, "
-"pastabas, žymes, apmokestinamumo būseną ir užduoties priskyrimą. "
+"pastabas, žymas, apmokestinamumo būseną ir užduoties priskyrimą. "
 "Administratoriai gali redaguoti visus laiko įrašus, o įprasti naudotojai "
 "– tik savo įrašus."
 
