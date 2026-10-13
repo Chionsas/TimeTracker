@@ -1,5 +1,6 @@
 # Lithuanian translations for TimeTracker.
-# This file is distributed under the same license as the TimeTracker project.
+# This file is distributed under the same license as the TimeTracker
+# project.
 #
 msgid ""
 msgstr ""
@@ -6894,7 +6895,7 @@ msgstr "Paslėpti"
 
 #: app/templates/base.html:121
 msgid "Built by an independent developer"
-msgstr "Sukūrė nepriklausomas kūrėjas"
+msgstr "Sukurta laisvo programuotojo"
 
 #: app/templates/base.html:134
 msgid "Software update"
@@ -7215,7 +7216,7 @@ msgstr "Visi veiksmai"
 #: app/templates/timer/manual_entry.html:155
 #: app/templates/timer/time_entries_overview.html:79
 msgid "Start Date"
-msgstr "Pradžios data"
+msgstr "Pradžia"
 
 #: app/templates/activity/feed.html:43
 #: app/templates/calendar/event_form.html:61 app/templates/gantt/view.html:41
@@ -7235,7 +7236,7 @@ msgstr "Pradžios data"
 #: app/templates/timer/manual_entry.html:159
 #: app/templates/timer/time_entries_overview.html:83
 msgid "End Date"
-msgstr "Pabaigos data"
+msgstr "Pabaiga"
 
 #: app/templates/activity/feed.html:48 app/templates/issues/list.html:80
 #: app/templates/tasks/my_tasks.html:176
@@ -8151,13 +8152,11 @@ msgstr "El. pašto konfigūracija"
 
 #: app/templates/admin/email_support.html:23
 msgid "Configure email settings here to save them in the database."
-msgstr ""
-"Čia sukonfigūruok el. pašto nustatymus, kad jie būtų išsaugoti duomenų "
-"bazėje."
+msgstr "Sukonfigūruok el. pašto nustatymus, kad jie būtų išsaugoti duomenų bazėje."
 
 #: app/templates/admin/email_support.html:31
 msgid "Enable Database Email Configuration"
-msgstr "Įjungti el. pašto konfigūraciją duomenų bazėje"
+msgstr "Saugoti el. pašto konfigūraciją duomenų bazėje"
 
 #: app/templates/admin/email_support.html:37
 #: app/templates/admin/email_support.html:168
@@ -8227,7 +8226,7 @@ msgstr ""
 #: app/templates/integrations/caldav_setup.html:215
 #: app/templates/integrations/manage.html:520
 msgid "Save Configuration"
-msgstr "Išsaugoti konfigūraciją"
+msgstr "Išsaugoti"
 
 #: app/templates/admin/email_support.html:94
 #: app/templates/admin/pdf_layout.html:1741
@@ -8245,7 +8244,7 @@ msgstr "Atstatyti"
 
 #: app/templates/admin/email_support.html:106
 msgid "Email Configuration Status"
-msgstr "El. pašto konfigūracijos būsena"
+msgstr "El. pašto konfigūracija"
 
 #: app/templates/admin/email_support.html:108
 #: app/templates/analytics/dashboard.html:20
@@ -13927,7 +13926,7 @@ msgstr "Neturi peržiūros laukiančių laiko įrašų ar lankomumo pataisų pra
 #: app/templates/approvals/list.html:154
 #: app/templates/workday/admin_corrections.html:5
 msgid "Attendance corrections"
-msgstr "Lankomumo pataisos"
+msgstr "Lankomumo korekcijos"
 
 #: app/templates/approvals/list.html:168
 #: app/templates/workday/admin_corrections.html:27
@@ -14775,7 +14774,7 @@ msgstr "Pavadinimas"
 #: app/templates/timer/timer_page.html:242
 #: app/templates/timer/view_timer.html:28
 msgid "Start Time"
-msgstr "Pradžios laikas"
+msgstr "Pradžia"
 
 #: app/templates/calendar/event_form.html:71
 #: app/templates/client_portal/approval_detail.html:65
@@ -14786,7 +14785,7 @@ msgstr "Pradžios laikas"
 #: app/templates/timer/manual_entry.html:169
 #: app/templates/timer/view_timer.html:34
 msgid "End Time"
-msgstr "Pabaigos laikas"
+msgstr "Pabaiga"
 
 #: app/templates/calendar/event_form.html:88
 msgid "All Day Event"
@@ -24246,7 +24245,7 @@ msgstr "Etapas"
 
 #: app/templates/main/dashboard.html:835
 msgid "Time by project (last 7 days)"
-msgstr "Laikas pagal projektą (pastarosios 7 dienos)"
+msgstr "Pastarosios 7 dienos pagal projektus"
 
 #: app/templates/main/dashboard.html:837
 msgid "View report"
@@ -24266,7 +24265,7 @@ msgstr "Pradėk laiko apskaitą ir čia matysi pasiskirstymą."
 
 #: app/templates/main/dashboard.html:892
 msgid "Top Projects (30 days)"
-msgstr "Populiariausi projektai (30 dienų)"
+msgstr "30 d. populiariausi projektai"
 
 #: app/templates/main/dashboard.html:930
 msgid "No activity in the last 30 days."
@@ -24321,7 +24320,7 @@ msgid ""
 "If this saves you time, consider supporting development — everything "
 "stays free and open."
 msgstr ""
-"Jei tai taupo tavo laiką, pagalvok apie kūrimo paramą — viskas lieka "
+"Jei padedame sutaupyti laiko, paremk programos kūrimą — viskas lieka "
 "nemokama ir atvira."
 
 #: app/templates/main/dashboard.html:1017
@@ -26342,11 +26341,11 @@ msgstr "Atidaryti paramos langą"
 #: app/templates/partials/_sidebar.html:55
 #: app/templates/partials/_sidebar.html:57
 msgid "My productivity"
-msgstr "Mano produktyvumas"
+msgstr "Produktyvumas"
 
 #: app/templates/main/productivity_dashboard.html:8
 msgid "Your personal time tracking patterns, focus, and streaks."
-msgstr "Tavo asmeniniai laiko apskaitos įpročiai, susikaupimas ir serijos."
+msgstr "Asmeniniai laiko apskaitos įpročiai, susikaupimas ir atkaklumas."
 
 #: app/templates/main/productivity_dashboard.html:48
 msgid "today"
@@ -26362,11 +26361,11 @@ msgstr "Rodoma atskirai – nesumuojama"
 
 #: app/templates/main/productivity_dashboard.html:99
 msgid "Streak"
-msgstr "Serija"
+msgstr "Iš eilės"
 
 #: app/templates/main/productivity_dashboard.html:103
 msgid "day streak"
-msgstr "dienų serija"
+msgstr "dienų iš eilės"
 
 #: app/templates/main/productivity_dashboard.html:104
 msgid "Best"
@@ -26459,7 +26458,7 @@ msgstr "Apskaitytos dienos šį mėnesį"
 
 #: app/templates/main/productivity_dashboard.html:209
 msgid "Activity heatmap"
-msgstr "Veiklos šilumos žemėlapis"
+msgstr "Veiklos intensyvumo grafikas"
 
 #: app/templates/main/productivity_dashboard.html:210
 msgid "Last 12 weeks of tracked time"
@@ -26885,7 +26884,7 @@ msgstr "Laiko patvirtinimai"
 #: app/templates/partials/_sidebar.html:150
 #: app/templates/workforce/dashboard.html:68
 msgid "Attendance Corrections"
-msgstr "Lankomumo pataisos"
+msgstr "Lankomumo korekcijos"
 
 #: app/templates/partials/_sidebar.html:162
 #: app/templates/project_templates/list.html:4
@@ -29309,7 +29308,7 @@ msgstr ""
 #: app/templates/reports/export_form.html:36
 #: app/templates/reports/export_form.html:38
 msgid "Export format"
-msgstr "Eksporto formatas"
+msgstr "Formatas"
 
 #: app/templates/reports/export_form.html:175
 msgid "e.g., development, meeting, urgent"
@@ -29341,7 +29340,7 @@ msgstr "Pradžios data turi būti ankstesnė už pabaigos datą arba jai lygi."
 
 #: app/templates/reports/index.html:13
 msgid "View comprehensive reports and analytics for your time tracking data"
-msgstr "Peržiūrėk išsamias laiko apskaitos duomenų ataskaitas ir analitiką"
+msgstr "Išsamios laiko apskaitos duomenų ataskaitos ir analitika"
 
 #: app/templates/reports/index.html:20
 msgid ""
@@ -29389,7 +29388,7 @@ msgstr "Savas intervalas"
 
 #: app/templates/reports/index.html:102
 msgid "Comparison View"
-msgstr "Palyginimo rodinys"
+msgstr "Palyginimas"
 
 #: app/templates/reports/index.html:107
 #: app/templates/reports/week_in_review.html:7
@@ -29429,7 +29428,7 @@ msgstr "Eksportuoti ataskaitas"
 
 #: app/templates/reports/index.html:149
 msgid "Export Format"
-msgstr "Eksporto formatas"
+msgstr "Formatas"
 
 #: app/templates/reports/index.html:155
 msgid "Export Report"
@@ -31671,7 +31670,7 @@ msgstr ""
 
 #: app/templates/timer/focus.html:12 app/templates/timer/timer_page.html:308
 msgid "Focus / Pomodoro"
-msgstr "Fokusavimas / Pomodoro"
+msgstr "Susikaupimas / Pomodoro"
 
 #: app/templates/timer/focus.html:13 app/templates/timer/timer_page.html:309
 msgid "Work in focused cycles with short breaks"
@@ -31689,7 +31688,7 @@ msgstr "pertraukimų"
 
 #: app/templates/timer/focus.html:65 app/templates/timer/timer_page.html:329
 msgid "Start Focus"
-msgstr "Pradėti fokusavimą"
+msgstr "Pradėti susikaupimą"
 
 #: app/templates/timer/focus.html:68 app/templates/timer/timer_page.html:332
 msgid "Complete Cycle"
@@ -31705,7 +31704,7 @@ msgstr "Tavo numatytosios reikšmės"
 
 #: app/templates/timer/focus.html:84
 msgid "Focus length"
-msgstr "Fokusavimo trukmė"
+msgstr "Susikaupimo trukmė"
 
 #: app/templates/timer/focus.html:85 app/templates/timer/focus.html:275
 #: app/templates/timer/timer_page.html:895
@@ -31739,7 +31738,7 @@ msgstr "Ciklai"
 
 #: app/templates/timer/focus.html:100
 msgid "Minutes focused"
-msgstr "Fokusavimo minutės"
+msgstr "Susikaupimo minutės"
 
 #: app/templates/timer/focus.html:101
 msgid "Interruptions"
@@ -31811,7 +31810,7 @@ msgstr "Data ir laikas"
 
 #: app/templates/timer/manual_entry.html:175
 msgid "Worked Time"
-msgstr "Dirbtas laikas"
+msgstr "Trukmė"
 
 #: app/templates/timer/manual_entry.html:177
 msgid ""
@@ -32265,17 +32264,17 @@ msgstr "Sistemos numatytasis"
 
 #: app/templates/user/settings.html:308
 msgid "Focus / Pomodoro Defaults"
-msgstr "Fokusavimo / Pomodoro numatytosios reikšmės"
+msgstr "Susikaupimo / Pomodoro numatytosios reikšmės"
 
 #: app/templates/user/settings.html:314
 msgid "Default lengths used when starting a focus session from the Timer page."
 msgstr ""
-"Numatytosios trukmės, naudojamos pradedant fokusavimo sesiją laikmačio "
+"Numatytosios trukmės, naudojamos pradedant susikaupimo sesiją laikmačio "
 "puslapyje."
 
 #: app/templates/user/settings.html:318
 msgid "Focus length (minutes)"
-msgstr "Fokusavimo trukmė (minutėmis)"
+msgstr "Susikaupimo trukmė (minutėmis)"
 
 #: app/templates/user/settings.html:324
 msgid "Short break (minutes)"
@@ -32858,7 +32857,7 @@ msgstr ""
 
 #: app/templates/workday/history.html:20
 msgid "Start time"
-msgstr "Pradžios laikas"
+msgstr "Pradžia"
 
 #: app/templates/workday/history.html:24
 msgid "End time (optional)"
@@ -33180,15 +33179,15 @@ msgstr "Sukurti / gauti laikotarpį"
 
 #: app/templates/workforce/dashboard.html:29
 msgid "Start date"
-msgstr "Pradžios data"
+msgstr "Pradžia"
 
 #: app/templates/workforce/dashboard.html:33
 msgid "End date"
-msgstr "Pabaigos data"
+msgstr "Pabaiga"
 
 #: app/templates/workforce/dashboard.html:42
 msgid "Exports"
-msgstr "Eksportai"
+msgstr "Eksportavimas"
 
 #: app/templates/workforce/dashboard.html:43
 msgid "Download payroll, capacity, and compliance exports"
