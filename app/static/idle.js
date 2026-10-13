@@ -150,8 +150,8 @@
         const j = await r.json().catch(function(){ return {}; });
         if (!j.already_resolved){
           const msg = j && j.stopped
-            ? (window.i18n?.messages?.timerStopped || 'Timer stopped')
-            : (window.i18n?.messages?.stillWorkingYes || 'Great — timer continues');
+            ? gettext('Timer stopped')
+            : gettext('Great — timer continues');
           if (window.toastManager && window.toastManager.success) {
             window.toastManager.success(msg, '', 5000);
           }
@@ -166,8 +166,7 @@
   }
 
   function showUnansweredNotice(){
-    const msg = window.i18n?.messages?.idleUnanswered ||
-      'No answer received — the server will flag or stop this timer at its next check.';
+    const msg = gettext('No answer received — the server will flag or stop this timer at its next check.');
     if (window.toastManager && window.toastManager.info) {
       window.toastManager.info(msg, '', 6000);
     }
@@ -191,8 +190,8 @@
       if (r.ok){
         const j = await r.json().catch(function(){ return {}; });
         const msg = j && j.stopped
-          ? (window.i18n?.messages?.timerStopped || 'Timer stopped')
-          : (window.i18n?.messages?.stillWorkingYes || 'Great — timer continues');
+          ? gettext('Timer stopped')
+          : gettext('Great — timer continues');
         if (window.toastManager && window.toastManager.success) window.toastManager.success(msg, '', 5000);
         await refreshTimerUiAfterStop();
       }
@@ -202,12 +201,11 @@
   function showNeedsReviewBanner(){
     if (reviewBannerOpen || promptShown) return;
     reviewBannerOpen = true;
-    const trimLabel = window.i18n?.messages?.stillWorkingTrim || 'Trim idle time';
-    const stopLabel = window.i18n?.messages?.timerStopped || 'Stop timer now';
-    const contLabel = window.i18n?.messages?.stillWorkingYes || 'I am still working';
+    const trimLabel = gettext('Trim idle time');
+    const stopLabel = gettext('Stop timer now');
+    const contLabel = gettext('I am still working');
     const msg = escapeHtml(
-      window.i18n?.messages?.idleNeedsReview ||
-      'We could not reach you while you were idle. Your timer kept running — trim it back to your last activity, stop it now, or keep working.'
+      gettext('We could not reach you while you were idle. Your timer kept running — trim it back to your last activity, stop it now, or keep working.')
     );
     buildReminderToast('blue', msg, [
       { label: trimLabel, style: 'primary', onClick: function(){ resolveIdleReview('trim'); } },
@@ -221,14 +219,12 @@
     if (Notification.permission !== 'granted') return;
     closeIdleNotification();
     try {
-      const title = window.i18n?.messages?.stillWorkingTitle || 'Still working?';
+      const title = gettext('Still working?');
       const autoStop = getIdleUnansweredAction() === 'auto_stop';
-      const body = window.i18n?.messages?.stillWorkingPrompt ||
-        (autoStop
-          ? ('You seem inactive since ' + formatTime(new Date(stopTs)) +
-             '. Click to confirm you are still working, or the timer will be stopped and the idle time kept.')
-          : ('You seem inactive since ' + formatTime(new Date(stopTs)) +
-             '. Click to confirm you are still working, or the timer will be flagged for review.'));
+      const since = formatTime(new Date(stopTs));
+      const body = autoStop
+        ? gettext('You seem inactive since %(time)s. Click to confirm you are still working, or the timer will be stopped and the idle time kept.', { time: since })
+        : gettext('You seem inactive since %(time)s. Click to confirm you are still working, or the timer will be flagged for review.', { time: since });
       const n = new Notification(title, {
         body: body,
         tag: 'tt-still-working',
@@ -253,16 +249,14 @@
     currentIdleToken = notifiedAt || null;
     clearGraceTimers();
 
-    const yesLabel = window.i18n?.messages?.stillWorkingYes || 'Yes, still working';
-    const noLabel = window.i18n?.messages?.stillWorkingNo || 'No, stop timer';
-    const trimLabel = window.i18n?.messages?.stillWorkingTrim || 'Keep until idle';
+    const yesLabel = gettext('Yes, still working');
+    const noLabel = gettext('No, stop timer');
+    const trimLabel = gettext('Keep until idle');
     const autoStop = getIdleUnansweredAction() === 'auto_stop';
-    const baseMsg = window.i18n?.messages?.stillWorkingPrompt ||
-      (autoStop
-        ? ('Still working? You seem inactive since ' + formatTime(new Date(stopTs)) +
-           '. If you do not answer, the timer will be stopped and the idle time kept.')
-        : ('Still working? You seem inactive since ' + formatTime(new Date(stopTs)) +
-           '. If you do not answer, the timer keeps running and is flagged for review.'));
+    const since = formatTime(new Date(stopTs));
+    const baseMsg = autoStop
+      ? gettext('Still working? You seem inactive since %(time)s. If you do not answer, the timer will be stopped and the idle time kept.', { time: since })
+      : gettext('Still working? You seem inactive since %(time)s. If you do not answer, the timer keeps running and is flagged for review.', { time: since });
 
     const deadline = Date.now() + GRACE_MS;
 
@@ -368,12 +362,12 @@
       escapeHtml(msg),
       [
         {
-          label: (window.i18n?.messages?.timerStopped || 'Stop timer'),
+          label: gettext('Stop timer'),
           style: 'primary',
           onClick: function(){ window.floatingTimerBar && window.floatingTimerBar.stopTimer(); }
         },
         {
-          label: (window.i18n?.messages?.dismiss || 'Dismiss'),
+          label: gettext('Dismiss'),
           style: 'link',
           onClick: function(){ longEntryNudgeShown = true; }
         }
@@ -581,8 +575,8 @@
           'blue',
           msg,
           [
-            { label: (window.i18n?.messages?.startTimer || 'Start timer'), style: 'primary', onClick: function(){ window.location.href = '/'; } },
-            { label: (window.i18n?.messages?.dismiss || 'Dismiss'), style: 'link', onClick: function(){ dismissNotification('no_tracking_today'); } }
+            { label: gettext('Start timer'), style: 'primary', onClick: function(){ window.location.href = '/'; } },
+            { label: gettext('Dismiss'), style: 'link', onClick: function(){ dismissNotification('no_tracking_today'); } }
           ],
           30000
         );
@@ -599,8 +593,8 @@
           'green',
           msg,
           [
-            { label: (window.i18n?.messages?.viewEntries || 'View entries'), style: 'primary', onClick: function(){ window.location.href = '/time-entries'; } },
-            { label: (window.i18n?.messages?.dismiss || 'Dismiss'), style: 'link', onClick: function(){ dismissNotification('end_of_day_reminder'); } }
+            { label: gettext('View entries'), style: 'primary', onClick: function(){ window.location.href = '/time-entries'; } },
+            { label: gettext('Dismiss'), style: 'link', onClick: function(){ dismissNotification('end_of_day_reminder'); } }
           ],
           60000
         );
@@ -628,7 +622,7 @@
       msg,
       [
         {
-          label: (window.i18n?.messages?.pauseTimer || 'Pause timer'),
+          label: gettext('Pause timer'),
           style: 'primary',
           onClick: async function(){
             try {
@@ -638,7 +632,7 @@
           }
         },
         {
-          label: (window.i18n?.messages?.snooze15 || 'Snooze 15 min'),
+          label: gettext('Snooze 15 min'),
           style: 'secondary',
           onClick: function(){
             // Client-side snooze: keep the per-timer flag set for 15 minutes so the
@@ -647,7 +641,7 @@
             setTimeout(function(){ breakNudgeShown = false; }, 15 * 60 * 1000);
           }
         },
-        { label: (window.i18n?.messages?.dismiss || 'Dismiss'), style: 'link', onClick: function(){ dismissNotification('break_reminder'); } }
+        { label: gettext('Dismiss'), style: 'link', onClick: function(){ dismissNotification('break_reminder'); } }
       ],
       45000
     );

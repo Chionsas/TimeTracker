@@ -59,7 +59,7 @@ See implementation commits and CHANGELOG Unreleased section for other Phase 1 it
 **Navigation / command palette**
 
 - Expanded Ctrl+K destinations (projects, tasks, invoices, analytics, calendar, expenses, time entries, settings) via `data-*` URLs on `_command_palette.html`.
-- Command titles wired to `window.i18n.commandPalette` in `_head.html`.
+- Command titles translated with `gettext()` (see `app/static/i18n.js`).
 - Sidebar unchanged structurally; comment notes palette as alternate entry to primary routes.
 
 **i18n quick wins**

@@ -412,6 +412,7 @@
         {% endwith %}
     </div>
 
+    {% include 'partials/_i18n.html' %}
     <script src="{{ asset_url('toast') }}"></script>
     <script src="{{ url_for('static', filename='vendor/socketio/socket.io.min.js') }}" crossorigin="anonymous"></script>
     <script nonce="{{ csp_nonce() }}">

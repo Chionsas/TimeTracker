@@ -1,0 +1,6 @@
+{# gettext for JavaScript: the runtime (app/static/i18n.js) and the current
+   locale's catalog (app/routes/i18n.py). Every layout that loads JavaScript
+   includes this before its first <script>, so gettext()/ngettext() exist and
+   are translated by the time any bundle runs. #}
+    <script src="{{ asset_url('i18n', fallback='i18n.js') }}"></script>
+    <script src="{{ i18n_catalog_url() }}"></script>

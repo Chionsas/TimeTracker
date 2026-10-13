@@ -10,10 +10,7 @@
     var dirty = false;
 
     function message() {
-        if (window.i18n && window.i18n.messages && window.i18n.messages.unsavedChanges) {
-            return window.i18n.messages.unsavedChanges;
-        }
-        return 'You have unsaved changes. Are you sure you want to leave?';
+        return gettext('You have unsaved changes. Are you sure you want to leave?');
     }
 
     function markDirty() {

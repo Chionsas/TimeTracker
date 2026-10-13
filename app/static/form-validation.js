@@ -234,7 +234,7 @@ class FormValidator {
                     const trimmed = typeof value === 'string' ? value.trim() : value;
                     return trimmed !== '' && trimmed !== null && trimmed !== undefined;
                 },
-                message: window.i18n?.messages?.requiredField || 'This field is required'
+                message: gettext('This field is required')
             });
         }
         

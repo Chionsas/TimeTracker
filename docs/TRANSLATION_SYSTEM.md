@@ -114,6 +114,20 @@ message = _('Timer started successfully')
 flash(_('Project created'), 'success')
 ```
 
+### In JavaScript
+
+`gettext()` and `ngettext()` are globals defined by `app/static/i18n.js` and take the English text as the key, exactly like `_()` in templates:
+
+```javascript
+showToast(gettext('Failed to load projects'), 'danger');
+el.textContent = gettext('%(count)s characters remaining', { count: remaining });
+label = ngettext('%(num)s day overdue', '%(num)s days overdue', days);
+```
+
+The placeholders are filled from the params object (`ngettext()` provides `%(num)s` itself), and a string without a translation renders as written, so the source stays the complete English UI. `pybabel extract` reads these calls through the `javascript` section of `babel.cfg` (`scripts/babel_javascript.py`, a scan of the source that also finds calls inside template literals, which Babel's own JavaScript extractor loses), so they land in the same `messages.pot` and `.po` files as everything else; no separate catalog to maintain.
+
+The browser gets the translations from `/i18n/<locale>.js` (`app/routes/i18n.py`), which defines `window.i18n` with the locale, its plural rule and the translated strings that `messages.po` locates in `app/static/`. Every layout loads it through `partials/_i18n.html` before its first script. Translations that are only used in inline `<script>` blocks of a template stay server-rendered: `{{ _('…')|tojson }}`.
+
 ## Translation Compilation
 
 Translation files (`.po`) are automatically compiled to binary files (`.mo`) when the application starts. The compilation is handled by `app/utils/i18n.py` which:
@@ -156,10 +170,10 @@ When you add new translatable strings to the application:
 
 2. **Extract messages** (writes `messages.pot` at the repo root; it is gitignored):
    ```bash
-   pybabel extract -F babel.cfg -o messages.pot .
+   PYTHONPATH=. pybabel extract -F babel.cfg -o messages.pot .
    ```
 
-   `babel.cfg` defines a `[extractors]` alias so the **jinja2** method resolves to `jinja2.ext:babel_extract` (needed on some Python/setuptools setups where the `babel.extractors` entry point is not visible).
+   `babel.cfg` defines `[extractors]` aliases: the **jinja2** method resolves to `jinja2.ext:babel_extract` (needed on some Python/setuptools setups where the `babel.extractors` entry point is not visible), and **javascript** to `scripts/babel_javascript.py` in this repository, which is why `PYTHONPATH=.` is needed.
 
 3. **Update all translation files**:
    ```bash

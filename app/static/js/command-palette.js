@@ -65,15 +65,6 @@ import { commandScore } from 'cmdk/command-score';
     settings: root.dataset.settingsUrl || '/user/settings',
   };
 
-  function cpT(key, fallback) {
-    try {
-      const v = window.i18n && window.i18n.commandPalette && window.i18n.commandPalette[key];
-      return v || fallback;
-    } catch (_) {
-      return fallback;
-    }
-  }
-
   const state = {
     open: false,
     mode: 'commands', // 'commands' | 'projects'
@@ -208,32 +199,32 @@ import { commandScore } from 'cmdk/command-score';
     state.commands = [
       {
         id: 'start-timer',
-        title: cpT('startTimer', 'Start Timer'),
+        title: gettext('Start Timer'),
         keywords: 'timer start track',
         hint: isMac ? '⌘K' : 'Ctrl+K',
         action: async () => {
           try {
             await fetchProjects();
-            setMode('projects', cpT('selectProject', 'Start Timer → Select a project'));
+            setMode('projects', gettext('Start Timer → Select a project'));
           } catch (e) {
             showToast(e.message || 'Failed to load projects', 'danger');
           }
         },
       },
-      { id: 'new-time-entry', title: cpT('newTimeEntry', 'New Time Entry'), keywords: 'manual log add', action: () => nav(urls.newTimeEntry) },
-      { id: 'new-project', title: cpT('newProject', 'New Project'), keywords: 'project create add', action: () => nav(urls.newProject) },
-      { id: 'new-invoice', title: cpT('newInvoice', 'New Invoice'), keywords: 'invoice billing create', action: () => nav(urls.newInvoice) },
-      { id: 'goto-dashboard', title: cpT('gotoDashboard', 'Go to Dashboard'), keywords: 'home overview main', action: () => nav(urls.dashboard) },
-      { id: 'goto-time-entries', title: cpT('gotoTimeEntries', 'Go to Time Entries'), keywords: 'entries list log history', action: () => nav(urls.timeEntries) },
-      { id: 'goto-projects', title: cpT('gotoProjects', 'Go to Projects'), keywords: 'projects work jobs', action: () => nav(urls.projects) },
-      { id: 'goto-tasks', title: cpT('gotoTasks', 'Go to Tasks'), keywords: 'tasks todo issues', action: () => nav(urls.tasks) },
-      { id: 'goto-invoices', title: cpT('gotoInvoices', 'Go to Invoices'), keywords: 'invoices billing', action: () => nav(urls.invoices) },
-      { id: 'goto-expenses', title: cpT('gotoExpenses', 'Go to Expenses'), keywords: 'expenses receipts', action: () => nav(urls.expenses) },
-      { id: 'goto-calendar', title: cpT('gotoCalendar', 'Go to Calendar'), keywords: 'calendar schedule', action: () => nav(urls.calendar) },
-      { id: 'goto-analytics', title: cpT('gotoAnalytics', 'Go to Analytics'), keywords: 'analytics charts metrics', action: () => nav(urls.analytics) },
-      { id: 'goto-reports', title: cpT('gotoReports', 'Go to Reports'), keywords: 'reports insights export', action: () => nav(urls.reports) },
-      { id: 'goto-clients', title: cpT('gotoClients', 'Go to Clients'), keywords: 'crm customers companies', action: () => nav(urls.clients) },
-      { id: 'goto-settings', title: cpT('gotoSettings', 'Go to Settings'), keywords: 'settings preferences profile account', action: () => nav(urls.settings) },
+      { id: 'new-time-entry', title: gettext('New Time Entry'), keywords: 'manual log add', action: () => nav(urls.newTimeEntry) },
+      { id: 'new-project', title: gettext('New Project'), keywords: 'project create add', action: () => nav(urls.newProject) },
+      { id: 'new-invoice', title: gettext('New Invoice'), keywords: 'invoice billing create', action: () => nav(urls.newInvoice) },
+      { id: 'goto-dashboard', title: gettext('Go to Dashboard'), keywords: 'home overview main', action: () => nav(urls.dashboard) },
+      { id: 'goto-time-entries', title: gettext('Go to Time Entries'), keywords: 'entries list log history', action: () => nav(urls.timeEntries) },
+      { id: 'goto-projects', title: gettext('Go to Projects'), keywords: 'projects work jobs', action: () => nav(urls.projects) },
+      { id: 'goto-tasks', title: gettext('Go to Tasks'), keywords: 'tasks todo issues', action: () => nav(urls.tasks) },
+      { id: 'goto-invoices', title: gettext('Go to Invoices'), keywords: 'invoices billing', action: () => nav(urls.invoices) },
+      { id: 'goto-expenses', title: gettext('Go to Expenses'), keywords: 'expenses receipts', action: () => nav(urls.expenses) },
+      { id: 'goto-calendar', title: gettext('Go to Calendar'), keywords: 'calendar schedule', action: () => nav(urls.calendar) },
+      { id: 'goto-analytics', title: gettext('Go to Analytics'), keywords: 'analytics charts metrics', action: () => nav(urls.analytics) },
+      { id: 'goto-reports', title: gettext('Go to Reports'), keywords: 'reports insights export', action: () => nav(urls.reports) },
+      { id: 'goto-clients', title: gettext('Go to Clients'), keywords: 'crm customers companies', action: () => nav(urls.clients) },
+      { id: 'goto-settings', title: gettext('Go to Settings'), keywords: 'settings preferences profile account', action: () => nav(urls.settings) },
     ];
   }
 
@@ -249,7 +240,7 @@ import { commandScore } from 'cmdk/command-score';
           try {
             await startTimerWithProject(p.id);
             closePalette();
-            showToast(cpT('timerStarted', 'Timer started'), 'info');
+            showToast(gettext('Timer started'), 'info');
           } catch (e) {
             showToast(e.message || 'Failed to start timer', 'danger');
           }
@@ -304,8 +295,8 @@ import { commandScore } from 'cmdk/command-score';
 
     const items = state.filtered || [];
     if (!items.length) {
-      if (state.mode === 'projects') renderEmpty(cpT('noProjectsFound', 'No projects found.'));
-      else renderEmpty(cpT('noCommandsFound', 'No commands found.'));
+      if (state.mode === 'projects') renderEmpty(gettext('No projects found.'));
+      else renderEmpty(gettext('No commands found.'));
       return;
     }
 

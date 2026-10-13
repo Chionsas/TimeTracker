@@ -101,7 +101,7 @@ When new or changed `msgid` strings land in the app, refresh every locale from a
 When developers add or change translatable strings:
 
 ```bash
-pybabel extract -F babel.cfg -o messages.pot .
+PYTHONPATH=. pybabel extract -F babel.cfg -o messages.pot .
 pybabel update -i messages.pot -d translations
 ```
 
