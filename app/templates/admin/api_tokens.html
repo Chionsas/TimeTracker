@@ -5,8 +5,8 @@
 
 {% block content %}
 {% set breadcrumbs = [
-    {'text': 'Admin', 'url': url_for('admin.admin_dashboard')},
-    {'text': 'API Tokens'}
+    {'text': _('Admin'), 'url': url_for('admin.admin_dashboard')},
+    {'text': _('API Tokens')}
 ] %}
 
 {{ page_header(
@@ -14,7 +14,7 @@
     title_text=_('API Tokens'),
     subtitle_text=_('Manage REST API authentication tokens'),
     breadcrumbs=breadcrumbs,
-    actions_html='<button onclick="showCreateTokenModal()" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors"><i class="fas fa-plus mr-2"></i>Create Token</button>'
+    actions_html='<button onclick="showCreateTokenModal()" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors"><i class="fas fa-plus mr-2"></i>' + _('Create Token') + '</button>'
 ) }}
 
     <!-- API Documentation Link -->
@@ -52,19 +52,19 @@
             <tbody class="bg-card-light dark:bg-card-dark divide-y divide-gray-200 dark:divide-gray-700">
                 {% for token in tokens %}
                 <tr>
-                    <td class="px-6 py-4 whitespace-nowrap mobile-card-header" data-label="Name">
+                    <td class="px-6 py-4 whitespace-nowrap mobile-card-header" data-label="{{ _('Name') }}">
                         <div class="text-sm font-medium text-gray-900 dark:text-white">{{ token.name }}</div>
                         {% if token.description %}
                         <div class="text-sm text-gray-500 dark:text-gray-400">{{ token.description }}</div>
                         {% endif %}
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" data-label="User">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" data-label="{{ _('User') }}">
                         {{ token.user.username }}
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap" data-label="Token">
+                    <td class="px-6 py-4 whitespace-nowrap" data-label="{{ _('Token') }}">
                         <code class="text-sm bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">{{ token.token_prefix }}...</code>
                     </td>
-                    <td class="px-6 py-4" data-label="Scopes">
+                    <td class="px-6 py-4" data-label="{{ _('Scopes') }}">
                         <div class="flex flex-wrap gap-1">
                             {% for scope in token.scopes.split(',') if token.scopes %}
                             <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200">
@@ -73,37 +73,37 @@
                             {% endfor %}
                         </div>
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap" data-label="Status">
+                    <td class="px-6 py-4 whitespace-nowrap" data-label="{{ _('Status') }}">
                         {% if token.is_active and (not token.expires_at or token.expires_at > now) %}
                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200">
-                            Active
+                            {{ _('Active') }}
                         </span>
                         {% elif token.expires_at and token.expires_at < now %}
                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200">
-                            Expired
+                            {{ _('Expired') }}
                         </span>
                         {% else %}
                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200">
-                            Inactive
+                            {{ _('Inactive') }}
                         </span>
                         {% endif %}
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" data-label="Last Used">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" data-label="{{ _('Last Used') }}">
                         {% if token.last_used_at %}
                         {{ token.last_used_at|user_datetime }}
-                        <div class="text-xs text-gray-400 dark:text-gray-500">{{ token.usage_count }} uses</div>
+                        <div class="text-xs text-gray-400 dark:text-gray-500">{{ ngettext('%(num)s use', '%(num)s uses', token.usage_count) }}</div>
                         {% else %}
-                        <span class="text-gray-400 dark:text-gray-500">Never</span>
+                        <span class="text-gray-400 dark:text-gray-500">{{ _('Never') }}</span>
                         {% endif %}
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium mobile-actions" data-label="Actions">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium mobile-actions" data-label="{{ _('Actions') }}">
                         <button onclick="toggleToken({{ token.id }}, {{ token.is_active|tojson }})" 
                                 class="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-200 mr-3">
-                            {% if token.is_active %}Deactivate{% else %}Activate{% endif %}
+                            {% if token.is_active %}{{ _('Deactivate') }}{% else %}{{ _('Activate') }}{% endif %}
                         </button>
                         <button onclick="deleteToken({{ token.id }})" 
                                 class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-200">
-                            Delete
+                            {{ _('Delete') }}
                         </button>
                     </td>
                 </tr>
@@ -115,8 +115,8 @@
             <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path>
             </svg>
-            <p class="mt-2">No API tokens created yet</p>
-            <p class="text-sm mt-1">Create your first token to start using the REST API</p>
+            <p class="mt-2">{{ _('No API tokens created yet') }}</p>
+            <p class="text-sm mt-1">{{ _('Create your first token to start using the REST API') }}</p>
         </div>
         {% endif %}
     </div>
@@ -130,20 +130,20 @@
         <form id="createTokenForm" class="px-6 py-4">
             <div class="space-y-4">
                 <div>
-                    <label class="form-label">Name *</label>
+                    <label class="form-label">{{ _('Name') }} *</label>
                     <input type="text" name="name" required 
                            class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">A descriptive name for this token</p>
+                    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">{{ _('A descriptive name for this token') }}</p>
                 </div>
 
                 <div>
-                    <label class="form-label">Description</label>
+                    <label class="form-label">{{ _('Description') }}</label>
                     <textarea name="description" rows="2" 
                               class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500"></textarea>
                 </div>
 
                 <div>
-                    <label class="form-label">User *</label>
+                    <label class="form-label">{{ _('User') }} *</label>
                     <select name="user_id" required 
                             class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500">
                         {% for user in users %}
@@ -153,180 +153,180 @@
                 </div>
 
                 <div>
-                    <label class="form-label">Scopes *</label>
+                    <label class="form-label">{{ _('Scopes') }} *</label>
                     <div class="space-y-2">
                         <!-- Convenience wildcards -->
                         <label class="flex items-center">
                             <input type="checkbox" name="scopes" value="read:*" class="rounded border-gray-300 dark:border-gray-600">
-                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">read:* - Read access to all resources</span>
+                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">read:* - {{ _('Read access to all resources') }}</span>
                         </label>
                         <label class="flex items-center">
                             <input type="checkbox" name="scopes" value="write:*" class="rounded border-gray-300 dark:border-gray-600">
-                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">write:* - Write access to all resources</span>
+                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">write:* - {{ _('Write access to all resources') }}</span>
                         </label>
                         <label class="flex items-center">
                             <input type="checkbox" name="scopes" value="read:projects" class="rounded border-gray-300 dark:border-gray-600">
-                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">read:projects - View projects</span>
+                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">read:projects - {{ _('View projects') }}</span>
                         </label>
                         <label class="flex items-center">
                             <input type="checkbox" name="scopes" value="write:projects" class="rounded border-gray-300 dark:border-gray-600">
-                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">write:projects - Create/update projects</span>
+                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">write:projects - {{ _('Create/update projects') }}</span>
                         </label>
                         <label class="flex items-center">
                             <input type="checkbox" name="scopes" value="read:invoices" class="rounded border-gray-300 dark:border-gray-600">
-                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">read:invoices - View invoices and billing data</span>
+                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">read:invoices - {{ _('View invoices and billing data') }}</span>
                         </label>
                         <label class="flex items-center">
                             <input type="checkbox" name="scopes" value="write:invoices" class="rounded border-gray-300 dark:border-gray-600">
-                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">write:invoices - Create/update invoices</span>
+                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">write:invoices - {{ _('Create/update invoices') }}</span>
                         </label>
                         <label class="flex items-center">
                             <input type="checkbox" name="scopes" value="read:expenses" class="rounded border-gray-300 dark:border-gray-600">
-                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">read:expenses - View expenses</span>
+                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">read:expenses - {{ _('View expenses') }}</span>
                         </label>
                         <label class="flex items-center">
                             <input type="checkbox" name="scopes" value="write:expenses" class="rounded border-gray-300 dark:border-gray-600">
-                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">write:expenses - Create/update expenses</span>
+                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">write:expenses - {{ _('Create/update expenses') }}</span>
                         </label>
                         <label class="flex items-center">
                             <input type="checkbox" name="scopes" value="read:payments" class="rounded border-gray-300 dark:border-gray-600">
-                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">read:payments - View payments</span>
+                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">read:payments - {{ _('View payments') }}</span>
                         </label>
                         <label class="flex items-center">
                             <input type="checkbox" name="scopes" value="write:payments" class="rounded border-gray-300 dark:border-gray-600">
-                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">write:payments - Create/update payments</span>
+                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">write:payments - {{ _('Create/update payments') }}</span>
                         </label>
                         <label class="flex items-center">
                             <input type="checkbox" name="scopes" value="read:time_entries" class="rounded border-gray-300 dark:border-gray-600">
-                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">read:time_entries - View time entries</span>
+                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">read:time_entries - {{ _('View time entries') }}</span>
                         </label>
                         <label class="flex items-center">
                             <input type="checkbox" name="scopes" value="write:time_entries" class="rounded border-gray-300 dark:border-gray-600">
-                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">write:time_entries - Create/update time entries</span>
+                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">write:time_entries - {{ _('Create/update time entries') }}</span>
                         </label>
                         <label class="flex items-center">
                             <input type="checkbox" name="scopes" value="read:tasks" class="rounded border-gray-300 dark:border-gray-600">
-                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">read:tasks - View tasks</span>
+                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">read:tasks - {{ _('View tasks') }}</span>
                         </label>
                         <label class="flex items-center">
                             <input type="checkbox" name="scopes" value="write:tasks" class="rounded border-gray-300 dark:border-gray-600">
-                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">write:tasks - Create/update tasks</span>
+                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">write:tasks - {{ _('Create/update tasks') }}</span>
                         </label>
                         <label class="flex items-center">
                             <input type="checkbox" name="scopes" value="read:clients" class="rounded border-gray-300 dark:border-gray-600">
-                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">read:clients - View clients</span>
+                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">read:clients - {{ _('View clients') }}</span>
                         </label>
                         <label class="flex items-center">
                             <input type="checkbox" name="scopes" value="write:clients" class="rounded border-gray-300 dark:border-gray-600">
-                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">write:clients - Create/update clients</span>
+                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">write:clients - {{ _('Create/update clients') }}</span>
                         </label>
                         <label class="flex items-center">
                             <input type="checkbox" name="scopes" value="read:comments" class="rounded border-gray-300 dark:border-gray-600">
-                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">read:comments - View comments</span>
+                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">read:comments - {{ _('View comments') }}</span>
                         </label>
                         <label class="flex items-center">
                             <input type="checkbox" name="scopes" value="write:comments" class="rounded border-gray-300 dark:border-gray-600">
-                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">write:comments - Create/update comments</span>
+                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">write:comments - {{ _('Create/update comments') }}</span>
                         </label>
                         <label class="flex items-center">
                             <input type="checkbox" name="scopes" value="read:mileage" class="rounded border-gray-300 dark:border-gray-600">
-                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">read:mileage - View mileage</span>
+                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">read:mileage - {{ _('View mileage') }}</span>
                         </label>
                         <label class="flex items-center">
                             <input type="checkbox" name="scopes" value="write:mileage" class="rounded border-gray-300 dark:border-gray-600">
-                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">write:mileage - Create/update mileage</span>
+                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">write:mileage - {{ _('Create/update mileage') }}</span>
                         </label>
                         <label class="flex items-center">
                             <input type="checkbox" name="scopes" value="read:per_diem" class="rounded border-gray-300 dark:border-gray-600">
-                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">read:per_diem - View per diem</span>
+                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">read:per_diem - {{ _('View per diem') }}</span>
                         </label>
                         <label class="flex items-center">
                             <input type="checkbox" name="scopes" value="write:per_diem" class="rounded border-gray-300 dark:border-gray-600">
-                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">write:per_diem - Create/update per diem</span>
+                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">write:per_diem - {{ _('Create/update per diem') }}</span>
                         </label>
                         <label class="flex items-center">
                             <input type="checkbox" name="scopes" value="read:calendar" class="rounded border-gray-300 dark:border-gray-600">
-                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">read:calendar - View calendar events</span>
+                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">read:calendar - {{ _('View calendar events') }}</span>
                         </label>
                         <label class="flex items-center">
                             <input type="checkbox" name="scopes" value="write:calendar" class="rounded border-gray-300 dark:border-gray-600">
-                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">write:calendar - Create/update calendar events</span>
+                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">write:calendar - {{ _('Create/update calendar events') }}</span>
                         </label>
                         <label class="flex items-center">
                             <input type="checkbox" name="scopes" value="read:deals" class="rounded border-gray-300 dark:border-gray-600">
-                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">read:deals - View deals</span>
+                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">read:deals - {{ _('View deals') }}</span>
                         </label>
                         <label class="flex items-center">
                             <input type="checkbox" name="scopes" value="write:deals" class="rounded border-gray-300 dark:border-gray-600">
-                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">write:deals - Create/update deals</span>
+                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">write:deals - {{ _('Create/update deals') }}</span>
                         </label>
                         <label class="flex items-center">
                             <input type="checkbox" name="scopes" value="read:leads" class="rounded border-gray-300 dark:border-gray-600">
-                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">read:leads - View leads</span>
+                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">read:leads - {{ _('View leads') }}</span>
                         </label>
                         <label class="flex items-center">
                             <input type="checkbox" name="scopes" value="write:leads" class="rounded border-gray-300 dark:border-gray-600">
-                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">write:leads - Create/update leads</span>
+                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">write:leads - {{ _('Create/update leads') }}</span>
                         </label>
                         <label class="flex items-center">
                             <input type="checkbox" name="scopes" value="read:contacts" class="rounded border-gray-300 dark:border-gray-600">
-                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">read:contacts - View contacts</span>
+                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">read:contacts - {{ _('View contacts') }}</span>
                         </label>
                         <label class="flex items-center">
                             <input type="checkbox" name="scopes" value="write:contacts" class="rounded border-gray-300 dark:border-gray-600">
-                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">write:contacts - Create/update contacts</span>
+                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">write:contacts - {{ _('Create/update contacts') }}</span>
                         </label>
                         <label class="flex items-center">
                             <input type="checkbox" name="scopes" value="read:time_approvals" class="rounded border-gray-300 dark:border-gray-600">
-                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">read:time_approvals - View time entry approvals</span>
+                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">read:time_approvals - {{ _('View time entry approvals') }}</span>
                         </label>
                         <label class="flex items-center">
                             <input type="checkbox" name="scopes" value="write:time_approvals" class="rounded border-gray-300 dark:border-gray-600">
-                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">write:time_approvals - Approve/reject time entries</span>
+                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">write:time_approvals - {{ _('Approve/reject time entries') }}</span>
                         </label>
                         <label class="flex items-center">
                             <input type="checkbox" name="scopes" value="read:budget_alerts" class="rounded border-gray-300 dark:border-gray-600">
-                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">read:budget_alerts - View budget alerts</span>
+                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">read:budget_alerts - {{ _('View budget alerts') }}</span>
                         </label>
                         <label class="flex items-center">
                             <input type="checkbox" name="scopes" value="write:budget_alerts" class="rounded border-gray-300 dark:border-gray-600">
-                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">write:budget_alerts - Create/ack budget alerts</span>
+                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">write:budget_alerts - {{ _('Create/ack budget alerts') }}</span>
                         </label>
                         <label class="flex items-center">
                             <input type="checkbox" name="scopes" value="read:recurring_invoices" class="rounded border-gray-300 dark:border-gray-600">
-                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">read:recurring_invoices - View recurring invoices</span>
+                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">read:recurring_invoices - {{ _('View recurring invoices') }}</span>
                         </label>
                         <label class="flex items-center">
                             <input type="checkbox" name="scopes" value="write:recurring_invoices" class="rounded border-gray-300 dark:border-gray-600">
-                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">write:recurring_invoices - Create/update recurring invoices</span>
+                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">write:recurring_invoices - {{ _('Create/update recurring invoices') }}</span>
                         </label>
                         <label class="flex items-center">
                             <input type="checkbox" name="scopes" value="read:reports" class="rounded border-gray-300 dark:border-gray-600">
-                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">read:reports - View reports</span>
+                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">read:reports - {{ _('View reports') }}</span>
                         </label>
                         <label class="flex items-center">
                             <input type="checkbox" name="scopes" value="admin:all" class="rounded border-gray-300 dark:border-gray-600">
-                            <span class="ml-2 text-sm text-red-600 dark:text-red-400 font-medium">admin:all - Full access (use with caution)</span>
+                            <span class="ml-2 text-sm text-red-600 dark:text-red-400 font-medium">admin:all - {{ _('Full access (use with caution)') }}</span>
                         </label>
                     </div>
                 </div>
 
                 <div>
-                    <label class="form-label">Expires In (days)</label>
+                    <label class="form-label">{{ _('Expires In (days)') }}</label>
                     <input type="number" name="expires_days" min="1" max="3650" 
                            class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Leave empty for tokens that never expire</p>
+                    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">{{ _('Leave empty for tokens that never expire') }}</p>
                 </div>
             </div>
 
             <div class="mt-6 flex justify-end space-x-3">
                 <button type="button" onclick="hideCreateTokenModal()" 
                         class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                    Cancel
+                    {{ _('Cancel') }}
                 </button>
                 <button type="submit" 
                         class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700">
-                    Create Token
+                    {{ _('Create Token') }}
                 </button>
             </div>
         </form>
@@ -337,7 +337,7 @@
 <div id="tokenDisplayModal" class="fixed inset-0 bg-black/50 hidden z-50 flex items-center justify-center">
     <div class="bg-card-light dark:bg-card-dark rounded-lg shadow-xl max-w-2xl w-full mx-4">
         <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-            <h3 class="text-lg font-medium text-gray-900 dark:text-white">API Token Created</h3>
+            <h3 class="text-lg font-medium text-gray-900 dark:text-white">{{ _('API Token Created') }}</h3>
         </div>
         <div class="px-6 py-4">
             <div class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4 mb-4">
@@ -346,7 +346,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
                     </svg>
                     <div class="text-sm text-yellow-700 dark:text-yellow-400">
-                        <strong>Important:</strong> This is the only time you'll see this token. Copy it now and store it securely.
+                        <strong>{{ _('Important:') }}</strong> {{ _("This is the only time you'll see this token. Copy it now and store it securely.") }}
                     </div>
                 </div>
             </div>
@@ -358,7 +358,7 @@
                            class="flex-1 p-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-l-md font-mono text-sm">
                     <button onclick="copyToken()" 
                             class="px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-r-md">
-                        Copy
+                        {{ _('Copy') }}
                     </button>
                 </div>
             </div>
@@ -367,11 +367,11 @@
                 <h4 class="text-sm font-medium text-gray-900 dark:text-white mb-2">{{ _('Usage Examples') }}:</h4>
                 <div class="space-y-2">
                     <div>
-                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Using Authorization header:</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">{{ _('Using Authorization header:') }}</p>
                         <pre class="text-xs bg-gray-50 dark:bg-gray-700 p-2 rounded overflow-x-auto"><code>curl -H "Authorization: Bearer YOUR_TOKEN" {{ request.url_root }}api/v1/projects</code></pre>
                     </div>
                     <div>
-                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Using X-API-Key header:</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">{{ _('Using X-API-Key header:') }}</p>
                         <pre class="text-xs bg-gray-50 dark:bg-gray-700 p-2 rounded overflow-x-auto"><code>curl -H "X-API-Key: YOUR_TOKEN" {{ request.url_root }}api/v1/projects</code></pre>
                     </div>
                 </div>
@@ -380,7 +380,7 @@
             <div class="mt-6 flex justify-end">
                 <button onclick="hideTokenDisplayModal()" 
                         class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md">
-                    I've Saved My Token
+                    {{ _("I've Saved My Token") }}
                 </button>
             </div>
         </div>
@@ -406,7 +406,7 @@ function copyToken() {
     const input = document.getElementById('newTokenValue');
     input.select();
     document.execCommand('copy');
-    alert('Token copied to clipboard!');
+    alert({{ _('Token copied to clipboard!')|tojson }});
 }
 
 document.getElementById('createTokenForm').addEventListener('submit', async (e) => {
@@ -444,10 +444,10 @@ document.getElementById('createTokenForm').addEventListener('submit', async (e) 
             hideCreateTokenModal();
             document.getElementById('tokenDisplayModal').classList.remove('hidden');
         } else {
-            alert('Error: ' + (result.error || 'Failed to create token'));
+            alert({{ _('Error')|tojson }} + ': ' + (result.error || {{ _('Failed to create token')|tojson }}));
         }
     } catch (error) {
-        alert('Error creating token: ' + error.message);
+        alert({{ _('Error creating token')|tojson }} + ': ' + error.message);
     }
 });
 
@@ -477,10 +477,10 @@ async function toggleToken(tokenId, isActive) {
         if (response.ok) {
             location.reload();
         } else {
-            alert('Failed to toggle token');
+            alert({{ _('Failed to toggle token')|tojson }});
         }
     } catch (error) {
-        alert('Error: ' + error.message);
+        alert({{ _('Error')|tojson }} + ': ' + error.message);
     }
 }
 
@@ -510,10 +510,10 @@ async function deleteToken(tokenId) {
         if (response.ok) {
             location.reload();
         } else {
-            alert('Failed to delete token');
+            alert({{ _('Failed to delete token')|tojson }});
         }
     } catch (error) {
-        alert('Error: ' + error.message);
+        alert({{ _('Error')|tojson }} + ': ' + error.message);
     }
 }
 </script>

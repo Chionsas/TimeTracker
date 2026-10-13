@@ -1681,7 +1681,7 @@
     <p style="margin-top: 0.5rem; font-size: 0.813rem;">
         <strong>{{ _('Keyboard Shortcuts:') }}</strong>
         <span style="opacity: 0.9;">
-            Delete/Backspace = Remove | Ctrl+C = Copy | Ctrl+V = Paste | Ctrl+D = Duplicate | Arrow Keys = Move (+ Shift for 10px steps)
+            {{ _('Delete/Backspace = Remove | Ctrl+C = Copy | Ctrl+V = Paste | Ctrl+D = Duplicate | Arrow Keys = Move (+ Shift for 10px steps)') }}
             <span class="block mt-1">{{ _('Ctrl+Z undo; Ctrl+Y or Ctrl+Shift+Z redo (Cmd+Z / Cmd+Shift+Z on Mac). Mouse wheel over the canvas zooms in or out.') }}</span>
         </span>
     </p>
@@ -2227,7 +2227,7 @@
                         {% endif %}
                     </select>
                     <div class="page-size-help" style="font-size: 0.75rem; color: #6b7280; margin-top: 0.25rem;">
-                        The blue border marks the page boundaries. Zoom changes the view, not the page size.
+                        {{ _('The blue border marks the page boundaries. Zoom changes the view, not the page size.') }}
                     </div>
                 </div>
                 <div class="canvas-toolbar">
@@ -2774,19 +2774,19 @@ async function initializePDFEditor() {
             const container = document.getElementById('canvas-container');
             if (container) {
                 container.innerHTML = '<div style="padding: 40px; text-align: center; background: #fee; border: 2px solid red; border-radius: 8px; margin: 20px;">' +
-                    '<h3 style="color: #d00; margin-bottom: 10px;">⚠️ Konva.js Library Failed to Load</h3>' +
-                    '<p>The canvas library could not be loaded. This might be due to:</p>' +
+                    '<h3 style="color: #d00; margin-bottom: 10px;">⚠️ {{ _('Konva.js Library Failed to Load') }}</h3>' +
+                    '<p>{{ _('The canvas library could not be loaded. This might be due to:') }}</p>' +
                     '<ul style="text-align: left; display: inline-block; margin: 10px auto;">' +
-                    '<li>Network connectivity issues</li>' +
-                    '<li>CDN being blocked</li>' +
-                    '<li>Firewall/proxy restrictions</li>' +
+                    '<li>{{ _('Network connectivity issues') }}</li>' +
+                    '<li>{{ _('CDN being blocked') }}</li>' +
+                    '<li>{{ _('Firewall/proxy restrictions') }}</li>' +
                     '</ul>' +
-                    '<p><strong>Try:</strong></p>' +
+                    '<p><strong>{{ _('Try:') }}</strong></p>' +
                     '<ul style="text-align: left; display: inline-block; margin: 10px auto;">' +
-                    '<li>Refresh the page (Ctrl+F5)</li>' +
-                    '<li>Check your internet connection</li>' +
-                    '<li>Try a different network</li>' +
-                    '<li>Check browser console for errors (F12)</li>' +
+                    '<li>{{ _('Refresh the page (Ctrl+F5)') }}</li>' +
+                    '<li>{{ _('Check your internet connection') }}</li>' +
+                    '<li>{{ _('Try a different network') }}</li>' +
+                    '<li>{{ _('Check browser console for errors (F12)') }}</li>' +
                     '</ul>' +
                     '</div>';
             }
@@ -3641,20 +3641,20 @@ async function initializePDFEditor() {
                 const item = document.createElement('div');
                 item.className = 'warning-item';
                 
-                const elementName = element.attrs.name || element.className || 'Element';
+                const elementName = element.attrs.name || element.className || {{ _('Element')|tojson }};
                 let warningText = `${elementName}: `;
                 const issues = [];
                 
                 if (warnings.overflow) {
                     const b = warnings.boundaryDetails;
-                    if (b.overflowLeft > 0) issues.push(`Overflows left by ${Math.round(b.overflowLeft)}px`);
-                    if (b.overflowRight > 0) issues.push(`Overflows right by ${Math.round(b.overflowRight)}px`);
-                    if (b.overflowTop > 0) issues.push(`Overflows top by ${Math.round(b.overflowTop)}px`);
-                    if (b.overflowBottom > 0) issues.push(`Overflows bottom by ${Math.round(b.overflowBottom)}px`);
+                    if (b.overflowLeft > 0) issues.push({{ _('Overflows left by %(px)spx')|tojson }}.replace('%(px)s', Math.round(b.overflowLeft)));
+                    if (b.overflowRight > 0) issues.push({{ _('Overflows right by %(px)spx')|tojson }}.replace('%(px)s', Math.round(b.overflowRight)));
+                    if (b.overflowTop > 0) issues.push({{ _('Overflows top by %(px)spx')|tojson }}.replace('%(px)s', Math.round(b.overflowTop)));
+                    if (b.overflowBottom > 0) issues.push({{ _('Overflows bottom by %(px)spx')|tojson }}.replace('%(px)s', Math.round(b.overflowBottom)));
                 }
                 
                 if (warnings.overlap) {
-                    issues.push(`Overlaps with ${warnings.overlaps.length} element(s)`);
+                    issues.push({{ _('Overlaps with %(count)s element(s)')|tojson }}.replace('%(count)s', warnings.overlaps.length));
                 }
                 
                 warningText += issues.join(', ');
@@ -3672,7 +3672,7 @@ async function initializePDFEditor() {
         });
         
         if (!hasWarnings) {
-            warningList.innerHTML = '<div class="warning-list-empty">No warnings</div>';
+            warningList.innerHTML = '<div class="warning-list-empty">{{ _('No warnings') }}</div>';
         }
     }
     
@@ -3766,8 +3766,8 @@ async function initializePDFEditor() {
             const lock = isPdfLocked(n) ? 'fa-lock' : 'fa-unlock';
             rows.push(
                 '<div class="pdf-editor-layer-row' + (active ? ' active' : '') + '" data-node-index="' + i + '">' +
-                '<button type="button" class="pdf-layer-eye" data-idx="' + i + '" title="Toggle visibility"><i class="fas ' + eye + '"></i></button>' +
-                '<button type="button" class="pdf-layer-lock" data-idx="' + i + '" title="Toggle lock"><i class="fas ' + lock + '"></i></button>' +
+                '<button type="button" class="pdf-layer-eye" data-idx="' + i + '" title="{{ _('Toggle visibility') }}"><i class="fas ' + eye + '"></i></button>' +
+                '<button type="button" class="pdf-layer-lock" data-idx="' + i + '" title="{{ _('Toggle lock') }}"><i class="fas ' + lock + '"></i></button>' +
                 '<span class="layer-name">' + String(nm).replace(/</g, '&lt;') + '</span></div>'
             );
         }
@@ -3958,9 +3958,9 @@ async function initializePDFEditor() {
         const sameX = xs.every(function (v) { return v === xs[0]; });
         const sameY = ys.every(function (v) { return v === ys[0]; });
         let html = '<div class="space-y-4"><p class="text-sm text-gray-600">' + n + ' {{ _("elements selected") }}</p>';
-        html += '<div class="property-group"><div class="property-label">Position X</div>';
+        html += '<div class="property-group"><div class="property-label">{{ _('Position X') }}</div>';
         html += '<input type="number" id="prop-x" value="' + (sameX ? xs[0] : '') + '" placeholder="' + MIXED + '" class="property-input"></div>';
-        html += '<div class="property-group"><div class="property-label">Position Y</div>';
+        html += '<div class="property-group"><div class="property-label">{{ _('Position Y') }}</div>';
         html += '<input type="number" id="prop-y" value="' + (sameY ? ys[0] : '') + '" placeholder="' + MIXED + '" class="property-input"></div>';
         html += '<p class="text-xs text-gray-500">{{ _("Edits apply to all selected elements. Leave blank to keep each value unchanged.") }}</p></div>';
         propsContent.innerHTML = html;
@@ -3990,7 +3990,7 @@ async function initializePDFEditor() {
         
         if (!node) {
             console.error('Node is null or undefined!');
-            propsContent.innerHTML = '<p class="text-sm text-red-500">Error: No element selected</p>';
+            propsContent.innerHTML = '<p class="text-sm text-red-500">{{ _('Error: No element selected') }}</p>';
             return;
         }
         
@@ -4015,18 +4015,18 @@ async function initializePDFEditor() {
         
         // Element type
         html += '<div class="property-group">';
-        html += '<div class="property-label">Element Type</div>';
+        html += '<div class="property-label">{{ _('Element Type') }}</div>';
         html += `<input type="text" value="${attrs.name || className}" disabled class="property-input bg-gray-100">`;
         html += '</div>';
         
         // Position
         html += '<div class="property-group">';
-        html += '<div class="property-label">Position X</div>';
+        html += '<div class="property-label">{{ _('Position X') }}</div>';
         html += `<input type="number" id="prop-x" value="${Math.round(attrs.x || 0)}" class="property-input">`;
         html += '</div>';
         
         html += '<div class="property-group">';
-        html += '<div class="property-label">Position Y</div>';
+        html += '<div class="property-label">{{ _('Position Y') }}</div>';
         html += `<input type="number" id="prop-y" value="${Math.round(attrs.y || 0)}" class="property-input">`;
         html += '</div>';
         
@@ -4039,20 +4039,20 @@ async function initializePDFEditor() {
             const textareaRows = isTableText ? 8 : 3;
             
             html += '<div class="property-group">';
-            html += '<div class="property-label">Text Content</div>';
+            html += '<div class="property-label">{{ _('Text Content') }}</div>';
             html += `<textarea id="prop-text" class="property-input" rows="${textareaRows}">${textContent}</textarea>`;
             if (isTableText) {
-                html += '<p class="text-xs text-gray-500 mt-1">Double-click table text to edit, or edit here in the properties panel.</p>';
+                html += '<p class="text-xs text-gray-500 mt-1">{{ _('Double-click table text to edit, or edit here in the properties panel.') }}</p>';
             }
             html += '</div>';
             
             html += '<div class="property-group">';
-            html += '<div class="property-label">Font Size</div>';
+            html += '<div class="property-label">{{ _('Font Size') }}</div>';
             html += `<input type="number" id="prop-fontSize" value="${attrs.fontSize || 14}" class="property-input">`;
             html += '</div>';
             
             html += '<div class="property-group">';
-            html += '<div class="property-label">Font Family</div>';
+            html += '<div class="property-label">{{ _('Font Family') }}</div>';
             html += `<select id="prop-fontFamily" class="property-input">`;
             const fonts = ['Arial', 'Times New Roman', 'Courier New', 'Georgia', 'Verdana', 'Helvetica'];
             fonts.forEach(font => {
@@ -4063,21 +4063,21 @@ async function initializePDFEditor() {
             html += '</div>';
             
             html += '<div class="property-group">';
-            html += '<div class="property-label">Font Style</div>';
+            html += '<div class="property-label">{{ _('Font Style') }}</div>';
             html += `<select id="prop-fontStyle" class="property-input">`;
-            html += `<option value="normal" ${attrs.fontStyle === 'normal' ? 'selected' : ''}>Normal</option>`;
-            html += `<option value="bold" ${attrs.fontStyle === 'bold' ? 'selected' : ''}>Bold</option>`;
-            html += `<option value="italic" ${attrs.fontStyle === 'italic' ? 'selected' : ''}>Italic</option>`;
+            html += `<option value="normal" ${attrs.fontStyle === 'normal' ? 'selected' : ''}>{{ _('Normal') }}</option>`;
+            html += `<option value="bold" ${attrs.fontStyle === 'bold' ? 'selected' : ''}>{{ _('Bold') }}</option>`;
+            html += `<option value="italic" ${attrs.fontStyle === 'italic' ? 'selected' : ''}>{{ _('Italic') }}</option>`;
             html += '</select>';
             html += '</div>';
             
             html += '<div class="property-group">';
-            html += '<div class="property-label">Text Color</div>';
+            html += '<div class="property-label">{{ _('Text Color') }}</div>';
             html += `<input type="color" id="prop-fill" value="${rgbToHex(attrs.fill || '#000000')}" class="property-input">`;
             html += '</div>';
             
             html += '<div class="property-group">';
-            html += '<div class="property-label">Width</div>';
+            html += '<div class="property-label">{{ _('Width') }}</div>';
             html += `<input type="number" id="prop-width" value="${attrs.width || 400}" class="property-input">`;
             html += '</div>';
             
@@ -4101,7 +4101,7 @@ async function initializePDFEditor() {
             html += '</div></div>';
             
             html += '<div class="property-group">';
-            html += '<div class="property-label">Opacity</div>';
+            html += '<div class="property-label">{{ _('Opacity') }}</div>';
             html += `<input type="range" id="prop-opacity" min="0" max="1" step="0.1" value="${attrs.opacity !== undefined ? attrs.opacity : 1}" class="property-input">`;
             html += `<span id="opacity-value">${(attrs.opacity !== undefined ? attrs.opacity : 1) * 100}%</span>`;
             html += '</div>';
@@ -4110,35 +4110,35 @@ async function initializePDFEditor() {
         // Shape-specific properties
         if (className === 'Rect' || className === 'Circle') {
             html += '<div class="property-group">';
-            html += '<div class="property-label">Fill Color</div>';
+            html += '<div class="property-label">{{ _('Fill Color') }}</div>';
             html += `<input type="color" id="prop-fill" value="${rgbToHex(attrs.fill || '#ffffff')}" class="property-input">`;
             html += '</div>';
             
             html += '<div class="property-group">';
-            html += '<div class="property-label">Stroke Color</div>';
+            html += '<div class="property-label">{{ _('Stroke Color') }}</div>';
             html += `<input type="color" id="prop-stroke" value="${rgbToHex(attrs.stroke || '#000000')}" class="property-input">`;
             html += '</div>';
             
             html += '<div class="property-group">';
-            html += '<div class="property-label">Stroke Width</div>';
+            html += '<div class="property-label">{{ _('Stroke Width') }}</div>';
             html += `<input type="number" id="prop-strokeWidth" value="${attrs.strokeWidth || 1}" class="property-input">`;
             html += '</div>';
             
             if (className === 'Rect') {
                 html += '<div class="property-group">';
-                html += '<div class="property-label">Width</div>';
+                html += '<div class="property-label">{{ _('Width') }}</div>';
                 html += `<input type="number" id="prop-width" value="${attrs.width || 100}" class="property-input">`;
                 html += '</div>';
                 
                 html += '<div class="property-group">';
-                html += '<div class="property-label">Height</div>';
+                html += '<div class="property-label">{{ _('Height') }}</div>';
                 html += `<input type="number" id="prop-height" value="${attrs.height || 100}" class="property-input">`;
                 html += '</div>';
             }
             
             if (className === 'Circle') {
                 html += '<div class="property-group">';
-                html += '<div class="property-label">Radius</div>';
+                html += '<div class="property-label">{{ _('Radius') }}</div>';
                 html += `<input type="number" id="prop-radius" value="${attrs.radius || 50}" class="property-input">`;
                 html += '</div>';
             }
@@ -4147,12 +4147,12 @@ async function initializePDFEditor() {
         // Line-specific properties
         if (className === 'Line') {
             html += '<div class="property-group">';
-            html += '<div class="property-label">Stroke Color</div>';
+            html += '<div class="property-label">{{ _('Stroke Color') }}</div>';
             html += `<input type="color" id="prop-stroke" value="${rgbToHex(attrs.stroke || '#000000')}" class="property-input">`;
             html += '</div>';
             
             html += '<div class="property-group">';
-            html += '<div class="property-label">Stroke Width</div>';
+            html += '<div class="property-label">{{ _('Stroke Width') }}</div>';
             html += `<input type="number" id="prop-strokeWidth" value="${attrs.strokeWidth || 1}" class="property-input">`;
             html += '</div>';
         }
@@ -4164,16 +4164,16 @@ async function initializePDFEditor() {
             const imageUrl = node.getAttr('imageUrl') || attrs.imageUrl || '';
             console.log('Properties panel - decorative image URL:', imageUrl);
             html += '<div class="property-group" style="margin-top: 1rem; padding-top: 1rem; border-top: 2px solid #e5e7eb;">';
-            html += '<div class="property-label" style="font-weight: bold; color: #667eea;">Decorative Image</div>';
+            html += '<div class="property-label" style="font-weight: bold; color: #667eea;">{{ _('Decorative Image') }}</div>';
             
             if (imageUrl && imageUrl.trim() !== '') {
                 html += '<div style="margin-bottom: 1rem;">';
-                html += `<img src="${imageUrl}" alt="Decorative image" style="max-width: 100%; max-height: 150px; border: 1px solid #ddd; border-radius: 4px;">`;
+                html += `<img src="${imageUrl}" alt="{{ _('Decorative image') }}" style="max-width: 100%; max-height: 150px; border: 1px solid #ddd; border-radius: 4px;">`;
                 html += '</div>';
             }
             
             html += '<div class="property-group">';
-            html += '<label for="decorative-image-upload" class="property-label">Upload Image</label>';
+            html += '<label for="decorative-image-upload" class="property-label">{{ _('Upload Image') }}</label>';
             html += '<input type="file" id="decorative-image-upload" accept="image/png,image/jpeg,image/jpg,image/gif,image/webp" style="display: none;">';
             html += `<button type="button" id="btn-upload-decorative-image" class="property-input" style="background: #667eea; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; width: 100%;">`;
             html += '<i class="fas fa-upload mr-2"></i>';
@@ -4227,74 +4227,74 @@ async function initializePDFEditor() {
                 console.log('Line elements:', lineElements.length);
                 
                 html += '<div class="property-group" style="margin-top: 1rem; padding-top: 1rem; border-top: 2px solid #e5e7eb;">';
-                html += '<div class="property-label" style="font-weight: bold; color: #667eea;">Table Header</div>';
+                html += '<div class="property-label" style="font-weight: bold; color: #667eea;">{{ _('Table Header') }}</div>';
                 
                 html += '<div class="property-group">';
-                html += '<div class="property-label">Header Text</div>';
+                html += '<div class="property-label">{{ _('Header Text') }}</div>';
                 html += `<textarea id="prop-table-header-text" class="property-input" rows="2">${(headerAttrs.text || '').replace(/\\n/g, '\n')}</textarea>`;
                 html += '</div>';
                 
                 html += '<div class="property-group">';
-                html += '<div class="property-label">Header Font Size</div>';
+                html += '<div class="property-label">{{ _('Header Font Size') }}</div>';
                 html += `<input type="number" id="prop-table-header-fontSize" value="${headerAttrs.fontSize || 12}" class="property-input">`;
                 html += '</div>';
                 
                 html += '<div class="property-group">';
-                html += '<div class="property-label">Header Font Style</div>';
+                html += '<div class="property-label">{{ _('Header Font Style') }}</div>';
                 html += `<select id="prop-table-header-fontStyle" class="property-input">`;
-                html += `<option value="normal" ${headerAttrs.fontStyle === 'normal' ? 'selected' : ''}>Normal</option>`;
-                html += `<option value="bold" ${headerAttrs.fontStyle === 'bold' ? 'selected' : ''}>Bold</option>`;
-                html += `<option value="italic" ${headerAttrs.fontStyle === 'italic' ? 'selected' : ''}>Italic</option>`;
+                html += `<option value="normal" ${headerAttrs.fontStyle === 'normal' ? 'selected' : ''}>{{ _('Normal') }}</option>`;
+                html += `<option value="bold" ${headerAttrs.fontStyle === 'bold' ? 'selected' : ''}>{{ _('Bold') }}</option>`;
+                html += `<option value="italic" ${headerAttrs.fontStyle === 'italic' ? 'selected' : ''}>{{ _('Italic') }}</option>`;
                 html += '</select>';
                 html += '</div>';
                 
                 html += '<div class="property-group">';
-                html += '<div class="property-label">Header Color</div>';
+                html += '<div class="property-label">{{ _('Header Color') }}</div>';
                 html += `<input type="color" id="prop-table-header-fill" value="${rgbToHex(headerAttrs.fill || '#000000')}" class="property-input">`;
                 html += '</div>';
                 
                 html += '</div>';
                 
                 html += '<div class="property-group" style="margin-top: 1rem; padding-top: 1rem; border-top: 2px solid #e5e7eb;">';
-                html += '<div class="property-label" style="font-weight: bold; color: #667eea;">Table Items</div>';
+                html += '<div class="property-label" style="font-weight: bold; color: #667eea;">{{ _('Table Items') }}</div>';
                 
                 html += '<div class="property-group">';
-                html += '<div class="property-label">Items Template</div>';
+                html += '<div class="property-label">{{ _('Items Template') }}</div>';
                 html += `<textarea id="prop-table-items-text" class="property-input" rows="4">${(itemsAttrs.text || '').replace(/\\n/g, '\n')}</textarea>`;
                 html += '</div>';
                 
                 html += '<div class="property-group">';
-                html += '<div class="property-label">Items Font Size</div>';
+                html += '<div class="property-label">{{ _('Items Font Size') }}</div>';
                 html += `<input type="number" id="prop-table-items-fontSize" value="${itemsAttrs.fontSize || 11}" class="property-input">`;
                 html += '</div>';
                 
                 html += '<div class="property-group">';
-                html += '<div class="property-label">Items Color</div>';
+                html += '<div class="property-label">{{ _('Items Color') }}</div>';
                 html += `<input type="color" id="prop-table-items-fill" value="${rgbToHex(itemsAttrs.fill || '#000000')}" class="property-input">`;
                 html += '</div>';
                 
                 html += '</div>';
                 
                 html += '<div class="property-group" style="margin-top: 1rem; padding-top: 1rem; border-top: 2px solid #e5e7eb;">';
-                html += '<div class="property-label" style="font-weight: bold; color: #667eea;">Table Separator Line</div>';
+                html += '<div class="property-label" style="font-weight: bold; color: #667eea;">{{ _('Table Separator Line') }}</div>';
                 
                 html += '<div class="property-group">';
-                html += '<div class="property-label">Line Color</div>';
+                html += '<div class="property-label">{{ _('Line Color') }}</div>';
                 html += `<input type="color" id="prop-table-line-stroke" value="${rgbToHex(lineAttrs.stroke || '#000000')}" class="property-input">`;
                 html += '</div>';
                 
                 html += '<div class="property-group">';
-                html += '<div class="property-label">Line Width</div>';
+                html += '<div class="property-label">{{ _('Line Width') }}</div>';
                 html += `<input type="number" id="prop-table-line-strokeWidth" value="${lineAttrs.strokeWidth || 1}" class="property-input">`;
                 html += '</div>';
                 
                 html += '</div>';
                 
                 html += '<div class="property-group" style="margin-top: 1rem; padding-top: 1rem; border-top: 2px solid #e5e7eb;">';
-                html += '<div class="property-label" style="font-weight: bold; color: #667eea;">Table Dimensions</div>';
+                html += '<div class="property-label" style="font-weight: bold; color: #667eea;">{{ _('Table Dimensions') }}</div>';
                 
                 html += '<div class="property-group">';
-                html += '<div class="property-label">Table Width</div>';
+                html += '<div class="property-label">{{ _('Table Width') }}</div>';
                 const tableWidth = headerAttrs.width || itemsAttrs.width || 500;
                 html += `<input type="number" id="prop-table-width" value="${tableWidth}" class="property-input">`;
                 html += '</div>';
@@ -4302,33 +4302,33 @@ async function initializePDFEditor() {
                 html += '</div>';
             } catch (error) {
                 console.error('Error processing table group:', error);
-                html += '<div class="property-group"><p class="text-sm text-red-500">Error loading table properties: ' + error.message + '</p></div>';
+                html += '<div class="property-group"><p class="text-sm text-red-500">' + {{ _('Error loading table properties: %(error)s')|tojson }}.replace('%(error)s', error.message) + '</p></div>';
             }
         } else if (isGroup) {
             // Fallback for Groups that aren't recognized as tables
             // Show at least basic info
             html += '<div class="property-group" style="margin-top: 1rem; padding-top: 1rem; border-top: 2px solid #e5e7eb;">';
-            html += '<div class="property-label" style="font-weight: bold; color: #667eea;">Group Information</div>';
+            html += '<div class="property-label" style="font-weight: bold; color: #667eea;">{{ _('Group Information') }}</div>';
             html += '<div class="property-group">';
-            html += '<div class="property-label">Group Name</div>';
-            html += `<input type="text" value="${attrs.name || 'Unnamed Group'}" disabled class="property-input bg-gray-100">`;
+            html += '<div class="property-label">{{ _('Group Name') }}</div>';
+            html += `<input type="text" value="${attrs.name || {{ _('Unnamed Group')|tojson }}}" disabled class="property-input bg-gray-100">`;
             html += '</div>';
             html += '<div class="property-group">';
-            html += '<div class="property-label">Children Count</div>';
+            html += '<div class="property-label">{{ _('Children Count') }}</div>';
             try {
                 const childrenCount = node.getChildren ? node.getChildren().length : (node.children ? node.children.length : 0);
-                html += `<input type="text" value="${childrenCount} children" disabled class="property-input bg-gray-100">`;
+                html += `<input type="text" value="${ {{ _('%(count)s children')|tojson }}.replace('%(count)s', childrenCount) }" disabled class="property-input bg-gray-100">`;
             } catch (e) {
-                html += `<input type="text" value="Unknown" disabled class="property-input bg-gray-100">`;
+                html += `<input type="text" value="{{ _('Unknown') }}" disabled class="property-input bg-gray-100">`;
             }
             html += '</div>';
-            html += '<p class="text-sm text-gray-500 italic mt-2">This is a Group element. If this is a table, make sure it has the name "items-table" or "expenses-table".</p>';
+            html += '<p class="text-sm text-gray-500 italic mt-2">{{ _('This is a Group element. If this is a table, make sure it has the name "items-table" or "expenses-table".') }}</p>';
             html += '</div>';
         }
         
         // Layer controls
         html += '<div class="property-group" style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 2px solid #e5e7eb;">';
-        html += '<div class="property-label">Layer Order</div>';
+        html += '<div class="property-label">{{ _('Layer Order') }}</div>';
         html += '<div style="display: flex; gap: 0.5rem;">';
         html += '<button onclick="moveLayer(\'up\')" class="btn btn-sm btn-secondary flex-1"><i class="fas fa-arrow-up"></i></button>';
         html += '<button onclick="moveLayer(\'down\')" class="btn btn-sm btn-secondary flex-1"><i class="fas fa-arrow-down"></i></button>';
@@ -4556,13 +4556,13 @@ async function initializePDFEditor() {
                         }
                     }, function(error) {
                         console.error('Konva failed to load image:', error);
-                        ttAlert('Failed to load image into canvas. The image URL is saved but may not display correctly.');
+                        ttAlert({{ _('Failed to load image into canvas. The image URL is saved but may not display correctly.')|tojson }});
                     });
                 };
                 
                 tempImg.onerror = function() {
                     console.error('Failed to load image (onerror):', imageUrl);
-                    ttAlert('Failed to load image. Please check the image URL: ' + imageUrl);
+                    ttAlert({{ _('Failed to load image. Please check the image URL: %(url)s')|tojson }}.replace('%(url)s', imageUrl));
                 };
                 
                 tempImg.src = imageUrl;
@@ -4903,7 +4903,7 @@ async function initializePDFEditor() {
             layer.find('Transformer').forEach(t => t.destroy());
             selectedElement = null;
             layer.draw();
-            document.getElementById('properties-content').innerHTML = '<p class="text-sm text-gray-500 italic">Select an element to edit its properties</p>';
+            document.getElementById('properties-content').innerHTML = '<p class="text-sm text-gray-500 italic">{{ _('Select an element to edit its properties') }}</p>';
             pushInvoiceEditorHistory();
         }
     });
@@ -6691,7 +6691,7 @@ table tr:last-child td {
             const errMsg = (error && error.message) ? String(error.message) : String(error);
             // Issue #600: Do not return pseudo-valid empty template_json (caller must omit JSON and fall back to DB)
             return {
-                html: `<div class="invoice-wrapper"><p style="color: red; padding: 20px;">Error generating template: ${errMsg}</p></div>`,
+                html: `<div class="invoice-wrapper"><p style="color: red; padding: 20px;">${ {{ _('Error generating template: %(error)s')|tojson }}.replace('%(error)s', errMsg) }</p></div>`,
                 css: `@page { size: ${currentSize}; margin: 0; } html, body { margin: 0; padding: 0; width: ${widthPx}px; height: ${heightPx}px; } .invoice-wrapper { width: ${widthPx}px; height: ${heightPx}px; background: white; padding: 0; }`,
                 json: null,
                 ok: false,
@@ -6740,11 +6740,11 @@ table tr:last-child td {
         pageSizeSelector.addEventListener('change', async function() {
             const newSize = this.value;
             const confirmed = await showConfirm(
-                'Switching page size will reload the template. Any unsaved changes will be lost. Continue?',
+                {{ _('Switching page size will reload the template. Any unsaved changes will be lost. Continue?')|tojson }},
                 {
-                    title: 'Switch Page Size',
-                    confirmText: 'Continue',
-                    cancelText: 'Cancel',
+                    title: {{ _('Switch Page Size')|tojson }},
+                    confirmText: {{ _('Continue')|tojson }},
+                    cancelText: {{ _('Cancel')|tojson }},
                     variant: 'warning'
                 }
             );
@@ -6991,7 +6991,7 @@ table tr:last-child td {
         }
         if (!json || !json.trim()) {
             console.error('No JSON generated from template!');
-            ttAlert('Error: Could not generate template JSON. Please try again.');
+            ttAlert({{ _('Error: Could not generate template JSON. Please try again.')|tojson }});
             return;
         }
         
@@ -7000,7 +7000,7 @@ table tr:last-child td {
             JSON.parse(json);
         } catch (e) {
             console.error('Invalid JSON generated:', e);
-            ttAlert('Error: Generated template JSON is invalid. Please try again.');
+            ttAlert({{ _('Error: Generated template JSON is invalid. Please try again.')|tojson }});
             return;
         }
         
@@ -7312,22 +7312,22 @@ table tr:last-child td {
     const canvasToolbar = document.querySelector('.canvas-toolbar');
     if (canvasToolbar) {
         const alignmentButtons = `
-            <button type="button" onclick="alignElements('left')" title="Align Left">
+            <button type="button" onclick="alignElements('left')" title="{{ _('Align Left') }}">
                 <i class="fas fa-align-left"></i>
             </button>
-            <button type="button" onclick="alignElements('center-h')" title="Center Horizontally">
+            <button type="button" onclick="alignElements('center-h')" title="{{ _('Center Horizontally') }}">
                 <i class="fas fa-align-center"></i>
             </button>
-            <button type="button" onclick="alignElements('right')" title="Align Right">
+            <button type="button" onclick="alignElements('right')" title="{{ _('Align Right') }}">
                 <i class="fas fa-align-right"></i>
             </button>
-            <button type="button" onclick="alignElements('top')" title="Align Top">
+            <button type="button" onclick="alignElements('top')" title="{{ _('Align Top') }}">
                 <i class="fas fa-arrow-up"></i>
             </button>
-            <button type="button" onclick="alignElements('center-v')" title="Center Vertically">
+            <button type="button" onclick="alignElements('center-v')" title="{{ _('Center Vertically') }}">
                 <i class="fas fa-arrows-alt-v"></i>
             </button>
-            <button type="button" onclick="alignElements('bottom')" title="Align Bottom">
+            <button type="button" onclick="alignElements('bottom')" title="{{ _('Align Bottom') }}">
                 <i class="fas fa-arrow-down"></i>
             </button>
             <button type="button" onclick="distributeElements('h')" title="{{ _('Distribute horizontally') }}">

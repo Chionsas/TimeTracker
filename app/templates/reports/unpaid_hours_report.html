@@ -10,28 +10,28 @@
     <form id="filterForm" method="GET" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
         <div>
             <label for="client_id" class="form-label">
-                <i class="fas fa-building mr-1"></i>Client
+                <i class="fas fa-building mr-1"></i>{{ _('Client') }}
             </label>
             {{ client_select('client_id', clients, selected_id=selected_client, required=False, only_one_client=only_one_client|default(false), single_client=single_client) }}
         </div>
         <div>
             <label for="start_date" class="form-label">
-                <i class="fas fa-calendar mr-1"></i>Start Date
+                <i class="fas fa-calendar mr-1"></i>{{ _('Start Date') }}
             </label>
             <input type="date" name="start_date" id="start_date" value="{{ start_date }}" class="form-input user-date-input">
         </div>
         <div>
             <label for="end_date" class="form-label">
-                <i class="fas fa-calendar mr-1"></i>End Date
+                <i class="fas fa-calendar mr-1"></i>{{ _('End Date') }}
             </label>
             <input type="date" name="end_date" id="end_date" value="{{ end_date }}" class="form-input user-date-input">
         </div>
         <div class="self-end flex gap-2">
             <button type="submit" id="filterBtn" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition">
-                <i class="fas fa-filter mr-2"></i>Filter
+                <i class="fas fa-filter mr-2"></i>{{ _('Filter') }}
             </button>
             <a href="#" id="exportBtn" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition inline-flex items-center">
-                <i class="fas fa-file-excel mr-2"></i>Export to Excel
+                <i class="fas fa-file-excel mr-2"></i>{{ _('Export to Excel') }}
             </a>
         </div>
     </form>
@@ -127,8 +127,8 @@
                                         <tbody>
                                             {% for entry in data.entries %}
                                             <tr class="border-b border-gray-200 dark:border-gray-700">
-                                                <td class="p-2">{{ entry.user.display_name if entry.user else 'Unknown' }}</td>
-                                                <td class="p-2">{{ entry.project.name if entry.project else 'No Project' }}</td>
+                                                <td class="p-2">{{ entry.user.display_name if entry.user else _('Unknown') }}</td>
+                                                <td class="p-2">{{ entry.project.name if entry.project else _('No Project') }}</td>
                                                 <td class="p-2">{{ entry.task.name if entry.task else '-' }}</td>
                                                 <td class="p-2">{{ entry.start_time|user_date if entry.start_time else '-' }}</td>
                                                 <td class="p-2">{{ "%.2f"|format(entry.duration_hours) }}h</td>
@@ -207,7 +207,7 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error('Error loading report:', error);
             loadingIndicator.classList.add('hidden');
             clientDataContainer.style.opacity = '1';
-            alert('Error loading report data. Please try again.');
+            alert({{ _('Error loading report data. Please try again.')|tojson }});
         });
     }
     
@@ -226,7 +226,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <tr>
                     <td colspan="5" class="text-center py-8 text-gray-500 dark:text-gray-400">
                         <i class="fas fa-inbox text-4xl mb-4"></i>
-                        <p>No unpaid hours found for the selected period.</p>
+                        <p>{{ _('No unpaid hours found for the selected period.') }}</p>
                     </td>
                 </tr>
             `;
@@ -253,7 +253,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         ${data.client_email ? `<div class="text-sm text-gray-600 dark:text-gray-400">${escapeHtml(data.client_email)}</div>` : ''}
                     </td>
                     <td class="p-3">
-                        <span class="font-semibold">${data.total_hours.toFixed(2)}</span> hours
+                        <span class="font-semibold">${data.total_hours.toFixed(2)}</span> {{ _('hours') }}
                     </td>
                     <td class="p-3">
                         <span class="font-semibold text-green-600 dark:text-green-400">${data.estimated_amount.toFixed(2)}</span>
@@ -265,17 +265,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 <tr class="client-details-row hidden" data-client-id="${data.client_id}">
                     <td colspan="5" class="p-4 bg-gray-50 dark:bg-gray-800/50">
                         <div class="ml-8">
-                            <h4 class="font-semibold mb-3">Time Entry Details</h4>
+                            <h4 class="font-semibold mb-3">{{ _('Time Entry Details') }}</h4>
                             <div class="overflow-x-auto">
                                 <table class="w-full text-sm">
                                     <thead>
                                         <tr class="border-b border-gray-300 dark:border-gray-600">
-                                            <th class="p-2 text-left">User</th>
-                                            <th class="p-2 text-left">Project</th>
-                                            <th class="p-2 text-left">Task</th>
-                                            <th class="p-2 text-left">Date</th>
-                                            <th class="p-2 text-left">Duration</th>
-                                            <th class="p-2 text-left">Notes</th>
+                                            <th class="p-2 text-left">{{ _('User') }}</th>
+                                            <th class="p-2 text-left">{{ _('Project') }}</th>
+                                            <th class="p-2 text-left">{{ _('Task') }}</th>
+                                            <th class="p-2 text-left">{{ _('Date') }}</th>
+                                            <th class="p-2 text-left">{{ _('Duration') }}</th>
+                                            <th class="p-2 text-left">{{ _('Notes') }}</th>
                                         </tr>
                                     </thead>
                                     <tbody>

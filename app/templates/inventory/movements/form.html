@@ -3,15 +3,15 @@
 
 {% block content %}
 {% set breadcrumbs = [
-    {'text': 'Inventory', 'url': url_for('inventory.list_stock_items')},
-    {'text': 'Stock Movements', 'url': url_for('inventory.list_movements')},
-    {'text': 'Record Movement'}
+    {'text': _('Inventory'), 'url': url_for('inventory.list_stock_items')},
+    {'text': _('Stock Movements'), 'url': url_for('inventory.list_movements')},
+    {'text': _('Record Movement')}
 ] %}
 
 {{ page_header(
     icon_class='fas fa-exchange-alt',
-    title_text='Record Stock Movement',
-    subtitle_text='Record inventory adjustment or movement',
+    title_text=_('Record Stock Movement'),
+    subtitle_text=_('Record inventory adjustment or movement'),
     breadcrumbs=breadcrumbs
 ) }}
 

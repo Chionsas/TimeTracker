@@ -3,9 +3,9 @@
 {% block content %}
 <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
     <div>
-        <h1 class="text-2xl font-bold">{{ 'Edit User' if user else 'Create User' }}</h1>
+        <h1 class="text-2xl font-bold">{{ _('Edit User') if user else _('Create User') }}</h1>
         <p class="text-text-muted-light dark:text-text-muted-dark">
-            {{ 'Update the details for %s.'|format(user.username) if user else 'Create a new user account.' }}
+            {{ _('Update the details for %(username)s.', username=user.username) if user else _('Create a new user account.') }}
         </p>
     </div>
 </div>
@@ -15,67 +15,67 @@
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <div class="space-y-6">
             <div>
-                <label for="username" class="form-label">Username</label>
+                <label for="username" class="form-label">{{ _('Username') }}</label>
                 <input type="text" name="username" id="username" value="{{ user.username if user else '' }}" required class="form-input">
             </div>
             <div>
-                <label for="role" class="form-label">Role</label>
+                <label for="role" class="form-label">{{ _('Role') }}</label>
                 <select name="role" id="role" class="form-input">
                     {% if all_roles %}
                         {% for role in all_roles %}
                             <option value="{{ role.name }}" {% if user and user.roles and user.roles|length > 0 and role == user.roles[0] %}selected{% elif user and not user.roles and role.name == user.role %}selected{% elif not user and role.name == 'user' %}selected{% endif %}>
-                                {{ role.name|capitalize }}{% if role.is_system_role %} (System){% endif %}
+                                {{ role.name|capitalize }}{% if role.is_system_role %} ({{ _('System') }}){% endif %}
                             </option>
                         {% endfor %}
                     {% else %}
                         {# Fallback to legacy roles if Role system not initialized #}
-                        <option value="user" {% if user and user.role == 'user' %}selected{% endif %}>User</option>
-                        <option value="admin" {% if user and user.role == 'admin' %}selected{% endif %}>Admin</option>
+                        <option value="user" {% if user and user.role == 'user' %}selected{% endif %}>{{ _('User') }}</option>
+                        <option value="admin" {% if user and user.role == 'admin' %}selected{% endif %}>{{ _('Admin') }}</option>
                     {% endif %}
                 </select>
                 <p class="text-xs text-text-muted-light dark:text-text-muted-dark mt-1">
-                    Select the primary role for this user. Additional roles can be assigned via "Manage Roles & Permissions" below.
+                    {{ _('Select the primary role for this user. Additional roles can be assigned via "Manage Roles & Permissions" below.') }}
                 </p>
             </div>
             {% if not user %}
             <div>
-                <label for="default_password" class="form-label">Default Password</label>
-                <input type="password" name="default_password" id="default_password" class="form-input" placeholder="Leave empty for no password">
+                <label for="default_password" class="form-label">{{ _('Default Password') }}</label>
+                <input type="password" name="default_password" id="default_password" class="form-input" placeholder="{{ _('Leave empty for no password') }}">
                 <p class="text-xs text-text-muted-light dark:text-text-muted-dark mt-1">
-                    Set an initial password for this user. If set, you can require them to change it on first login.
+                    {{ _('Set an initial password for this user. If set, you can require them to change it on first login.') }}
                 </p>
             </div>
             <div class="flex items-center">
                 <input type="checkbox" name="force_password_change" id="force_password_change" class="h-4 w-4 rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                <label for="force_password_change" class="ml-2 block text-sm text-gray-900 dark:text-gray-300">Require password change on first login</label>
+                <label for="force_password_change" class="ml-2 block text-sm text-gray-900 dark:text-gray-300">{{ _('Require password change on first login') }}</label>
             </div>
             {% endif %}
             {% if user %}
             <div class="flex items-center">
                 <input type="checkbox" name="is_active" id="is_active" {% if user.is_active %}checked{% endif %} class="h-4 w-4 rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                <label for="is_active" class="ml-2 block text-sm text-gray-900 dark:text-gray-300">Active</label>
+                <label for="is_active" class="ml-2 block text-sm text-gray-900 dark:text-gray-300">{{ _('Active') }}</label>
             </div>
             
             <div class="border border-border-light dark:border-border-dark rounded-lg p-4 bg-bg-secondary-light dark:bg-bg-secondary-dark">
                 <h3 class="font-semibold mb-2">{{ _('Password Reset') }}</h3>
                 <p class="text-sm text-text-muted-light dark:text-text-muted-dark mb-3">
-                    Reset the password for this user. Leave blank to keep the current password.
+                    {{ _('Reset the password for this user. Leave blank to keep the current password.') }}
                 </p>
                 <div class="space-y-3">
                     <div>
-                        <label for="new_password" class="form-label">New Password</label>
+                        <label for="new_password" class="form-label">{{ _('New Password') }}</label>
                         <input type="password" name="new_password" id="new_password" class="form-input" placeholder="{{ _('Leave blank to keep current password') }}">
                         <p class="text-xs text-text-muted-light dark:text-text-muted-dark mt-1">
-                            Password must be at least 8 characters long.
+                            {{ _('Password must be at least 8 characters long.') }}
                         </p>
                     </div>
                     <div>
-                        <label for="password_confirm" class="form-label">Confirm New Password</label>
+                        <label for="password_confirm" class="form-label">{{ _('Confirm New Password') }}</label>
                         <input type="password" name="password_confirm" id="password_confirm" class="form-input">
                     </div>
                     <div class="flex items-center">
                         <input type="checkbox" name="force_password_change" id="force_password_change" {% if user.password_change_required %}checked{% endif %} class="h-4 w-4 rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                        <label for="force_password_change" class="ml-2 block text-sm text-gray-900 dark:text-gray-300">Require password change on next login</label>
+                        <label for="force_password_change" class="ml-2 block text-sm text-gray-900 dark:text-gray-300">{{ _('Require password change on next login') }}</label>
                     </div>
                 </div>
             </div>
@@ -92,17 +92,17 @@
                 <div class="space-y-3">
                     <div class="flex items-center">
                         <input type="checkbox" name="client_portal_enabled" id="client_portal_enabled" {% if user.client_portal_enabled %}checked{% endif %} class="h-4 w-4 rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" onchange="toggleClientPortalOptions()">
-                        <label for="client_portal_enabled" class="ml-2 block text-sm text-gray-900 dark:text-gray-300">Enable Client Portal</label>
+                        <label for="client_portal_enabled" class="ml-2 block text-sm text-gray-900 dark:text-gray-300">{{ _('Enable Client Portal') }}</label>
                     </div>
                     <div id="client_select_container" style="display: {% if user.client_portal_enabled %}block{% else %}none{% endif %};">
-                        <label for="client_id" class="form-label">Assign Client</label>
+                        <label for="client_id" class="form-label">{{ _('Assign Client') }}</label>
                         <select name="client_id" id="client_id" class="form-input">
-                            <option value="">-- Select Client --</option>
+                            <option value="">{{ _('-- Select Client --') }}</option>
                             {% for client in clients %}
                             <option value="{{ client.id }}" {% if user.client_id == client.id %}selected{% endif %}>{{ client.name }}</option>
                             {% endfor %}
                         </select>
-                        <p class="text-xs text-text-muted-light dark:text-text-muted-dark mt-1">Select the client this user should have access to.</p>
+                        <p class="text-xs text-text-muted-light dark:text-text-muted-dark mt-1">{{ _('Select the client this user should have access to.') }}</p>
                     </div>
                     <div id="portal_only_container" class="flex items-center" style="display: {% if user.client_portal_enabled %}flex{% else %}none{% endif %};">
                         <input type="checkbox" name="portal_only" id="portal_only" {% if user.portal_only %}checked{% endif %} class="h-4 w-4 rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
@@ -114,7 +114,7 @@
             <div class="border border-border-light dark:border-border-dark rounded-lg p-4 bg-bg-secondary-light dark:bg-bg-secondary-dark" id="assigned_clients_section" style="display: none;">
                 <h3 class="font-semibold mb-2">{{ _('Assigned Clients (Subcontractor)') }}</h3>
                 <p class="text-sm text-text-muted-light dark:text-text-muted-dark mb-3">
-                    When the role is <strong>Subcontractor</strong>, the user will only see these clients and their projects. Select all clients this user should have access to.
+                    {{ _('When the role is %(role)s, the user will only see these clients and their projects. Select all clients this user should have access to.', role='<strong>' ~ _('Subcontractor') ~ '</strong>')|safe }}
                 </p>
                 <div id="assigned_clients_container">
                     <label for="assigned_client_ids" class="form-label">{{ _('Assigned clients') }}</label>
@@ -130,24 +130,24 @@
             <div class="border border-border-light dark:border-border-dark rounded-lg p-4 bg-bg-secondary-light dark:bg-bg-secondary-dark">
                 <h3 class="font-semibold mb-2">{{ _('Roles & Permissions') }}</h3>
                 <p class="text-sm text-text-muted-light dark:text-text-muted-dark mb-3">
-                    Manage fine-grained role-based permissions for this user. You can assign multiple roles and customize permissions.
+                    {{ _('Manage fine-grained role-based permissions for this user. You can assign multiple roles and customize permissions.') }}
                 </p>
                 <a href="{{ url_for('permissions.manage_user_roles', user_id=user.id) }}" class="inline-block bg-primary text-white px-4 py-2 rounded-lg text-sm hover:bg-opacity-90">
-                    Manage Roles & Permissions
+                    {{ _('Manage Roles & Permissions') }}
                 </a>
                 <div class="mt-3 text-xs text-text-muted-light dark:text-text-muted-dark">
                     {% if user.roles %}
-                    <strong>Current roles:</strong> {{ user.get_role_names()|join(', ') }}
+                    <strong>{{ _('Current roles:') }}</strong> {{ user.get_role_names()|join(', ') }}
                     {% else %}
-                    <strong>Current role:</strong> {{ user.role|capitalize }} (legacy)
+                    <strong>{{ _('Current role:') }}</strong> {{ user.role|capitalize }} ({{ _('legacy') }})
                     {% endif %}
                 </div>
             </div>
             {% endif %}
         </div>
         <div class="mt-8 border-t border-border-light dark:border-border-dark pt-6 flex flex-col sm:flex-row justify-end gap-3">
-            <a href="{{ url_for('admin.list_users') }}" class="bg-gray-200 dark:bg-gray-700 px-4 py-2 rounded-lg text-center">Cancel</a>
-            <button type="submit" class="bg-primary text-white px-4 py-2 rounded-lg">Save</button>
+            <a href="{{ url_for('admin.list_users') }}" class="bg-gray-200 dark:bg-gray-700 px-4 py-2 rounded-lg text-center">{{ _('Cancel') }}</a>
+            <button type="submit" class="bg-primary text-white px-4 py-2 rounded-lg">{{ _('Save') }}</button>
         </div>
     </form>
 </div>

@@ -4,14 +4,14 @@
 
 {% block content %}
 {% set breadcrumbs = [
-    {'text': 'Mileage', 'url': url_for('mileage.list_mileage')},
-    {'text': 'Edit' if mileage else 'New'}
+    {'text': _('Mileage'), 'url': url_for('mileage.list_mileage')},
+    {'text': _('Edit') if mileage else _('New')}
 ] %}
 
 {{ page_header(
     icon_class='fas fa-car',
-    title_text=('Edit Mileage Entry' if mileage else 'New Mileage Entry'),
-    subtitle_text=('Update mileage details' if mileage else 'Record a new vehicle mileage entry'),
+    title_text=(_('Edit Mileage Entry') if mileage else _('New Mileage Entry')),
+    subtitle_text=(_('Update mileage details') if mileage else _('Record a new vehicle mileage entry')),
     breadcrumbs=breadcrumbs
 ) }}
 
@@ -22,13 +22,13 @@
         <!-- Trip Information -->
         <div class="mb-6">
             <h3 class="text-lg font-semibold mb-4 pb-2 border-b border-gray-200 dark:border-gray-700">
-                <i class="fas fa-info-circle mr-2"></i>Trip Information
+                <i class="fas fa-info-circle mr-2"></i>{{ _('Trip Information') }}
             </h3>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                     <label for="trip_date" class="form-label">
-                        Trip Date <span class="text-red-500">*</span>
+                        {{ _('Trip Date') }} <span class="text-red-500">*</span>
                     </label>
                     <input type="date" name="trip_date" id="trip_date" required
                            value="{{ mileage.trip_date.strftime('%Y-%m-%d') if mileage else '' }}"
@@ -37,7 +37,7 @@
                 
                 <div>
                     <label for="currency_code" class="form-label">
-                        Currency
+                        {{ _('Currency') }}
                     </label>
                     <select name="currency_code" id="currency_code"
                             class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-primary focus:border-primary dark:bg-gray-700">
@@ -49,7 +49,7 @@
                 
                 <div class="md:col-span-2">
                     <label for="purpose" class="form-label">
-                        Purpose <span class="text-red-500">*</span>
+                        {{ _('Purpose') }} <span class="text-red-500">*</span>
                     </label>
                     <input type="text" name="purpose" id="purpose" required
                            value="{{ mileage.purpose if mileage else '' }}"
@@ -59,7 +59,7 @@
                 
                 <div class="md:col-span-2">
                     <label for="description" class="form-label">
-                        Description
+                        {{ _('Description') }}
                     </label>
                     <textarea name="description" id="description" rows="2"
                               placeholder="{{ _('Additional details...') }}"
@@ -71,13 +71,13 @@
         <!-- Route Information -->
         <div class="mb-6">
             <h3 class="text-lg font-semibold mb-4 pb-2 border-b border-gray-200 dark:border-gray-700">
-                <i class="fas fa-route mr-2"></i>Route Details
+                <i class="fas fa-route mr-2"></i>{{ _('Route Details') }}
             </h3>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                     <label for="start_location" class="form-label">
-                        Start Location <span class="text-red-500">*</span>
+                        {{ _('Start Location') }} <span class="text-red-500">*</span>
                     </label>
                     <input type="text" name="start_location" id="start_location" required
                            value="{{ mileage.start_location if mileage else '' }}"
@@ -87,7 +87,7 @@
                 
                 <div>
                     <label for="end_location" class="form-label">
-                        End Location <span class="text-red-500">*</span>
+                        {{ _('End Location') }} <span class="text-red-500">*</span>
                     </label>
                     <input type="text" name="end_location" id="end_location" required
                            value="{{ mileage.end_location if mileage else '' }}"
@@ -97,7 +97,7 @@
                 
                 <div>
                     <label for="distance_km" class="form-label">
-                        Distance (km) <span class="text-red-500">*</span>
+                        {{ _('Distance (km)') }} <span class="text-red-500">*</span>
                     </label>
                     <input type="number" name="distance_km" id="distance_km" step="0.01" required
                            value="{{ mileage.distance_km if mileage else '' }}"
@@ -107,18 +107,18 @@
                 
                 <div>
                     <label for="rate_per_km" class="form-label">
-                        Rate per km <span class="text-red-500">*</span>
+                        {{ _('Rate per km') }} <span class="text-red-500">*</span>
                     </label>
                     <input type="number" name="rate_per_km" id="rate_per_km" step="0.01" required
                            value="{{ mileage.rate_per_km if mileage else (default_rates.car if default_rates else '0.30') }}"
                            placeholder="0.30"
                            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-primary focus:border-primary dark:bg-gray-700">
-                    <p class="text-xs text-gray-500 mt-1">Standard rate: €0.30/km</p>
+                    <p class="text-xs text-gray-500 mt-1">{{ _('Standard rate: €0.30/km') }}</p>
                 </div>
                 
                 <div>
                     <label for="start_odometer" class="form-label">
-                        Start Odometer (optional)
+                        {{ _('Start Odometer (optional)') }}
                     </label>
                     <input type="number" name="start_odometer" id="start_odometer" step="1"
                            value="{{ mileage.start_odometer if mileage and mileage.start_odometer else '' }}"
@@ -128,7 +128,7 @@
                 
                 <div>
                     <label for="end_odometer" class="form-label">
-                        End Odometer (optional)
+                        {{ _('End Odometer (optional)') }}
                     </label>
                     <input type="number" name="end_odometer" id="end_odometer" step="1"
                            value="{{ mileage.end_odometer if mileage and mileage.end_odometer else '' }}"
@@ -141,8 +141,8 @@
                            {% if mileage and mileage.is_round_trip %}checked{% endif %}
                            class="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded">
                     <label for="is_round_trip" class="ml-2 text-sm text-gray-700 dark:text-gray-300">
-                        <strong>Round Trip</strong>
-                        <span class="block text-xs text-gray-500">Double the distance for return journey</span>
+                        <strong>{{ _('Round Trip') }}</strong>
+                        <span class="block text-xs text-gray-500">{{ _('Double the distance for return journey') }}</span>
                     </label>
                 </div>
             </div>
@@ -150,7 +150,7 @@
             <div class="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
                 <p class="text-sm text-blue-800 dark:text-blue-200">
                     <i class="fas fa-calculator mr-1"></i>
-                    <strong>Calculated Amount:</strong> <span id="calculated_amount">0.00</span> <span id="amount_currency">EUR</span>
+                    <strong>{{ _('Calculated Amount:') }}</strong> <span id="calculated_amount">0.00</span> <span id="amount_currency">EUR</span>
                 </p>
             </div>
         </div>
@@ -158,27 +158,27 @@
         <!-- Vehicle Information -->
         <div class="mb-6">
             <h3 class="text-lg font-semibold mb-4 pb-2 border-b border-gray-200 dark:border-gray-700">
-                <i class="fas fa-car mr-2"></i>Vehicle Information
+                <i class="fas fa-car mr-2"></i>{{ _('Vehicle Information') }}
             </h3>
             
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
                     <label for="vehicle_type" class="form-label">
-                        Vehicle Type
+                        {{ _('Vehicle Type') }}
                     </label>
                     <select name="vehicle_type" id="vehicle_type"
                             class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-primary focus:border-primary dark:bg-gray-700">
-                        <option value="">Select Type</option>
-                        <option value="car" {% if mileage and mileage.vehicle_type == 'car' %}selected{% endif %}>Car</option>
-                        <option value="motorcycle" {% if mileage and mileage.vehicle_type == 'motorcycle' %}selected{% endif %}>Motorcycle</option>
-                        <option value="van" {% if mileage and mileage.vehicle_type == 'van' %}selected{% endif %}>Van</option>
-                        <option value="truck" {% if mileage and mileage.vehicle_type == 'truck' %}selected{% endif %}>Truck</option>
+                        <option value="">{{ _('Select Type') }}</option>
+                        <option value="car" {% if mileage and mileage.vehicle_type == 'car' %}selected{% endif %}>{{ _('Car') }}</option>
+                        <option value="motorcycle" {% if mileage and mileage.vehicle_type == 'motorcycle' %}selected{% endif %}>{{ _('Motorcycle') }}</option>
+                        <option value="van" {% if mileage and mileage.vehicle_type == 'van' %}selected{% endif %}>{{ _('Van') }}</option>
+                        <option value="truck" {% if mileage and mileage.vehicle_type == 'truck' %}selected{% endif %}>{{ _('Truck') }}</option>
                     </select>
                 </div>
                 
                 <div>
                     <label for="vehicle_description" class="form-label">
-                        Vehicle Make/Model
+                        {{ _('Vehicle Make/Model') }}
                     </label>
                     <input type="text" name="vehicle_description" id="vehicle_description"
                            value="{{ mileage.vehicle_description if mileage and mileage.vehicle_description else '' }}"
@@ -188,7 +188,7 @@
                 
                 <div>
                     <label for="license_plate" class="form-label">
-                        License Plate
+                        {{ _('License Plate') }}
                     </label>
                     <input type="text" name="license_plate" id="license_plate"
                            value="{{ mileage.license_plate if mileage and mileage.license_plate else '' }}"
@@ -201,17 +201,17 @@
         <!-- Project & Client -->
         <div class="mb-6">
             <h3 class="text-lg font-semibold mb-4 pb-2 border-b border-gray-200 dark:border-gray-700">
-                <i class="fas fa-project-diagram mr-2"></i>Association
+                <i class="fas fa-project-diagram mr-2"></i>{{ _('Association') }}
             </h3>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                     <label for="project_id" class="form-label">
-                        Project
+                        {{ _('Project') }}
                     </label>
                     <select name="project_id" id="project_id"
                             class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-primary focus:border-primary dark:bg-gray-700">
-                        <option value="">No Project</option>
+                        <option value="">{{ _('No Project') }}</option>
                         {% for project in projects %}
                         <option value="{{ project.id }}" {% if mileage and mileage.project_id == project.id %}selected{% endif %}>
                             {{ project.name }}
@@ -222,7 +222,7 @@
                 
                 <div>
                     <label for="client_id" class="form-label">
-                        Client
+                        {{ _('Client') }}
                     </label>
                     {{ client_select('client_id', clients, selected_id=mileage.client_id if mileage else none, required=False, only_one_client=only_one_client|default(false), single_client=single_client) }}
                 </div>
@@ -232,7 +232,7 @@
         <!-- Notes -->
         <div class="mb-6">
             <label for="notes" class="form-label">
-                Notes
+                {{ _('Notes') }}
             </label>
             <textarea name="notes" id="notes" rows="3"
                       placeholder="{{ _('Additional notes...') }}"
@@ -246,8 +246,8 @@
                 <input type="checkbox" name="create_expense" id="create_expense" checked
                        class="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded">
                 <label for="create_expense" class="ml-2 text-sm text-gray-700 dark:text-gray-300">
-                    <strong>Create linked expense entry</strong>
-                    <span class="block text-xs text-gray-500">Automatically create an expense record for this mileage</span>
+                    <strong>{{ _('Create linked expense entry') }}</strong>
+                    <span class="block text-xs text-gray-500">{{ _('Automatically create an expense record for this mileage') }}</span>
                 </label>
             </div>
         </div>
@@ -257,11 +257,11 @@
         <div class="flex items-center justify-between pt-4 border-t border-gray-200 dark:border-gray-700">
             <a href="{{ url_for('mileage.view_mileage', mileage_id=mileage.id) if mileage else url_for('mileage.list_mileage') }}" 
                class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-                <i class="fas fa-times mr-2"></i>Cancel
+                <i class="fas fa-times mr-2"></i>{{ _('Cancel') }}
             </a>
             
             <button type="submit" class="bg-primary text-white px-6 py-2 rounded-lg hover:bg-primary/90 transition-colors">
-                <i class="fas fa-save mr-2"></i>{{ 'Update Mileage' if mileage else 'Create Mileage Entry' }}
+                <i class="fas fa-save mr-2"></i>{{ _('Update Mileage') if mileage else _('Create Mileage Entry') }}
             </button>
         </div>
     </form>

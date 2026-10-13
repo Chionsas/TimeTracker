@@ -3,15 +3,15 @@
 
 {% block content %}
 {% set breadcrumbs = [
-    {'text': 'Projects'}
+    {'text': _('Projects')}
 ] %}
 
 {{ page_header(
     icon_class='fas fa-folder',
-    title_text='Projects',
-    subtitle_text='Manage your projects here',
+    title_text=_('Projects'),
+    subtitle_text=_('Manage your projects here'),
     breadcrumbs=breadcrumbs,
-    actions_html='<a href="' + url_for("projects.create_project") + '" class="btn btn-primary"><i class="fas fa-plus"></i>Create Project</a>' if (current_user.is_admin or has_permission('create_projects')) else None
+    actions_html='<a href="' + url_for("projects.create_project") + '" class="btn btn-primary"><i class="fas fa-plus"></i>' + _('Create Project') + '</a>' if (current_user.is_admin or has_permission('create_projects')) else None
 ) }}
 
 <div class="bg-card-light dark:bg-card-dark p-6 rounded-xl border border-border-light dark:border-border-dark shadow-sm mb-6">
@@ -24,20 +24,20 @@
     <div id="filterBody">
     <form method="GET" class="grid grid-cols-1 md:grid-cols-4 gap-4" id="projectsFilterForm" data-filter-form>
         <div>
-            <label for="projects-filter-search" class="form-label">Search</label>
+            <label for="projects-filter-search" class="form-label">{{ _('Search') }}</label>
             <input type="text" name="search" id="projects-filter-search" value="{{ search or '' }}" class="form-input">
         </div>
         <div>
-            <label for="status" class="form-label">Status</label>
+            <label for="status" class="form-label">{{ _('Status') }}</label>
             <select name="status" id="status" class="form-input">
-                <option value="all" {% if not status or status == 'all' %}selected{% endif %}>All</option>
-                <option value="active" {% if status == 'active' %}selected{% endif %}>Active</option>
-                <option value="inactive" {% if status == 'inactive' %}selected{% endif %}>Inactive</option>
-                <option value="archived" {% if status == 'archived' %}selected{% endif %}>Archived</option>
+                <option value="all" {% if not status or status == 'all' %}selected{% endif %}>{{ _('All') }}</option>
+                <option value="active" {% if status == 'active' %}selected{% endif %}>{{ _('Active') }}</option>
+                <option value="inactive" {% if status == 'inactive' %}selected{% endif %}>{{ _('Inactive') }}</option>
+                <option value="archived" {% if status == 'archived' %}selected{% endif %}>{{ _('Archived') }}</option>
             </select>
         </div>
         <div>
-            <label for="client" class="form-label">Client</label>
+            <label for="client" class="form-label">{{ _('Client') }}</label>
             {% set locked_client = get_locked_client() %}
             {% if locked_client %}
                 <input type="hidden" name="client" id="client" value="{{ locked_client.name }}">
@@ -49,7 +49,7 @@
                        value="{{ single_client.name }}" disabled readonly>
             {% else %}
                 <select name="client" id="client" class="form-input">
-                    <option value="">All</option>
+                    <option value="">{{ _('All') }}</option>
                     {% for client_name in clients %}
                     <option value="{{ client_name }}" {% if request.args.get('client') == client_name %}selected{% endif %}>{{ client_name }}</option>
                     {% endfor %}
@@ -57,10 +57,10 @@
             {% endif %}
         </div>
         <div>
-            <label for="favorites" class="form-label">Show</label>
+            <label for="favorites" class="form-label">{{ _('Show') }}</label>
             <select name="favorites" id="favorites" class="form-input">
-                <option value="">All Projects</option>
-                <option value="true" {% if favorites_only %}selected{% endif %}>⭐ Favorites Only</option>
+                <option value="">{{ _('All Projects') }}</option>
+                <option value="true" {% if favorites_only %}selected{% endif %}>⭐ {{ _('Favorites Only') }}</option>
             </select>
         </div>
         {% if custom_field_definitions %}
@@ -82,7 +82,7 @@
     <div id="projectsListContainer">
     <div class="flex justify-between items-center mb-4">
         <h3 class="text-sm font-medium">
-            <span class="table-count-badge">{{ projects|length }} project{{ 's' if projects|length != 1 else '' }} found</span>
+            <span class="table-count-badge">{{ ngettext('%(num)s project found', '%(num)s projects found', projects|length) }}</span>
         </h3>
         <div class="flex items-center gap-2">
             <!-- View Toggle -->
@@ -98,19 +98,19 @@
                class="px-3 py-1.5 text-sm bg-background-light dark:bg-background-dark rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors inline-flex items-center export-btn" 
                title="{{ _('Export to CSV') }}"
                onclick="showExportLoading(this); return true;">
-                <i class="fas fa-download mr-1"></i> <span class="export-text">Export</span>
+                <i class="fas fa-download mr-1"></i> <span class="export-text">{{ _('Export') }}</span>
             </a>
             {% if current_user.is_admin %}
             <div class="relative">
                 <button type="button" id="bulkActionsBtn" class="px-3 py-1.5 text-sm border rounded-lg text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-600 disabled:opacity-60" onclick="openMenu(this, 'projectsBulkMenu')" disabled>
-                    <i class="fas fa-tasks mr-1"></i> Bulk Actions (<span id="selectedCount">0</span>)
+                    <i class="fas fa-tasks mr-1"></i> {{ _('Bulk Actions') }} (<span id="selectedCount">0</span>)
                 </button>
                 <ul id="projectsBulkMenu" class="bulk-menu hidden absolute right-0 mt-2 w-56 bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark rounded-md shadow-lg z-50">
-                    <li><a class="block px-4 py-2 text-sm text-text-light dark:text-text-dark hover:bg-gray-100 dark:hover:bg-gray-700" href="#" onclick="return showBulkStatusChange('active')"><i class="fas fa-check-circle mr-2 text-green-600"></i>Mark as Active</a></li>
-                    <li><a class="block px-4 py-2 text-sm text-text-light dark:text-text-dark hover:bg-gray-100 dark:hover:bg-gray-700" href="#" onclick="return showBulkStatusChange('inactive')"><i class="fas fa-pause-circle mr-2 text-amber-500"></i>Mark as Inactive</a></li>
-                    <li><a class="block px-4 py-2 text-sm text-text-light dark:text-text-dark hover:bg-gray-100 dark:hover:bg-gray-700" href="#" onclick="return showBulkArchiveDialog()"><i class="fas fa-archive mr-2 text-gray-600"></i>Archive</a></li>
+                    <li><a class="block px-4 py-2 text-sm text-text-light dark:text-text-dark hover:bg-gray-100 dark:hover:bg-gray-700" href="#" onclick="return showBulkStatusChange('active')"><i class="fas fa-check-circle mr-2 text-green-600"></i>{{ _('Mark as Active') }}</a></li>
+                    <li><a class="block px-4 py-2 text-sm text-text-light dark:text-text-dark hover:bg-gray-100 dark:hover:bg-gray-700" href="#" onclick="return showBulkStatusChange('inactive')"><i class="fas fa-pause-circle mr-2 text-amber-500"></i>{{ _('Mark as Inactive') }}</a></li>
+                    <li><a class="block px-4 py-2 text-sm text-text-light dark:text-text-dark hover:bg-gray-100 dark:hover:bg-gray-700" href="#" onclick="return showBulkArchiveDialog()"><i class="fas fa-archive mr-2 text-gray-600"></i>{{ _('Archive') }}</a></li>
                     <li><hr class="my-1 border-border-light dark:border-border-dark"></li>
-                    <li><a class="block px-4 py-2 text-sm text-rose-600 hover:bg-gray-100 dark:hover:bg-gray-700" href="#" onclick="return showBulkDeleteConfirm()"><i class="fas fa-trash mr-2"></i>Delete</a></li>
+                    <li><a class="block px-4 py-2 text-sm text-rose-600 hover:bg-gray-100 dark:hover:bg-gray-700" href="#" onclick="return showBulkDeleteConfirm()"><i class="fas fa-trash mr-2"></i>{{ _('Delete') }}</a></li>
                 </ul>
             </div>
             {% endif %}
@@ -128,13 +128,13 @@
                 </th>
                 {% endif %}
                 <th class="p-4 w-10"></th>
-                <th class="p-4" data-sortable>Name</th>
-                <th class="p-4" data-sortable>Client</th>
-                <th class="p-4" data-sortable>Status</th>
-                <th class="p-4" data-sortable>Billable</th>
-                <th class="p-4" data-sortable>Rate</th>
-                <th class="p-4" data-sortable>Budget</th>
-                <th class="p-4">Actions</th>
+                <th class="p-4" data-sortable>{{ _('Name') }}</th>
+                <th class="p-4" data-sortable>{{ _('Client') }}</th>
+                <th class="p-4" data-sortable>{{ _('Status') }}</th>
+                <th class="p-4" data-sortable>{{ _('Billable') }}</th>
+                <th class="p-4" data-sortable>{{ _('Rate') }}</th>
+                <th class="p-4" data-sortable>{{ _('Budget') }}</th>
+                <th class="p-4">{{ _('Actions') }}</th>
             </tr>
         </thead>
         <tbody>
@@ -152,7 +152,7 @@
                             data-project-id="{{ project.id }}"
                             data-is-favorited="{{ 'true' if is_fav else 'false' }}"
                             onclick="toggleFavorite({{ project.id }}, this)"
-                            title="{{ 'Remove from favorites' if is_fav else 'Add to favorites' }}">
+                            title="{{ _('Remove from favorites') if is_fav else _('Add to favorites') }}">
                         <i class="{{ 'fas fa-star text-yellow-500' if is_fav else 'far fa-star text-gray-400' }}"></i>
                     </button>
                 </td>
@@ -166,18 +166,18 @@
                 </td>
                 <td class="p-4" data-label="{{ _('Status') }}">
                     {% if project.status == 'active' %}
-                        <span class="px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300">Active</span>
+                        <span class="px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300">{{ _('Active') }}</span>
                     {% elif project.status == 'inactive' %}
-                        <span class="px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300">Inactive</span>
+                        <span class="px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300">{{ _('Inactive') }}</span>
                     {% else %}
-                        <span class="px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-200">Archived</span>
+                        <span class="px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-200">{{ _('Archived') }}</span>
                     {% endif %}
                 </td>
                 <td class="p-4" data-label="{{ _('Billable') }}">
                     {% if project.billable %}
-                        <span class="px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300">Billable</span>
+                        <span class="px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300">{{ _('Billable') }}</span>
                     {% else %}
-                        <span class="px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300">Non-billable</span>
+                        <span class="px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300">{{ _('Non-billable') }}</span>
                     {% endif %}
                 </td>
                 <td class="p-4" data-label="{{ _('Rate') }}">
@@ -214,7 +214,7 @@
                     {% endif %}
                 </td>
                 <td class="p-4 mobile-actions" data-label="{{ _('Actions') }}">
-                    <a href="{{ url_for('projects.view_project', project_id=project.id) }}" class="text-primary hover:underline">View</a>
+                    <a href="{{ url_for('projects.view_project', project_id=project.id) }}" class="text-primary hover:underline">{{ _('View') }}</a>
                 </td>
             </tr>
             {% else %}
@@ -248,7 +248,7 @@
                                 data-project-id="{{ project.id }}"
                                 data-is-favorited="{{ 'true' if (favorite_project_ids and project.id in favorite_project_ids) else 'false' }}"
                                 onclick="toggleFavorite({{ project.id }}, this)"
-                                title="{{ 'Remove from favorites' if (favorite_project_ids and project.id in favorite_project_ids) else 'Add to favorites' }}">
+                                title="{{ _('Remove from favorites') if (favorite_project_ids and project.id in favorite_project_ids) else _('Add to favorites') }}">
                             <i class="{{ 'fas' if (favorite_project_ids and project.id in favorite_project_ids) else 'far' }} fa-star text-xs"></i>
                         </button>
                     </div>
@@ -294,7 +294,7 @@
                         {% set pct = (consumed / total * 100) if total > 0 else 0 %}
                         <div>
                             <div class="flex justify-between items-center mb-1">
-                                <span class="text-xs font-medium text-text-muted-light dark:text-text-muted-dark">Budget</span>
+                                <span class="text-xs font-medium text-text-muted-light dark:text-text-muted-dark">{{ _('Budget') }}</span>
                                 <span class="text-xs font-semibold 
                                     {% if pct >= 90 %}text-red-600
                                     {% elif pct >= 70 %}text-amber-600
@@ -319,7 +319,7 @@
                     <!-- Hours Progress -->
                     <div>
                         <div class="flex justify-between items-center mb-1">
-                            <span class="text-xs font-medium text-text-muted-light dark:text-text-muted-dark">Hours</span>
+                            <span class="text-xs font-medium text-text-muted-light dark:text-text-muted-dark">{{ _('Hours') }}</span>
                             <span class="text-xs font-semibold text-text-light dark:text-text-dark">
                                 {{ "%.1f"|format(project.total_hours) }}h
                             </span>
@@ -344,7 +344,7 @@
                         <div class="flex items-center gap-3 text-sm">
                             {% if project.billable %}
                             <span class="px-2 py-1 rounded-full text-xs font-medium bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300">
-                                <i class="fas fa-dollar-sign mr-1"></i>Billable
+                                <i class="fas fa-dollar-sign mr-1"></i>{{ _('Billable') }}
                             </span>
                             {% endif %}
                             {% if project.hourly_rate %}
@@ -355,7 +355,7 @@
                         </div>
                         <a href="{{ url_for('projects.view_project', project_id=project.id) }}" 
                            class="text-primary hover:text-primary/80 text-sm font-medium">
-                            View <i class="fas fa-arrow-right ml-1"></i>
+                            {{ _('View') }} <i class="fas fa-arrow-right ml-1"></i>
                         </a>
                     </div>
                 </div>
@@ -369,17 +369,17 @@
     {% set actions %}
         {% if current_user.is_admin %}
         <a href="{{ url_for('projects.create_project') }}" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors">
-            <i class="fas fa-plus mr-2"></i>Create Your First Project
+            <i class="fas fa-plus mr-2"></i>{{ _('Create Your First Project') }}
         </a>
         {% endif %}
         <a href="{{ url_for('main.help') }}" class="bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-4 py-2 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
-            <i class="fas fa-question-circle mr-2"></i>Learn More
+            <i class="fas fa-question-circle mr-2"></i>{{ _('Learn More') }}
         </a>
     {% endset %}
     {% if search or request.args.get('client') or request.args.get('status') != 'all' %}
-        {{ empty_state('fas fa-search', 'No Projects Match Your Filters', 'Try adjusting your filters to see more results. You can clear filters or create a new project that matches your criteria.', actions, type='no-results') }}
+        {{ empty_state('fas fa-search', _('No Projects Match Your Filters'), _('Try adjusting your filters to see more results. You can clear filters or create a new project that matches your criteria.'), actions, type='no-results') }}
     {% else %}
-        {{ empty_state('fas fa-folder-open', 'No Projects Yet', 'Projects help you organize your work and track time efficiently. Create your first project to get started!', actions, type='no-data') }}
+        {{ empty_state('fas fa-folder-open', _('No Projects Yet'), _('Projects help you organize your work and track time efficiently. Create your first project to get started!'), actions, type='no-data') }}
     {% endif %}
     {% endif %}
     </div>
@@ -545,8 +545,8 @@ document.addEventListener('keydown', function(e){ if (e.key === 'Escape') closeA
 function showBulkDeleteConfirm(){
     const count = document.querySelectorAll('.project-checkbox:checked').length;
     if (count === 0) return false;
-    const msg = `Are you sure you want to delete ${count} project(s)? Projects with time entries will be skipped.`;
-    if (window.showConfirm){ window.showConfirm(msg, { title: 'Delete Projects', confirmText: 'Delete', variant: 'danger' }).then(function(ok){ if (ok) submitBulkDelete(); }); }
+    const msg = {{ _('Are you sure you want to delete %(count)s project(s)? Projects with time entries will be skipped.')|tojson }}.replace('%(count)s', count);
+    if (window.showConfirm){ window.showConfirm(msg, { title: {{ _('Delete Projects')|tojson }}, confirmText: {{ _('Delete')|tojson }}, variant: 'danger' }).then(function(ok){ if (ok) submitBulkDelete(); }); }
     return false;
 }
 function submitBulkDelete(){
@@ -566,21 +566,21 @@ function showBulkArchiveDialog(){
         <div id="bulkArchiveModal" class="fixed inset-0 z-50 flex items-center justify-center">
             <div class="absolute inset-0 bg-black/50" onclick="closeBulkArchiveModal()"></div>
             <div class="relative bg-card-light dark:bg-card-dark rounded-lg shadow-lg max-w-md w-full mx-4 p-6">
-                <h3 class="text-lg font-semibold mb-4">Archive ${count} Project${count !== 1 ? 's' : ''}?</h3>
+                <h3 class="text-lg font-semibold mb-4">${(count !== 1 ? {{ _('Archive %(count)s Projects?')|tojson }} : {{ _('Archive %(count)s Project?')|tojson }}).replace('%(count)s', count)}</h3>
                 <div class="mb-4">
                     <label class="form-label">
-                        Reason for Archiving <span class="text-text-muted-light dark:text-text-muted-dark">(Optional)</span>
+                        {{ _('Reason for Archiving') }} <span class="text-text-muted-light dark:text-text-muted-dark">{{ _('(Optional)') }}</span>
                     </label>
-                    <textarea id="bulkArchiveReasonInput" rows="3" class="form-input" placeholder="e.g., Projects completed, Contracts ended, etc."></textarea>
+                    <textarea id="bulkArchiveReasonInput" rows="3" class="form-input" placeholder="{{ _('e.g., Projects completed, Contracts ended, etc.') }}"></textarea>
                 </div>
                 <div class="flex gap-2 mb-3">
-                    <button type="button" onclick="setBulkArchiveReason('Projects completed successfully')" class="px-2 py-1 text-xs bg-gray-100 dark:bg-gray-700 rounded hover:bg-gray-200 dark:hover:bg-gray-600">Completed</button>
-                    <button type="button" onclick="setBulkArchiveReason('Contracts ended')" class="px-2 py-1 text-xs bg-gray-100 dark:bg-gray-700 rounded hover:bg-gray-200 dark:hover:bg-gray-600">{{ _('Contract Ended') }}</button>
-                    <button type="button" onclick="setBulkArchiveReason('Projects cancelled')" class="px-2 py-1 text-xs bg-gray-100 dark:bg-gray-700 rounded hover:bg-gray-200 dark:hover:bg-gray-600">Cancelled</button>
+                    <button type="button" onclick="setBulkArchiveReason('{{ _('Projects completed successfully') }}')" class="px-2 py-1 text-xs bg-gray-100 dark:bg-gray-700 rounded hover:bg-gray-200 dark:hover:bg-gray-600">{{ _('Completed') }}</button>
+                    <button type="button" onclick="setBulkArchiveReason('{{ _('Contracts ended') }}')" class="px-2 py-1 text-xs bg-gray-100 dark:bg-gray-700 rounded hover:bg-gray-200 dark:hover:bg-gray-600">{{ _('Contract Ended') }}</button>
+                    <button type="button" onclick="setBulkArchiveReason('{{ _('Projects cancelled') }}')" class="px-2 py-1 text-xs bg-gray-100 dark:bg-gray-700 rounded hover:bg-gray-200 dark:hover:bg-gray-600">{{ _('Cancelled') }}</button>
                 </div>
                 <div class="flex justify-end gap-3">
-                    <button type="button" onclick="closeBulkArchiveModal()" class="px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600">Cancel</button>
-                    <button type="button" onclick="confirmBulkArchive()" class="px-4 py-2 rounded-lg bg-amber-600 text-white hover:bg-amber-700">Archive</button>
+                    <button type="button" onclick="closeBulkArchiveModal()" class="px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600">{{ _('Cancel') }}</button>
+                    <button type="button" onclick="confirmBulkArchive()" class="px-4 py-2 rounded-lg bg-amber-600 text-white hover:bg-amber-700">{{ _('Archive') }}</button>
                 </div>
             </div>
         </div>
@@ -610,9 +610,9 @@ function confirmBulkArchive(){
 function showBulkStatusChange(newStatus){
     const count = document.querySelectorAll('.project-checkbox:checked').length;
     if (count === 0) return false;
-    const label = {active:'Active', inactive:'Inactive', archived:'Archived'}[newStatus] || newStatus;
-    const msg = `Are you sure you want to mark ${count} project(s) as ${label}?`;
-    if (window.showConfirm){ window.showConfirm(msg, { title: 'Change Project Status', confirmText: 'Change' }).then(function(ok){ if (ok){ document.getElementById('bulkNewStatus').value=newStatus; document.getElementById('bulkArchiveReason').value=''; submitBulkStatusChange(); }}); }
+    const label = {active:{{ _('Active')|tojson }}, inactive:{{ _('Inactive')|tojson }}, archived:{{ _('Archived')|tojson }}}[newStatus] || newStatus;
+    const msg = {{ _('Are you sure you want to mark %(count)s project(s) as %(status)s?')|tojson }}.replace('%(count)s', count).replace('%(status)s', label);
+    if (window.showConfirm){ window.showConfirm(msg, { title: {{ _('Change Project Status')|tojson }}, confirmText: {{ _('Change')|tojson }} }).then(function(ok){ if (ok){ document.getElementById('bulkNewStatus').value=newStatus; document.getElementById('bulkArchiveReason').value=''; submitBulkStatusChange(); }}); }
     return false;
 }
 function submitBulkStatusChange(){
@@ -627,7 +627,7 @@ function submitBulkStatusChange(){
     if (btn) {
         const originalHTML = btn.innerHTML;
         btn.disabled = true;
-        btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Processing...';
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> ' + {{ _('Processing...')|tojson }};
         
         // Re-enable after timeout (safety fallback)
         setTimeout(() => {
@@ -643,7 +643,7 @@ function submitBulkStatusChange(){
 function showExportLoading(link) {
     const originalHTML = link.innerHTML;
     link.classList.add('pointer-events-none', 'opacity-60');
-    link.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> <span class="export-text">Exporting...</span>';
+    link.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> <span class="export-text">' + {{ _('Exporting...')|tojson }} + '</span>';
     
     // Reset after 5 seconds (fallback)
     setTimeout(() => {
@@ -680,7 +680,7 @@ function toggleFavorite(projectId, button) {
         if (icon.tagName === 'svg') {
             icon.setAttribute('data-prefix', 'far');
         }
-        button.title = 'Add to favorites';
+        button.title = {{ _('Add to favorites')|tojson }};
     } else {
         // Change to filled star
         icon.classList.remove('far', 'text-gray-400');
@@ -688,7 +688,7 @@ function toggleFavorite(projectId, button) {
         if (icon.tagName === 'svg') {
             icon.setAttribute('data-prefix', 'fas');
         }
-        button.title = 'Remove from favorites';
+        button.title = {{ _('Remove from favorites')|tojson }};
     }
     
     // Send AJAX request
@@ -705,9 +705,9 @@ function toggleFavorite(projectId, button) {
     .then(data => {
         if (data.success) {
             // Success - show toast notification
-            const message = action === 'favorite' ? 'Project added to favorites' : 'Project removed from favorites';
+            const message = action === 'favorite' ? {{ _('Project added to favorites')|tojson }} : {{ _('Project removed from favorites')|tojson }};
             if (window.toastManager) {
-                window.toastManager.success(message, 'Success', 3000);
+                window.toastManager.success(message, {{ _('Success')|tojson }}, 3000);
             } else if (window.showToast) {
                 window.showToast(message, 'success');
             }
@@ -719,19 +719,19 @@ function toggleFavorite(projectId, button) {
                 if (icon.tagName === 'svg') {
                     icon.setAttribute('data-prefix', 'fas');
                 }
-                button.title = 'Remove from favorites';
+                button.title = {{ _('Remove from favorites')|tojson }};
             } else {
                 icon.classList.remove('fas', 'text-yellow-500');
                 icon.classList.add('far', 'text-gray-400');
                 if (icon.tagName === 'svg') {
                     icon.setAttribute('data-prefix', 'far');
                 }
-                button.title = 'Add to favorites';
+                button.title = {{ _('Add to favorites')|tojson }};
             }
             if (window.showAlert) {
-                window.showAlert(data.message || 'Failed to update favorite status');
+                window.showAlert(data.message || {{ _('Failed to update favorite status')|tojson }});
             } else {
-                alert(data.message || 'Failed to update favorite status');
+                alert(data.message || {{ _('Failed to update favorite status')|tojson }});
             }
         }
     })
@@ -744,19 +744,19 @@ function toggleFavorite(projectId, button) {
             if (icon.tagName === 'svg') {
                 icon.setAttribute('data-prefix', 'fas');
             }
-            button.title = 'Remove from favorites';
+            button.title = {{ _('Remove from favorites')|tojson }};
         } else {
             icon.classList.remove('fas', 'text-yellow-500');
             icon.classList.add('far', 'text-gray-400');
             if (icon.tagName === 'svg') {
                 icon.setAttribute('data-prefix', 'far');
             }
-            button.title = 'Add to favorites';
+            button.title = {{ _('Add to favorites')|tojson }};
         }
         if (window.showAlert) {
-            window.showAlert('Failed to update favorite status');
+            window.showAlert({{ _('Failed to update favorite status')|tojson }});
         } else {
-            alert('Failed to update favorite status');
+            alert({{ _('Failed to update favorite status')|tojson }});
         }
     })
     .finally(() => {
@@ -879,9 +879,9 @@ function toggleFavorite(projectId, button) {
             
             // Show error message
             if (window.toastManager) {
-                window.toastManager.show('Failed to filter projects. Please refresh the page.', 'error');
+                window.toastManager.show({{ _('Failed to filter projects. Please refresh the page.')|tojson }}, 'error');
             } else if (window.showToast) {
-                window.showToast('Failed to filter projects. Please refresh the page.', 'error');
+                window.showToast({{ _('Failed to filter projects. Please refresh the page.')|tojson }}, 'error');
             }
         })
         .finally(() => {
@@ -965,7 +965,7 @@ function toggleFavorite(projectId, button) {
         const clearAllBtn = document.createElement('button');
         clearAllBtn.type = 'button';
         clearAllBtn.className = 'text-sm text-gray-600 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition-colors';
-        clearAllBtn.innerHTML = '<i class="fas fa-times-circle mr-1"></i> Clear all';
+        clearAllBtn.innerHTML = '<i class="fas fa-times-circle mr-1"></i> ' + {{ _('Clear all')|tojson }};
         clearAllBtn.addEventListener('click', clearAllFilters);
         container.appendChild(clearAllBtn);
         

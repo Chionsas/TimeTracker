@@ -5,16 +5,16 @@
 
 {% block content %}
 {% set breadcrumbs = [
-    {'text': 'Calendar', 'url': url_for('calendar.view_calendar')},
-    {'text': 'Integrations'}
+    {'text': _('Calendar'), 'url': url_for('calendar.view_calendar')},
+    {'text': _('Integrations')}
 ] %}
 
 {{ page_header(
     icon_class='fas fa-calendar-alt',
-    title_text='Calendar Integrations',
-    subtitle_text='Sync your calendar with time entries',
+    title_text=_('Calendar Integrations'),
+    subtitle_text=_('Sync your calendar with time entries'),
     breadcrumbs=breadcrumbs,
-    actions_html='<a href="' + url_for("calendar.connect_google") + '" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors"><i class="fas fa-plus mr-2"></i>Connect Google Calendar</a>'
+    actions_html='<a href="' + url_for("calendar.connect_google") + '" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors"><i class="fas fa-plus mr-2"></i>' + _('Connect Google Calendar') + '</a>'
 ) }}
 
 <div class="bg-card-light dark:bg-card-dark p-6 rounded-xl border border-border-light dark:border-border-dark shadow-sm">
@@ -31,7 +31,7 @@
                             {% elif integration.provider == 'outlook' or integration.provider == 'outlook_calendar' %}
                             <i class="fab fa-microsoft text-blue-500 mr-2"></i>Outlook Calendar
                             {% else %}
-                            {{ integration.provider|title|replace('_', ' ') }} Calendar
+                            {{ _('%(provider)s Calendar', provider=integration.provider|title|replace('_', ' ')) }}
                             {% endif %}
                         </h3>
                         {% if integration.is_active %}

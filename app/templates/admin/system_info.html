@@ -4,23 +4,23 @@
 
 {% block content %}
 {% set breadcrumbs = [
-    {'text': 'Admin', 'url': url_for('admin.admin_dashboard')},
-    {'text': 'System Information'}
+    {'text': _('Admin'), 'url': url_for('admin.admin_dashboard')},
+    {'text': _('System Information')}
 ] %}
 
 {{ page_header(
     icon_class='fas fa-info-circle',
-    title_text='System Information',
-    subtitle_text='Key metrics and statistics about the application',
+    title_text=_('System Information'),
+    subtitle_text=_('Key metrics and statistics about the application'),
     breadcrumbs=breadcrumbs,
     actions_html=None
 ) }}
 
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-    {{ info_card("Total Users", total_users, "All time") }}
-    {{ info_card("Total Projects", total_projects, "All time") }}
-    {{ info_card("Total Time Entries", total_entries, "All time") }}
-    {{ info_card("Active Timers", active_timers, "Currently running") }}
-    {{ info_card("Database Size (MB)", db_size_mb, "Current size") }}
+    {{ info_card(_("Total Users"), total_users, _("All time")) }}
+    {{ info_card(_("Total Projects"), total_projects, _("All time")) }}
+    {{ info_card(_("Total Time Entries"), total_entries, _("All time")) }}
+    {{ info_card(_("Active Timers"), active_timers, _("Currently running")) }}
+    {{ info_card(_("Database Size (MB)"), db_size_mb, _("Current size")) }}
 </div>
 {% endblock %}

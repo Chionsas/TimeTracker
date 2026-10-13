@@ -3,14 +3,14 @@
 
 {% block content %}
 {% set breadcrumbs = [
-    {'text': 'Inventory', 'url': url_for('inventory.list_stock_items')},
-    {'text': 'Stock Reservations'}
+    {'text': _('Inventory'), 'url': url_for('inventory.list_stock_items')},
+    {'text': _('Stock Reservations')}
 ] %}
 
 {{ page_header(
     icon_class='fas fa-bookmark',
-    title_text='Stock Reservations',
-    subtitle_text='Manage reserved stock for quotes and invoices',
+    title_text=_('Stock Reservations'),
+    subtitle_text=_('Manage reserved stock for quotes and invoices'),
     breadcrumbs=breadcrumbs
 ) }}
 
@@ -67,11 +67,11 @@
                 <td class="p-4" data-label="{{ _('Reference') }}">
                     {% if reservation.reservation_type == 'invoice' %}
                         <a href="{{ url_for('invoices.view_invoice', invoice_id=reservation.reservation_id) }}" class="text-primary hover:underline">
-                            Invoice #{{ reservation.reservation_id }}
+                            {{ _('Invoice #%(id)s', id=reservation.reservation_id) }}
                         </a>
                     {% elif reservation.reservation_type == 'quote' %}
                         <a href="{{ url_for('quotes.view_quote', quote_id=reservation.reservation_id) }}" class="text-primary hover:underline">
-                            Quote #{{ reservation.reservation_id }}
+                            {{ _('Quote #%(id)s', id=reservation.reservation_id) }}
                         </a>
                     {% else %}
                         {{ reservation.reservation_type }} #{{ reservation.reservation_id }}
@@ -129,9 +129,9 @@
     {% endif %}
     {% endset %}
     {% if status %}
-        {{ empty_state('fas fa-bookmark', 'No Reservations Match Your Filters', 'Try adjusting your filters to see more results.', actions, type='no-results') }}
+        {{ empty_state('fas fa-bookmark', _('No Reservations Match Your Filters'), _('Try adjusting your filters to see more results.'), actions, type='no-results') }}
     {% else %}
-        {{ empty_state('fas fa-bookmark', 'No Reservations Yet', 'Reserve stock for projects or orders before fulfillment.', actions, type='no-data') }}
+        {{ empty_state('fas fa-bookmark', _('No Reservations Yet'), _('Reserve stock for projects or orders before fulfillment.'), actions, type='no-data') }}
     {% endif %}
     {% endif %}
 </div>

@@ -1,20 +1,20 @@
 {% extends "base.html" %}
 {% from "components/ui.html" import page_header, breadcrumb_nav %}
 
-{% block title %}{{ 'Edit' if contact else 'Create' }} Contact - {{ config.APP_NAME }}{% endblock %}
+{% block title %}{{ _('Edit Contact') if contact else _('Create Contact') }} - {{ config.APP_NAME }}{% endblock %}
 
 {% block content %}
 {% set breadcrumbs = [
-    {'text': 'Clients', 'url': url_for('clients.list_clients')},
+    {'text': _('Clients'), 'url': url_for('clients.list_clients')},
     {'text': client.name, 'url': url_for('clients.view_client', client_id=client.id)},
-    {'text': 'Contacts', 'url': url_for('contacts.list_contacts', client_id=client.id)},
-    {'text': 'Edit Contact' if contact else 'Create Contact'}
+    {'text': _('Contacts'), 'url': url_for('contacts.list_contacts', client_id=client.id)},
+    {'text': _('Edit Contact') if contact else _('Create Contact')}
 ] %}
 
 {{ page_header(
     icon_class='fas fa-address-book',
-    title_text='Edit Contact' if contact else 'Create Contact',
-    subtitle_text='Contact for ' + client.name,
+    title_text=_('Edit Contact') if contact else _('Create Contact'),
+    subtitle_text=_('Contact for %(name)s', name=client.name),
     breadcrumbs=breadcrumbs
 ) }}
 
@@ -86,7 +86,7 @@
             </div>
             
             <div class="md:col-span-2">
-                <label for="tags" class="block text-sm font-medium mb-2">{{ _('Tags') }} <span class="text-xs text-text-muted-light dark:text-text-muted-dark">(comma-separated)</span></label>
+                <label for="tags" class="block text-sm font-medium mb-2">{{ _('Tags') }} <span class="text-xs text-text-muted-light dark:text-text-muted-dark">{{ _('(comma-separated)') }}</span></label>
                 <input type="text" name="tags" id="tags" value="{{ contact.tags if contact else '' }}" class="form-input" placeholder="tag1, tag2, tag3">
             </div>
         </div>

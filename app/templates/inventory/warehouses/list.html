@@ -3,16 +3,16 @@
 
 {% block content %}
 {% set breadcrumbs = [
-    {'text': 'Inventory', 'url': url_for('inventory.list_stock_items')},
-    {'text': 'Warehouses'}
+    {'text': _('Inventory'), 'url': url_for('inventory.list_stock_items')},
+    {'text': _('Warehouses')}
 ] %}
 
 {{ page_header(
     icon_class='fas fa-warehouse',
-    title_text='Warehouses',
-    subtitle_text='Manage warehouse locations',
+    title_text=_('Warehouses'),
+    subtitle_text=_('Manage warehouse locations'),
     breadcrumbs=breadcrumbs,
-    actions_html='<a href="' + url_for("inventory.new_warehouse") + '" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors"><i class="fas fa-plus mr-2"></i>Create Warehouse</a>' if (current_user.is_admin or has_permission('manage_warehouses')) else None
+    actions_html='<a href="' + url_for("inventory.new_warehouse") + '" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors"><i class="fas fa-plus mr-2"></i>' + _('Create Warehouse') + '</a>' if (current_user.is_admin or has_permission('manage_warehouses')) else None
 ) }}
 
 <div class="bg-card-light dark:bg-card-dark p-6 rounded-xl border border-border-light dark:border-border-dark shadow-sm">
@@ -76,7 +76,7 @@
     </a>
     {% endif %}
     {% endset %}
-    {{ empty_state('fas fa-warehouse', 'No Warehouses Yet', 'Add warehouse locations to organize stock and fulfillment.', actions, type='no-data') }}
+    {{ empty_state('fas fa-warehouse', _('No Warehouses Yet'), _('Add warehouse locations to organize stock and fulfillment.'), actions, type='no-data') }}
     {% endif %}
 </div>
 {% endblock %}

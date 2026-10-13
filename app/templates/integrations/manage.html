@@ -5,7 +5,7 @@
 
 {% block content %}
 {% set breadcrumbs = [
-    {'text': 'Integrations', 'url': url_for('integrations.list_integrations')},
+    {'text': _('Integrations'), 'url': url_for('integrations.list_integrations')},
     {'text': display_name}
 ] %}
 
@@ -294,7 +294,7 @@
                 <div class="mb-8 last:mb-0">
                     <div class="border-b border-border-light dark:border-border-dark pb-2 mb-4">
                         <h3 class="text-md font-semibold text-text-light dark:text-text-dark">
-                            {{ section.get('title', 'Settings') }}
+                            {{ section.get('title', _('Settings')) }}
                         </h3>
                         {% if section.get('description') %}
                         <p class="text-sm text-text-muted-light dark:text-text-muted-dark mt-1">

@@ -126,7 +126,7 @@
     <!-- Left Column: Project Details -->
     <div class="lg:col-span-1 space-y-6">
         <div class="bg-card-light dark:bg-card-dark p-6 rounded-xl border border-border-light dark:border-border-dark shadow-sm">
-            <h2 class="text-lg font-semibold mb-4">Details</h2>
+            <h2 class="text-lg font-semibold mb-4">{{ _('Details') }}</h2>
             <div class="space-y-4">
                 <div>
                     <h3 class="text-sm font-medium text-text-muted-light dark:text-text-muted-dark">{{ _('Project Code') }}</h3>
@@ -139,11 +139,11 @@
                     </p>
                 </div>
                 <div>
-                    <h3 class="text-sm font-medium text-text-muted-light dark:text-text-muted-dark">Description</h3>
-                    <div class="prose prose-sm dark:prose-invert max-w-none">{{ (project.description or 'No description provided.') | markdown | safe }}</div>
+                    <h3 class="text-sm font-medium text-text-muted-light dark:text-text-muted-dark">{{ _('Description') }}</h3>
+                    <div class="prose prose-sm dark:prose-invert max-w-none">{{ (project.description or _('No description provided.')) | markdown | safe }}</div>
                 </div>
                 <div>
-                    <h3 class="text-sm font-medium text-text-muted-light dark:text-text-muted-dark">Status</h3>
+                    <h3 class="text-sm font-medium text-text-muted-light dark:text-text-muted-dark">{{ _('Status') }}</h3>
                     {% set status_map = {
                         'active':   {'cls': 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300', 'label': _('Active')},
                         'inactive': {'cls': 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300', 'label': _('Inactive')},
@@ -153,8 +153,8 @@
                     <span class="px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap {{ st.cls }}">{{ st.label }}</span>
                 </div>
                 <div>
-                    <h3 class="text-sm font-medium text-text-muted-light dark:text-text-muted-dark">Billing</h3>
-                    <p>{{ 'Billable' if project.billable else 'Not Billable' }} {% if project.hourly_rate %}({{ "%.2f"|format(project.hourly_rate) }}/hr){% endif %}</p>
+                    <h3 class="text-sm font-medium text-text-muted-light dark:text-text-muted-dark">{{ _('Billing') }}</h3>
+                    <p>{{ _('Billable') if project.billable else _('Not Billable') }} {% if project.hourly_rate %}({{ "%.2f"|format(project.hourly_rate) }}/hr){% endif %}</p>
                 </div>
                 {% if project.is_archived and project.archived_at %}
                 <div class="pt-4 border-t border-border-light dark:border-border-dark">
@@ -336,15 +336,15 @@
         {% endif %}
 
         <div class="bg-card-light dark:bg-card-dark p-6 rounded-xl border border-border-light dark:border-border-dark shadow-sm">
-            <h2 class="text-lg font-semibold mb-4">User Contributions</h2>
+            <h2 class="text-lg font-semibold mb-4">{{ _('User Contributions') }}</h2>
             <ul>
                 {% for user_total in user_totals %}
                 <li class="flex justify-between py-2 border-b border-border-light dark:border-border-dark">
                     <span>{{ user_total.username }}</span>
-                    <span class="font-semibold">{{ "%.2f"|format(user_total.total_hours) }} hrs</span>
+                    <span class="font-semibold">{{ _('%(hours)s hrs', hours="%.2f"|format(user_total.total_hours)) }}</span>
                 </li>
                 {% else %}
-                <li>No hours logged yet.</li>
+                <li>{{ _('No hours logged yet.') }}</li>
                 {% endfor %}
             </ul>
         </div>
@@ -526,10 +526,10 @@
 {% if current_user.is_admin or has_permission('delete_projects') %}
 {{ confirm_dialog(
     'confirmDeleteProject-' ~ project.id,
-    'Delete Project',
-    'Are you sure you want to delete this project? This action cannot be undone.',
-    'Delete',
-    'Cancel',
+    _('Delete Project'),
+    _('Are you sure you want to delete this project? This action cannot be undone.'),
+    _('Delete'),
+    _('Cancel'),
     'danger'
 ) }}
 {% endif %}

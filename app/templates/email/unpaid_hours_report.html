@@ -110,48 +110,48 @@
 </head>
 <body>
     <div class="header">
-        <h1>⚠️ Unpaid Hours Report</h1>
-        <p>Salesman: {{ salesman_initial }}</p>
-        <p>{{ start_date }} to {{ end_date }}</p>
+        <h1>⚠️ {{ _('Unpaid Hours Report') }}</h1>
+        <p>{{ _('Salesman: %(initial)s', initial=salesman_initial) }}</p>
+        <p>{{ _('%(start)s to %(end)s', start=start_date, end=end_date) }}</p>
     </div>
     
     <div class="content">
-        <p>Hello,</p>
+        <p>{{ _('Hello,') }}</p>
         
-        <p>This report contains all unpaid (unbilled) hours for clients assigned to you ({{ salesman_initial }}).</p>
+        <p>{{ _('This report contains all unpaid (unbilled) hours for clients assigned to you (%(initial)s).', initial=salesman_initial) }}</p>
         
         <div class="summary-box">
-            <p>Total Unpaid Hours</p>
+            <p>{{ _('Total Unpaid Hours') }}</p>
             <h2>{{ "%.2f"|format(report_data.total_hours) }}</h2>
-            <p>{{ report_data.total_entries }} time entries</p>
+            <p>{{ ngettext('%(num)s time entry', '%(num)s time entries', report_data.total_entries) }}</p>
         </div>
 
         <div class="warning-box">
-            <strong>⚠️ Action Required:</strong> These hours need to be reviewed and billed to clients.
+            <strong>⚠️ {{ _('Action Required:') }}</strong> {{ _('These hours need to be reviewed and billed to clients.') }}
         </div>
 
         <div class="clients-section">
-            <h3>Clients with Unpaid Hours:</h3>
+            <h3>{{ _('Clients with Unpaid Hours:') }}</h3>
             <p><strong>{{ report_data.clients|join(', ') }}</strong></p>
         </div>
 
         <div class="clients-section">
-            <h3>Projects with Unpaid Hours:</h3>
+            <h3>{{ _('Projects with Unpaid Hours:') }}</h3>
             <p><strong>{{ report_data.projects|join(', ') }}</strong></p>
         </div>
 
         {% if report_data.entries %}
-        <h3 style="margin-top: 30px;">Time Entry Details</h3>
+        <h3 style="margin-top: 30px;">{{ _('Time Entry Details') }}</h3>
         
         <table class="entries-table">
             <thead>
                 <tr>
-                    <th>Date</th>
-                    <th>Client</th>
-                    <th>Project</th>
-                    <th>User</th>
-                    <th style="text-align: right;">Hours</th>
-                    <th>Notes</th>
+                    <th>{{ _('Date') }}</th>
+                    <th>{{ _('Client') }}</th>
+                    <th>{{ _('Project') }}</th>
+                    <th>{{ _('User') }}</th>
+                    <th style="text-align: right;">{{ _('Hours') }}</th>
+                    <th>{{ _('Notes') }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -171,20 +171,20 @@
         </table>
         {% endif %}
         
-        <p style="margin-top: 20px;">Please review these entries and create invoices as needed.</p>
+        <p style="margin-top: 20px;">{{ _('Please review these entries and create invoices as needed.') }}</p>
         
         {% if reports_url %}
         <center>
             <a href="{{ reports_url }}" class="button">
-                View Reports in TimeTracker
+                {{ _('View Reports in TimeTracker') }}
             </a>
         </center>
         {% endif %}
     </div>
     
     <div class="footer">
-        <p>TimeTracker - Time Tracking & Project Management</p>
-        <p>This is an automated report. For questions, please contact your administrator.</p>
+        <p>TimeTracker - {{ _('Time Tracking & Project Management') }}</p>
+        <p>{{ _('This is an automated report. For questions, please contact your administrator.') }}</p>
     </div>
 </body>
 </html>

@@ -1,18 +1,18 @@
 {% extends "base.html" %}
 {% from "components/ui.html" import page_header, breadcrumb_nav %}
 
-{% block title %}{{ 'Edit' if lead else 'Create' }} Lead - {{ config.APP_NAME }}{% endblock %}
+{% block title %}{{ _('Edit Lead') if lead else _('Create Lead') }} - {{ config.APP_NAME }}{% endblock %}
 
 {% block content %}
 {% set breadcrumbs = [
-    {'text': 'Leads', 'url': url_for('leads.list_leads')},
-    {'text': 'Edit Lead' if lead else 'Create Lead'}
+    {'text': _('Leads'), 'url': url_for('leads.list_leads')},
+    {'text': _('Edit Lead') if lead else _('Create Lead')}
 ] %}
 
 {{ page_header(
     icon_class='fas fa-user-plus',
-    title_text='Edit Lead' if lead else 'Create Lead',
-    subtitle_text='Manage lead information',
+    title_text=_('Edit Lead') if lead else _('Create Lead'),
+    subtitle_text=_('Manage lead information'),
     breadcrumbs=breadcrumbs
 ) }}
 
@@ -90,7 +90,7 @@
             </div>
             
             <div class="md:col-span-2">
-                <label for="tags" class="block text-sm font-medium mb-2">{{ _('Tags') }} <span class="text-xs text-text-muted-light dark:text-text-muted-dark">(comma-separated)</span></label>
+                <label for="tags" class="block text-sm font-medium mb-2">{{ _('Tags') }} <span class="text-xs text-text-muted-light dark:text-text-muted-dark">({{ _('comma-separated') }})</span></label>
                 <input type="text" name="tags" id="tags" value="{{ lead.tags if lead else '' }}" class="form-input" placeholder="tag1, tag2, tag3">
             </div>
         </div>

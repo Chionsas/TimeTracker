@@ -3,14 +3,14 @@
 
 {% block content %}
 {% set breadcrumbs = [
-    {'text': 'Inventory', 'url': url_for('inventory.list_stock_items')},
-    {'text': 'Low Stock Alerts'}
+    {'text': _('Inventory'), 'url': url_for('inventory.list_stock_items')},
+    {'text': _('Low Stock Alerts')}
 ] %}
 
 {{ page_header(
     icon_class='fas fa-exclamation-triangle',
-    title_text='Low Stock Alerts',
-    subtitle_text='Items below reorder point',
+    title_text=_('Low Stock Alerts'),
+    subtitle_text=_('Items below reorder point'),
     breadcrumbs=breadcrumbs
 ) }}
 
@@ -53,7 +53,7 @@
     </table>
     </div>
     {% else %}
-    {{ empty_state('fas fa-check-circle', 'No Low Stock Alerts', 'All tracked items are above their reorder points.', None, type='success') }}
+    {{ empty_state('fas fa-check-circle', _('No Low Stock Alerts'), _('All tracked items are above their reorder points.'), None, type='success') }}
     {% endif %}
 </div>
 {% endblock %}

@@ -1,65 +1,65 @@
 {% extends "base.html" %}
 
-{% block title %}Telemetry & Analytics Dashboard{% endblock %}
+{% block title %}{{ _('Telemetry & Analytics Dashboard') }}{% endblock %}
 
 {% block content %}
 <div class="container mx-auto px-4 py-8">
     <div class="mb-6">
         <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">{{ _('Telemetry & Analytics Dashboard') }}</h1>
-        <p class="text-gray-600 dark:text-gray-400">Monitor what data is being collected and manage your privacy settings</p>
+        <p class="text-gray-600 dark:text-gray-400">{{ _('Monitor what data is being collected and manage your privacy settings') }}</p>
     </div>
 
     <!-- Telemetry Status Card -->
     <div class="bg-card-light dark:bg-card-dark rounded-lg shadow-md p-6 mb-6">
         <div class="flex items-center justify-between mb-4">
-            <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200">📊 Telemetry Status</h2>
+            <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200">📊 {{ _('Telemetry Status') }}</h2>
             {% if telemetry.enabled %}
-            <span class="px-3 py-1 bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 rounded-full text-sm font-medium">Enabled</span>
+            <span class="px-3 py-1 bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 rounded-full text-sm font-medium">{{ _('Enabled') }}</span>
             {% else %}
-            <span class="px-3 py-1 bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200 rounded-full text-sm font-medium">Disabled</span>
+            <span class="px-3 py-1 bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200 rounded-full text-sm font-medium">{{ _('Disabled') }}</span>
             {% endif %}
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
             <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
-                <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Installation ID</p>
+                <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">{{ _('Installation ID') }}</p>
                 <p class="font-mono text-sm text-text-light dark:text-text-dark">{{ telemetry.installation_id }}</p>
             </div>
             <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
-                <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Telemetry Fingerprint</p>
+                <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">{{ _('Telemetry Fingerprint') }}</p>
                 <p class="font-mono text-sm break-all text-text-light dark:text-text-dark">{{ telemetry.fingerprint[:32] }}...</p>
             </div>
             <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
-                <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Salt (Partial)</p>
+                <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">{{ _('Salt (Partial)') }}</p>
                 <p class="font-mono text-sm text-text-light dark:text-text-dark">{{ telemetry.telemetry_salt }}</p>
             </div>
             <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
-                <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Setup Status</p>
-                <p class="font-medium text-text-light dark:text-text-dark">{{ 'Complete' if telemetry.setup_complete else 'Pending' }}</p>
+                <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">{{ _('Setup Status') }}</p>
+                <p class="font-medium text-text-light dark:text-text-dark">{{ _('Complete') if telemetry.setup_complete else _('Pending') }}</p>
             </div>
         </div>
 
         <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">
-            <strong>Minimal install telemetry</strong> is always on (version, platform, last seen). The toggle below controls <strong>optional detailed analytics</strong> (feature usage, screens, errors).
+            <strong>{{ _('Minimal install telemetry') }}</strong> {{ _('is always on (version, platform, last seen). The toggle below controls') }} <strong>{{ _('optional detailed analytics') }}</strong> {{ _('(feature usage, screens, errors).') }}
         </p>
         <form method="POST" action="{{ url_for('admin.toggle_telemetry') }}" class="mt-4">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
             <button type="submit" class="px-4 py-2 rounded-lg transition {% if telemetry.enabled %}bg-red-600 hover:bg-red-700 text-white{% else %}bg-green-600 hover:bg-green-700 text-white{% endif %}">
-                {% if telemetry.enabled %}Disable detailed analytics{% else %}Enable detailed analytics{% endif %}
+                {% if telemetry.enabled %}{{ _('Disable detailed analytics') }}{% else %}{{ _('Enable detailed analytics') }}{% endif %}
             </button>
-            <p class="text-xs text-gray-600 dark:text-gray-400 mt-2">Also in <a href="{{ url_for('admin.settings') }}#section-analytics" class="text-primary hover:underline">{{ _('Admin → Settings') }}</a> (Privacy &amp; Analytics)</p>
+            <p class="text-xs text-gray-600 dark:text-gray-400 mt-2">{{ _('Also in') }} <a href="{{ url_for('admin.settings') }}#section-analytics" class="text-primary hover:underline">{{ _('Admin → Settings') }}</a> ({{ _('Privacy & Analytics') }})</p>
         </form>
 
         {% if telemetry.enabled %}
         <div class="mt-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4">
             <p class="text-sm text-green-800 dark:text-green-200">
-                <strong>Detailed analytics is on.</strong> We receive feature usage, screens, and error context (no PII). Thank you for helping improve TimeTracker.
+                <strong>{{ _('Detailed analytics is on.') }}</strong> {{ _('We receive feature usage, screens, and error context (no PII). Thank you for helping improve TimeTracker.') }}
             </p>
         </div>
         {% else %}
         <div class="mt-4 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4">
             <p class="text-sm text-gray-700 dark:text-gray-300">
-                Detailed analytics is off. Only minimal install telemetry (version, platform, heartbeat) is sent.
+                {{ _('Detailed analytics is off. Only minimal install telemetry (version, platform, heartbeat) is sent.') }}
             </p>
         </div>
         {% endif %}
@@ -70,34 +70,33 @@
         <div class="flex items-center justify-between mb-4">
             <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200">📈 Grafana Cloud OTLP</h2>
             {% if grafana.enabled %}
-            <span class="px-3 py-1 bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 rounded-full text-sm font-medium">Configured</span>
+            <span class="px-3 py-1 bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 rounded-full text-sm font-medium">{{ _('Configured') }}</span>
             {% else %}
-            <span class="px-3 py-1 bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200 rounded-full text-sm font-medium">Not Configured</span>
+            <span class="px-3 py-1 bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200 rounded-full text-sm font-medium">{{ _('Not Configured') }}</span>
             {% endif %}
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
-                <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Token</p>
-                <p class="font-medium text-text-light dark:text-text-dark">{{ 'Set' if grafana.token_set else 'Not Set' }}</p>
+                <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">{{ _('Token') }}</p>
+                <p class="font-medium text-text-light dark:text-text-dark">{{ _('Set') if grafana.token_set else _('Not Set') }}</p>
             </div>
             <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
-                <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">OTLP Endpoint</p>
-                <p class="font-mono text-sm text-text-light dark:text-text-dark">{{ grafana.endpoint or 'Not Set' }}</p>
+                <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">{{ _('OTLP Endpoint') }}</p>
+                <p class="font-mono text-sm text-text-light dark:text-text-dark">{{ grafana.endpoint or _('Not Set') }}</p>
             </div>
         </div>
 
         {% if grafana.enabled %}
         <div class="mt-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
             <p class="text-sm text-blue-800 dark:text-blue-200">
-                <strong>Grafana OTLP is receiving telemetry:</strong> anonymous base install events and consented detailed analytics.
-                Direct personal identifiers are excluded.
+                <strong>{{ _('Grafana OTLP is receiving telemetry:') }}</strong> {{ _('anonymous base install events and consented detailed analytics. Direct personal identifiers are excluded.') }}
             </p>
         </div>
         {% else %}
         <div class="mt-4 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4">
             <p class="text-sm text-gray-700 dark:text-gray-300">
-                To enable OTLP telemetry, set <code class="bg-gray-200 dark:bg-gray-700 px-1 py-0.5 rounded text-text-light dark:text-text-dark">OTEL_EXPORTER_OTLP_ENDPOINT</code> and <code class="bg-gray-200 dark:bg-gray-700 px-1 py-0.5 rounded text-text-light dark:text-text-dark">OTEL_EXPORTER_OTLP_TOKEN</code> in your environment variables.
+                {{ _('To enable OTLP telemetry, set %(endpoint)s and %(token)s in your environment variables.', endpoint='<code class="bg-gray-200 dark:bg-gray-700 px-1 py-0.5 rounded text-text-light dark:text-text-dark">OTEL_EXPORTER_OTLP_ENDPOINT</code>', token='<code class="bg-gray-200 dark:bg-gray-700 px-1 py-0.5 rounded text-text-light dark:text-text-dark">OTEL_EXPORTER_OTLP_TOKEN</code>')|safe }}
             </p>
         </div>
         {% endif %}
@@ -106,21 +105,21 @@
     <!-- Sentry Status Card -->
     <div class="bg-card-light dark:bg-card-dark rounded-lg shadow-md p-6 mb-6">
         <div class="flex items-center justify-between mb-4">
-            <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200">🔍 Sentry (Error Monitoring)</h2>
+            <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200">🔍 {{ _('Sentry (Error Monitoring)') }}</h2>
             {% if sentry.enabled %}
-            <span class="px-3 py-1 bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 rounded-full text-sm font-medium">Configured</span>
+            <span class="px-3 py-1 bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 rounded-full text-sm font-medium">{{ _('Configured') }}</span>
             {% else %}
-            <span class="px-3 py-1 bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200 rounded-full text-sm font-medium">Not Configured</span>
+            <span class="px-3 py-1 bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200 rounded-full text-sm font-medium">{{ _('Not Configured') }}</span>
             {% endif %}
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
                 <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">DSN</p>
-                <p class="font-medium text-text-light dark:text-text-dark">{{ 'Set' if sentry.dsn_set else 'Not Set' }}</p>
+                <p class="font-medium text-text-light dark:text-text-dark">{{ _('Set') if sentry.dsn_set else _('Not Set') }}</p>
             </div>
             <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
-                <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Traces Sample Rate</p>
+                <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">{{ _('Traces Sample Rate') }}</p>
                 <p class="font-medium text-text-light dark:text-text-dark">{{ sentry.traces_rate }}</p>
             </div>
         </div>
@@ -128,14 +127,13 @@
         {% if sentry.enabled %}
         <div class="mt-4 bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800 rounded-lg p-4">
             <p class="text-sm text-purple-800 dark:text-purple-200">
-                <strong>Sentry is monitoring:</strong> Application errors and performance issues.
-                Helps identify and fix bugs quickly.
+                <strong>{{ _('Sentry is monitoring:') }}</strong> {{ _('Application errors and performance issues. Helps identify and fix bugs quickly.') }}
             </p>
         </div>
         {% else %}
         <div class="mt-4 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4">
             <p class="text-sm text-gray-700 dark:text-gray-300">
-                To enable Sentry, set <code class="bg-gray-200 dark:bg-gray-700 px-1 py-0.5 rounded text-text-light dark:text-text-dark">SENTRY_DSN</code> in your environment variables.
+                {{ _('To enable Sentry, set %(dsn)s in your environment variables.', dsn='<code class="bg-gray-200 dark:bg-gray-700 px-1 py-0.5 rounded text-text-light dark:text-text-dark">SENTRY_DSN</code>')|safe }}
             </p>
         </div>
         {% endif %}
@@ -143,30 +141,30 @@
 
     <!-- What Data is Collected -->
     <div class="bg-card-light dark:bg-card-dark rounded-lg shadow-md p-6 mb-6">
-        <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">📋 What Data is Collected</h2>
+        <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">📋 {{ _('What Data is Collected') }}</h2>
 
         <div class="space-y-4">
             <div>
-                <h3 class="font-semibold text-gray-900 dark:text-gray-100 mb-2">Always on (minimal install telemetry)</h3>
+                <h3 class="font-semibold text-gray-900 dark:text-gray-100 mb-2">{{ _('Always on (minimal install telemetry)') }}</h3>
                 <ul class="list-disc list-inside space-y-1 text-sm text-gray-700 dark:text-gray-300 ml-4">
-                    <li>Install ID (random UUID), app version, platform, OS version, architecture</li>
-                    <li>Locale, timezone, deployment type (docker/native), release channel</li>
-                    <li>First seen and last seen timestamps, coarse heartbeat</li>
+                    <li>{{ _('Install ID (random UUID), app version, platform, OS version, architecture') }}</li>
+                    <li>{{ _('Locale, timezone, deployment type (docker/native), release channel') }}</li>
+                    <li>{{ _('First seen and last seen timestamps, coarse heartbeat') }}</li>
                 </ul>
             </div>
             <div>
-                <h3 class="font-semibold text-gray-900 dark:text-gray-100 mb-2">Only when you enable detailed analytics</h3>
+                <h3 class="font-semibold text-gray-900 dark:text-gray-100 mb-2">{{ _('Only when you enable detailed analytics') }}</h3>
                 <ul class="list-disc list-inside space-y-1 text-sm text-gray-700 dark:text-gray-300 ml-4">
-                    <li>Feature usage (e.g. timer started, project created)</li>
-                    <li>Screens/pages visited, internal user IDs (not linked to identity)</li>
-                    <li>Errors with usage context, performance metrics</li>
+                    <li>{{ _('Feature usage (e.g. timer started, project created)') }}</li>
+                    <li>{{ _('Screens/pages visited, internal user IDs (not linked to identity)') }}</li>
+                    <li>{{ _('Errors with usage context, performance metrics') }}</li>
                 </ul>
             </div>
             <div>
-                <h3 class="font-semibold text-gray-900 dark:text-gray-100 mb-2">Never collected</h3>
+                <h3 class="font-semibold text-gray-900 dark:text-gray-100 mb-2">{{ _('Never collected') }}</h3>
                 <ul class="list-disc list-inside space-y-1 text-sm text-gray-700 dark:text-gray-300 ml-4">
-                    <li>Email, usernames, IP addresses (stored), project/time entry content</li>
-                    <li>Client or business data; any PII</li>
+                    <li>{{ _('Email, usernames, IP addresses (stored), project/time entry content') }}</li>
+                    <li>{{ _('Client or business data; any PII') }}</li>
                 </ul>
             </div>
         </div>
@@ -174,19 +172,19 @@
 
     <!-- Privacy & Documentation -->
     <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-6">
-        <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">📚 Documentation & Privacy</h2>
+        <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">📚 {{ _('Documentation & Privacy') }}</h2>
         <div class="space-y-2 text-sm text-gray-700 dark:text-gray-300">
             <p>
-                <a href="/docs/analytics.md" class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 underline">📖 Analytics Documentation</a> - 
-                Complete guide to analytics features
+                <a href="/docs/analytics.md" class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 underline">📖 {{ _('Analytics Documentation') }}</a> - 
+                {{ _('Complete guide to analytics features') }}
             </p>
             <p>
-                <a href="/docs/events.md" class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 underline">📊 Events Schema</a> - 
-                List of all tracked events
+                <a href="/docs/events.md" class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 underline">📊 {{ _('Events Schema') }}</a> - 
+                {{ _('List of all tracked events') }}
             </p>
             <p>
-                <a href="/docs/privacy.md" class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 underline">🔒 Privacy Policy</a> - 
-                Data collection and your rights
+                <a href="/docs/privacy.md" class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 underline">🔒 {{ _('Privacy Policy') }}</a> - 
+                {{ _('Data collection and your rights') }}
             </p>
         </div>
     </div>

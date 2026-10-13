@@ -3,16 +3,16 @@
 
 {% block content %}
 {% set breadcrumbs = [
-    {'text': 'Inventory', 'url': url_for('inventory.list_stock_items')},
-    {'text': 'Purchase Orders'}
+    {'text': _('Inventory'), 'url': url_for('inventory.list_stock_items')},
+    {'text': _('Purchase Orders')}
 ] %}
 
 {{ page_header(
     icon_class='fas fa-shopping-cart',
-    title_text='Purchase Orders',
-    subtitle_text='Manage purchase orders to suppliers',
+    title_text=_('Purchase Orders'),
+    subtitle_text=_('Manage purchase orders to suppliers'),
     breadcrumbs=breadcrumbs,
-    actions_html='<a href="' + url_for("inventory.new_purchase_order") + '" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors"><i class="fas fa-plus mr-2"></i>Create Purchase Order</a>' if (current_user.is_admin or has_permission('manage_purchase_orders')) else None
+    actions_html='<a href="' + url_for("inventory.new_purchase_order") + '" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors"><i class="fas fa-plus mr-2"></i>' + _('Create Purchase Order') + '</a>' if (current_user.is_admin or has_permission('manage_purchase_orders')) else None
 ) }}
 
 <div class="bg-card-light dark:bg-card-dark p-6 rounded-xl border border-border-light dark:border-border-dark shadow-sm mb-6">

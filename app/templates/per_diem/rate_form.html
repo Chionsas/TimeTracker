@@ -3,12 +3,12 @@
 
 {% block content %}
 {% set breadcrumbs = [
-    {'text': 'Per Diem', 'url': url_for('per_diem.list_per_diem')},
-    {'text': 'Rates', 'url': url_for('per_diem.list_rates')},
-    {'text': 'Edit' if rate else 'New'}
+    {'text': _('Per Diem'), 'url': url_for('per_diem.list_per_diem')},
+    {'text': _('Rates'), 'url': url_for('per_diem.list_rates')},
+    {'text': _('Edit') if rate else _('New')}
 ] %}
-{% set page_title = 'Edit Per Diem Rate' if rate else 'New Per Diem Rate' %}
-{% set page_subtitle = 'Update rate details' if rate else 'Create a new per diem rate' %}
+{% set page_title = _('Edit Per Diem Rate') if rate else _('New Per Diem Rate') %}
+{% set page_subtitle = _('Update rate details') if rate else _('Create a new per diem rate') %}
 
 {{ page_header(
     icon_class='fas fa-list-alt',
@@ -28,13 +28,13 @@
         <!-- Location Information -->
         <div class="mb-6">
             <h3 class="text-lg font-semibold mb-4 pb-2 border-b border-gray-200 dark:border-gray-700">
-                <i class="fas fa-map-marker-alt mr-2"></i>Location
+                <i class="fas fa-map-marker-alt mr-2"></i>{{ _('Location') }}
             </h3>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                     <label for="country" class="form-label">
-                        Country Code <span class="text-red-500">*</span>
+                        {{ _('Country Code') }} <span class="text-red-500">*</span>
                     </label>
                     <input type="text" name="country" id="country" required
                            value="{{ rate.country if rate else '' }}"
@@ -45,7 +45,7 @@
                 
                 <div>
                     <label for="city" class="form-label">
-                        City (optional)
+                        {{ _('City (optional)') }}
                     </label>
                     <input type="text" name="city" id="city"
                            value="{{ rate.city if rate and rate.city else '' }}"
@@ -58,13 +58,13 @@
         <!-- Rate Information -->
         <div class="mb-6">
             <h3 class="text-lg font-semibold mb-4 pb-2 border-b border-gray-200 dark:border-gray-700">
-                <i class="fas fa-euro-sign mr-2"></i>Rates
+                <i class="fas fa-euro-sign mr-2"></i>{{ _('Rates') }}
             </h3>
             
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
                     <label for="full_day_rate" class="form-label">
-                        Full Day Rate <span class="text-red-500">*</span>
+                        {{ _('Full Day Rate') }} <span class="text-red-500">*</span>
                     </label>
                     <input type="number" name="full_day_rate" id="full_day_rate" step="0.01" required
                            value="{{ rate.full_day_rate if rate else '' }}"
@@ -74,7 +74,7 @@
                 
                 <div>
                     <label for="half_day_rate" class="form-label">
-                        Half Day Rate <span class="text-red-500">*</span>
+                        {{ _('Half Day Rate') }} <span class="text-red-500">*</span>
                     </label>
                     <input type="number" name="half_day_rate" id="half_day_rate" step="0.01" required
                            value="{{ rate.half_day_rate if rate else '' }}"
@@ -84,7 +84,7 @@
                 
                 <div>
                     <label for="currency_code" class="form-label">
-                        Currency
+                        {{ _('Currency') }}
                     </label>
                     <select name="currency_code" id="currency_code"
                             class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-primary focus:border-primary dark:bg-gray-700">
@@ -96,7 +96,7 @@
                 
                 <div>
                     <label for="breakfast_rate" class="form-label">
-                        Breakfast Deduction
+                        {{ _('Breakfast Deduction') }}
                     </label>
                     <input type="number" name="breakfast_rate" id="breakfast_rate" step="0.01"
                            value="{{ rate.breakfast_rate if rate and rate.breakfast_rate else '' }}"
@@ -106,7 +106,7 @@
                 
                 <div>
                     <label for="lunch_rate" class="form-label">
-                        Lunch Deduction
+                        {{ _('Lunch Deduction') }}
                     </label>
                     <input type="number" name="lunch_rate" id="lunch_rate" step="0.01"
                            value="{{ rate.lunch_rate if rate and rate.lunch_rate else '' }}"
@@ -116,7 +116,7 @@
                 
                 <div>
                     <label for="dinner_rate" class="form-label">
-                        Dinner Deduction
+                        {{ _('Dinner Deduction') }}
                     </label>
                     <input type="number" name="dinner_rate" id="dinner_rate" step="0.01"
                            value="{{ rate.dinner_rate if rate and rate.dinner_rate else '' }}"
@@ -129,13 +129,13 @@
         <!-- Effective Period -->
         <div class="mb-6">
             <h3 class="text-lg font-semibold mb-4 pb-2 border-b border-gray-200 dark:border-gray-700">
-                <i class="fas fa-calendar mr-2"></i>Effective Period
+                <i class="fas fa-calendar mr-2"></i>{{ _('Effective Period') }}
             </h3>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                     <label for="effective_from" class="form-label">
-                        Effective From <span class="text-red-500">*</span>
+                        {{ _('Effective From') }} <span class="text-red-500">*</span>
                     </label>
                     <input type="date" name="effective_from" id="effective_from" required
                            value="{{ rate.effective_from.strftime('%Y-%m-%d') if rate else '' }}"
@@ -144,7 +144,7 @@
                 
                 <div>
                     <label for="effective_to" class="form-label">
-                        Effective To (optional)
+                        {{ _('Effective To (optional)') }}
                     </label>
                     <input type="date" name="effective_to" id="effective_to"
                            value="{{ rate.effective_to.strftime('%Y-%m-%d') if rate and rate.effective_to else '' }}"
@@ -156,7 +156,7 @@
         <!-- Notes -->
         <div class="mb-6">
             <label for="notes" class="form-label">
-                Notes
+                {{ _('Notes') }}
             </label>
             <textarea name="notes" id="notes" rows="3"
                       placeholder="{{ _('Additional notes about this rate...') }}"
@@ -167,11 +167,11 @@
         <div class="flex items-center justify-between pt-4 border-t border-gray-200 dark:border-gray-700">
             <a href="{{ url_for('per_diem.list_rates') }}" 
                class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-smooth btn-press">
-                <i class="fas fa-times mr-2"></i>Cancel
+                <i class="fas fa-times mr-2"></i>{{ _('Cancel') }}
             </a>
             
             <button type="submit" class="bg-primary text-white px-6 py-2 rounded-lg hover:bg-primary/90 transition-smooth btn-press shadow-md" data-show-success="true">
-                <i class="fas fa-save mr-2"></i>{{ 'Update Rate' if rate else 'Create Rate' }}
+                <i class="fas fa-save mr-2"></i>{{ _('Update Rate') if rate else _('Create Rate') }}
             </button>
         </div>
     </form>

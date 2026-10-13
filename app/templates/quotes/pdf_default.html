@@ -12,7 +12,7 @@
                 {% set image_data = get_image_base64(image.file_path) %}
                 {% if image_data %}
                     <img src="{{ image_data }}" 
-                         alt="Decorative image"
+                         alt="{{ _('Decorative image') }}"
                          style="position: absolute; 
                                 left: {{ image.position_x }}mm; 
                                 top: {{ image.position_y }}mm; 
@@ -54,7 +54,7 @@
                 <div class="quote-title">{{ _('QUOTE') }}</div>
                 <div class="meta-grid">
                     <div class="label">{{ _('Quote #') }}</div><div class="value">{{ quote.quote_number }}</div>
-                    <div class="label">{{ _('Date') }}</div><div class="value">{{ format_date(quote.created_at) if quote.created_at else 'N/A' }}</div>
+                    <div class="label">{{ _('Date') }}</div><div class="value">{{ format_date(quote.created_at) if quote.created_at else _('N/A') }}</div>
                     {% if quote.valid_until %}
                     <div class="label">{{ _('Valid Until') }}</div><div class="value">{{ format_date(quote.valid_until) }}</div>
                     {% endif %}
@@ -66,7 +66,7 @@
         <div class="two-col">
             <div class="card">
                 <div class="section-title">{{ _('Quote For') }}</div>
-                <div><strong>{{ quote.client.name|e if quote.client else 'N/A' }}</strong></div>
+                <div><strong>{{ quote.client.name|e if quote.client else _('N/A') }}</strong></div>
                 {% if quote.client and quote.client.email %}
                     <div class="client-email">{{ quote.client.email|e }}</div>
                 {% endif %}

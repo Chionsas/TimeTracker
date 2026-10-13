@@ -3,16 +3,16 @@
 
 {% block content %}
 {% set breadcrumbs = [
-    {'text': 'Inventory', 'url': url_for('inventory.list_stock_items')},
-    {'text': 'Stock Movements'}
+    {'text': _('Inventory'), 'url': url_for('inventory.list_stock_items')},
+    {'text': _('Stock Movements')}
 ] %}
 
 {{ page_header(
     icon_class='fas fa-exchange-alt',
-    title_text='Stock Movements',
-    subtitle_text='View inventory movement history',
+    title_text=_('Stock Movements'),
+    subtitle_text=_('View inventory movement history'),
     breadcrumbs=breadcrumbs,
-    actions_html='<a href="' + url_for("inventory.new_movement") + '" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors"><i class="fas fa-plus mr-2"></i>Record Movement</a>' if (current_user.is_admin or has_permission('manage_stock_movements')) else None
+    actions_html='<a href="' + url_for("inventory.new_movement") + '" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors"><i class="fas fa-plus mr-2"></i>' + _('Record Movement') + '</a>' if (current_user.is_admin or has_permission('manage_stock_movements')) else None
 ) }}
 
 <div class="bg-card-light dark:bg-card-dark p-6 rounded-xl border border-border-light dark:border-border-dark shadow-sm mb-6">
@@ -130,11 +130,11 @@
                     {% if movement.reference_type and movement.reference_id %}
                         {% if movement.reference_type == 'invoice' %}
                             <a href="{{ url_for('invoices.view_invoice', invoice_id=movement.reference_id) }}" class="text-primary hover:underline">
-                                Invoice #{{ movement.reference_id }}
+                                {{ _('Invoice #%(id)s', id=movement.reference_id) }}
                             </a>
                         {% elif movement.reference_type == 'quote' %}
                             <a href="{{ url_for('quotes.view_quote', quote_id=movement.reference_id) }}" class="text-primary hover:underline">
-                                Quote #{{ movement.reference_id }}
+                                {{ _('Quote #%(id)s', id=movement.reference_id) }}
                             </a>
                         {% else %}
                             {{ movement.reference_type }} #{{ movement.reference_id }}
@@ -155,9 +155,9 @@
 
     {% endset %}
     {% if movement_type or reference_type %}
-        {{ empty_state('fas fa-exchange-alt', 'No Movements Match Your Filters', 'Try adjusting your filters to see more results.', actions, type='no-results') }}
+        {{ empty_state('fas fa-exchange-alt', _('No Movements Match Your Filters'), _('Try adjusting your filters to see more results.'), actions, type='no-results') }}
     {% else %}
-        {{ empty_state('fas fa-exchange-alt', 'No Stock Movements Yet', 'Stock movements appear when you receive, transfer, or adjust inventory.', actions, type='no-data') }}
+        {{ empty_state('fas fa-exchange-alt', _('No Stock Movements Yet'), _('Stock movements appear when you receive, transfer, or adjust inventory.'), actions, type='no-data') }}
     {% endif %}
     {% endif %}
 </div>

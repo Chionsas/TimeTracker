@@ -71,9 +71,10 @@
     </div>
     
     <div class="content">
-        <p>Hello {{ user.display_name }},</p>
+        <p>{{ _('Hello %(name)s,', name=user.display_name) }}</p>
         
-        <p><strong>{{ comment.user.display_name }}</strong> mentioned you in a comment:</p>
+        {% set comment_author %}<strong>{{ comment.user.display_name }}</strong>{% endset %}
+        <p>{{ _('%(name)s mentioned you in a comment:', name=comment_author)|safe }}</p>
         
         <div class="comment-box">
             <div class="comment-author">{{ comment.user.display_name }}</div>
@@ -81,8 +82,8 @@
         </div>
         
         <div class="task-info">
-            <strong>Task:</strong> {{ task.name }}<br>
-            <strong>Project:</strong> {{ task.project.name if task.project else 'N/A' }}
+            <strong>{{ _('Task:') }}</strong> {{ task.name }}<br>
+            <strong>{{ _('Project:') }}</strong> {{ task.project.name if task.project else _('N/A') }}
         </div>
         
         {% if task_url %}
@@ -95,8 +96,8 @@
     </div>
     
     <div class="footer">
-        <p>TimeTracker - Time Tracking & Project Management</p>
-        <p>To manage your notification preferences, visit your user settings.</p>
+        <p>{{ _('TimeTracker - Time Tracking & Project Management') }}</p>
+        <p>{{ _('To manage your notification preferences, visit your user settings.') }}</p>
     </div>
 </body>
 </html>

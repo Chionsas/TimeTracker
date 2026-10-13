@@ -12,7 +12,7 @@
             <div class="sticky top-0 bg-card-light dark:bg-card-dark border-b border-gray-200 dark:border-gray-700 px-6 py-4 flex justify-between items-center">
                 <h2 class="text-2xl font-bold text-gray-900 dark:text-white">
                     <i class="fas fa-keyboard mr-2 text-blue-600"></i>
-                    Keyboard Shortcuts
+                    {{ _('Keyboard Shortcuts') }}
                 </h2>
                 <button onclick="closeKeyboardShortcutsModal()" 
                         class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
@@ -26,29 +26,29 @@
                 <div>
                     <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
                         <i class="fas fa-globe mr-2 text-blue-600"></i>
-                        General
+                        {{ _('General') }}
                     </h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div class="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-900 rounded">
-                            <span class="text-gray-700 dark:text-gray-300">Command Palette</span>
+                            <span class="text-gray-700 dark:text-gray-300">{{ _('Command Palette') }}</span>
                             <kbd class="px-3 py-1 bg-card-light dark:bg-card-dark border border-gray-300 dark:border-gray-600 rounded text-sm font-mono">
                                 <span class="platform-key">Ctrl</span> K
                             </kbd>
                         </div>
                         <div class="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-900 rounded">
-                            <span class="text-gray-700 dark:text-gray-300">Toggle Theme</span>
+                            <span class="text-gray-700 dark:text-gray-300">{{ _('Toggle Theme') }}</span>
                             <kbd class="px-3 py-1 bg-card-light dark:bg-card-dark border border-gray-300 dark:border-gray-600 rounded text-sm font-mono">
                                 <span class="platform-key">Ctrl</span> Shift L
                             </kbd>
                         </div>
                         <div class="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-900 rounded">
-                            <span class="text-gray-700 dark:text-gray-300">Search</span>
+                            <span class="text-gray-700 dark:text-gray-300">{{ _('Search') }}</span>
                             <kbd class="px-3 py-1 bg-card-light dark:bg-card-dark border border-gray-300 dark:border-gray-600 rounded text-sm font-mono">
                                 <span class="platform-key">Ctrl</span> /
                             </kbd>
                         </div>
                         <div class="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-900 rounded">
-                            <span class="text-gray-700 dark:text-gray-300">Show This Help</span>
+                            <span class="text-gray-700 dark:text-gray-300">{{ _('Show This Help') }}</span>
                             <kbd class="px-3 py-1 bg-card-light dark:bg-card-dark border border-gray-300 dark:border-gray-600 rounded text-sm font-mono">
                                 Shift ?
                             </kbd>
@@ -60,29 +60,29 @@
                 <div>
                     <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
                         <i class="fas fa-compass mr-2 text-green-600"></i>
-                        Navigation
+                        {{ _('Navigation') }}
                     </h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div class="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-900 rounded">
-                            <span class="text-gray-700 dark:text-gray-300">Go to Dashboard</span>
+                            <span class="text-gray-700 dark:text-gray-300">{{ _('Go to Dashboard') }}</span>
                             <kbd class="px-3 py-1 bg-card-light dark:bg-card-dark border border-gray-300 dark:border-gray-600 rounded text-sm font-mono">
                                 g d
                             </kbd>
                         </div>
                         <div class="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-900 rounded">
-                            <span class="text-gray-700 dark:text-gray-300">Go to Projects</span>
+                            <span class="text-gray-700 dark:text-gray-300">{{ _('Go to Projects') }}</span>
                             <kbd class="px-3 py-1 bg-card-light dark:bg-card-dark border border-gray-300 dark:border-gray-600 rounded text-sm font-mono">
                                 g p
                             </kbd>
                         </div>
                         <div class="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-900 rounded">
-                            <span class="text-gray-700 dark:text-gray-300">Go to Reports</span>
+                            <span class="text-gray-700 dark:text-gray-300">{{ _('Go to Reports') }}</span>
                             <kbd class="px-3 py-1 bg-card-light dark:bg-card-dark border border-gray-300 dark:border-gray-600 rounded text-sm font-mono">
                                 g r
                             </kbd>
                         </div>
                         <div class="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-900 rounded">
-                            <span class="text-gray-700 dark:text-gray-300">Go to Tasks</span>
+                            <span class="text-gray-700 dark:text-gray-300">{{ _('Go to Tasks') }}</span>
                             <kbd class="px-3 py-1 bg-card-light dark:bg-card-dark border border-gray-300 dark:border-gray-600 rounded text-sm font-mono">
                                 g t
                             </kbd>
@@ -94,17 +94,17 @@
                 <div>
                     <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
                         <i class="fas fa-clock mr-2 text-purple-600 dark:text-purple-400"></i>
-                        Timer
+                        {{ _('Timer') }}
                     </h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div class="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-900 rounded">
-                            <span class="text-gray-700 dark:text-gray-300">Start/Stop Timer</span>
+                            <span class="text-gray-700 dark:text-gray-300">{{ _('Start/Stop Timer') }}</span>
                             <kbd class="px-3 py-1 bg-card-light dark:bg-card-dark border border-gray-300 dark:border-gray-600 rounded text-sm font-mono">
                                 t
                             </kbd>
                         </div>
                         <div class="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-900 rounded">
-                            <span class="text-gray-700 dark:text-gray-300">Log Manual Time</span>
+                            <span class="text-gray-700 dark:text-gray-300">{{ _('Log Manual Time') }}</span>
                             <kbd class="px-3 py-1 bg-card-light dark:bg-card-dark border border-gray-300 dark:border-gray-600 rounded text-sm font-mono">
                                 <span class="platform-key">Ctrl</span> M
                             </kbd>
@@ -116,29 +116,29 @@
                 <div>
                     <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
                         <i class="fas fa-bolt mr-2 text-yellow-600"></i>
-                        Quick Actions
+                        {{ _('Quick Actions') }}
                     </h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div class="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-900 rounded">
-                            <span class="text-gray-700 dark:text-gray-300">Create New Project</span>
+                            <span class="text-gray-700 dark:text-gray-300">{{ _('Create New Project') }}</span>
                             <kbd class="px-3 py-1 bg-card-light dark:bg-card-dark border border-gray-300 dark:border-gray-600 rounded text-sm font-mono">
                                 c p
                             </kbd>
                         </div>
                         <div class="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-900 rounded">
-                            <span class="text-gray-700 dark:text-gray-300">Create New Task</span>
+                            <span class="text-gray-700 dark:text-gray-300">{{ _('Create New Task') }}</span>
                             <kbd class="px-3 py-1 bg-card-light dark:bg-card-dark border border-gray-300 dark:border-gray-600 rounded text-sm font-mono">
                                 c t
                             </kbd>
                         </div>
                         <div class="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-900 rounded">
-                            <span class="text-gray-700 dark:text-gray-300">Create New Client</span>
+                            <span class="text-gray-700 dark:text-gray-300">{{ _('Create New Client') }}</span>
                             <kbd class="px-3 py-1 bg-card-light dark:bg-card-dark border border-gray-300 dark:border-gray-600 rounded text-sm font-mono">
                                 c c
                             </kbd>
                         </div>
                         <div class="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-900 rounded">
-                            <span class="text-gray-700 dark:text-gray-300">Create New Invoice</span>
+                            <span class="text-gray-700 dark:text-gray-300">{{ _('Create New Invoice') }}</span>
                             <kbd class="px-3 py-1 bg-card-light dark:bg-card-dark border border-gray-300 dark:border-gray-600 rounded text-sm font-mono">
                                 c i
                             </kbd>
@@ -150,24 +150,24 @@
                 <div>
                     <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
                         <i class="fas fa-star mr-2 text-yellow-500"></i>
-                        New Features
+                        {{ _('New Features') }}
                     </h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div class="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-900 rounded">
-                            <span class="text-gray-700 dark:text-gray-300">Time Entry Templates</span>
-                            <span class="text-xs text-gray-500">via Command Palette</span>
+                            <span class="text-gray-700 dark:text-gray-300">{{ _('Time Entry Templates') }}</span>
+                            <span class="text-xs text-gray-500">{{ _('via Command Palette') }}</span>
                         </div>
                         <div class="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-900 rounded">
-                            <span class="text-gray-700 dark:text-gray-300">Saved Filters</span>
-                            <span class="text-xs text-gray-500">via Command Palette</span>
+                            <span class="text-gray-700 dark:text-gray-300">{{ _('Saved Filters') }}</span>
+                            <span class="text-xs text-gray-500">{{ _('via Command Palette') }}</span>
                         </div>
                         <div class="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-900 rounded">
-                            <span class="text-gray-700 dark:text-gray-300">User Settings</span>
-                            <span class="text-xs text-gray-500">via Command Palette</span>
+                            <span class="text-gray-700 dark:text-gray-300">{{ _('User Settings') }}</span>
+                            <span class="text-xs text-gray-500">{{ _('via Command Palette') }}</span>
                         </div>
                         <div class="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-900 rounded">
-                            <span class="text-gray-700 dark:text-gray-300">Export to Excel</span>
-                            <span class="text-xs text-gray-500">via Command Palette</span>
+                            <span class="text-gray-700 dark:text-gray-300">{{ _('Export to Excel') }}</span>
+                            <span class="text-xs text-gray-500">{{ _('via Command Palette') }}</span>
                         </div>
                     </div>
                 </div>
@@ -176,25 +176,25 @@
                 <div>
                     <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
                         <i class="fas fa-check-square mr-2 text-indigo-600"></i>
-                        Bulk Actions
+                        {{ _('Bulk Actions') }}
                     </h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div class="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-900 rounded">
-                            <span class="text-gray-700 dark:text-gray-300">Select All</span>
+                            <span class="text-gray-700 dark:text-gray-300">{{ _('Select All') }}</span>
                             <kbd class="px-3 py-1 bg-card-light dark:bg-card-dark border border-gray-300 dark:border-gray-600 rounded text-sm font-mono">
                                 <span class="platform-key">Ctrl</span> A
                             </kbd>
                         </div>
                         <div class="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-900 rounded">
-                            <span class="text-gray-700 dark:text-gray-300">Delete Selected</span>
+                            <span class="text-gray-700 dark:text-gray-300">{{ _('Delete Selected') }}</span>
                             <kbd class="px-3 py-1 bg-card-light dark:bg-card-dark border border-gray-300 dark:border-gray-600 rounded text-sm font-mono">
                                 Delete
                             </kbd>
                         </div>
                         <div class="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-900 rounded">
-                            <span class="text-gray-700 dark:text-gray-300">Right-Click Menu</span>
+                            <span class="text-gray-700 dark:text-gray-300">{{ _('Right-Click Menu') }}</span>
                             <kbd class="px-3 py-1 bg-card-light dark:bg-card-dark border border-gray-300 dark:border-gray-600 rounded text-sm font-mono">
-                                Right Click
+                                {{ _('Right Click') }}
                             </kbd>
                         </div>
                     </div>
@@ -203,15 +203,15 @@
                 <!-- Tips -->
                 <div class="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4">
                     <h4 class="font-semibold text-blue-900 dark:text-blue-200 mb-2">
-                        <i class="fas fa-lightbulb mr-2"></i>Pro Tips
+                        <i class="fas fa-lightbulb mr-2"></i>{{ _('Pro Tips') }}
                     </h4>
                     <ul class="space-y-1 text-sm text-blue-800 dark:text-blue-300">
-                        <li>• Press <kbd class="px-2 py-0.5 bg-card-light dark:bg-card-dark rounded text-xs">Ctrl K</kbd> to open the command palette and search for any action</li>
-                        <li>• Use sequence shortcuts like <kbd class="px-2 py-0.5 bg-card-light dark:bg-card-dark rounded text-xs">g d</kbd> for quick navigation (type 'g' then 'd')</li>
-                        <li>• Most forms can be submitted with <kbd class="px-2 py-0.5 bg-card-light dark:bg-card-dark rounded text-xs">Ctrl Enter</kbd></li>
-                        <li>• Press <kbd class="px-2 py-0.5 bg-card-light dark:bg-card-dark rounded text-xs">Esc</kbd> to close any modal or dropdown</li>
-                        <li>• Right-click on any list item to see context menu options</li>
-                        <li>• Look for the help indicator in the bottom-right corner</li>
+                        <li>• {{ _('Press %(key)s to open the command palette and search for any action', key='<kbd class="px-2 py-0.5 bg-card-light dark:bg-card-dark rounded text-xs">Ctrl K</kbd>')|safe }}</li>
+                        <li>• {{ _("Use sequence shortcuts like %(keys)s for quick navigation (type 'g' then 'd')", keys='<kbd class="px-2 py-0.5 bg-card-light dark:bg-card-dark rounded text-xs">g d</kbd>')|safe }}</li>
+                        <li>• {{ _('Most forms can be submitted with %(keys)s', keys='<kbd class="px-2 py-0.5 bg-card-light dark:bg-card-dark rounded text-xs">Ctrl Enter</kbd>')|safe }}</li>
+                        <li>• {{ _('Press %(key)s to close any modal or dropdown', key='<kbd class="px-2 py-0.5 bg-card-light dark:bg-card-dark rounded text-xs">Esc</kbd>')|safe }}</li>
+                        <li>• {{ _('Right-click on any list item to see context menu options') }}</li>
+                        <li>• {{ _('Look for the help indicator in the bottom-right corner') }}</li>
                     </ul>
                 </div>
             </div>
@@ -220,7 +220,7 @@
             <div class="sticky bottom-0 bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 px-6 py-4">
                 <button onclick="closeKeyboardShortcutsModal()" 
                         class="w-full btn btn-primary">
-                    Close <kbd class="ml-2 px-2 py-0.5 bg-card-light dark:bg-card-dark rounded text-xs">Esc</kbd>
+                    {{ _('Close') }} <kbd class="ml-2 px-2 py-0.5 bg-card-light dark:bg-card-dark rounded text-xs">Esc</kbd>
                 </button>
             </div>
         </div>

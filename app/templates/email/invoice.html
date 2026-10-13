@@ -64,26 +64,26 @@
     </div>
     
     <div class="content">
-        <p>Hello,</p>
+        <p>{{ _('Hello,') }}</p>
         
-        <p>Please find attached invoice <strong>{{ invoice.invoice_number }}</strong> for your records.</p>
+        <p>{{ _('Please find attached invoice') }} <strong>{{ invoice.invoice_number }}</strong> {{ _('for your records.') }}</p>
         
         <div class="invoice-details">
             <table>
                 <tr>
-                    <td>Invoice Number:</td>
+                    <td>{{ _('Invoice Number:') }}</td>
                     <td>{{ invoice.invoice_number }}</td>
                 </tr>
                 <tr>
-                    <td>Issue Date:</td>
-                    <td>{{ invoice.issue_date|format_date if invoice.issue_date else 'N/A' }}</td>
+                    <td>{{ _('Issue Date:') }}</td>
+                    <td>{{ invoice.issue_date|format_date if invoice.issue_date else _('N/A') }}</td>
                 </tr>
                 <tr>
-                    <td>Due Date:</td>
-                    <td>{{ invoice.due_date|format_date if invoice.due_date else 'N/A' }}</td>
+                    <td>{{ _('Due Date:') }}</td>
+                    <td>{{ invoice.due_date|format_date if invoice.due_date else _('N/A') }}</td>
                 </tr>
                 <tr>
-                    <td>Amount:</td>
+                    <td>{{ _('Amount:') }}</td>
                     <td><strong>{{ invoice.currency_code }} {{ invoice.total_amount }}</strong></td>
                 </tr>
             </table>
@@ -91,20 +91,20 @@
         
         {% if custom_message %}
         <div class="custom-message">
-            <p><strong>Message:</strong></p>
+            <p><strong>{{ _('Message:') }}</strong></p>
             <p>{{ custom_message }}</p>
         </div>
         {% endif %}
         
-        <p>Please remit payment by the due date.</p>
+        <p>{{ _('Please remit payment by the due date.') }}</p>
         
-        <p>Thank you for your business!</p>
+        <p>{{ _('Thank you for your business!') }}</p>
     </div>
     
     <div class="footer">
         <p><strong>{{ company_name }}</strong></p>
-        <p>TimeTracker - Time Tracking & Project Management</p>
-        <p>This invoice was sent automatically. Please contact us if you have any questions.</p>
+        <p>TimeTracker - {{ _('Time Tracking & Project Management') }}</p>
+        <p>{{ _('This invoice was sent automatically. Please contact us if you have any questions.') }}</p>
     </div>
 </body>
 </html>

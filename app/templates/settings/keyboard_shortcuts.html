@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Keyboard Shortcuts Settings - {{ super() }}{% endblock %}
+{% block title %}{{ _('Keyboard Shortcuts Settings') }} - {{ super() }}{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='keyboard-shortcuts.css') }}">
@@ -23,20 +23,20 @@
             <div>
                 <h1 class="text-3xl font-bold text-text-light dark:text-text-dark flex items-center gap-3">
                     <i class="fas fa-keyboard text-primary"></i>
-                    Keyboard Shortcuts
+                    {{ _('Keyboard Shortcuts') }}
                 </h1>
                 <p class="mt-2 text-text-muted-light dark:text-text-muted-dark">
-                    Customize and manage your keyboard shortcuts for faster navigation
+                    {{ _('Customize and manage your keyboard shortcuts for faster navigation') }}
                 </p>
             </div>
             <div class="flex gap-3">
                 <button type="button" id="view-all-shortcuts-btn"
                         class="px-4 py-2 bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
-                    <i class="fas fa-list mr-2"></i>View All Shortcuts
+                    <i class="fas fa-list mr-2"></i>{{ _('View All Shortcuts') }}
                 </button>
                 <button type="button" onclick="resetToDefaults()" 
                         class="px-4 py-2 bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
-                    <i class="fas fa-undo mr-2"></i>Reset to Defaults
+                    <i class="fas fa-undo mr-2"></i>{{ _('Reset to Defaults') }}
                 </button>
             </div>
         </div>
@@ -47,7 +47,7 @@
         <div class="bg-card-light dark:bg-card-dark p-6 rounded-lg border border-border-light dark:border-border-dark">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-sm text-text-muted-light dark:text-text-muted-dark">Total Shortcuts</p>
+                    <p class="text-sm text-text-muted-light dark:text-text-muted-dark">{{ _('Total Shortcuts') }}</p>
                     <p class="text-2xl font-bold text-text-light dark:text-text-dark mt-1" id="total-shortcuts">0</p>
                 </div>
                 <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
@@ -59,7 +59,7 @@
         <div class="bg-card-light dark:bg-card-dark p-6 rounded-lg border border-border-light dark:border-border-dark">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-sm text-text-muted-light dark:text-text-muted-dark">Custom Shortcuts</p>
+                    <p class="text-sm text-text-muted-light dark:text-text-muted-dark">{{ _('Custom Shortcuts') }}</p>
                     <p class="text-2xl font-bold text-text-light dark:text-text-dark mt-1" id="custom-shortcuts">0</p>
                 </div>
                 <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center">
@@ -71,7 +71,7 @@
         <div class="bg-card-light dark:bg-card-dark p-6 rounded-lg border border-border-light dark:border-border-dark">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-sm text-text-muted-light dark:text-text-muted-dark">Most Used</p>
+                    <p class="text-sm text-text-muted-light dark:text-text-muted-dark">{{ _('Most Used') }}</p>
                     <p class="text-sm font-semibold text-text-light dark:text-text-dark mt-1" id="most-used">-</p>
                 </div>
                 <div class="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center">
@@ -83,7 +83,7 @@
         <div class="bg-card-light dark:bg-card-dark p-6 rounded-lg border border-border-light dark:border-border-dark">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-sm text-text-muted-light dark:text-text-muted-dark">Total Uses</p>
+                    <p class="text-sm text-text-muted-light dark:text-text-muted-dark">{{ _('Total Uses') }}</p>
                     <p class="text-2xl font-bold text-text-light dark:text-text-dark mt-1" id="total-uses">0</p>
                 </div>
                 <div class="w-12 h-12 bg-amber-100 dark:bg-amber-900/30 rounded-lg flex items-center justify-center">
@@ -96,21 +96,21 @@
     <!-- Settings Tabs -->
     <div class="mb-6">
         <div class="border-b border-border-light dark:border-border-dark">
-            <nav class="flex space-x-8" aria-label="Tabs">
+            <nav class="flex space-x-8" aria-label="{{ _('Tabs') }}">
                 <button type="button" onclick="window.keyboardShortcutsSwitchTab('general')" 
                         data-tab="general"
                         class="tab-button border-b-2 border-primary text-primary py-3 px-1 font-medium">
-                    <i class="fas fa-cog mr-2"></i>General Settings
+                    <i class="fas fa-cog mr-2"></i>{{ _('General Settings') }}
                 </button>
                 <button onclick="switchTab('customization')" 
                         data-tab="customization"
                         class="tab-button border-b-2 border-transparent text-text-muted-light dark:text-text-muted-dark hover:text-text-light dark:hover:text-text-dark py-3 px-1 font-medium">
-                    <i class="fas fa-edit mr-2"></i>Customize Shortcuts
+                    <i class="fas fa-edit mr-2"></i>{{ _('Customize Shortcuts') }}
                 </button>
                 <button type="button" onclick="window.keyboardShortcutsSwitchTab('statistics')" 
                         data-tab="statistics"
                         class="tab-button border-b-2 border-transparent text-text-muted-light dark:text-text-muted-dark hover:text-text-light dark:hover:text-text-dark py-3 px-1 font-medium">
-                    <i class="fas fa-chart-bar mr-2"></i>Usage Statistics
+                    <i class="fas fa-chart-bar mr-2"></i>{{ _('Usage Statistics') }}
                 </button>
             </nav>
         </div>
@@ -125,10 +125,10 @@
                     <div class="flex-1">
                         <h3 class="text-lg font-semibold text-text-light dark:text-text-dark flex items-center gap-2">
                             <i class="fas fa-power-off text-primary"></i>
-                            Enable Keyboard Shortcuts
+                            {{ _('Enable Keyboard Shortcuts') }}
                         </h3>
                         <p class="text-sm text-text-muted-light dark:text-text-muted-dark mt-2">
-                            Turn keyboard shortcuts on or off globally
+                            {{ _('Turn keyboard shortcuts on or off globally') }}
                         </p>
                     </div>
                     <label class="relative inline-flex items-center cursor-pointer ml-4">
@@ -144,10 +144,10 @@
                     <div class="flex-1">
                         <h3 class="text-lg font-semibold text-text-light dark:text-text-dark flex items-center gap-2">
                             <i class="fas fa-lightbulb text-primary"></i>
-                            Show Shortcut Hints
+                            {{ _('Show Shortcut Hints') }}
                         </h3>
                         <p class="text-sm text-text-muted-light dark:text-text-muted-dark mt-2">
-                            Display keyboard shortcut hints next to buttons
+                            {{ _('Display keyboard shortcut hints next to buttons') }}
                         </p>
                     </div>
                     <label class="relative inline-flex items-center cursor-pointer ml-4">
@@ -161,10 +161,10 @@
             <div class="setting-card bg-card-light dark:bg-card-dark p-6 rounded-lg border border-border-light dark:border-border-dark">
                 <h3 class="text-lg font-semibold text-text-light dark:text-text-dark flex items-center gap-2 mb-4">
                     <i class="fas fa-clock text-primary"></i>
-                    Sequence Timeout
+                    {{ _('Sequence Timeout') }}
                 </h3>
                 <p class="text-sm text-text-muted-light dark:text-text-muted-dark mb-4">
-                    Time to wait between key presses in a sequence (e.g., 'g d')
+                    {{ _("Time to wait between key presses in a sequence (e.g., 'g d')") }}
                 </p>
                 <div class="flex items-center gap-4">
                     <input type="range" id="sequence-timeout" min="500" max="3000" step="100" value="1000" 
@@ -179,10 +179,10 @@
                     <div class="flex-1">
                         <h3 class="text-lg font-semibold text-text-light dark:text-text-dark flex items-center gap-2">
                             <i class="fas fa-layer-group text-primary"></i>
-                            Context-Aware Shortcuts
+                            {{ _('Context-Aware Shortcuts') }}
                         </h3>
                         <p class="text-sm text-text-muted-light dark:text-text-muted-dark mt-2">
-                            Enable different shortcuts based on current context
+                            {{ _('Enable different shortcuts based on current context') }}
                         </p>
                     </div>
                     <label class="relative inline-flex items-center cursor-pointer ml-4">
@@ -197,24 +197,25 @@
         <div class="mt-6 bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 p-6 rounded-lg border border-blue-200 dark:border-blue-800">
             <h3 class="text-lg font-semibold text-text-light dark:text-text-dark flex items-center gap-2 mb-4">
                 <i class="fas fa-rocket text-primary"></i>
-                Quick Tips
+                {{ _('Quick Tips') }}
             </h3>
+            {% set kbd = '<kbd class="px-2 py-1 bg-card-light dark:bg-card-dark border border-gray-300 dark:border-gray-600 rounded text-xs">%s</kbd>' %}
             <ul class="space-y-2 text-sm text-text-light dark:text-text-dark">
                 <li class="flex items-start gap-2">
                     <i class="fas fa-check-circle text-green-600 dark:text-green-400 mt-0.5"></i>
-                    <span>Press <kbd class="px-2 py-1 bg-card-light dark:bg-card-dark border border-gray-300 dark:border-gray-600 rounded text-xs">Shift</kbd> + <kbd class="px-2 py-1 bg-card-light dark:bg-card-dark border border-gray-300 dark:border-gray-600 rounded text-xs">?</kbd> to view all keyboard shortcuts</span>
+                    <span>{{ _('Press %(keys)s to view all keyboard shortcuts', keys=kbd|format('Shift') ~ ' + ' ~ kbd|format('?'))|safe }}</span>
                 </li>
                 <li class="flex items-start gap-2">
                     <i class="fas fa-check-circle text-green-600 dark:text-green-400 mt-0.5"></i>
-                    <span>Use <kbd class="px-2 py-1 bg-card-light dark:bg-card-dark border border-gray-300 dark:border-gray-600 rounded text-xs">Ctrl</kbd> + <kbd class="px-2 py-1 bg-card-light dark:bg-card-dark border border-gray-300 dark:border-gray-600 rounded text-xs">K</kbd> to open the command palette</span>
+                    <span>{{ _('Use %(keys)s to open the command palette', keys=kbd|format('Ctrl') ~ ' + ' ~ kbd|format('K'))|safe }}</span>
                 </li>
                 <li class="flex items-start gap-2">
                     <i class="fas fa-check-circle text-green-600 dark:text-green-400 mt-0.5"></i>
-                    <span>Navigate quickly with sequences like <kbd class="px-2 py-1 bg-card-light dark:bg-card-dark border border-gray-300 dark:border-gray-600 rounded text-xs">g</kbd> <kbd class="px-2 py-1 bg-card-light dark:bg-card-dark border border-gray-300 dark:border-gray-600 rounded text-xs">d</kbd> for dashboard</span>
+                    <span>{{ _('Navigate quickly with sequences like %(keys)s for dashboard', keys=kbd|format('g') ~ ' ' ~ kbd|format('d'))|safe }}</span>
                 </li>
                 <li class="flex items-start gap-2">
                     <i class="fas fa-check-circle text-green-600 dark:text-green-400 mt-0.5"></i>
-                    <span>Context-aware shortcuts change based on what you're doing (table, form, etc.)</span>
+                    <span>{{ _("Context-aware shortcuts change based on what you're doing (table, form, etc.)") }}</span>
                 </li>
             </ul>
         </div>
@@ -226,7 +227,7 @@
                 <div>
                     <h3 class="text-lg font-semibold text-text-light dark:text-text-dark">{{ _('Customize Shortcuts') }}</h3>
                     <p class="text-sm text-text-muted-light dark:text-text-muted-dark mt-1">
-                        Click on a shortcut to record a new key combination
+                        {{ _('Click on a shortcut to record a new key combination') }}
                     </p>
                 </div>
                 <div class="flex gap-2">
@@ -255,7 +256,7 @@
             <div class="bg-card-light dark:bg-card-dark p-6 rounded-lg border border-border-light dark:border-border-dark">
                 <h3 class="text-lg font-semibold text-text-light dark:text-text-dark flex items-center gap-2 mb-4">
                     <i class="fas fa-trophy text-amber-500"></i>
-                    Most Used Shortcuts
+                    {{ _('Most Used Shortcuts') }}
                 </h3>
                 <div id="most-used-list" class="space-y-3">
                     <!-- Populated by JavaScript -->
@@ -266,7 +267,7 @@
             <div class="bg-card-light dark:bg-card-dark p-6 rounded-lg border border-border-light dark:border-border-dark">
                 <h3 class="text-lg font-semibold text-text-light dark:text-text-dark flex items-center gap-2 mb-4">
                     <i class="fas fa-history text-blue-500"></i>
-                    Recently Used
+                    {{ _('Recently Used') }}
                 </h3>
                 <div id="recent-usage-list" class="space-y-3">
                     <!-- Populated by JavaScript -->
@@ -278,12 +279,12 @@
         <div class="mt-6 bg-card-light dark:bg-card-dark p-6 rounded-lg border border-border-light dark:border-border-dark">
             <h3 class="text-lg font-semibold text-text-light dark:text-text-dark flex items-center gap-2 mb-4">
                 <i class="fas fa-chart-area text-green-500"></i>
-                Usage Over Time
+                {{ _('Usage Over Time') }}
             </h3>
             <div class="h-64 flex items-center justify-center text-text-muted-light dark:text-text-muted-dark">
                 <div class="text-center">
                     <i class="fas fa-chart-line text-4xl mb-4 opacity-30"></i>
-                    <p>Usage statistics will appear here as you use keyboard shortcuts</p>
+                    <p>{{ _('Usage statistics will appear here as you use keyboard shortcuts') }}</p>
                 </div>
             </div>
         </div>

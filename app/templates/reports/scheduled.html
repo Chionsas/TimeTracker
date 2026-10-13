@@ -5,16 +5,16 @@
 
 {% block content %}
 {% set breadcrumbs = [
-    {'text': 'Reports', 'url': url_for('reports.reports')},
-    {'text': 'Scheduled Reports'}
+    {'text': _('Reports'), 'url': url_for('reports.reports')},
+    {'text': _('Scheduled Reports')}
 ] %}
 
 {{ page_header(
     icon_class='fas fa-clock',
-    title_text='Scheduled Reports',
-    subtitle_text='Automated report delivery via email',
+    title_text=_('Scheduled Reports'),
+    subtitle_text=_('Automated report delivery via email'),
     breadcrumbs=breadcrumbs,
-    actions_html='<a href="' + url_for("scheduled_reports.create_scheduled") + '" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors"><i class="fas fa-plus mr-2"></i>Schedule Report</a>'
+    actions_html='<a href="' + url_for("scheduled_reports.create_scheduled") + '" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors"><i class="fas fa-plus mr-2"></i>' + _('Schedule Report') + '</a>'
 ) }}
 
 <div class="bg-card-light dark:bg-card-dark p-6 rounded-xl border border-border-light dark:border-border-dark shadow-sm">

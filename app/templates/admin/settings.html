@@ -14,14 +14,14 @@
 
 {% block content %}
 {% set breadcrumbs = [
-    {'text': 'Admin', 'url': url_for('admin.admin_dashboard')},
-    {'text': 'System Settings'}
+    {'text': _('Admin'), 'url': url_for('admin.admin_dashboard')},
+    {'text': _('System Settings')}
 ] %}
 
 {{ page_header(
     icon_class='fas fa-sliders-h',
-    title_text='System Settings',
-    subtitle_text='Configure system-wide application settings',
+    title_text=_('System Settings'),
+    subtitle_text=_('Configure system-wide application settings'),
     breadcrumbs=breadcrumbs,
     actions_html=None
 ) }}
@@ -29,18 +29,18 @@
 <!-- Mobile Section Navigation -->
 <div class="mb-4 overflow-x-auto lg:hidden">
     <nav class="flex gap-2 pb-2 min-w-max">
-        <a href="#section-general" class="px-3 py-1.5 text-xs font-medium rounded-full bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark whitespace-nowrap">General</a>
-        <a href="#section-timers" class="px-3 py-1.5 text-xs font-medium rounded-full bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark whitespace-nowrap">Timers</a>
-        <a href="#section-time-entry" class="px-3 py-1.5 text-xs font-medium rounded-full bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark whitespace-nowrap">Time Entry</a>
-        <a href="#section-branding" class="px-3 py-1.5 text-xs font-medium rounded-full bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark whitespace-nowrap">Branding</a>
-        <a href="#section-invoices" class="px-3 py-1.5 text-xs font-medium rounded-full bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark whitespace-nowrap">Invoices</a>
-        <a href="#section-quotes" class="px-3 py-1.5 text-xs font-medium rounded-full bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark whitespace-nowrap">Quotes</a>
+        <a href="#section-general" class="px-3 py-1.5 text-xs font-medium rounded-full bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark whitespace-nowrap">{{ _('General') }}</a>
+        <a href="#section-timers" class="px-3 py-1.5 text-xs font-medium rounded-full bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark whitespace-nowrap">{{ _('Timers') }}</a>
+        <a href="#section-time-entry" class="px-3 py-1.5 text-xs font-medium rounded-full bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark whitespace-nowrap">{{ _('Time Entry') }}</a>
+        <a href="#section-branding" class="px-3 py-1.5 text-xs font-medium rounded-full bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark whitespace-nowrap">{{ _('Branding') }}</a>
+        <a href="#section-invoices" class="px-3 py-1.5 text-xs font-medium rounded-full bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark whitespace-nowrap">{{ _('Invoices') }}</a>
+        <a href="#section-quotes" class="px-3 py-1.5 text-xs font-medium rounded-full bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark whitespace-nowrap">{{ _('Quotes') }}</a>
         <a href="#section-peppol" class="px-3 py-1.5 text-xs font-medium rounded-full bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark whitespace-nowrap">Peppol</a>
-        <a href="#section-backup" class="px-3 py-1.5 text-xs font-medium rounded-full bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark whitespace-nowrap">Backup</a>
-        <a href="#section-ldap" class="px-3 py-1.5 text-xs font-medium rounded-full bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark whitespace-nowrap">LDAP</a>
-        <a href="#section-kiosk" class="px-3 py-1.5 text-xs font-medium rounded-full bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark whitespace-nowrap">Kiosk</a>
-        <a href="#section-ai" class="px-3 py-1.5 text-xs font-medium rounded-full bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark whitespace-nowrap">AI Helper</a>
-        <a href="#section-analytics" class="px-3 py-1.5 text-xs font-medium rounded-full bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark whitespace-nowrap">Analytics</a>
+        <a href="#section-backup" class="px-3 py-1.5 text-xs font-medium rounded-full bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark whitespace-nowrap">{{ _('Backup') }}</a>
+        <a href="#section-ldap" class="px-3 py-1.5 text-xs font-medium rounded-full bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark whitespace-nowrap">{{ _('LDAP') }}</a>
+        <a href="#section-kiosk" class="px-3 py-1.5 text-xs font-medium rounded-full bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark whitespace-nowrap">{{ _('Kiosk') }}</a>
+        <a href="#section-ai" class="px-3 py-1.5 text-xs font-medium rounded-full bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark whitespace-nowrap">{{ _('AI Helper') }}</a>
+        <a href="#section-analytics" class="px-3 py-1.5 text-xs font-medium rounded-full bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark whitespace-nowrap">{{ _('Analytics') }}</a>
     </nav>
 </div>
 
@@ -52,17 +52,17 @@
         <div class="space-y-8">
             <!-- General Settings -->
             <div id="section-general" class="border-b border-border-light dark:border-border-dark pb-6">
-                <h2 class="text-lg font-semibold mb-4">General</h2>
+                <h2 class="text-lg font-semibold mb-4">{{ _('General') }}</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <label for="timezone" class="form-label">Timezone</label>
+                        <label for="timezone" class="form-label">{{ _('Timezone') }}</label>
                         <select name="timezone" id="timezone" class="form-input" required>
                             {% for tz in timezones %}
                             <option value="{{ tz }}" {% if settings.timezone == tz %}selected{% endif %}>{{ tz }}</option>
                             {% endfor %}
                         </select>
                         <p class="mt-1 text-xs text-text-muted-light dark:text-text-muted-dark">
-                            This becomes the default timezone for users who choose “System Default”.
+                            {{ _('This becomes the default timezone for users who choose “System Default”.') }}
                         </p>
                     </div>
                     <div>
@@ -73,11 +73,11 @@
                         </p>
                     </div>
                     <div>
-                        <label for="currency" class="form-label">Currency</label>
+                        <label for="currency" class="form-label">{{ _('Currency') }}</label>
                         <input type="text" name="currency" id="currency" value="{{ settings.currency }}" required class="form-input">
                     </div>
                     <div>
-                        <label for="date_format" class="form-label">Date Format</label>
+                        <label for="date_format" class="form-label">{{ _('Date Format') }}</label>
                         <select name="date_format" id="date_format" class="form-input">
                             <option value="YYYY-MM-DD" {% if settings.date_format == 'YYYY-MM-DD' %}selected{% endif %}>YYYY-MM-DD (2026-02-06)</option>
                             <option value="MM/DD/YYYY" {% if settings.date_format == 'MM/DD/YYYY' %}selected{% endif %}>MM/DD/YYYY (02/06/2026)</option>
@@ -85,17 +85,17 @@
                             <option value="DD.MM.YYYY" {% if settings.date_format == 'DD.MM.YYYY' %}selected{% endif %}>DD.MM.YYYY (06.02.2026)</option>
                         </select>
                         <p class="mt-1 text-xs text-text-muted-light dark:text-text-muted-dark">
-                            System-wide default date format. Users can override this in their profile.
+                            {{ _('System-wide default date format. Users can override this in their profile.') }}
                         </p>
                     </div>
                     <div>
-                        <label for="time_format" class="form-label">Time Format</label>
+                        <label for="time_format" class="form-label">{{ _('Time Format') }}</label>
                         <select name="time_format" id="time_format" class="form-input">
-                            <option value="24h" {% if settings.time_format == '24h' %}selected{% endif %}>24-hour (14:30)</option>
-                            <option value="12h" {% if settings.time_format == '12h' %}selected{% endif %}>12-hour (2:30 PM)</option>
+                            <option value="24h" {% if settings.time_format == '24h' %}selected{% endif %}>{{ _('24-hour') }} (14:30)</option>
+                            <option value="12h" {% if settings.time_format == '12h' %}selected{% endif %}>{{ _('12-hour') }} (2:30 PM)</option>
                         </select>
                         <p class="mt-1 text-xs text-text-muted-light dark:text-text-muted-dark">
-                            System-wide default time format. Users can override this in their profile.
+                            {{ _('System-wide default time format. Users can override this in their profile.') }}
                         </p>
                     </div>
                 </div>
@@ -103,7 +103,7 @@
 
             <!-- Timer Settings -->
             <div id="section-timers" class="border-b border-border-light dark:border-border-dark pb-6">
-                <h2 class="text-lg font-semibold mb-4">Timers</h2>
+                <h2 class="text-lg font-semibold mb-4">{{ _('Timers') }}</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <label for="rounding_minutes" class="form-label">{{ _('Rounding Interval') }}</label>
@@ -118,7 +118,7 @@
                         <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">{{ _('Default interval for users who have not set a personal rounding interval.') }}</p>
                     </div>
                     <div>
-                        <label for="idle_timeout_minutes" class="form-label">Idle Timeout (Minutes)</label>
+                        <label for="idle_timeout_minutes" class="form-label">{{ _('Idle Timeout (Minutes)') }}</label>
                         <input type="number" name="idle_timeout_minutes" id="idle_timeout_minutes" value="{{ settings.idle_timeout_minutes }}" required class="form-input">
                         <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">{{ _('After this much inactivity, clients ask "Still working?" with a 5-minute window to answer.') }}</p>
                     </div>
@@ -294,10 +294,10 @@
                 <div class="space-y-4">
                     <div class="flex items-center">
                         <input type="checkbox" name="allow_self_register" id="allow_self_register" {% if settings.allow_self_register %}checked{% endif %} class="h-4 w-4 rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                        <label for="allow_self_register" class="ml-2 block text-sm text-gray-900 dark:text-gray-300">Allow self-registration (users can create accounts by entering any username on login page)</label>
+                        <label for="allow_self_register" class="ml-2 block text-sm text-gray-900 dark:text-gray-300">{{ _('Allow self-registration (users can create accounts by entering any username on login page)') }}</label>
                     </div>
                     <p class="text-xs text-text-muted-light dark:text-text-muted-dark ml-6">
-                        Note: Admin users are configured via the ADMIN_USERNAMES environment variable, not in this UI.
+                        {{ _('Note: Admin users are configured via the ADMIN_USERNAMES environment variable, not in this UI.') }}
                     </p>
                 </div>
             </div>
@@ -360,19 +360,19 @@
                         <input type="text" name="company_name" id="company_name" value="{{ settings.company_name }}" class="form-input">
                     </div>
                     <div>
-                        <label for="company_email" class="form-label">Company Email</label>
+                        <label for="company_email" class="form-label">{{ _('Company Email') }}</label>
                         <input type="email" name="company_email" id="company_email" value="{{ settings.company_email }}" class="form-input">
                     </div>
                     <div>
-                        <label for="company_phone" class="form-label">Company Phone</label>
+                        <label for="company_phone" class="form-label">{{ _('Company Phone') }}</label>
                         <input type="text" name="company_phone" id="company_phone" value="{{ settings.company_phone }}" class="form-input">
                     </div>
                     <div>
-                        <label for="company_website" class="form-label">Company Website</label>
+                        <label for="company_website" class="form-label">{{ _('Company Website') }}</label>
                         <input type="text" name="company_website" id="company_website" value="{{ settings.company_website }}" class="form-input">
                     </div>
                     <div class="md:col-span-2">
-                        <label for="company_address" class="form-label">Company Address (free text / fallback)</label>
+                        <label for="company_address" class="form-label">{{ _('Company Address (free text / fallback)') }}</label>
                         <textarea name="company_address" id="company_address" rows="3" class="form-input">{{ settings.company_address }}</textarea>
                     </div>
                     <div>
@@ -393,7 +393,7 @@
                         <p class="mt-1 text-xs text-text-muted-light dark:text-text-muted-dark">{{ _('Required for Factur-X / ZUGFeRD (seller country BT-40).') }}</p>
                     </div>
                     <div>
-                        <label for="company_tax_id" class="form-label">Tax ID (optional)</label>
+                        <label for="company_tax_id" class="form-label">{{ _('Tax ID (optional)') }}</label>
                         <input type="text" name="company_tax_id" id="company_tax_id" value="{{ settings.company_tax_id }}" class="form-input">
                     </div>
                     <div>
@@ -405,7 +405,7 @@
                         <input type="text" name="company_bic" id="company_bic" value="{{ getattr(settings, 'company_bic', '') or '' }}" class="form-input" placeholder="BKAUATWW">
                     </div>
                     <div class="md:col-span-2">
-                        <label for="company_bank_info" class="form-label">Bank Information (optional, free text)</label>
+                        <label for="company_bank_info" class="form-label">{{ _('Bank Information (optional, free text)') }}</label>
                         <textarea name="company_bank_info" id="company_bank_info" rows="3" class="form-input">{{ settings.company_bank_info }}</textarea>
                     </div>
                 </div>
@@ -416,26 +416,26 @@
                 <h2 class="text-lg font-semibold mb-4">{{ _('Invoice Defaults') }}</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <label for="invoice_prefix" class="form-label">Invoice Prefix</label>
+                        <label for="invoice_prefix" class="form-label">{{ _('Invoice Prefix') }}</label>
                         <input type="text" name="invoice_prefix" id="invoice_prefix" value="{{ settings.invoice_prefix }}" class="form-input">
                     </div>
                     <div class="md:col-span-2">
-                        <label for="invoice_number_pattern" class="form-label">Invoice Number Pattern</label>
-                        <input type="text" name="invoice_number_pattern" id="invoice_number_pattern" value="{{ settings.invoice_number_pattern or '{PREFIX}-{YYYY}{MM}{DD}-{SEQ}' }}" class="form-input" placeholder="e.g. RE-{YYYY}-{SEQ}">
+                        <label for="invoice_number_pattern" class="form-label">{{ _('Invoice Number Pattern') }}</label>
+                        <input type="text" name="invoice_number_pattern" id="invoice_number_pattern" value="{{ settings.invoice_number_pattern or '{PREFIX}-{YYYY}{MM}{DD}-{SEQ}' }}" class="form-input" placeholder="{{ _('e.g. RE-{YYYY}-{SEQ}') }}">
                         <p class="mt-1 text-xs text-text-muted-light dark:text-text-muted-dark">
-                            Available tokens: <code>{SEQ}</code>, <code>{YYYY}</code>, <code>{YY}</code>, <code>{MM}</code>, <code>{DD}</code>, <code>{PREFIX}</code>. Leave blank to generate sequence-only numbers.
+                            {{ _('Available tokens:') }} <code>{SEQ}</code>, <code>{YYYY}</code>, <code>{YY}</code>, <code>{MM}</code>, <code>{DD}</code>, <code>{PREFIX}</code>. {{ _('Leave blank to generate sequence-only numbers.') }}
                         </p>
                     </div>
                     <div>
-                        <label for="invoice_start_number" class="form-label">Invoice Start Number</label>
+                        <label for="invoice_start_number" class="form-label">{{ _('Invoice Start Number') }}</label>
                         <input type="number" name="invoice_start_number" id="invoice_start_number" value="{{ settings.invoice_start_number }}" class="form-input">
                     </div>
                     <div class="md:col-span-2">
-                        <label for="invoice_terms" class="form-label">Default Payment Terms</label>
+                        <label for="invoice_terms" class="form-label">{{ _('Default Payment Terms') }}</label>
                         <textarea name="invoice_terms" id="invoice_terms" rows="3" class="form-input">{{ settings.invoice_terms }}</textarea>
                     </div>
                     <div class="md:col-span-2">
-                        <label for="invoice_notes" class="form-label">Default Invoice Notes</label>
+                        <label for="invoice_notes" class="form-label">{{ _('Default Invoice Notes') }}</label>
                         <textarea name="invoice_notes" id="invoice_notes" rows="3" class="form-input">{{ settings.invoice_notes }}</textarea>
                     </div>
                     <div class="md:col-span-2">
@@ -460,7 +460,7 @@
                     </div>
                     <div class="md:col-span-2">
                         <label for="quote_number_pattern" class="form-label">{{ _('Quote Number Pattern') }}</label>
-                        <input type="text" name="quote_number_pattern" id="quote_number_pattern" value="{{ settings.quote_number_pattern or '{PREFIX}-{YYYY}{MM}{DD}-{SEQ}' }}" class="form-input" placeholder="e.g. OFF-{YYYY}-{SEQ}">
+                        <input type="text" name="quote_number_pattern" id="quote_number_pattern" value="{{ settings.quote_number_pattern or '{PREFIX}-{YYYY}{MM}{DD}-{SEQ}' }}" class="form-input" placeholder="{{ _('e.g. OFF-{YYYY}-{SEQ}') }}">
                         <p class="mt-1 text-xs text-text-muted-light dark:text-text-muted-dark">
                             {{ _('Available tokens:') }} <code>{SEQ}</code>, <code>{YYYY}</code>, <code>{YY}</code>, <code>{MM}</code>, <code>{DD}</code>, <code>{PREFIX}</code>. {{ _('Leave blank to generate sequence-only numbers.') }}
                         </p>
@@ -475,32 +475,32 @@
             <!-- Peppol e-Invoicing -->
             <div id="section-peppol" class="border-b border-border-light dark:border-border-dark pb-6">
                 <div class="flex items-center justify-between gap-3 mb-4">
-                    <h2 class="text-lg font-semibold">Peppol e-Invoicing</h2>
+                    <h2 class="text-lg font-semibold">{{ _('Peppol e-Invoicing') }}</h2>
                     <a href="{{ url_for('admin.admin_peppol_setup_wizard') }}" class="px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-sm font-medium transition">
-                        <i class="fas fa-magic mr-2"></i>Setup wizard
+                        <i class="fas fa-magic mr-2"></i>{{ _('Setup wizard') }}
                     </a>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="md:col-span-2">
-                        <label for="peppol_enabled_mode" class="form-label">Enable Peppol sending</label>
+                        <label for="peppol_enabled_mode" class="form-label">{{ _('Enable Peppol sending') }}</label>
                         <select name="peppol_enabled_mode" id="peppol_enabled_mode" class="form-input">
                             <option value="env" {% if settings.peppol_enabled is none %}selected{% endif %}>
-                                Use environment variable (PEPPOL_ENABLED) — currently {% if peppol_env_enabled|default(false) %}enabled{% else %}disabled{% endif %}
+                                {% if peppol_env_enabled|default(false) %}{{ _('Use environment variable (PEPPOL_ENABLED) — currently enabled') }}{% else %}{{ _('Use environment variable (PEPPOL_ENABLED) — currently disabled') }}{% endif %}
                             </option>
-                            <option value="true" {% if settings.peppol_enabled is true %}selected{% endif %}>Enabled</option>
-                            <option value="false" {% if settings.peppol_enabled is false %}selected{% endif %}>Disabled</option>
+                            <option value="true" {% if settings.peppol_enabled is true %}selected{% endif %}>{{ _('Enabled') }}</option>
+                            <option value="false" {% if settings.peppol_enabled is false %}selected{% endif %}>{{ _('Disabled') }}</option>
                         </select>
                         <p class="mt-1 text-xs text-text-muted-light dark:text-text-muted-dark">
-                            If enabled, invoices can be sent via Peppol using your configured access point.
+                            {{ _('If enabled, invoices can be sent via Peppol using your configured access point.') }}
                         </p>
                     </div>
 
                     <div class="md:col-span-2 flex items-start">
                         <input type="checkbox" name="invoices_peppol_compliant" id="invoices_peppol_compliant" {% if settings.invoices_peppol_compliant %}checked{% endif %} class="h-4 w-4 rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 mt-1">
                         <div class="ml-2">
-                            <label for="invoices_peppol_compliant" class="form-label">Make all invoices PEPPOL compliant</label>
+                            <label for="invoices_peppol_compliant" class="form-label">{{ _('Make all invoices PEPPOL compliant') }}</label>
                             <p class="mt-1 text-xs text-text-muted-light dark:text-text-muted-dark">
-                                When enabled, PDFs include PEPPOL/EN 16931 identifiers (seller/buyer endpoint and VAT), and warnings are shown when required data is missing. UBL for Peppol includes mandatory elements.
+                                {{ _('When enabled, PDFs include PEPPOL/EN 16931 identifiers (seller/buyer endpoint and VAT), and warnings are shown when required data is missing. UBL for Peppol includes mandatory elements.') }}
                             </p>
                         </div>
                     </div>
@@ -508,46 +508,46 @@
                     <div class="md:col-span-2 flex items-start">
                         <input type="checkbox" name="invoices_zugferd_pdf" id="invoices_zugferd_pdf" {% if settings.invoices_zugferd_pdf %}checked{% endif %} class="h-4 w-4 rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 mt-1">
                         <div class="ml-2">
-                            <label for="invoices_zugferd_pdf" class="form-label">Embed Factur-X / ZUGFeRD CII XML in invoice PDFs (EN 16931)</label>
+                            <label for="invoices_zugferd_pdf" class="form-label">{{ _('Embed Factur-X / ZUGFeRD CII XML in invoice PDFs (EN 16931)') }}</label>
                             <p class="mt-1 text-xs text-text-muted-light dark:text-text-muted-dark">
-                                When enabled, exported invoice PDFs contain an embedded CII (Cross-Industry Invoice) XML file (<code>factur-x.xml</code>) conforming to the Factur-X / ZUGFeRD EN 16931 profile. The PDF is both human-readable and machine-readable.
+                                {{ _('When enabled, exported invoice PDFs contain an embedded CII (Cross-Industry Invoice) XML file') }} (<code>factur-x.xml</code>) {{ _('conforming to the Factur-X / ZUGFeRD EN 16931 profile.') }} {{ _('The PDF is both human-readable and machine-readable.') }}
                             </p>
                         </div>
                     </div>
                     <div class="md:col-span-2 flex items-start">
                         <input type="checkbox" name="invoices_pdfa3_compliant" id="invoices_pdfa3_compliant" {% if getattr(settings, 'invoices_pdfa3_compliant', false) %}checked{% endif %} class="h-4 w-4 rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 mt-1">
                         <div class="ml-2">
-                            <label for="invoices_pdfa3_compliant" class="form-label">Normalize Factur-X PDFs to PDF/A-3b</label>
+                            <label for="invoices_pdfa3_compliant" class="form-label">{{ _('Normalize Factur-X PDFs to PDF/A-3b') }}</label>
                             <p class="mt-1 text-xs text-text-muted-light dark:text-text-muted-dark">
-                                When enabled with Factur-X embedding, exported PDFs include PDF/A-3b identification, an embedded sRGB ICC profile, and output intent metadata for validator compliance (e.g. veraPDF).
+                                {{ _('When enabled with Factur-X embedding, exported PDFs include PDF/A-3b identification, an embedded sRGB ICC profile, and output intent metadata for validator compliance (e.g. veraPDF).') }}
                             </p>
                         </div>
                     </div>
                     <div class="md:col-span-2 flex items-start">
                         <input type="checkbox" name="invoices_validate_export" id="invoices_validate_export" {% if getattr(settings, 'invoices_validate_export', false) %}checked{% endif %} class="h-4 w-4 rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 mt-1">
                         <div class="ml-2">
-                            <label for="invoices_validate_export" class="form-label">Run veraPDF after export (optional)</label>
+                            <label for="invoices_validate_export" class="form-label">{{ _('Run veraPDF after export (optional)') }}</label>
                             <p class="mt-1 text-xs text-text-muted-light dark:text-text-muted-dark">
-                                When enabled, runs veraPDF on exported ZUGFeRD PDFs and shows a summary. Does not block download. Set path below.
+                                {{ _('When enabled, runs veraPDF on exported ZUGFeRD PDFs and shows a summary. Does not block download. Set path below.') }}
                             </p>
                         </div>
                     </div>
                     <div class="md:col-span-2">
-                        <label for="invoices_verapdf_path" class="form-label">veraPDF executable path</label>
-                        <input type="text" name="invoices_verapdf_path" id="invoices_verapdf_path" value="{{ getattr(settings, 'invoices_verapdf_path', '') or '' }}" class="form-input" placeholder="e.g. /usr/bin/verapdf or C:\verapdf\verapdf.exe">
+                        <label for="invoices_verapdf_path" class="form-label">{{ _('veraPDF executable path') }}</label>
+                        <input type="text" name="invoices_verapdf_path" id="invoices_verapdf_path" value="{{ getattr(settings, 'invoices_verapdf_path', '') or '' }}" class="form-input" placeholder="{{ _('e.g. %(unix)s or %(windows)s', unix='/usr/bin/verapdf', windows='C:\\verapdf\\verapdf.exe') }}">
                     </div>
 
                     <div>
                         <label for="invoices_default_vat_category" class="form-label">{{ _('Default VAT category (Factur-X)') }}</label>
                         <select name="invoices_default_vat_category" id="invoices_default_vat_category" class="form-input">
                             {% set vat_cat = getattr(settings, 'invoices_default_vat_category', 'S') or 'S' %}
-                            <option value="S" {% if vat_cat == 'S' %}selected{% endif %}>S — Standard rate</option>
-                            <option value="Z" {% if vat_cat == 'Z' %}selected{% endif %}>Z — Zero rated</option>
-                            <option value="E" {% if vat_cat == 'E' %}selected{% endif %}>E — Exempt</option>
-                            <option value="AE" {% if vat_cat == 'AE' %}selected{% endif %}>AE — Reverse charge</option>
-                            <option value="K" {% if vat_cat == 'K' %}selected{% endif %}>K — Intra-Community</option>
-                            <option value="G" {% if vat_cat == 'G' %}selected{% endif %}>G — Export outside EU</option>
-                            <option value="O" {% if vat_cat == 'O' %}selected{% endif %}>O — Not subject to VAT</option>
+                            <option value="S" {% if vat_cat == 'S' %}selected{% endif %}>S — {{ _('Standard rate') }}</option>
+                            <option value="Z" {% if vat_cat == 'Z' %}selected{% endif %}>Z — {{ _('Zero rated') }}</option>
+                            <option value="E" {% if vat_cat == 'E' %}selected{% endif %}>E — {{ _('Exempt') }}</option>
+                            <option value="AE" {% if vat_cat == 'AE' %}selected{% endif %}>AE — {{ _('Reverse charge') }}</option>
+                            <option value="K" {% if vat_cat == 'K' %}selected{% endif %}>K — {{ _('Intra-Community') }}</option>
+                            <option value="G" {% if vat_cat == 'G' %}selected{% endif %}>G — {{ _('Export outside EU') }}</option>
+                            <option value="O" {% if vat_cat == 'O' %}selected{% endif %}>O — {{ _('Not subject to VAT') }}</option>
                         </select>
                     </div>
                     <div>
@@ -556,7 +556,7 @@
                             <option value="">{{ _('— Select preset —') }}</option>
                             <option value="at_kleinunternehmer">AT Kleinunternehmer §6 Abs. 1 Z 27 UStG</option>
                             <option value="de_kleinunternehmer">DE Kleinunternehmer §19 UStG</option>
-                            <option value="reverse_charge">Reverse charge (VATEX-EU-AE)</option>
+                            <option value="reverse_charge">{{ _('Reverse charge (VATEX-EU-AE)') }}</option>
                         </select>
                     </div>
                     <div class="md:col-span-2">
@@ -569,58 +569,58 @@
                     </div>
 
                     <div>
-                        <label for="peppol_sender_endpoint_id" class="form-label">Sender Endpoint ID</label>
-                        <input type="text" name="peppol_sender_endpoint_id" id="peppol_sender_endpoint_id" value="{{ settings.peppol_sender_endpoint_id or '' }}" class="form-input" placeholder="e.g. 9915:BE0123456789">
+                        <label for="peppol_sender_endpoint_id" class="form-label">{{ _('Sender Endpoint ID') }}</label>
+                        <input type="text" name="peppol_sender_endpoint_id" id="peppol_sender_endpoint_id" value="{{ settings.peppol_sender_endpoint_id or '' }}" class="form-input" placeholder="{{ _('e.g. 9915:BE0123456789') }}">
                     </div>
                     <div>
-                        <label for="peppol_sender_scheme_id" class="form-label">Sender Scheme ID</label>
-                        <input type="text" name="peppol_sender_scheme_id" id="peppol_sender_scheme_id" value="{{ settings.peppol_sender_scheme_id or '' }}" class="form-input" placeholder="e.g. 9915">
+                        <label for="peppol_sender_scheme_id" class="form-label">{{ _('Sender Scheme ID') }}</label>
+                        <input type="text" name="peppol_sender_scheme_id" id="peppol_sender_scheme_id" value="{{ settings.peppol_sender_scheme_id or '' }}" class="form-input" placeholder="{{ _('e.g. 9915') }}">
                     </div>
                     <div>
-                        <label for="peppol_sender_country" class="form-label">Sender Country (optional)</label>
-                        <input type="text" name="peppol_sender_country" id="peppol_sender_country" value="{{ settings.peppol_sender_country or '' }}" class="form-input" placeholder="e.g. BE">
+                        <label for="peppol_sender_country" class="form-label">{{ _('Sender Country (optional)') }}</label>
+                        <input type="text" name="peppol_sender_country" id="peppol_sender_country" value="{{ settings.peppol_sender_country or '' }}" class="form-input" placeholder="{{ _('e.g. BE') }}">
                     </div>
                     <div>
-                        <label for="peppol_provider" class="form-label">Provider label</label>
+                        <label for="peppol_provider" class="form-label">{{ _('Provider label') }}</label>
                         <input type="text" name="peppol_provider" id="peppol_provider" value="{{ settings.peppol_provider or 'generic' }}" class="form-input">
                     </div>
                     <div class="md:col-span-2">
-                        <label for="peppol_transport_mode" class="form-label">Transport mode</label>
+                        <label for="peppol_transport_mode" class="form-label">{{ _('Transport mode') }}</label>
                         <select name="peppol_transport_mode" id="peppol_transport_mode" class="form-input">
-                            <option value="generic" {% if (getattr(settings, 'peppol_transport_mode', '') or 'generic') == 'generic' %}selected{% endif %}>Generic (HTTP JSON access point)</option>
-                            <option value="native" {% if getattr(settings, 'peppol_transport_mode', '') == 'native' %}selected{% endif %}>Native (SML/SMP + AS4) — experimental</option>
+                            <option value="generic" {% if (getattr(settings, 'peppol_transport_mode', '') or 'generic') == 'generic' %}selected{% endif %}>{{ _('Generic (HTTP JSON access point)') }}</option>
+                            <option value="native" {% if getattr(settings, 'peppol_transport_mode', '') == 'native' %}selected{% endif %}>{{ _('Native (SML/SMP + AS4) — experimental') }}</option>
                         </select>
                         <p class="mt-1 text-xs text-text-muted-light dark:text-text-muted-dark">
-                            Generic: use your access point adapter URL. Native (experimental): discover recipient via SML/SMP and send AS4 — lacks WS-Security and receipt handling; use a Peppol AP provider for production.
+                            {{ _('Generic: use your access point adapter URL. Native (experimental): discover recipient via SML/SMP and send AS4 — lacks WS-Security and receipt handling; use a Peppol AP provider for production.') }}
                         </p>
                     </div>
                     <div id="peppol_native_fields" class="md:col-span-2 space-y-4 {% if getattr(settings, 'peppol_transport_mode', '') != 'native' %}hidden{% endif %}">
                         <div>
-                            <label for="peppol_sml_url" class="form-label">SML URL (required for native)</label>
+                            <label for="peppol_sml_url" class="form-label">{{ _('SML URL (required for native)') }}</label>
                             <input type="text" name="peppol_sml_url" id="peppol_sml_url" value="{{ getattr(settings, 'peppol_sml_url', '') or '' }}" class="form-input" placeholder="https://edelivery.tech.ec.europa.eu/edelivery-sml">
                         </div>
                         <div>
-                            <label for="peppol_native_cert_path" class="form-label">Client certificate path (optional)</label>
+                            <label for="peppol_native_cert_path" class="form-label">{{ _('Client certificate path (optional)') }}</label>
                             <input type="text" name="peppol_native_cert_path" id="peppol_native_cert_path" value="{{ getattr(settings, 'peppol_native_cert_path', '') or '' }}" class="form-input" placeholder="/path/to/cert.pem">
                         </div>
                         <div>
-                            <label for="peppol_native_key_path" class="form-label">Client key path (optional)</label>
+                            <label for="peppol_native_key_path" class="form-label">{{ _('Client key path (optional)') }}</label>
                             <input type="text" name="peppol_native_key_path" id="peppol_native_key_path" value="{{ getattr(settings, 'peppol_native_key_path', '') or '' }}" class="form-input" placeholder="/path/to/key.pem">
                         </div>
                     </div>
                     <div class="md:col-span-2 peppol-generic-url">
-                        <label for="peppol_access_point_url" class="form-label">Access Point URL (generic mode)</label>
+                        <label for="peppol_access_point_url" class="form-label">{{ _('Access Point URL (generic mode)') }}</label>
                         <input type="text" name="peppol_access_point_url" id="peppol_access_point_url" value="{{ settings.peppol_access_point_url or '' }}" class="form-input" placeholder="https://your-access-point-adapter.example.com/send">
                     </div>
                     <div>
-                        <label for="peppol_access_point_timeout" class="form-label">Access Point Timeout (seconds)</label>
+                        <label for="peppol_access_point_timeout" class="form-label">{{ _('Access Point Timeout (seconds)') }}</label>
                         <input type="number" name="peppol_access_point_timeout" id="peppol_access_point_timeout" value="{{ settings.peppol_access_point_timeout or 30 }}" class="form-input" min="1" max="300">
                     </div>
                     <div>
-                        <label for="peppol_access_point_token" class="form-label">Access Point Token (optional)</label>
-                        <input type="password" name="peppol_access_point_token" id="peppol_access_point_token" value="" class="form-input" placeholder="{% if settings.peppol_access_point_token %}Token is set (enter to replace){% else %}Enter token (optional){% endif %}">
+                        <label for="peppol_access_point_token" class="form-label">{{ _('Access Point Token (optional)') }}</label>
+                        <input type="password" name="peppol_access_point_token" id="peppol_access_point_token" value="" class="form-input" placeholder="{% if settings.peppol_access_point_token %}{{ _('Token is set (enter to replace)') }}{% else %}{{ _('Enter token (optional)') }}{% endif %}">
                         <p class="mt-1 text-xs text-text-muted-light dark:text-text-muted-dark">
-                            For security, the token is not shown. Leave blank to keep the current token.
+                            {{ _('For security, the token is not shown. Leave blank to keep the current token.') }}
                         </p>
                     </div>
                 </div>
@@ -631,11 +631,11 @@
                 <h2 class="text-lg font-semibold mb-4">{{ _('Backup Settings') }}</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <label for="backup_retention_days" class="form-label">Backup Retention (Days)</label>
+                        <label for="backup_retention_days" class="form-label">{{ _('Backup Retention (Days)') }}</label>
                         <input type="number" name="backup_retention_days" id="backup_retention_days" value="{{ settings.backup_retention_days }}" class="form-input">
                     </div>
                     <div>
-                        <label for="backup_time" class="form-label">Backup Time (HH:MM)</label>
+                        <label for="backup_time" class="form-label">{{ _('Backup Time (HH:MM)') }}</label>
                         <input type="text" name="backup_time" id="backup_time" value="{{ settings.backup_time }}" placeholder="02:00" class="form-input">
                     </div>
                 </div>
@@ -695,11 +695,11 @@
                 <h2 class="text-lg font-semibold mb-4">{{ _('Export Settings') }}</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <label for="export_delimiter" class="form-label">CSV Export Delimiter</label>
+                        <label for="export_delimiter" class="form-label">{{ _('CSV Export Delimiter') }}</label>
                         <select name="export_delimiter" id="export_delimiter" class="form-input">
-                            <option value="," {% if settings.export_delimiter == ',' %}selected{% endif %}>Comma (,)</option>
-                            <option value=";" {% if settings.export_delimiter == ';' %}selected{% endif %}>Semicolon (;)</option>
-                            <option value="\t" {% if settings.export_delimiter == '\t' %}selected{% endif %}>Tab</option>
+                            <option value="," {% if settings.export_delimiter == ',' %}selected{% endif %}>{{ _('Comma') }} (,)</option>
+                            <option value=";" {% if settings.export_delimiter == ';' %}selected{% endif %}>{{ _('Semicolon') }} (;)</option>
+                            <option value="\t" {% if settings.export_delimiter == '\t' %}selected{% endif %}>{{ _('Tab') }}</option>
                         </select>
                     </div>
                 </div>
@@ -764,7 +764,7 @@
                     <div>
                         <label for="ai_enabled_mode" class="form-label">{{ _('Availability') }}</label>
                         <select name="ai_enabled_mode" id="ai_enabled_mode" class="form-input">
-                            <option value="env" {% if settings.ai_enabled is none %}selected{% endif %}>{{ _('Use environment default') }} ({{ _('currently') }} {{ 'on' if ai_config.enabled else 'off' }})</option>
+                            <option value="env" {% if settings.ai_enabled is none %}selected{% endif %}>{{ _('Use environment default') }} ({{ _('currently') }} {{ _('on') if ai_config.enabled else _('off') }})</option>
                             <option value="true" {% if settings.ai_enabled is sameas true %}selected{% endif %}>{{ _('Enabled') }}</option>
                             <option value="false" {% if settings.ai_enabled is sameas false %}selected{% endif %}>{{ _('Disabled') }}</option>
                         </select>
@@ -772,7 +772,7 @@
                     <div>
                         <label for="ai_provider" class="form-label">{{ _('Provider') }}</label>
                         <select name="ai_provider" id="ai_provider" class="form-input">
-                            <option value="ollama" {% if ai_config.provider == 'ollama' %}selected{% endif %}>Ollama (local)</option>
+                            <option value="ollama" {% if ai_config.provider == 'ollama' %}selected{% endif %}>{{ _('Ollama (local)') }}</option>
                             <option value="openai" {% if ai_config.provider == 'openai' %}selected{% endif %}>OpenAI</option>
                             <option value="anthropic" {% if ai_config.provider == 'anthropic' %}selected{% endif %}>Anthropic</option>
                             <option value="gemini" {% if ai_config.provider == 'gemini' %}selected{% endif %}>Google Gemini</option>
@@ -853,21 +853,21 @@
                         {{ _('When enabled, clients with a custom domain set will be resolved by Host header. See nginx/CUSTOM_DOMAINS.md for TLS setup.') }}
                     </p>
                     <p class="text-sm text-text-muted-light dark:text-text-muted-dark">
-                        <strong>Minimal install telemetry (always on):</strong> Version, platform, and last-seen heartbeat so we can understand install footprint and distribution. No personal data.
+                        <strong>{{ _('Minimal install telemetry (always on):') }}</strong> {{ _('Version, platform, and last-seen heartbeat so we can understand install footprint and distribution. No personal data.') }}
                     </p>
                     <div class="flex items-center">
                         <input type="checkbox" name="allow_analytics" id="allow_analytics" {% if settings.allow_analytics %}checked{% endif %} class="h-4 w-4 rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                        <label for="allow_analytics" class="ml-2 block text-sm text-gray-900 dark:text-gray-300">Enable optional detailed analytics</label>
+                        <label for="allow_analytics" class="ml-2 block text-sm text-gray-900 dark:text-gray-300">{{ _('Enable optional detailed analytics') }}</label>
                     </div>
                     <div class="ml-6 text-xs text-text-muted-light dark:text-text-muted-dark space-y-1">
-                        <p>When enabled, we also collect:</p>
+                        <p>{{ _('When enabled, we also collect:') }}</p>
                         <ul class="list-disc ml-4 space-y-0.5">
-                            <li>Feature usage (e.g. timer started, project created)</li>
-                            <li>Screens and pages visited</li>
-                            <li>Errors linked to usage context (no PII)</li>
+                            <li>{{ _('Feature usage (e.g. timer started, project created)') }}</li>
+                            <li>{{ _('Screens and pages visited') }}</li>
+                            <li>{{ _('Errors linked to usage context (no PII)') }}</li>
                         </ul>
-                        <p class="mt-2"><strong>Privacy:</strong> No email, usernames, time entry content, or client data. You can turn this off anytime.</p>
-                        <p>Same setting as the telemetry preference during initial setup.</p>
+                        <p class="mt-2"><strong>{{ _('Privacy:') }}</strong> {{ _('No email, usernames, time entry content, or client data. You can turn this off anytime.') }}</p>
+                        <p>{{ _('Same setting as the telemetry preference during initial setup.') }}</p>
                     </div>
                 </div>
             </div>
@@ -888,8 +888,8 @@
     <div class="mb-6 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border-2 border-green-500 dark:border-green-600">
         <div class="flex items-start justify-between mb-3">
             <div>
-                <h3 class="text-sm font-semibold text-green-700 dark:text-green-400 mb-1">✓ Current Company Logo</h3>
-                <p class="text-xs text-gray-600 dark:text-gray-400">This logo appears on invoices, PDFs, and other documents</p>
+                <h3 class="text-sm font-semibold text-green-700 dark:text-green-400 mb-1">{{ _('✓ Current Company Logo') }}</h3>
+                <p class="text-xs text-gray-600 dark:text-gray-400">{{ _('This logo appears on invoices, PDFs, and other documents') }}</p>
             </div>
             <form id="removeLogoForm" method="POST" action="{{ url_for('admin.remove_logo') }}" class="inline">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
@@ -897,12 +897,12 @@
                     <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                     </svg>
-                    Remove Logo
+                    {{ _('Remove Logo') }}
                 </button>
             </form>
         </div>
         <div class="flex items-center justify-center bg-white dark:bg-gray-900 p-6 rounded border border-gray-200 dark:border-gray-700">
-            <img src="{{ settings.get_logo_url() }}?v={{ range(1, 10000) | random }}" alt="{{ _('Company Logo') }}" class="max-h-32 max-w-full object-contain" onerror="this.onerror=null; this.parentElement.innerHTML='<p class=\'text-red-600 text-sm\'>Error loading logo</p>';">
+            <img src="{{ settings.get_logo_url() }}?v={{ range(1, 10000) | random }}" alt="{{ _('Company Logo') }}" class="max-h-32 max-w-full object-contain" onerror="this.onerror=null; this.parentElement.innerHTML='<p class=\'text-red-600 text-sm\'>{{ _('Error loading logo') }}</p>';">
         </div>
     </div>
     {% else %}
@@ -911,8 +911,8 @@
             <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
             </svg>
-            <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">No company logo uploaded yet</p>
-            <p class="text-xs text-gray-500 dark:text-gray-500 mt-1">Upload a logo to appear on invoices, PDFs, and documents</p>
+            <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">{{ _('No company logo uploaded yet') }}</p>
+            <p class="text-xs text-gray-500 dark:text-gray-500 mt-1">{{ _('Upload a logo to appear on invoices, PDFs, and documents') }}</p>
         </div>
     </div>
     {% endif %}
@@ -931,7 +931,7 @@
                 
                 <!-- Preview of selected file before upload -->
                 <div id="logoPreview" class="hidden bg-white dark:bg-gray-900 p-4 rounded border border-gray-200 dark:border-gray-700">
-                    <p class="text-xs text-gray-600 dark:text-gray-400 mb-2">Preview:</p>
+                    <p class="text-xs text-gray-600 dark:text-gray-400 mb-2">{{ _('Preview:') }}</p>
                     <div class="flex items-center justify-center">
                         <img id="logoPreviewImage" src="" alt="{{ _('Logo Preview') }}" class="max-h-24 max-w-full object-contain">
                     </div>
@@ -942,19 +942,19 @@
                         <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
                         </svg>
-                        Upload Logo
+                        {{ _('Upload Logo') }}
                     </button>
                     <button type="button" onclick="document.getElementById('logoFileInput').value = ''; document.getElementById('logoPreview').classList.add('hidden');" 
                             class="text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 px-4 py-2 text-sm">
-                        Clear
+                        {{ _('Clear') }}
                     </button>
                 </div>
             </div>
         </form>
         <div class="mt-3 text-xs text-gray-600 dark:text-gray-400 space-y-1">
-            <p><strong>Allowed formats:</strong> PNG, JPG, GIF, SVG, WEBP (max 5MB)</p>
-            <p><strong>Recommended:</strong> Square or landscape logo, at least 200x200 pixels</p>
-            <p><strong>Where it appears:</strong> PDF invoices, email templates, and exported documents</p>
+            <p><strong>{{ _('Allowed formats:') }}</strong> {{ _('PNG, JPG, GIF, SVG, WEBP (max 5MB)') }}</p>
+            <p><strong>{{ _('Recommended:') }}</strong> {{ _('Square or landscape logo, at least 200x200 pixels') }}</p>
+            <p><strong>{{ _('Where it appears:') }}</strong> {{ _('PDF invoices, email templates, and exported documents') }}</p>
         </div>
     </div>
 </div>

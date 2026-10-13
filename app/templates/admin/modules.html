@@ -16,15 +16,15 @@
 
 {% block content %}
 {% set breadcrumbs = [
-    {'text': 'Admin', 'url': url_for('admin.admin_dashboard')},
-    {'text': 'System Settings'},
-    {'text': 'Module Management'}
+    {'text': _('Admin'), 'url': url_for('admin.admin_dashboard')},
+    {'text': _('System Settings')},
+    {'text': _('Module Management')}
 ] %}
 
 {{ page_header(
     icon_class='fas fa-puzzle-piece',
-    title_text='Module Management',
-    subtitle_text='Enable or disable modules system-wide. Disabled modules will not appear in the navigation for non-admin users.',
+    title_text=_('Module Management'),
+    subtitle_text=_('Enable or disable modules system-wide. Disabled modules will not appear in the navigation for non-admin users.'),
     breadcrumbs=breadcrumbs,
     actions_html=None
 ) }}
@@ -625,7 +625,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     const moduleName = moduleNames[moduleId] || moduleId;
                     const depNames = enabledDependents.map(depId => moduleNames[depId] || depId).join(', ');
                     
-                    errors.push(`Cannot disable "${moduleName}" because these modules depend on it: ${depNames}`);
+                    errors.push({{ _('Cannot disable "%(module)s" because these modules depend on it: %(dependencies)s')|tojson }}.replace('%(module)s', moduleName).replace('%(dependencies)s', depNames));
                 }
             }
             

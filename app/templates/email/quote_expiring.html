@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quote Expiring Soon</title>
+    <title>{{ _('Quote Expiring Soon') }}</title>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
@@ -74,20 +74,20 @@
             <h1>⚠ {{ _('Quote Expiring Soon') }}</h1>
         </div>
         <div class="content">
-            <p>Hello {{ user.display_name or user.username }},</p>
-            <p>Quote <strong>{{ quote.quote_number }}</strong> will expire in <strong>{{ days_remaining }} day{% if days_remaining != 1 %}s{% endif %}</strong>.</p>
+            <p>{{ _('Hello %(name)s,', name=user.display_name or user.username) }}</p>
+            <p>{{ _('Quote %(number)s will expire in %(days)s.', number='<strong>%s</strong>'|format(quote.quote_number|e), days='<strong>%s</strong>'|format(ngettext('%(num)s day', '%(num)s days', days_remaining)))|safe }}</p>
             
             <div class="warning">
-                <strong>Action Required:</strong> You may want to follow up with the client before the quote expires.
+                <strong>{{ _('Action Required:') }}</strong> {{ _('You may want to follow up with the client before the quote expires.') }}
             </div>
             
             <div class="quote-details">
-                <p><strong>Quote Number:</strong> {{ quote.quote_number }}</p>
-                <p><strong>Title:</strong> {{ quote.title }}</p>
-                <p><strong>Client:</strong> {{ quote.client.name if quote.client else 'N/A' }}</p>
-                <p><strong>Total Amount:</strong> {{ quote.currency_code }} {{ "%.2f"|format(quote.total_amount) }}</p>
-                <p><strong>Valid Until:</strong> {{ quote.valid_until|format_date if quote.valid_until else 'N/A' }}</p>
-                <p><strong>Days Remaining:</strong> {{ days_remaining }}</p>
+                <p><strong>{{ _('Quote Number:') }}</strong> {{ quote.quote_number }}</p>
+                <p><strong>{{ _('Title:') }}</strong> {{ quote.title }}</p>
+                <p><strong>{{ _('Client:') }}</strong> {{ quote.client.name if quote.client else _('N/A') }}</p>
+                <p><strong>{{ _('Total Amount:') }}</strong> {{ quote.currency_code }} {{ "%.2f"|format(quote.total_amount) }}</p>
+                <p><strong>{{ _('Valid Until:') }}</strong> {{ quote.valid_until|format_date if quote.valid_until else _('N/A') }}</p>
+                <p><strong>{{ _('Days Remaining:') }}</strong> {{ days_remaining }}</p>
             </div>
             
             {% if quote_url %}
@@ -95,7 +95,7 @@
             {% endif %}
         </div>
         <div class="footer">
-            <p>TimeTracker - Time Tracking & Project Management</p>
+            <p>{{ _('TimeTracker - Time Tracking & Project Management') }}</p>
         </div>
     </div>
 </body>

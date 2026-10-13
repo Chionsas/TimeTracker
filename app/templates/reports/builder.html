@@ -5,14 +5,14 @@
 
 {% block content %}
 {% set breadcrumbs = [
-    {'text': 'Reports', 'url': url_for('reports.reports')},
-    {'text': 'Report Builder' if not saved_view else saved_view.name}
+    {'text': _('Reports'), 'url': url_for('reports.reports')},
+    {'text': _('Report Builder') if not saved_view else saved_view.name}
 ] %}
 
 {{ page_header(
     icon_class='fas fa-chart-bar',
-    title_text=saved_view.name if saved_view else 'Custom Report Builder',
-    subtitle_text='Edit report' if saved_view else 'Create custom reports with drag-and-drop',
+    title_text=saved_view.name if saved_view else _('Custom Report Builder'),
+    subtitle_text=_('Edit report') if saved_view else _('Create custom reports with drag-and-drop'),
     breadcrumbs=breadcrumbs,
     actions_html='<a href="' + url_for("custom_reports.list_saved_views") + '" class="bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-4 py-2 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"><i class="fas fa-list mr-2"></i>' + _('Saved Views') + '</a>'
 ) }}

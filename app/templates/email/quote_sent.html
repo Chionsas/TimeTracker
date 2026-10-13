@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quote Sent</title>
+    <title>{{ _('Quote Sent') }}</title>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
@@ -67,15 +67,15 @@
             <h1>{{ _('Quote Sent') }}</h1>
         </div>
         <div class="content">
-            <p>Hello {{ user.display_name or user.username }},</p>
-            <p>Quote <strong>{{ quote.quote_number }}</strong> has been sent to the client.</p>
+            <p>{{ _('Hello %(name)s,', name=user.display_name or user.username) }}</p>
+            <p>{{ _('Quote %(number)s has been sent to the client.', number='<strong>%s</strong>'|format(quote.quote_number|e))|safe }}</p>
             
             <div class="quote-details">
-                <p><strong>Quote Number:</strong> {{ quote.quote_number }}</p>
-                <p><strong>Title:</strong> {{ quote.title }}</p>
-                <p><strong>Client:</strong> {{ quote.client.name if quote.client else 'N/A' }}</p>
-                <p><strong>Total Amount:</strong> {{ quote.currency_code }} {{ "%.2f"|format(quote.total_amount) }}</p>
-                <p><strong>Sent At:</strong> {{ quote.sent_at|user_datetime if quote.sent_at else 'N/A' }}</p>
+                <p><strong>{{ _('Quote Number:') }}</strong> {{ quote.quote_number }}</p>
+                <p><strong>{{ _('Title:') }}</strong> {{ quote.title }}</p>
+                <p><strong>{{ _('Client:') }}</strong> {{ quote.client.name if quote.client else _('N/A') }}</p>
+                <p><strong>{{ _('Total Amount:') }}</strong> {{ quote.currency_code }} {{ "%.2f"|format(quote.total_amount) }}</p>
+                <p><strong>{{ _('Sent At:') }}</strong> {{ quote.sent_at|user_datetime if quote.sent_at else _('N/A') }}</p>
             </div>
             
             {% if quote_url %}
@@ -83,7 +83,7 @@
             {% endif %}
         </div>
         <div class="footer">
-            <p>TimeTracker - Time Tracking & Project Management</p>
+            <p>{{ _('TimeTracker - Time Tracking & Project Management') }}</p>
         </div>
     </div>
 </body>

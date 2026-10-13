@@ -1,17 +1,17 @@
 {% extends "base.html" %}
 {% from "components/ui.html" import page_header, breadcrumb_nav, button, filter_badge, empty_state %}
 
-{% block title %}Saved Filters - {{ config.APP_NAME }}{% endblock %}
+{% block title %}{{ _('Saved Filters') }} - {{ config.APP_NAME }}{% endblock %}
 
 {% block content %}
 {% set breadcrumbs = [
-    {'text': 'Saved Filters'}
+    {'text': _('Saved Filters')}
 ] %}
 
 {{ page_header(
     icon_class='fas fa-filter',
-    title_text='Saved Filters',
-    subtitle_text='Quick access to your commonly used filters',
+    title_text=_('Saved Filters'),
+    subtitle_text=_('Quick access to your commonly used filters'),
     breadcrumbs=breadcrumbs,
     actions_html=None
 ) }}
@@ -22,7 +22,7 @@
     <div class="bg-card-light dark:bg-card-dark rounded-lg shadow-md p-6 mb-6">
         <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-4 capitalize">
             <i class="fas fa-filter mr-2 text-blue-600"></i>
-            {{ scope }} Filters
+            {{ _('%(scope)s Filters', scope=scope) }}
         </h2>
         
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -35,7 +35,7 @@
                             {{ filter.name }}
                         </h3>
                         <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                            Created {{ filter.created_at|timeago }}
+                            {{ _('Created %(time)s', time=filter.created_at|timeago) }}
                         </p>
                     </div>
                     
@@ -53,7 +53,7 @@
                             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                             <button type="submit" 
                                     class="text-gray-500 hover:text-red-600 dark:text-gray-400"
-                                    title="Delete">
+                                    title="{{ _('Delete') }}">
                                 <i class="fas fa-trash"></i>
                             </button>
                         </form>
@@ -71,7 +71,7 @@
                         </div>
                         {% endfor %}
                         {% else %}
-                        <span class="text-gray-500 dark:text-gray-400">No parameters</span>
+                        <span class="text-gray-500 dark:text-gray-400">{{ _('No parameters') }}</span>
                         {% endif %}
                     </div>
                 </div>
@@ -80,7 +80,7 @@
                 {% if filter.is_shared %}
                 <div class="mt-2">
                     <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
-                        <i class="fas fa-users mr-1"></i> Shared
+                        <i class="fas fa-users mr-1"></i> {{ _('Shared') }}
                     </span>
                 </div>
                 {% endif %}
@@ -135,7 +135,7 @@ function applyFilter(filterId, scope) {
         })
         .catch(error => {
             console.error('Error loading filter:', error);
-            alert('Failed to load filter. Please try again.');
+            alert({{ _('Failed to load filter. Please try again.')|tojson }});
         });
 }
 </script>

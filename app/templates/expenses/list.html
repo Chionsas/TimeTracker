@@ -3,19 +3,19 @@
 
 {% block content %}
 {% set breadcrumbs = [
-    {'text': 'Expenses'}
+    {'text': _('Expenses')}
 ] %}
 
 {{ page_header(
     icon_class='fas fa-receipt',
-    title_text='Expenses',
-    subtitle_text='Track and manage business expenses',
+    title_text=_('Expenses'),
+    subtitle_text=_('Track and manage business expenses'),
     breadcrumbs=breadcrumbs,
     actions_html=''
         + '<div class="flex gap-2">'
-        +   '<a href="' + url_for("expenses.create_expense") + '" class="btn btn-primary"><i class="fas fa-plus mr-2"></i>New Expense</a>'
-        +   '<a href="' + url_for("mileage.create_mileage") + '" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"><i class="fas fa-car mr-2"></i>New Mileage</a>'
-        +   '<a href="' + url_for("per_diem.create_per_diem") + '" class="bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 transition-colors"><i class="fas fa-money-bill-alt mr-2"></i>New Per Diem</a>'
+        +   '<a href="' + url_for("expenses.create_expense") + '" class="btn btn-primary"><i class="fas fa-plus mr-2"></i>' + _('New Expense') + '</a>'
+        +   '<a href="' + url_for("mileage.create_mileage") + '" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"><i class="fas fa-car mr-2"></i>' + _('New Mileage') + '</a>'
+        +   '<a href="' + url_for("per_diem.create_per_diem") + '" class="bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 transition-colors"><i class="fas fa-money-bill-alt mr-2"></i>' + _('New Per Diem') + '</a>'
         +   ('<a href="' + url_for("expenses.expense_approvals") + '" class="bg-amber-600 text-white px-4 py-2 rounded-lg hover:bg-amber-700 transition-colors"><i class="fas fa-clipboard-check mr-2"></i>' + _('Approvals') + '</a>' if current_user.is_admin else '')
         + '</div>'
 ) }}
@@ -25,7 +25,7 @@
     <div class="bg-card-light dark:bg-card-dark p-6 rounded-xl border border-border-light dark:border-border-dark shadow-sm">
         <div class="flex items-center justify-between">
             <div>
-                <p class="text-sm text-gray-600 dark:text-gray-400">Total Expenses</p>
+                <p class="text-sm text-gray-600 dark:text-gray-400">{{ _('Total Expenses') }}</p>
                 <p class="text-2xl font-bold">{{ total_count }}</p>
             </div>
             <div class="text-primary text-3xl">
@@ -37,7 +37,7 @@
     <div class="bg-card-light dark:bg-card-dark p-6 rounded-xl border border-border-light dark:border-border-dark shadow-sm">
         <div class="flex items-center justify-between">
             <div>
-                <p class="text-sm text-gray-600 dark:text-gray-400">Total Amount</p>
+                <p class="text-sm text-gray-600 dark:text-gray-400">{{ _('Total Amount') }}</p>
                 <p class="text-2xl font-bold">{{ total_amount|format_currency(currency) }}</p>
             </div>
             <div class="text-green-500 text-3xl">
@@ -50,7 +50,7 @@
         <div class="flex items-center justify-between">
             <div>
                 <a href="{{ url_for('expenses.dashboard') }}" class="text-sm text-primary hover:underline">
-                    View Dashboard <i class="fas fa-arrow-right ml-1"></i>
+                    {{ _('View Dashboard') }} <i class="fas fa-arrow-right ml-1"></i>
                 </a>
             </div>
             <div class="text-blue-500 text-3xl">
@@ -71,27 +71,27 @@
     <div id="filterBody">
     <form method="GET" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4" data-filter-form>
         <div>
-            <label for="expenses-filter-search" class="form-label">Search</label>
+            <label for="expenses-filter-search" class="form-label">{{ _('Search') }}</label>
             <input type="text" name="search" id="expenses-filter-search" value="{{ search or '' }}" 
-                   placeholder="Title, vendor, notes..." 
+                   placeholder="{{ _('Title, vendor, notes...') }}" 
                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-primary focus:border-primary dark:bg-gray-700">
         </div>
         
         <div>
-            <label for="status" class="form-label">Status</label>
+            <label for="status" class="form-label">{{ _('Status') }}</label>
             <select name="status" id="status" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-primary focus:border-primary dark:bg-gray-700">
-                <option value="">All Statuses</option>
-                <option value="pending" {% if status == 'pending' %}selected{% endif %}>Pending</option>
-                <option value="approved" {% if status == 'approved' %}selected{% endif %}>Approved</option>
-                <option value="rejected" {% if status == 'rejected' %}selected{% endif %}>Rejected</option>
-                <option value="reimbursed" {% if status == 'reimbursed' %}selected{% endif %}>Reimbursed</option>
+                <option value="">{{ _('All Statuses') }}</option>
+                <option value="pending" {% if status == 'pending' %}selected{% endif %}>{{ _('Pending') }}</option>
+                <option value="approved" {% if status == 'approved' %}selected{% endif %}>{{ _('Approved') }}</option>
+                <option value="rejected" {% if status == 'rejected' %}selected{% endif %}>{{ _('Rejected') }}</option>
+                <option value="reimbursed" {% if status == 'reimbursed' %}selected{% endif %}>{{ _('Reimbursed') }}</option>
             </select>
         </div>
         
         <div>
-            <label for="category" class="form-label">Category</label>
+            <label for="category" class="form-label">{{ _('Category') }}</label>
             <select name="category" id="category" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-primary focus:border-primary dark:bg-gray-700">
-                <option value="">All Categories</option>
+                <option value="">{{ _('All Categories') }}</option>
                 {% for cat in categories %}
                 <option value="{{ cat }}" {% if category == cat %}selected{% endif %}>{{ cat|title }}</option>
                 {% endfor %}
@@ -99,9 +99,9 @@
         </div>
         
         <div>
-            <label for="project_id" class="form-label">Project</label>
+            <label for="project_id" class="form-label">{{ _('Project') }}</label>
             <select name="project_id" id="project_id" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-primary focus:border-primary dark:bg-gray-700">
-                <option value="">All Projects</option>
+                <option value="">{{ _('All Projects') }}</option>
                 {% for project in projects %}
                 <option value="{{ project.id }}" {% if project_id == project.id %}selected{% endif %}>{{ project.name }}</option>
                 {% endfor %}
@@ -109,7 +109,7 @@
         </div>
         
         <div>
-            <label for="client_id" class="form-label">Client</label>
+            <label for="client_id" class="form-label">{{ _('Client') }}</label>
             {% set locked_client = get_locked_client() %}
             {% if locked_client %}
                 <input type="hidden" name="client_id" id="client_id" value="{{ locked_client.id }}">
@@ -121,7 +121,7 @@
                        value="{{ single_client.name }}" disabled readonly>
             {% else %}
                 <select name="client_id" id="client_id" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-primary focus:border-primary dark:bg-gray-700">
-                    <option value="">All Clients</option>
+                    <option value="">{{ _('All Clients') }}</option>
                     {% for client in clients %}
                     <option value="{{ client.id }}" {% if client_id == client.id %}selected{% endif %}>{{ client.name }}</option>
                     {% endfor %}
@@ -131,9 +131,9 @@
         
         {% if current_user.is_admin and users %}
         <div>
-            <label for="user_id" class="form-label">User</label>
+            <label for="user_id" class="form-label">{{ _('User') }}</label>
             <select name="user_id" id="user_id" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-primary focus:border-primary dark:bg-gray-700">
-                <option value="">All Users</option>
+                <option value="">{{ _('All Users') }}</option>
                 {% for user in users %}
                 <option value="{{ user.id }}" {% if user_id == user.id %}selected{% endif %}>{{ user.username }}</option>
                 {% endfor %}
@@ -142,29 +142,29 @@
         {% endif %}
         
         <div>
-            <label for="start_date" class="form-label">Start Date</label>
+            <label for="start_date" class="form-label">{{ _('Start Date') }}</label>
             <input type="date" name="start_date" id="start_date" value="{{ start_date or '' }}" 
                    class="form-input user-date-input">
         </div>
         
         <div>
-            <label for="end_date" class="form-label">End Date</label>
+            <label for="end_date" class="form-label">{{ _('End Date') }}</label>
             <input type="date" name="end_date" id="end_date" value="{{ end_date or '' }}" 
                    class="form-input user-date-input">
         </div>
         
         <div>
-            <label for="billable" class="form-label">Billable</label>
+            <label for="billable" class="form-label">{{ _('Billable') }}</label>
             <select name="billable" id="billable" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-primary focus:border-primary dark:bg-gray-700">
-                <option value="">All</option>
-                <option value="true" {% if billable == 'true' %}selected{% endif %}>Billable Only</option>
-                <option value="false" {% if billable == 'false' %}selected{% endif %}>Non-Billable</option>
+                <option value="">{{ _('All') }}</option>
+                <option value="true" {% if billable == 'true' %}selected{% endif %}>{{ _('Billable Only') }}</option>
+                <option value="false" {% if billable == 'false' %}selected{% endif %}>{{ _('Non-Billable') }}</option>
             </select>
         </div>
         
         <div class="flex items-end gap-2 col-span-full">
             <button type="submit" class="btn btn-primary flex-1">
-                <i class="fas fa-filter mr-2"></i>Filter
+                <i class="fas fa-filter mr-2"></i>{{ _('Filter') }}
             </button>
             <a href="{{ url_for('expenses.list_expenses') }}" class="btn btn-secondary">
                 <i class="fas fa-times"></i>
@@ -202,15 +202,15 @@
                 </div>
                 <div class="ml-4 flex-1">
                     <h3 class="text-lg font-semibold text-text-light dark:text-text-dark mb-2">{{ _('Delete Selected Expenses') }}</h3>
-                    <p class="text-sm text-text-muted-light dark:text-text-muted-dark">Are you sure you want to delete the selected expenses? This action cannot be undone.</p>
+                    <p class="text-sm text-text-muted-light dark:text-text-muted-dark">{{ _('Are you sure you want to delete the selected expenses? This action cannot be undone.') }}</p>
                 </div>
             </div>
             <div class="flex justify-end gap-3 mt-6">
                 <button type="button" class="btn btn-secondary" onclick="closeBulkDeleteDialog()">
-                    Cancel
+                    {{ _('Cancel') }}
                 </button>
                 <button type="button" class="btn btn-danger" onclick="submitBulkDelete()">
-                    Delete
+                    {{ _('Delete') }}
                 </button>
             </div>
         </div>
@@ -222,16 +222,16 @@
     <div class="bg-card-light dark:bg-card-dark rounded-lg shadow-xl max-w-md w-full mx-4">
         <div class="p-6">
             <h3 class="text-lg font-semibold mb-4">{{ _('Change Status for Selected Expenses') }}</h3>
-            <label for="bulkStatusSelect" class="form-label">Select Status</label>
+            <label for="bulkStatusSelect" class="form-label">{{ _('Select Status') }}</label>
             <select id="bulkStatusSelect" class="form-input w-full mb-4">
-                <option value="">-- Select Status --</option>
-                <option value="pending">Pending</option>
-                <option value="approved">Approved</option>
-                <option value="rejected">Rejected</option>
-                <option value="reimbursed">Reimbursed</option>
+                <option value="">{{ _('-- Select Status --') }}</option>
+                <option value="pending">{{ _('Pending') }}</option>
+                <option value="approved">{{ _('Approved') }}</option>
+                <option value="rejected">{{ _('Rejected') }}</option>
+                <option value="reimbursed">{{ _('Reimbursed') }}</option>
             </select>
             <div class="flex justify-end gap-2">
-                <button type="button" onclick="closeBulkStatusDialog()" class="btn btn-secondary">Cancel</button>
+                <button type="button" onclick="closeBulkStatusDialog()" class="btn btn-secondary">{{ _('Cancel') }}</button>
                 <button type="button" onclick="submitBulkStatus()" class="btn btn-primary">{{ _('Update Status') }}</button>
             </div>
         </div>
@@ -243,24 +243,24 @@
 <div class="bg-card-light dark:bg-card-dark rounded-xl border border-border-light dark:border-border-dark shadow-sm overflow-visible">
     <div class="flex justify-between items-center mb-4 p-6 pb-0">
         <h3 class="text-sm font-medium text-text-muted-light dark:text-text-muted-dark">
-            {{ expenses|length }} expense{{ 's' if expenses|length != 1 else '' }} found
+            {{ ngettext('%(num)s expense found', '%(num)s expenses found', expenses|length) }}
         </h3>
         <div class="flex items-center gap-2">
             <a href="{{ url_for('expenses.export_expenses', **request.args) }}" 
                class="px-3 py-1.5 text-sm bg-background-light dark:bg-background-dark rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors inline-flex items-center export-btn" 
                title="{{ _('Export to CSV') }}"
                onclick="showExportLoading(this); return true;">
-                <i class="fas fa-download mr-1"></i> <span class="export-text">Export</span>
+                <i class="fas fa-download mr-1"></i> <span class="export-text">{{ _('Export') }}</span>
             </a>
             {% if current_user.is_admin %}
             <div class="relative">
                 <button type="button" id="bulkActionsBtn" class="px-3 py-1.5 text-sm border rounded-lg text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-600 disabled:opacity-60" onclick="openMenu(this, 'expensesBulkMenu')" disabled>
-                    <i class="fas fa-tasks mr-1"></i> Bulk Actions (<span id="selectedCount">0</span>)
+                    <i class="fas fa-tasks mr-1"></i> {{ _('Bulk Actions') }} (<span id="selectedCount">0</span>)
                 </button>
                 <ul id="expensesBulkMenu" class="bulk-menu hidden absolute right-0 mt-2 w-56 bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark rounded-md shadow-lg z-50">
-                    <li><a class="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700" href="#" onclick="return showBulkStatusDialog()"><i class="fas fa-tasks mr-2"></i>Change Status</a></li>
+                    <li><a class="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700" href="#" onclick="return showBulkStatusDialog()"><i class="fas fa-tasks mr-2"></i>{{ _('Change Status') }}</a></li>
                     <li><hr class="my-1 border-border-light dark:border-border-dark"></li>
-                    <li><a class="block px-4 py-2 text-sm text-rose-600 hover:bg-gray-100 dark:hover:bg-gray-700" href="#" onclick="return showBulkDeleteConfirm()"><i class="fas fa-trash mr-2"></i>Delete</a></li>
+                    <li><a class="block px-4 py-2 text-sm text-rose-600 hover:bg-gray-100 dark:hover:bg-gray-700" href="#" onclick="return showBulkDeleteConfirm()"><i class="fas fa-trash mr-2"></i>{{ _('Delete') }}</a></li>
                 </ul>
             </div>
             {% endif %}
@@ -275,14 +275,14 @@
                         <input type="checkbox" id="selectAll" class="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary" onchange="toggleAllExpenses()">
                     </th>
                     {% endif %}
-                    <th class="px-4 py-3" data-sortable>Date</th>
-                    <th class="px-4 py-3" data-sortable>Title</th>
-                    <th class="px-4 py-3" data-sortable>Category</th>
-                    <th class="px-4 py-3 table-number" data-sortable>Amount</th>
-                    <th class="px-4 py-3" data-sortable>Status</th>
-                    <th class="px-4 py-3" data-sortable>User</th>
-                    <th class="px-4 py-3" data-sortable>Project</th>
-                    <th class="px-4 py-3">Actions</th>
+                    <th class="px-4 py-3" data-sortable>{{ _('Date') }}</th>
+                    <th class="px-4 py-3" data-sortable>{{ _('Title') }}</th>
+                    <th class="px-4 py-3" data-sortable>{{ _('Category') }}</th>
+                    <th class="px-4 py-3 table-number" data-sortable>{{ _('Amount') }}</th>
+                    <th class="px-4 py-3" data-sortable>{{ _('Status') }}</th>
+                    <th class="px-4 py-3" data-sortable>{{ _('User') }}</th>
+                    <th class="px-4 py-3" data-sortable>{{ _('Project') }}</th>
+                    <th class="px-4 py-3">{{ _('Actions') }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -311,18 +311,18 @@
                         <td class="p-4 table-number font-medium" data-label="{{ _('Amount') }}">
                             {{ expense.total_amount|format_currency(expense.currency_code) }}
                             {% if expense.billable %}
-                            <span class="ml-1 text-xs text-green-600 dark:text-green-400" title="Billable"><i class="fas fa-check-circle"></i></span>
+                            <span class="ml-1 text-xs text-green-600 dark:text-green-400" title="{{ _('Billable') }}"><i class="fas fa-check-circle"></i></span>
                             {% endif %}
                         </td>
                         <td class="p-4" data-label="{{ _('Status') }}">
                             {% if expense.status == 'pending' %}
-                            <span class="px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200">Pending</span>
+                            <span class="px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200">{{ _('Pending') }}</span>
                             {% elif expense.status == 'approved' %}
-                            <span class="px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">Approved</span>
+                            <span class="px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">{{ _('Approved') }}</span>
                             {% elif expense.status == 'rejected' %}
-                            <span class="px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200">Rejected</span>
+                            <span class="px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200">{{ _('Rejected') }}</span>
                             {% elif expense.status == 'reimbursed' %}
-                            <span class="px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">Reimbursed</span>
+                            <span class="px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">{{ _('Reimbursed') }}</span>
                             {% else %}
                             <span class="px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200">{{ expense.status|title }}</span>
                             {% endif %}
@@ -336,7 +336,7 @@
                             {% endif %}
                         </td>
                         <td class="p-4" data-label="{{ _('Actions') }}">
-                            <a href="{{ url_for('expenses.view_expense', expense_id=expense.id) }}" class="text-primary hover:underline">View</a>
+                            <a href="{{ url_for('expenses.view_expense', expense_id=expense.id) }}" class="text-primary hover:underline">{{ _('View') }}</a>
                         </td>
                     </tr>
                     {% endfor %}
@@ -347,16 +347,16 @@
         {% from "components/ui.html" import empty_state %}
         {% set actions %}
             <a href="{{ url_for('expenses.create_expense') }}" class="btn btn-primary">
-                <i class="fas fa-plus mr-2"></i>Create Your First Expense
+                <i class="fas fa-plus mr-2"></i>{{ _('Create Your First Expense') }}
             </a>
             <a href="{{ url_for('main.help') }}" class="btn btn-secondary">
-                <i class="fas fa-question-circle mr-2"></i>Learn More
+                <i class="fas fa-question-circle mr-2"></i>{{ _('Learn More') }}
             </a>
         {% endset %}
         {% if request.args.get('search') or request.args.get('category') or request.args.get('status') %}
-            {{ empty_state('fas fa-search', 'No Expenses Match Your Filters', 'Try adjusting your filters to see more results. You can clear filters or create a new expense that matches your criteria.', actions, type='no-results') }}
+            {{ empty_state('fas fa-search', _('No Expenses Match Your Filters'), _('Try adjusting your filters to see more results. You can clear filters or create a new expense that matches your criteria.'), actions, type='no-results') }}
         {% else %}
-            {{ empty_state('fas fa-receipt', 'No Expenses Yet', 'Track your business expenses to keep accurate financial records. Create your first expense entry to get started!', actions, type='no-data') }}
+            {{ empty_state('fas fa-receipt', _('No Expenses Yet'), _('Track your business expenses to keep accurate financial records. Create your first expense entry to get started!'), actions, type='no-data') }}
         {% endif %}
         {% endif %}
     </div>
@@ -367,25 +367,24 @@
         <div class="flex-1 flex justify-between sm:hidden">
             {% if pagination.has_prev %}
             <a href="{{ url_for('expenses.list_expenses', page=pagination.prev_num, **request.args) }}" class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
-                Previous
+                {{ _('Previous') }}
             </a>
             {% endif %}
             {% if pagination.has_next %}
             <a href="{{ url_for('expenses.list_expenses', page=pagination.next_num, **request.args) }}" class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
-                Next
+                {{ _('Next') }}
             </a>
             {% endif %}
         </div>
         <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
             <div>
                 <p class="text-sm text-gray-700 dark:text-gray-300">
-                    Showing <span class="font-medium">{{ ((pagination.page - 1) * pagination.per_page) + 1 }}</span>
-                    to <span class="font-medium">{{ [pagination.page * pagination.per_page, pagination.total] | min }}</span>
-                    of <span class="font-medium">{{ pagination.total }}</span> results
+                    {% set num = '<span class="font-medium">%d</span>' %}
+                    {{ _('Showing %(start)s to %(end)s of %(total)s results', start=num|format(((pagination.page - 1) * pagination.per_page) + 1), end=num|format([pagination.page * pagination.per_page, pagination.total] | min), total=num|format(pagination.total))|safe }}
                 </p>
             </div>
             <div>
-                <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="{{ _('Pagination') }}">
                     {% if pagination.has_prev %}
                     <a href="{{ url_for('expenses.list_expenses', page=pagination.prev_num, **request.args) }}" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-sm font-medium text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-600">
                         <i class="fas fa-chevron-left"></i>
@@ -555,7 +554,7 @@ function submitBulkDelete() {
     
     const checkboxes = document.querySelectorAll('.expense-checkbox:checked');
     if (checkboxes.length === 0) {
-        alert('Please select at least one expense to delete.');
+        alert({{ _('Please select at least one expense to delete.')|tojson }});
         return;
     }
     
@@ -572,7 +571,7 @@ function submitBulkDelete() {
     if (btn) {
         const originalHTML = btn.innerHTML;
         btn.disabled = true;
-        btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Processing...';
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> ' + {{ _('Processing...')|tojson }};
         
         // Re-enable after timeout (safety fallback)
         setTimeout(() => {
@@ -600,7 +599,7 @@ function submitBulkStatus() {
     
     const status = statusSelect.value;
     if (!status) {
-        alert('Please select a status');
+        alert({{ _('Please select a status')|tojson }});
         return;
     }
     
@@ -618,7 +617,7 @@ function submitBulkStatus() {
     // Add selected expense IDs to form
     const checkboxes = document.querySelectorAll('.expense-checkbox:checked');
     if (checkboxes.length === 0) {
-        alert('Please select at least one expense to update.');
+        alert({{ _('Please select at least one expense to update.')|tojson }});
         return;
     }
     
@@ -628,7 +627,7 @@ function submitBulkStatus() {
     if (btn) {
         originalHTML = btn.innerHTML;
         btn.disabled = true;
-        btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Processing...';
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> ' + {{ _('Processing...')|tojson }};
         
         // Re-enable after timeout (safety fallback)
         setTimeout(() => {
@@ -653,7 +652,7 @@ function submitBulkStatus() {
 function showExportLoading(link) {
     const originalHTML = link.innerHTML;
     link.classList.add('pointer-events-none', 'opacity-60');
-    link.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> <span class="export-text">Exporting...</span>';
+    link.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> <span class="export-text">' + {{ _('Exporting...')|tojson }} + '</span>';
     
     // Reset after 5 seconds (fallback)
     setTimeout(() => {

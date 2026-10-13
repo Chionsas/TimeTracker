@@ -568,7 +568,7 @@
         });
         gh.querySelector('[data-role="test"]').addEventListener("click", function () {
             postJSON(gh.dataset.testUrl, {}).then(function (r) {
-                flash(gh, r.body.message || (r.body.success ? "OK" : "{{ _('Failed.') }}"), !r.body.success);
+                flash(gh, r.body.message || (r.body.success ? {{ _('OK')|tojson }} : "{{ _('Failed.') }}"), !r.body.success);
             });
         });
         gh.querySelector('[data-role="sync"]').addEventListener("click", function () {

@@ -5,13 +5,13 @@
 
 {% block content %}
 {% set breadcrumbs = [
-    {'text': 'Invoice Approvals'}
+    {'text': _('Invoice Approvals')}
 ] %}
 
 {{ page_header(
     icon_class='fas fa-check-circle',
-    title_text='Pending Approvals',
-    subtitle_text='Invoices awaiting your approval',
+    title_text=_('Pending Approvals'),
+    subtitle_text=_('Invoices awaiting your approval'),
     breadcrumbs=breadcrumbs
 ) }}
 

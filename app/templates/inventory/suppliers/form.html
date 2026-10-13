@@ -3,15 +3,15 @@
 
 {% block content %}
 {% set breadcrumbs = [
-    {'text': 'Inventory', 'url': url_for('inventory.list_stock_items')},
-    {'text': 'Suppliers', 'url': url_for('inventory.list_suppliers')},
-    {'text': supplier.name if supplier else 'New Supplier'}
+    {'text': _('Inventory'), 'url': url_for('inventory.list_stock_items')},
+    {'text': _('Suppliers'), 'url': url_for('inventory.list_suppliers')},
+    {'text': supplier.name if supplier else _('New Supplier')}
 ] %}
 
 {{ page_header(
     icon_class='fas fa-truck',
-    title_text=supplier.name if supplier else 'New Supplier',
-    subtitle_text='Create or edit supplier' if not supplier else 'Edit supplier',
+    title_text=supplier.name if supplier else _('New Supplier'),
+    subtitle_text=_('Create or edit supplier') if not supplier else _('Edit supplier'),
     breadcrumbs=breadcrumbs
 ) }}
 

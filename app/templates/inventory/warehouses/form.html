@@ -3,15 +3,15 @@
 
 {% block content %}
 {% set breadcrumbs = [
-    {'text': 'Inventory', 'url': url_for('inventory.list_stock_items')},
-    {'text': 'Warehouses', 'url': url_for('inventory.list_warehouses')},
-    {'text': warehouse.name if warehouse else 'New Warehouse'}
+    {'text': _('Inventory'), 'url': url_for('inventory.list_stock_items')},
+    {'text': _('Warehouses'), 'url': url_for('inventory.list_warehouses')},
+    {'text': warehouse.name if warehouse else _('New Warehouse')}
 ] %}
 
 {{ page_header(
     icon_class='fas fa-warehouse',
-    title_text=warehouse.name if warehouse else 'New Warehouse',
-    subtitle_text='Create or edit warehouse' if not warehouse else 'Edit warehouse',
+    title_text=warehouse.name if warehouse else _('New Warehouse'),
+    subtitle_text=_('Create or edit warehouse') if not warehouse else _('Edit warehouse'),
     breadcrumbs=breadcrumbs
 ) }}
 

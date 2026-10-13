@@ -3,15 +3,15 @@
 
 {% block content %}
 {% set breadcrumbs = [
-    {'text': 'Clients'}
+    {'text': _('Clients')}
 ] %}
 
 {{ page_header(
     icon_class='fas fa-users',
-    title_text='Clients',
-    subtitle_text='Manage your clients here',
+    title_text=_('Clients'),
+    subtitle_text=_('Manage your clients here'),
     breadcrumbs=breadcrumbs,
-    actions_html='<a href="' + url_for("clients.create_client") + '" class="btn btn-primary"><i class="fas fa-plus mr-2"></i>Create Client</a>' if (current_user.is_admin or has_permission('create_clients')) else None
+    actions_html='<a href="' + url_for("clients.create_client") + '" class="btn btn-primary"><i class="fas fa-plus mr-2"></i>' + _('Create Client') + '</a>' if (current_user.is_admin or has_permission('create_clients')) else None
 ) }}
 
 <div class="bg-card-light dark:bg-card-dark p-6 rounded-lg shadow mb-6">
@@ -24,15 +24,15 @@
     <div id="filterBody">
     <form method="GET" class="grid grid-cols-1 md:grid-cols-3 gap-4" id="clientsFilterForm" data-filter-form>
         <div>
-            <label for="clients-filter-search" class="form-label">Search</label>
+            <label for="clients-filter-search" class="form-label">{{ _('Search') }}</label>
             <input type="text" name="search" id="clients-filter-search" value="{{ search or '' }}" class="form-input">
         </div>
         <div>
-            <label for="status" class="form-label">Status</label>
+            <label for="status" class="form-label">{{ _('Status') }}</label>
             <select name="status" id="status" class="form-input">
-                <option value="all" {% if status == 'all' %}selected{% endif %}>All</option>
-                <option value="active" {% if status == 'active' %}selected{% endif %}>Active</option>
-                <option value="inactive" {% if status == 'inactive' %}selected{% endif %}>Inactive</option>
+                <option value="all" {% if status == 'all' %}selected{% endif %}>{{ _('All') }}</option>
+                <option value="active" {% if status == 'active' %}selected{% endif %}>{{ _('Active') }}</option>
+                <option value="inactive" {% if status == 'inactive' %}selected{% endif %}>{{ _('Inactive') }}</option>
             </select>
         </div>
     </form>
@@ -209,9 +209,9 @@ document.addEventListener('DOMContentLoaded', function() {
             container.style.opacity = '';
             container.style.pointerEvents = '';
             if (window.toastManager) {
-                window.toastManager.show('Failed to filter clients. Please refresh the page.', 'error');
+                window.toastManager.show({{ _('Failed to filter clients. Please refresh the page.')|tojson }}, 'error');
             } else if (window.showToast) {
-                window.showToast('Failed to filter clients. Please refresh the page.', 'error');
+                window.showToast({{ _('Failed to filter clients. Please refresh the page.')|tojson }}, 'error');
             }
         })
         .finally(() => {
@@ -331,8 +331,8 @@ document.addEventListener('keydown', function(e){ if (e.key === 'Escape') closeA
 function showBulkDeleteConfirm(){
     const count = document.querySelectorAll('.client-checkbox:checked').length;
     if (count === 0) return false;
-    const msg = `Are you sure you want to delete ${count} client(s)? Clients with projects will be skipped.`;
-    if (window.showConfirm){ window.showConfirm(msg, { title: 'Delete Clients', confirmText: 'Delete', variant: 'danger' }).then(function(ok){ if (ok) submitClientsBulkDelete(); }); }
+    const msg = {{ _('Are you sure you want to delete %(count)s client(s)? Clients with projects will be skipped.')|tojson }}.replace('%(count)s', count);
+    if (window.showConfirm){ window.showConfirm(msg, { title: {{ _('Delete Clients')|tojson }}, confirmText: {{ _('Delete')|tojson }}, variant: 'danger' }).then(function(ok){ if (ok) submitClientsBulkDelete(); }); }
     return false;
 }
 function submitClientsBulkDelete(){
@@ -346,9 +346,9 @@ function submitClientsBulkDelete(){
 function showBulkStatusChange(newStatus){
     const count = document.querySelectorAll('.client-checkbox:checked').length;
     if (count === 0) return false;
-    const label = {active:'Active', inactive:'Inactive'}[newStatus] || newStatus;
-    const msg = `Are you sure you want to mark ${count} client(s) as ${label}?`;
-    if (window.showConfirm){ window.showConfirm(msg, { title: 'Change Client Status', confirmText: 'Change' }).then(function(ok){ if (ok){ document.getElementById('clientsBulkNewStatus').value=newStatus; submitClientsBulkStatus(); }}); }
+    const label = {active:{{ _('Active')|tojson }}, inactive:{{ _('Inactive')|tojson }}}[newStatus] || newStatus;
+    const msg = {{ _('Are you sure you want to mark %(count)s client(s) as %(status)s?')|tojson }}.replace('%(count)s', count).replace('%(status)s', label);
+    if (window.showConfirm){ window.showConfirm(msg, { title: {{ _('Change Client Status')|tojson }}, confirmText: {{ _('Change')|tojson }} }).then(function(ok){ if (ok){ document.getElementById('clientsBulkNewStatus').value=newStatus; submitClientsBulkStatus(); }}); }
     return false;
 }
 function submitClientsBulkStatus(){

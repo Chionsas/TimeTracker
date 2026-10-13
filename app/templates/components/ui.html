@@ -44,7 +44,7 @@
    BREADCRUMBS
    ============================================ #}
 {% macro breadcrumb_nav(items) %}
-<nav class="flex" aria-label="Breadcrumb">
+<nav class="flex" aria-label="{{ _('Breadcrumb') }}">
     <ol class="inline-flex items-center space-x-1 md:space-x-3">
         <li class="inline-flex items-center">
             <a href="{% if get_current_client is defined and get_current_client() %}{{ url_for('client_portal.dashboard') }}{% else %}{{ url_for('main.dashboard') }}{% endif %}" class="inline-flex items-center text-sm font-medium text-text-muted-light dark:text-text-muted-dark hover:text-primary transition-colors">
@@ -516,7 +516,7 @@
 {# ============================================
    DATA TABLE WRAPPER
    ============================================ #}
-{% macro data_table(headers, rows, actions=None, empty_message="No data available", sortable=True) %}
+{% macro data_table(headers, rows, actions=None, empty_message=_('No data available'), sortable=True) %}
 <div class="bg-card-light dark:bg-card-dark rounded-lg shadow-sm overflow-hidden">
     <div class="overflow-x-auto">
         <table class="w-full text-left">
@@ -560,7 +560,7 @@
    ============================================ #}
 {% macro tabs(items, active_tab) %}
 <div class="border-b border-border-light dark:border-border-dark mb-6">
-    <nav class="flex space-x-8" aria-label="Tabs">
+    <nav class="flex space-x-8" aria-label="{{ _('Tabs') }}">
         {% for item in items %}
         <a href="{{ item.url }}" 
            class="py-4 px-1 border-b-2 font-medium text-sm transition-colors {% if item.id == active_tab %}border-primary text-primary{% else %}border-transparent text-text-muted-light dark:text-text-muted-dark hover:text-text-light dark:hover:text-text-dark hover:border-gray-300 dark:hover:border-gray-600{% endif %}">

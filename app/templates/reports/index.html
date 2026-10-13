@@ -157,7 +157,7 @@
         </div>
         <div class="p-4 border border-border-light dark:border-border-dark rounded-lg">
             <h3 class="font-medium mb-2">{{ _('Scheduled Reports') }}</h3>
-            <p class="text-sm text-text-muted-light dark:text-text-muted-dark mb-3">Set up automatic report generation</p>
+            <p class="text-sm text-text-muted-light dark:text-text-muted-dark mb-3">{{ _('Set up automatic report generation') }}</p>
             <button type="button" onclick="showScheduledReportsModal()" class="w-full bg-secondary text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors">
                 <i class="fas fa-clock mr-2"></i>{{ _('Manage Scheduled Reports') }}
             </button>
@@ -337,17 +337,17 @@ function showComparisonView(period) {
             statsDiv.innerHTML = `
                 <div class="text-center">
                     <div class="text-2xl font-bold text-primary">${data.current.hours.toFixed(1)}</div>
-                    <div class="text-sm text-text-muted-light dark:text-text-muted-dark">Current Period Hours</div>
+                    <div class="text-sm text-text-muted-light dark:text-text-muted-dark">{{ _('Current Period Hours') }}</div>
                 </div>
                 <div class="text-center">
                     <div class="text-2xl font-bold ${data.change >= 0 ? 'text-green-600' : 'text-red-600'}">
                         ${data.change >= 0 ? '+' : ''}${data.change.toFixed(1)}%
                     </div>
-                    <div class="text-sm text-text-muted-light dark:text-text-muted-dark">Change</div>
+                    <div class="text-sm text-text-muted-light dark:text-text-muted-dark">{{ _('Change') }}</div>
                 </div>
                 <div class="text-center">
                     <div class="text-2xl font-bold text-text-light dark:text-text-dark">${data.previous.hours.toFixed(1)}</div>
-                    <div class="text-sm text-text-muted-light dark:text-text-muted-dark">Previous Period Hours</div>
+                    <div class="text-sm text-text-muted-light dark:text-text-muted-dark">{{ _('Previous Period Hours') }}</div>
                 </div>
             `;
             
@@ -355,7 +355,7 @@ function showComparisonView(period) {
         })
         .catch(error => {
             console.error('Error loading comparison:', error);
-            ttAlert('Failed to load comparison data');
+            ttAlert({{ _('Failed to load comparison data')|tojson }});
         });
 }
 
@@ -393,7 +393,7 @@ function hideScheduledReportsModal() {
 
 function loadScheduledReports() {
     const listContainer = document.getElementById('scheduledReportsList');
-    listContainer.innerHTML = '<p class="text-text-muted-light dark:text-text-muted-dark text-center py-4">Loading...</p>';
+    listContainer.innerHTML = '<p class="text-text-muted-light dark:text-text-muted-dark text-center py-4">{{ _('Loading...') }}</p>';
     
     fetch('/api/reports/scheduled')
         .then(response => response.json())
@@ -402,37 +402,37 @@ function loadScheduledReports() {
                 listContainer.innerHTML = data.schedules.map(schedule => {
                     const nextRun = schedule.next_run_at
                         ? (window.formatUserDateTime ? window.formatUserDateTime(new Date(schedule.next_run_at)) : new Date(schedule.next_run_at).toLocaleString())
-                        : 'Not scheduled';
+                        : {{ _('Not scheduled')|tojson }};
                     const lastRun = schedule.last_run_at
                         ? (window.formatUserDateTime ? window.formatUserDateTime(new Date(schedule.last_run_at)) : new Date(schedule.last_run_at).toLocaleString())
-                        : 'Never';
+                        : {{ _('Never')|tojson }};
                     const statusBadge = schedule.active 
-                        ? '<span class="px-2 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded text-xs">Active</span>'
-                        : '<span class="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300 rounded text-xs">Inactive</span>';
+                        ? '<span class="px-2 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded text-xs">{{ _('Active') }}</span>'
+                        : '<span class="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300 rounded text-xs">{{ _('Inactive') }}</span>';
                     
                     return `
                         <div class="p-4 border border-border-light dark:border-border-dark rounded-lg">
                             <div class="flex justify-between items-start mb-2">
                                 <div class="flex-1">
-                                    <h4 class="font-semibold">${escapeHtml(schedule.saved_view_name || 'Unknown Report')}</h4>
+                                    <h4 class="font-semibold">${escapeHtml(schedule.saved_view_name || {{ _('Unknown Report')|tojson }})}</h4>
                                     <p class="text-sm text-text-muted-light dark:text-text-muted-dark">
                                         <i class="fas fa-clock mr-1"></i>${schedule.cadence}
                                         <span class="mx-2">•</span>
-                                        <i class="fas fa-envelope mr-1"></i>${schedule.recipients.split(',').length} recipient(s)
+                                        <i class="fas fa-envelope mr-1"></i>${ {{ _('%(count)s recipient(s)')|tojson }}.replace('%(count)s', schedule.recipients.split(',').length) }
                                     </p>
                                 </div>
                                 ${statusBadge}
                             </div>
                             <div class="text-xs text-text-muted-light dark:text-text-muted-dark mt-2">
-                                <div><strong>Next run:</strong> ${nextRun}</div>
-                                <div><strong>Last run:</strong> ${lastRun}</div>
+                                <div><strong>{{ _('Next run:') }}</strong> ${nextRun}</div>
+                                <div><strong>{{ _('Last run:') }}</strong> ${lastRun}</div>
                             </div>
                             <div class="flex gap-2 mt-3">
                                 <button onclick="toggleSchedule(${schedule.id}, ${!schedule.active})" class="text-sm px-3 py-1 rounded bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600">
-                                    ${schedule.active ? 'Deactivate' : 'Activate'}
+                                    ${schedule.active ? {{ _('Deactivate')|tojson }} : {{ _('Activate')|tojson }}}
                                 </button>
                                 <button onclick="deleteSchedule(${schedule.id})" class="text-sm px-3 py-1 rounded bg-red-600 text-white hover:bg-red-700">
-                                    Delete
+                                    {{ _('Delete') }}
                                 </button>
                             </div>
                         </div>
@@ -444,7 +444,7 @@ function loadScheduledReports() {
         })
         .catch(error => {
             console.error('Error loading scheduled reports:', error);
-            listContainer.innerHTML = '<p class="text-red-600 dark:text-red-400 text-center py-4">Failed to load scheduled reports.</p>';
+            listContainer.innerHTML = '<p class="text-red-600 dark:text-red-400 text-center py-4">{{ _('Failed to load scheduled reports.') }}</p>';
         });
 }
 

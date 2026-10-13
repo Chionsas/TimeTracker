@@ -4,14 +4,14 @@
 
 {% block content %}
 {% set breadcrumbs = [
-    {'text': 'Issues', 'url': url_for('issues.list_issues')},
-    {'text': 'New Issue'}
+    {'text': _('Issues'), 'url': url_for('issues.list_issues')},
+    {'text': _('New Issue')}
 ] %}
 
 {{ page_header(
     icon_class='fas fa-plus',
     title_text=_('Create New Issue'),
-    subtitle_text='Report a new issue or bug',
+    subtitle_text=_('Report a new issue or bug'),
     breadcrumbs=breadcrumbs
 ) }}
 

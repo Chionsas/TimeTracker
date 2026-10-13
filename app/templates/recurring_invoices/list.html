@@ -37,33 +37,33 @@
                         <div class="text-sm font-medium text-gray-900 dark:text-gray-100">{{ recurring.name }}</div>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap" data-label="{{ _('Project') }}">
-                        <div class="text-sm text-gray-500 dark:text-gray-400">{{ recurring.project.name if recurring.project else 'N/A' }}</div>
+                        <div class="text-sm text-gray-500 dark:text-gray-400">{{ recurring.project.name if recurring.project else _('N/A') }}</div>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap" data-label="{{ _('Client') }}">
                         <div class="text-sm text-gray-500 dark:text-gray-400">{{ recurring.client_name }}</div>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap" data-label="{{ _('Frequency') }}">
                         <div class="text-sm text-gray-500 dark:text-gray-400">
-                            Every {{ recurring.interval }} {{ recurring.frequency }}{{ 's' if recurring.interval > 1 else '' }}
+                            {{ _('Every %(interval)s %(frequency)s', interval=recurring.interval, frequency=recurring.frequency ~ ('s' if recurring.interval > 1 else '')) }}
                         </div>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap" data-label="{{ _('Next Run') }}">
-                        <div class="text-sm text-gray-500 dark:text-gray-400">{{ recurring.next_run_date|format_date if recurring.next_run_date else 'N/A' }}</div>
+                        <div class="text-sm text-gray-500 dark:text-gray-400">{{ recurring.next_run_date|format_date if recurring.next_run_date else _('N/A') }}</div>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap" data-label="{{ _('Status') }}">
                         {% if recurring.is_active %}
-                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">Active</span>
+                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">{{ _('Active') }}</span>
                         {% else %}
-                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200">Inactive</span>
+                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200">{{ _('Inactive') }}</span>
                         {% endif %}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium" data-label="{{ _('Actions') }}">
-                        <a href="{{ url_for('recurring_invoices.view_recurring_invoice', recurring_id=recurring.id) }}" class="text-primary hover:text-primary/80 mr-3">View</a>
-                        <a href="{{ url_for('recurring_invoices.edit_recurring_invoice', recurring_id=recurring.id) }}" class="text-blue-600 hover:text-blue-900 mr-3">Edit</a>
-                        <button onclick="generateInvoice({{ recurring.id }})" class="text-green-600 hover:text-green-900 mr-3">Generate Now</button>
-                        <form method="POST" action="{{ url_for('recurring_invoices.delete_recurring_invoice', recurring_id=recurring.id) }}" class="inline" onsubmit="return confirm('Are you sure you want to delete this recurring invoice?');">
+                        <a href="{{ url_for('recurring_invoices.view_recurring_invoice', recurring_id=recurring.id) }}" class="text-primary hover:text-primary/80 mr-3">{{ _('View') }}</a>
+                        <a href="{{ url_for('recurring_invoices.edit_recurring_invoice', recurring_id=recurring.id) }}" class="text-blue-600 hover:text-blue-900 mr-3">{{ _('Edit') }}</a>
+                        <button onclick="generateInvoice({{ recurring.id }})" class="text-green-600 hover:text-green-900 mr-3">{{ _('Generate Now') }}</button>
+                        <form method="POST" action="{{ url_for('recurring_invoices.delete_recurring_invoice', recurring_id=recurring.id) }}" class="inline" onsubmit="return confirm('{{ _('Are you sure you want to delete this recurring invoice?') }}');">
                             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                            <button type="submit" class="text-red-600 hover:text-red-900">Delete</button>
+                            <button type="submit" class="text-red-600 hover:text-red-900">{{ _('Delete') }}</button>
                         </form>
                     </td>
                 </tr>
@@ -77,13 +77,13 @@
             <i class="fas fa-plus mr-2"></i>{{ _('Create Recurring Invoice') }}
         </a>
     {% endset %}
-    {{ empty_state('fas fa-sync-alt', 'No Recurring Invoices Yet', 'Automate invoice generation for subscription or repeat billing. Create your first recurring invoice template to get started!', actions, type='no-data') }}
+    {{ empty_state('fas fa-sync-alt', _('No Recurring Invoices Yet'), _('Automate invoice generation for subscription or repeat billing. Create your first recurring invoice template to get started!'), actions, type='no-data') }}
     {% endif %}
 </div>
 
 <script nonce="{{ csp_nonce() }}">
 function generateInvoice(recurringId) {
-    if (!confirm('Generate an invoice from this recurring template now?')) {
+    if (!confirm({{ _('Generate an invoice from this recurring template now?')|tojson }})) {
         return;
     }
     
@@ -103,15 +103,15 @@ function generateInvoice(recurringId) {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            alert(`Invoice ${data.invoice_number} generated successfully!`);
+            alert({{ _('Invoice %(number)s generated successfully!')|tojson }}.replace('%(number)s', data.invoice_number));
             window.location.href = `/invoices/${data.invoice_id}/edit`;
         } else {
-            alert('Error: ' + (data.error || 'Failed to generate invoice'));
+            alert({{ _('Error')|tojson }} + ': ' + (data.error || {{ _('Failed to generate invoice')|tojson }}));
         }
     })
     .catch(error => {
         console.error('Error:', error);
-        alert('Failed to generate invoice');
+        alert({{ _('Failed to generate invoice')|tojson }});
     });
 }
 </script>

@@ -3,16 +3,16 @@
 
 {% block content %}
 {% set breadcrumbs = [
-    {'text': 'Inventory', 'url': url_for('inventory.list_stock_items')},
-    {'text': 'Stock Items'}
+    {'text': _('Inventory'), 'url': url_for('inventory.list_stock_items')},
+    {'text': _('Stock Items')}
 ] %}
 
 {{ page_header(
     icon_class='fas fa-cubes',
-    title_text='Stock Items',
-    subtitle_text='Manage your inventory items',
+    title_text=_('Stock Items'),
+    subtitle_text=_('Manage your inventory items'),
     breadcrumbs=breadcrumbs,
-    actions_html='<a href="' + url_for("inventory.new_stock_item") + '" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors"><i class="fas fa-plus mr-2"></i>Create Stock Item</a>' if (current_user.is_admin or has_permission('manage_stock_items')) else None
+    actions_html='<a href="' + url_for("inventory.new_stock_item") + '" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors"><i class="fas fa-plus mr-2"></i>' + _('Create Stock Item') + '</a>' if (current_user.is_admin or has_permission('manage_stock_items')) else None
 ) }}
 
 <div class="bg-card-light dark:bg-card-dark p-6 rounded-xl border border-border-light dark:border-border-dark shadow-sm mb-6">
@@ -117,9 +117,9 @@
     {% endif %}
     {% endset %}
     {% if search or category %}
-        {{ empty_state('fas fa-cubes', 'No Stock Items Match Your Filters', 'Try adjusting your filters to see more results.', actions, type='no-results') }}
+        {{ empty_state('fas fa-cubes', _('No Stock Items Match Your Filters'), _('Try adjusting your filters to see more results.'), actions, type='no-results') }}
     {% else %}
-        {{ empty_state('fas fa-cubes', 'No Stock Items Yet', 'Create stock items to track quantities, locations, and movements.', actions, type='no-data') }}
+        {{ empty_state('fas fa-cubes', _('No Stock Items Yet'), _('Create stock items to track quantities, locations, and movements.'), actions, type='no-data') }}
     {% endif %}
     {% endif %}
 </div>

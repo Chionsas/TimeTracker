@@ -4,27 +4,27 @@
 
 {% block content %}
 {% set breadcrumbs = [
-    {'text': 'Invoices'}
+    {'text': _('Invoices')}
 ] %}
 
 {{ page_header(
     icon_class='fas fa-file-invoice',
-    title_text='Invoices',
-    subtitle_text='Create and manage invoices for your clients',
+    title_text=_('Invoices'),
+    subtitle_text=_('Create and manage invoices for your clients'),
     breadcrumbs=breadcrumbs,
     actions_html=''
         + '<div class="flex gap-2">'
-        +   '<a href="' + url_for("recurring_invoices.list_recurring_invoices") + '" class="btn bg-purple-600 text-white hover:bg-purple-700"><i class="fas fa-sync-alt mr-2"></i>Recurring Invoices</a>'
-        +   '<a href="' + url_for("invoices.export_invoices_excel") + '" class="btn bg-green-600 text-white hover:bg-green-700"><i class="fas fa-file-excel mr-2"></i>Export to Excel</a>'
-        +   '<a href="' + url_for("invoices.create_invoice") + '" class="btn btn-primary"><i class="fas fa-plus mr-2"></i>Create Invoice</a>'
+        +   '<a href="' + url_for("recurring_invoices.list_recurring_invoices") + '" class="btn bg-purple-600 text-white hover:bg-purple-700"><i class="fas fa-sync-alt mr-2"></i>' + _('Recurring Invoices') + '</a>'
+        +   '<a href="' + url_for("invoices.export_invoices_excel") + '" class="btn bg-green-600 text-white hover:bg-green-700"><i class="fas fa-file-excel mr-2"></i>' + _('Export to Excel') + '</a>'
+        +   '<a href="' + url_for("invoices.create_invoice") + '" class="btn btn-primary"><i class="fas fa-plus mr-2"></i>' + _('Create Invoice') + '</a>'
         + '</div>'
 ) }}
 
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-    {{ info_card("Total Invoiced", "%.2f"|format(summary.total_amount), "All time") }}
-    {{ info_card("Total Paid", "%.2f"|format(summary.paid_amount), "All time") }}
-    {{ info_card("Outstanding", "%.2f"|format(summary.outstanding_amount), "All time") }}
-    {{ info_card("Overdue", "%.2f"|format(summary.overdue_amount), "All time") }}
+    {{ info_card(_("Total Invoiced"), "%.2f"|format(summary.total_amount), _("All time")) }}
+    {{ info_card(_("Total Paid"), "%.2f"|format(summary.paid_amount), _("All time")) }}
+    {{ info_card(_("Outstanding"), "%.2f"|format(summary.outstanding_amount), _("All time")) }}
+    {{ info_card(_("Overdue"), "%.2f"|format(summary.overdue_amount), _("All time")) }}
 </div>
 
 <div class="bg-card-light dark:bg-card-dark p-6 rounded-xl border border-border-light dark:border-border-dark shadow-sm mb-6">
@@ -37,38 +37,38 @@
     <div id="filterBody">
     <form method="GET" class="grid grid-cols-1 md:grid-cols-4 gap-4" id="invoicesFilterForm" data-filter-form>
         <div>
-            <label for="status" class="form-label">Status</label>
+            <label for="status" class="form-label">{{ _('Status') }}</label>
             <div class="flex flex-wrap gap-2">
                 <button type="button" onclick="filterByStatus('')" class="status-filter-btn px-3 py-1.5 rounded-lg text-sm transition-colors {% if not request.args.get('status') %}bg-primary text-white{% else %}bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark hover:bg-gray-100 dark:hover:bg-gray-700{% endif %}" data-status="">
-                    <i class="fas fa-list mr-1"></i>All
+                    <i class="fas fa-list mr-1"></i>{{ _('All') }}
                 </button>
                 <button type="button" onclick="filterByStatus('draft')" class="status-filter-btn px-3 py-1.5 rounded-lg text-sm transition-colors {% if request.args.get('status') == 'draft' %}bg-slate-500 text-white{% else %}bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700{% endif %}" data-status="draft">
-                    <i class="fas fa-file-alt mr-1"></i>Draft
+                    <i class="fas fa-file-alt mr-1"></i>{{ _('Draft') }}
                 </button>
                 <button type="button" onclick="filterByStatus('sent')" class="status-filter-btn px-3 py-1.5 rounded-lg text-sm transition-colors {% if request.args.get('status') == 'sent' %}bg-indigo-500 text-white{% else %}bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-200 dark:hover:bg-indigo-800{% endif %}" data-status="sent">
-                    <i class="fas fa-paper-plane mr-1"></i>Sent
+                    <i class="fas fa-paper-plane mr-1"></i>{{ _('Sent') }}
                 </button>
                 <button type="button" onclick="filterByStatus('paid')" class="status-filter-btn px-3 py-1.5 rounded-lg text-sm transition-colors {% if request.args.get('status') == 'paid' %}bg-emerald-500 text-white{% else %}bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-200 dark:hover:bg-emerald-800{% endif %}" data-status="paid">
-                    <i class="fas fa-check-circle mr-1"></i>Paid
+                    <i class="fas fa-check-circle mr-1"></i>{{ _('Paid') }}
                 </button>
                 <button type="button" onclick="filterByStatus('overdue')" class="status-filter-btn px-3 py-1.5 rounded-lg text-sm transition-colors {% if request.args.get('status') == 'overdue' %}bg-red-500 text-white{% else %}bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 hover:bg-red-200 dark:hover:bg-red-800{% endif %}" data-status="overdue">
-                    <i class="fas fa-exclamation-triangle mr-1"></i>Overdue
+                    <i class="fas fa-exclamation-triangle mr-1"></i>{{ _('Overdue') }}
                 </button>
             </div>
             <input type="hidden" name="status" id="statusFilter" value="{{ request.args.get('status', '') }}">
         </div>
         <div>
-            <label for="payment_status" class="form-label">Payment Status</label>
+            <label for="payment_status" class="form-label">{{ _('Payment Status') }}</label>
             <select name="payment_status" id="payment_status" class="form-input">
-                <option value="">All</option>
-                <option value="unpaid" {% if request.args.get('payment_status') == 'unpaid' %}selected{% endif %}>Unpaid</option>
-                <option value="partially_paid" {% if request.args.get('payment_status') == 'partially_paid' %}selected{% endif %}>Partially Paid</option>
-                <option value="fully_paid" {% if request.args.get('payment_status') == 'fully_paid' %}selected{% endif %}>Fully Paid</option>
-                <option value="overpaid" {% if request.args.get('payment_status') == 'overpaid' %}selected{% endif %}>Overpaid</option>
+                <option value="">{{ _('All') }}</option>
+                <option value="unpaid" {% if request.args.get('payment_status') == 'unpaid' %}selected{% endif %}>{{ _('Unpaid') }}</option>
+                <option value="partially_paid" {% if request.args.get('payment_status') == 'partially_paid' %}selected{% endif %}>{{ _('Partially Paid') }}</option>
+                <option value="fully_paid" {% if request.args.get('payment_status') == 'fully_paid' %}selected{% endif %}>{{ _('Fully Paid') }}</option>
+                <option value="overpaid" {% if request.args.get('payment_status') == 'overpaid' %}selected{% endif %}>{{ _('Overpaid') }}</option>
             </select>
         </div>
         <div>
-            <label for="invoices-filter-search" class="form-label">Search</label>
+            <label for="invoices-filter-search" class="form-label">{{ _('Search') }}</label>
             <input type="text" name="search" id="invoices-filter-search" value="{{ request.args.get('search', '') }}" class="form-input" placeholder="{{ _('Invoice number or client') }}">
         </div>
     </form>
@@ -103,15 +103,15 @@
                 </div>
                 <div class="ml-4 flex-1">
                     <h3 class="text-lg font-semibold text-text-light dark:text-text-dark mb-2">{{ _('Delete Selected Invoices') }}</h3>
-                    <p class="text-sm text-text-muted-light dark:text-text-muted-dark">Are you sure you want to delete the selected invoices? This action cannot be undone.</p>
+                    <p class="text-sm text-text-muted-light dark:text-text-muted-dark">{{ _('Are you sure you want to delete the selected invoices? This action cannot be undone.') }}</p>
                 </div>
             </div>
             <div class="flex justify-end gap-3 mt-6">
                 <button type="button" class="btn btn-secondary" onclick="closeBulkDeleteDialog()">
-                    Cancel
+                    {{ _('Cancel') }}
                 </button>
                 <button type="button" class="btn btn-danger" onclick="submitBulkDelete()">
-                    Delete
+                    {{ _('Delete') }}
                 </button>
             </div>
         </div>
@@ -136,7 +136,7 @@
                 <input type="text" id="bulkInvoiceReference" class="form-input w-full" placeholder="{{ _('e.g., Payment confirmation number') }}">
             </div>
             <div class="flex justify-end gap-2">
-                <button type="button" onclick="closeBulkStatusDialog()" class="btn btn-secondary">Cancel</button>
+                <button type="button" onclick="closeBulkStatusDialog()" class="btn btn-secondary">{{ _('Cancel') }}</button>
                 <button type="button" onclick="submitBulkStatus()" class="btn btn-primary">{{ _('Update Status') }}</button>
             </div>
         </div>
@@ -433,9 +433,9 @@ document.addEventListener('DOMContentLoaded', function() {
             container.style.opacity = '';
             container.style.pointerEvents = '';
             if (window.toastManager) {
-                window.toastManager.show('Failed to filter invoices. Please refresh the page.', 'error');
+                window.toastManager.show({{ _('Failed to filter invoices. Please refresh the page.')|tojson }}, 'error');
             } else if (window.showToast) {
-                window.showToast('Failed to filter invoices. Please refresh the page.', 'error');
+                window.showToast({{ _('Failed to filter invoices. Please refresh the page.')|tojson }}, 'error');
             }
         })
         .finally(() => {
@@ -588,7 +588,7 @@ function submitBulkDelete() {
     
     const checkboxes = document.querySelectorAll('.invoice-checkbox:checked');
     if (checkboxes.length === 0) {
-        alert('Please select at least one invoice to delete.');
+        alert({{ _('Please select at least one invoice to delete.')|tojson }});
         return;
     }
     
@@ -606,7 +606,7 @@ function submitBulkDelete() {
     if (btn) {
         originalHTML = btn.innerHTML;
         btn.disabled = true;
-        btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Processing...';
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> ' + {{ _('Processing...')|tojson }};
         
         // Re-enable after timeout (safety fallback)
         setTimeout(() => {
@@ -663,7 +663,7 @@ function submitBulkStatus() {
     
     const status = statusSelect.value;
     if (!status) {
-        alert('Please select a status');
+        alert({{ _('Please select a status')|tojson }});
         return;
     }
     
@@ -697,7 +697,7 @@ function submitBulkStatus() {
     // Add selected invoice IDs to form
     const checkboxes = document.querySelectorAll('.invoice-checkbox:checked');
     if (checkboxes.length === 0) {
-        alert('Please select at least one invoice to update.');
+        alert({{ _('Please select at least one invoice to update.')|tojson }});
         return;
     }
     
@@ -707,7 +707,7 @@ function submitBulkStatus() {
     if (btn) {
         originalHTML = btn.innerHTML;
         btn.disabled = true;
-        btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Processing...';
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> ' + {{ _('Processing...')|tojson }};
         
         // Re-enable after timeout (safety fallback)
         setTimeout(() => {
@@ -747,7 +747,7 @@ function hideDeleteModal() {
 function showExportLoading(link) {
     const originalHTML = link.innerHTML;
     link.classList.add('pointer-events-none', 'opacity-60');
-    link.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> <span class="export-text">Exporting...</span>';
+    link.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> <span class="export-text">' + {{ _('Exporting...')|tojson }} + '</span>';
     
     // Reset after 5 seconds (fallback)
     setTimeout(() => {

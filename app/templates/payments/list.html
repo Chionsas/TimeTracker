@@ -3,18 +3,18 @@
 
 {% block content %}
 {% set breadcrumbs = [
-    {'text': 'Payments'}
+    {'text': _('Payments')}
 ] %}
 
 {{ page_header(
     icon_class='fas fa-credit-card',
-    title_text='Payments',
-    subtitle_text='Track and record payments from clients',
+    title_text=_('Payments'),
+    subtitle_text=_('Track and record payments from clients'),
     breadcrumbs=breadcrumbs,
     actions_html=''
         + '<div class="flex gap-2">'
-        +   '<a href="' + url_for("payments.export_payments_excel", status=filters.status, method=filters.method, date_from=filters.date_from, date_to=filters.date_to) + '" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 inline-flex items-center"><i class="fas fa-file-excel mr-2"></i>Export to Excel</a>'
-        +   '<a href="' + url_for("payments.create_payment") + '" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors"><i class="fas fa-plus mr-2"></i>Record Payment</a>'
+        +   '<a href="' + url_for("payments.export_payments_excel", status=filters.status, method=filters.method, date_from=filters.date_from, date_to=filters.date_to) + '" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 inline-flex items-center"><i class="fas fa-file-excel mr-2"></i>' + _('Export to Excel') + '</a>'
+        +   '<a href="' + url_for("payments.create_payment") + '" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors"><i class="fas fa-plus mr-2"></i>' + _('Record Payment') + '</a>'
         + '</div>'
 ) }}
 
@@ -29,7 +29,7 @@
             <p class="text-2xl font-bold text-green-600 dark:text-green-400 mt-2">{{ currency|currency_symbol }}{{ "%.2f"|format(summary.total_amount) }}</p>
         </div>
         <div class="bg-card-light dark:bg-card-dark p-6 rounded-xl border border-border-light dark:border-border-dark shadow-sm">
-            <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">Completed</h3>
+            <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ _('Completed') }}</h3>
             <p class="text-2xl font-bold text-blue-600 dark:text-blue-400 mt-2">{{ summary.completed_count }}</p>
             <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">{{ currency|currency_symbol }}{{ "%.2f"|format(summary.completed_amount) }}</p>
         </div>
@@ -50,35 +50,35 @@
         <div id="filterBody">
         <form method="GET" class="grid grid-cols-1 md:grid-cols-5 gap-4" data-filter-form>
             <div>
-                <label for="status" class="form-label">Status</label>
+                <label for="status" class="form-label">{{ _('Status') }}</label>
                 <select name="status" id="status" class="form-input">
-                    <option value="">All</option>
-                    <option value="completed" {% if filters.status == 'completed' %}selected{% endif %}>Completed</option>
-                    <option value="pending" {% if filters.status == 'pending' %}selected{% endif %}>Pending</option>
-                    <option value="failed" {% if filters.status == 'failed' %}selected{% endif %}>Failed</option>
-                    <option value="refunded" {% if filters.status == 'refunded' %}selected{% endif %}>Refunded</option>
+                    <option value="">{{ _('All') }}</option>
+                    <option value="completed" {% if filters.status == 'completed' %}selected{% endif %}>{{ _('Completed') }}</option>
+                    <option value="pending" {% if filters.status == 'pending' %}selected{% endif %}>{{ _('Pending') }}</option>
+                    <option value="failed" {% if filters.status == 'failed' %}selected{% endif %}>{{ _('Failed') }}</option>
+                    <option value="refunded" {% if filters.status == 'refunded' %}selected{% endif %}>{{ _('Refunded') }}</option>
                 </select>
             </div>
             <div>
-                <label for="method" class="form-label">Payment Method</label>
+                <label for="method" class="form-label">{{ _('Payment Method') }}</label>
                 <select name="method" id="method" class="form-input">
-                    <option value="">All</option>
+                    <option value="">{{ _('All') }}</option>
                     {% for method in payment_methods %}
                     <option value="{{ method }}" {% if filters.method == method %}selected{% endif %}>{{ method }}</option>
                     {% endfor %}
                 </select>
             </div>
             <div>
-                <label for="date_from" class="form-label">From Date</label>
+                <label for="date_from" class="form-label">{{ _('From Date') }}</label>
                 <input type="date" name="date_from" id="date_from" value="{{ filters.date_from }}" class="form-input user-date-input">
             </div>
             <div>
-                <label for="date_to" class="form-label">To Date</label>
+                <label for="date_to" class="form-label">{{ _('To Date') }}</label>
                 <input type="date" name="date_to" id="date_to" value="{{ filters.date_to }}" class="form-input user-date-input">
             </div>
             <div class="flex items-end col-span-full justify-end gap-2">
-                <button type="submit" class="bg-primary hover:bg-primary-dark text-white px-4 py-2 rounded-lg">Filter</button>
-                <a href="{{ url_for('payments.list_payments') }}" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg">Clear</a>
+                <button type="submit" class="bg-primary hover:bg-primary-dark text-white px-4 py-2 rounded-lg">{{ _('Filter') }}</button>
+                <a href="{{ url_for('payments.list_payments') }}" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg">{{ _('Clear') }}</a>
             </div>
         </form>
         </div>
@@ -88,24 +88,24 @@
     <div class="bg-card-light dark:bg-card-dark rounded-xl border border-border-light dark:border-border-dark shadow-sm overflow-visible">
         <div class="flex justify-between items-center mb-4 p-6 pb-0">
             <h3 class="text-sm font-medium text-text-muted-light dark:text-text-muted-dark">
-                {{ payments|length }} payment{{ 's' if payments|length != 1 else '' }} found
+                {{ ngettext('%(num)s payment found', '%(num)s payments found', payments|length) }}
             </h3>
             <div class="flex items-center gap-2">
                 <a href="{{ url_for('payments.export_payments_excel', status=filters.status, method=filters.method, date_from=filters.date_from, date_to=filters.date_to) }}" 
                    class="px-3 py-1.5 text-sm bg-background-light dark:bg-background-dark rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors inline-flex items-center export-btn" 
                    title="{{ _('Export to Excel') }}"
                    onclick="showExportLoading(this); return true;">
-                    <i class="fas fa-download mr-1"></i> <span class="export-text">Export</span>
+                    <i class="fas fa-download mr-1"></i> <span class="export-text">{{ _('Export') }}</span>
                 </a>
                 {% if current_user.is_admin %}
                 <div class="relative">
                     <button type="button" id="bulkActionsBtn" class="px-3 py-1.5 text-sm border rounded-lg text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-600 disabled:opacity-60" onclick="openMenu(this, 'paymentsBulkMenu')" disabled>
-                        <i class="fas fa-tasks mr-1"></i> Bulk Actions (<span id="selectedCount">0</span>)
+                        <i class="fas fa-tasks mr-1"></i> {{ _('Bulk Actions') }} (<span id="selectedCount">0</span>)
                     </button>
                     <ul id="paymentsBulkMenu" class="bulk-menu hidden absolute right-0 mt-2 w-56 bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark rounded-md shadow-lg z-50">
-                        <li><a class="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700" href="#" onclick="return showBulkStatusDialog()"><i class="fas fa-tasks mr-2"></i>Change Status</a></li>
+                        <li><a class="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700" href="#" onclick="return showBulkStatusDialog()"><i class="fas fa-tasks mr-2"></i>{{ _('Change Status') }}</a></li>
                         <li><hr class="my-1 border-border-light dark:border-border-dark"></li>
-                        <li><a class="block px-4 py-2 text-sm text-rose-600 hover:bg-gray-100 dark:hover:bg-gray-700" href="#" onclick="return showBulkDeleteConfirm()"><i class="fas fa-trash mr-2"></i>Delete</a></li>
+                        <li><a class="block px-4 py-2 text-sm text-rose-600 hover:bg-gray-100 dark:hover:bg-gray-700" href="#" onclick="return showBulkDeleteConfirm()"><i class="fas fa-trash mr-2"></i>{{ _('Delete') }}</a></li>
                     </ul>
                 </div>
                 {% endif %}
@@ -120,13 +120,13 @@
                             <input type="checkbox" id="selectAll" class="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary" onchange="toggleAllPayments()">
                         </th>
                         {% endif %}
-                        <th class="px-4 py-3" data-sortable>ID</th>
-                        <th class="px-4 py-3" data-sortable>Invoice</th>
-                        <th class="px-4 py-3 table-number" data-sortable>Amount</th>
-                        <th class="px-4 py-3" data-sortable>Date</th>
-                        <th class="px-4 py-3" data-sortable>Method</th>
-                        <th class="px-4 py-3" data-sortable>Status</th>
-                        <th class="px-4 py-3">Actions</th>
+                        <th class="px-4 py-3" data-sortable>{{ _('ID') }}</th>
+                        <th class="px-4 py-3" data-sortable>{{ _('Invoice') }}</th>
+                        <th class="px-4 py-3 table-number" data-sortable>{{ _('Amount') }}</th>
+                        <th class="px-4 py-3" data-sortable>{{ _('Date') }}</th>
+                        <th class="px-4 py-3" data-sortable>{{ _('Method') }}</th>
+                        <th class="px-4 py-3" data-sortable>{{ _('Status') }}</th>
+                        <th class="px-4 py-3">{{ _('Actions') }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -150,7 +150,7 @@
                                 </span>
                                 {% if payment.gateway_fee %}
                                 <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                                    Fee: {{ payment.gateway_fee }} {{ payment.currency or 'EUR' }}
+                                    {{ _('Fee: %(amount)s %(currency)s', amount=payment.gateway_fee, currency=payment.currency or 'EUR') }}
                                 </div>
                                 {% endif %}
                             </td>
@@ -158,19 +158,19 @@
                             <td class="p-4" data-label="{{ _('Method') }}">{{ payment.method or '—' }}</td>
                             <td class="p-4" data-label="{{ _('Status') }}">
                                 {% if payment.status == 'completed' %}
-                                <span class="px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100">Completed</span>
+                                <span class="px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100">{{ _('Completed') }}</span>
                                 {% elif payment.status == 'pending' %}
-                                <span class="px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap bg-yellow-100 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-100">Pending</span>
+                                <span class="px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap bg-yellow-100 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-100">{{ _('Pending') }}</span>
                                 {% elif payment.status == 'failed' %}
-                                <span class="px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-100">Failed</span>
+                                <span class="px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-100">{{ _('Failed') }}</span>
                                 {% elif payment.status == 'refunded' %}
-                                <span class="px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap bg-gray-100 text-gray-800 dark:bg-gray-600 dark:text-gray-100">Refunded</span>
+                                <span class="px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap bg-gray-100 text-gray-800 dark:bg-gray-600 dark:text-gray-100">{{ _('Refunded') }}</span>
                                 {% else %}
                                 <span class="px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200">{{ payment.status|title }}</span>
                                 {% endif %}
                             </td>
                             <td class="p-4" data-label="{{ _('Actions') }}">
-                                <a href="{{ url_for('payments.view_payment', payment_id=payment.id) }}" class="text-primary hover:underline">View</a>
+                                <a href="{{ url_for('payments.view_payment', payment_id=payment.id) }}" class="text-primary hover:underline">{{ _('View') }}</a>
                             </td>
                         </tr>
                         {% endfor %}
@@ -181,16 +181,16 @@
             {% from "components/ui.html" import empty_state %}
             {% set actions %}
                 <a href="{{ url_for('payments.create_payment') }}" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors">
-                    <i class="fas fa-plus mr-2"></i>Record Your First Payment
+                    <i class="fas fa-plus mr-2"></i>{{ _('Record Your First Payment') }}
                 </a>
                 <a href="{{ url_for('main.help') }}" class="bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-4 py-2 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
-                    <i class="fas fa-question-circle mr-2"></i>Learn More
+                    <i class="fas fa-question-circle mr-2"></i>{{ _('Learn More') }}
                 </a>
             {% endset %}
             {% if filters.status or filters.method or filters.date_from or filters.date_to %}
-                {{ empty_state('fas fa-search', 'No Payments Match Your Filters', 'Try adjusting your filters to see more results. You can clear filters or record a new payment that matches your criteria.', actions, type='no-results') }}
+                {{ empty_state('fas fa-search', _('No Payments Match Your Filters'), _('Try adjusting your filters to see more results. You can clear filters or record a new payment that matches your criteria.'), actions, type='no-results') }}
             {% else %}
-                {{ empty_state('fas fa-credit-card', 'No Payments Yet', 'Track payments received from clients to manage your cash flow. Record your first payment to get started!', actions, type='no-data') }}
+                {{ empty_state('fas fa-credit-card', _('No Payments Yet'), _('Track payments received from clients to manage your cash flow. Record your first payment to get started!'), actions, type='no-data') }}
             {% endif %}
             {% endif %}
         </div>
@@ -220,15 +220,15 @@
                  </div>
                  <div class="ml-4 flex-1">
                      <h3 class="text-lg font-semibold text-text-light dark:text-text-dark mb-2">{{ _('Delete Selected Payments') }}</h3>
-                     <p class="text-sm text-text-muted-light dark:text-text-muted-dark">Are you sure you want to delete the selected payments? This action cannot be undone.</p>
+                     <p class="text-sm text-text-muted-light dark:text-text-muted-dark">{{ _('Are you sure you want to delete the selected payments? This action cannot be undone.') }}</p>
                  </div>
              </div>
              <div class="flex justify-end gap-3 mt-6">
                  <button type="button" class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors" onclick="closeBulkDeleteDialog()">
-                     Cancel
+                     {{ _('Cancel') }}
                  </button>
                  <button type="button" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors" onclick="submitBulkDelete()">
-                     Delete
+                     {{ _('Delete') }}
                  </button>
              </div>
          </div>
@@ -240,16 +240,16 @@
      <div class="bg-card-light dark:bg-card-dark rounded-lg shadow-xl max-w-md w-full mx-4">
          <div class="p-6">
              <h3 class="text-lg font-semibold mb-4">{{ _('Change Status for Selected Payments') }}</h3>
-             <label for="bulkStatusSelect" class="form-label">Select Status</label>
+             <label for="bulkStatusSelect" class="form-label">{{ _('Select Status') }}</label>
              <select id="bulkStatusSelect" class="form-input w-full mb-4">
-                 <option value="">-- Select Status --</option>
-                 <option value="completed">Completed</option>
-                 <option value="pending">Pending</option>
-                 <option value="failed">Failed</option>
-                 <option value="refunded">Refunded</option>
+                 <option value="">{{ _('-- Select Status --') }}</option>
+                 <option value="completed">{{ _('Completed') }}</option>
+                 <option value="pending">{{ _('Pending') }}</option>
+                 <option value="failed">{{ _('Failed') }}</option>
+                 <option value="refunded">{{ _('Refunded') }}</option>
              </select>
              <div class="flex justify-end gap-2">
-                 <button type="button" onclick="closeBulkStatusDialog()" class="px-4 py-2 text-sm bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600">Cancel</button>
+                 <button type="button" onclick="closeBulkStatusDialog()" class="px-4 py-2 text-sm bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600">{{ _('Cancel') }}</button>
                  <button type="button" onclick="submitBulkStatus()" class="px-4 py-2 text-sm bg-primary text-white rounded-lg hover:bg-primary/90">{{ _('Update Status') }}</button>
              </div>
          </div>
@@ -387,7 +387,7 @@ function submitBulkDelete() {
     
     const checkboxes = document.querySelectorAll('.payment-checkbox:checked');
     if (checkboxes.length === 0) {
-        alert('Please select at least one payment to delete.');
+        alert({{ _('Please select at least one payment to delete.')|tojson }});
         return;
     }
     
@@ -405,7 +405,7 @@ function submitBulkDelete() {
     if (btn) {
         originalHTML = btn.innerHTML;
         btn.disabled = true;
-        btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Processing...';
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> ' + {{ _('Processing...')|tojson }};
         
         // Re-enable after timeout (safety fallback)
         setTimeout(() => {
@@ -433,7 +433,7 @@ function submitBulkStatus() {
     
     const status = statusSelect.value;
     if (!status) {
-        alert('Please select a status');
+        alert({{ _('Please select a status')|tojson }});
         return;
     }
     
@@ -449,7 +449,7 @@ function submitBulkStatus() {
     
     const checkboxes = document.querySelectorAll('.payment-checkbox:checked');
     if (checkboxes.length === 0) {
-        alert('Please select at least one payment to update.');
+        alert({{ _('Please select at least one payment to update.')|tojson }});
         return;
     }
     
@@ -459,7 +459,7 @@ function submitBulkStatus() {
     if (btn) {
         originalHTML = btn.innerHTML;
         btn.disabled = true;
-        btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Processing...';
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> ' + {{ _('Processing...')|tojson }};
         
         // Re-enable after timeout (safety fallback)
         setTimeout(() => {
@@ -484,7 +484,7 @@ function submitBulkStatus() {
 function showExportLoading(link) {
     const originalHTML = link.innerHTML;
     link.classList.add('pointer-events-none', 'opacity-60');
-    link.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> <span class="export-text">Exporting...</span>';
+    link.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> <span class="export-text">' + {{ _('Exporting...')|tojson }} + '</span>';
     
     // Reset after 5 seconds (fallback)
     setTimeout(() => {

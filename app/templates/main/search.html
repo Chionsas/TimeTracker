@@ -88,7 +88,7 @@
                     </div>
 
                     <!-- Pagination -->
-                    <nav aria-label="Search pagination" class="mt-3 flex flex-wrap items-center justify-center gap-2">
+                    <nav aria-label="{{ _('Search pagination') }}" class="mt-3 flex flex-wrap items-center justify-center gap-2">
                         {% if entries.has_prev %}
                         <a class="btn btn-secondary btn-sm" href="{{ url_for('main.search', q=query, page=entries.prev_num) }}">{{ _('Previous') }}</a>
                         {% else %}
@@ -124,9 +124,9 @@ document.addEventListener('DOMContentLoaded', function(){
       var msg = f.getAttribute('data-confirm') || '';
       if (msg) {
         const confirmed = await showConfirm(msg, {
-          title: 'Confirm Action',
-          confirmText: 'Confirm',
-          cancelText: 'Cancel',
+          title: {{ _('Confirm Action')|tojson }},
+          confirmText: {{ _('Confirm')|tojson }},
+          cancelText: {{ _('Cancel')|tojson }},
           variant: 'warning'
         });
         if (confirmed) {

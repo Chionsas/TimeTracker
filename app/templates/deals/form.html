@@ -1,18 +1,18 @@
 {% extends "base.html" %}
 {% from "components/ui.html" import page_header, breadcrumb_nav %}
 
-{% block title %}{{ 'Edit' if deal else 'Create' }} Deal - {{ config.APP_NAME }}{% endblock %}
+{% block title %}{{ _('Edit Deal') if deal else _('Create Deal') }} - {{ config.APP_NAME }}{% endblock %}
 
 {% block content %}
 {% set breadcrumbs = [
-    {'text': 'Deals', 'url': url_for('deals.list_deals')},
-    {'text': 'Edit Deal' if deal else 'Create Deal'}
+    {'text': _('Deals'), 'url': url_for('deals.list_deals')},
+    {'text': _('Edit Deal') if deal else _('Create Deal')}
 ] %}
 
 {{ page_header(
     icon_class='fas fa-handshake',
-    title_text='Edit Deal' if deal else 'Create Deal',
-    subtitle_text='Manage deal information',
+    title_text=_('Edit Deal') if deal else _('Create Deal'),
+    subtitle_text=_('Manage deal information'),
     breadcrumbs=breadcrumbs
 ) }}
 

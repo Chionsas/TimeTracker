@@ -64,32 +64,32 @@
     </div>
     
     <div class="content">
-        <p>Hello,</p>
+        <p>{{ _('Hello,') }}</p>
         
-        <p>Please find attached quote <strong>{{ quote.quote_number }}</strong> for your review.</p>
+        <p>{{ _('Please find attached quote') }} <strong>{{ quote.quote_number }}</strong> {{ _('for your review.') }}</p>
         
         <div class="quote-details">
             <table>
                 <tr>
-                    <td>Quote Number:</td>
+                    <td>{{ _('Quote Number:') }}</td>
                     <td>{{ quote.quote_number }}</td>
                 </tr>
                 <tr>
-                    <td>Title:</td>
+                    <td>{{ _('Title:') }}</td>
                     <td>{{ quote.title }}</td>
                 </tr>
                 <tr>
-                    <td>Date:</td>
-                    <td>{{ quote.created_at|user_date if quote.created_at else 'N/A' }}</td>
+                    <td>{{ _('Date:') }}</td>
+                    <td>{{ quote.created_at|user_date if quote.created_at else _('N/A') }}</td>
                 </tr>
                 {% if quote.valid_until %}
                 <tr>
-                    <td>Valid Until:</td>
+                    <td>{{ _('Valid Until:') }}</td>
                     <td>{{ quote.valid_until|format_date }}</td>
                 </tr>
                 {% endif %}
                 <tr>
-                    <td>Amount:</td>
+                    <td>{{ _('Amount:') }}</td>
                     <td><strong>{{ quote.currency_code }} {{ "%.2f"|format(quote.total_amount) }}</strong></td>
                 </tr>
             </table>
@@ -97,20 +97,20 @@
         
         {% if custom_message %}
         <div class="custom-message">
-            <p><strong>Message:</strong></p>
+            <p><strong>{{ _('Message:') }}</strong></p>
             <p>{{ custom_message }}</p>
         </div>
         {% endif %}
         
-        <p>Please review the attached quote and let us know if you have any questions.</p>
+        <p>{{ _('Please review the attached quote and let us know if you have any questions.') }}</p>
         
-        <p>Thank you for your interest!</p>
+        <p>{{ _('Thank you for your interest!') }}</p>
     </div>
     
     <div class="footer">
         <p><strong>{{ company_name }}</strong></p>
-        <p>TimeTracker - Time Tracking & Project Management</p>
-        <p>This quote was sent automatically. Please contact us if you have any questions.</p>
+        <p>{{ _('TimeTracker - Time Tracking & Project Management') }}</p>
+        <p>{{ _('This quote was sent automatically. Please contact us if you have any questions.') }}</p>
     </div>
 </body>
 </html>

@@ -30,7 +30,7 @@
             <!-- Left side - Branding -->
             <div class="hidden md:flex flex-col items-center justify-center p-10 bg-background-light dark:bg-background-dark border-r border-border-light dark:border-border-dark">
                 <div class="text-center">
-                    <img src="{{ url_for('static', filename='images/timetracker-logo.svg') }}" alt="logo" class="w-24 h-24 mx-auto">
+                    <img src="{{ url_for('static', filename='images/timetracker-logo.svg') }}" alt="{{ _('logo') }}" class="w-24 h-24 mx-auto">
                     <h1 class="text-3xl font-bold mt-4 text-primary">TimeTracker</h1>
                     <p class="mt-2 text-text-muted-light dark:text-text-muted-dark">{{ _('Track time. Stay organized.') }}</p>
                     <!-- Privacy Principles -->
@@ -67,7 +67,7 @@
             <!-- Right side - Wizard -->
             <div class="p-4 sm:p-8 overflow-y-auto max-h-[90vh]">
                 <div class="flex items-center gap-3 mb-4 md:hidden">
-                    <img src="{{ url_for('static', filename='images/timetracker-logo.svg') }}" alt="TimeTracker Logo" class="w-10 h-10">
+                    <img src="{{ url_for('static', filename='images/timetracker-logo.svg') }}" alt="{{ _('TimeTracker Logo') }}" class="w-10 h-10">
                     <span class="text-xl font-bold text-primary">TimeTracker</span>
                 </div>
                 <p class="text-sm font-medium text-text-muted-light dark:text-text-muted-dark mb-4" id="wizard-progress-label">{{ _('Step 1 of 7') }}</p>

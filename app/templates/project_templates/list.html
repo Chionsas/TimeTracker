@@ -5,15 +5,15 @@
 
 {% block content %}
 {% set breadcrumbs = [
-    {'text': 'Project Templates'}
+    {'text': _('Project Templates')}
 ] %}
 
 {{ page_header(
     icon_class='fas fa-layer-group',
-    title_text='Project Templates',
-    subtitle_text='Create reusable project configurations',
+    title_text=_('Project Templates'),
+    subtitle_text=_('Create reusable project configurations'),
     breadcrumbs=breadcrumbs,
-    actions_html='<a href="' + url_for("project_templates.create_template") + '" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors"><i class="fas fa-plus mr-2"></i>Create Template</a>' if (current_user.is_admin or has_permission('create_projects')) else None
+    actions_html='<a href="' + url_for("project_templates.create_template") + '" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors"><i class="fas fa-plus mr-2"></i>' + _('Create Template') + '</a>' if (current_user.is_admin or has_permission('create_projects')) else None
 ) }}
 
 <div class="bg-card-light dark:bg-card-dark p-6 rounded-xl border border-border-light dark:border-border-dark shadow-sm mb-6">

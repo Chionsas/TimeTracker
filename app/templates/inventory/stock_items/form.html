@@ -3,15 +3,15 @@
 
 {% block content %}
 {% set breadcrumbs = [
-    {'text': 'Inventory', 'url': url_for('inventory.list_stock_items')},
-    {'text': 'Stock Items', 'url': url_for('inventory.list_stock_items')},
-    {'text': item.name if item else 'New Stock Item'}
+    {'text': _('Inventory'), 'url': url_for('inventory.list_stock_items')},
+    {'text': _('Stock Items'), 'url': url_for('inventory.list_stock_items')},
+    {'text': item.name if item else _('New Stock Item')}
 ] %}
 
 {{ page_header(
     icon_class='fas fa-cubes',
-    title_text=item.name if item else 'New Stock Item',
-    subtitle_text='Create or edit stock item' if not item else 'Edit stock item',
+    title_text=item.name if item else _('New Stock Item'),
+    subtitle_text=_('Create or edit stock item') if not item else _('Edit stock item'),
     breadcrumbs=breadcrumbs
 ) }}
 

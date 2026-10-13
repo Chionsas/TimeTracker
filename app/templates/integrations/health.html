@@ -6,11 +6,11 @@
 {% block content %}
 {{ page_header(
     icon_class='fas fa-heartbeat',
-    title_text='Integration Health',
-    subtitle_text='Overview of integration status, last sync results, and credentials expiry.',
+    title_text=_('Integration Health'),
+    subtitle_text=_('Overview of integration status, last sync results, and credentials expiry.'),
     breadcrumbs=[
-        {'text': 'Integrations', 'url': url_for('integrations.list_integrations')},
-        {'text': 'Health'}
+        {'text': _('Integrations'), 'url': url_for('integrations.list_integrations')},
+        {'text': _('Health')}
     ]
 ) }}
 

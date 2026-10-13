@@ -4,7 +4,7 @@
 <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
     <div>
         <h1 class="text-2xl font-bold">{{ _('Clear Cache') }}</h1>
-        <p class="text-text-muted-light dark:text-text-muted-dark">Force clear browser and ServiceWorker cache</p>
+        <p class="text-text-muted-light dark:text-text-muted-dark">{{ _('Force clear browser and ServiceWorker cache') }}</p>
     </div>
 </div>
 
@@ -14,7 +14,7 @@
         <div class="border-b border-border-light dark:border-border-dark pb-6">
             <h2 class="text-lg font-semibold mb-4">{{ _('ServiceWorker Status') }}</h2>
             <div id="sw-status" class="p-4 bg-gray-50 dark:bg-gray-800 rounded">
-                <p class="text-sm">Checking ServiceWorker...</p>
+                <p class="text-sm">{{ _('Checking ServiceWorker...') }}</p>
             </div>
         </div>
 
@@ -22,10 +22,10 @@
         <div class="border-b border-border-light dark:border-border-dark pb-6">
             <h2 class="text-lg font-semibold mb-4">{{ _('Clear All Caches') }}</h2>
             <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                This will clear all cached resources including CSS, JavaScript, and images. Use this if you're experiencing issues with outdated content.
+                {{ _("This will clear all cached resources including CSS, JavaScript, and images. Use this if you're experiencing issues with outdated content.") }}
             </p>
             <button onclick="clearAllCaches()" class="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg font-medium transition-colors">
-                Clear All Caches
+                {{ _('Clear All Caches') }}
             </button>
             <div id="cache-status" class="mt-4 p-3 rounded hidden"></div>
         </div>
@@ -35,10 +35,10 @@
             <h2 class="text-lg font-semibold mb-4">{{ _('ServiceWorker Actions') }}</h2>
             <div class="flex flex-wrap gap-3">
                 <button onclick="unregisterSW()" class="bg-orange-600 hover:bg-orange-700 text-white px-6 py-2 rounded-lg font-medium transition-colors">
-                    Unregister ServiceWorker
+                    {{ _('Unregister ServiceWorker') }}
                 </button>
                 <button onclick="updateSW()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-colors">
-                    Update ServiceWorker
+                    {{ _('Update ServiceWorker') }}
                 </button>
             </div>
             <div id="sw-action-status" class="mt-4 p-3 rounded hidden"></div>
@@ -48,12 +48,12 @@
         <div>
             <h2 class="text-lg font-semibold mb-4">{{ _('Manual Hard Refresh') }}</h2>
             <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">
-                If clearing cache doesn't help, try a hard refresh:
+                {{ _("If clearing cache doesn't help, try a hard refresh:") }}
             </p>
             <ul class="list-disc list-inside text-sm text-gray-600 dark:text-gray-400 space-y-1">
-                <li><strong>Windows/Linux:</strong> Press <kbd class="px-2 py-1 bg-gray-200 dark:bg-gray-700 rounded">Ctrl + F5</kbd> or <kbd class="px-2 py-1 bg-gray-200 dark:bg-gray-700 rounded">Ctrl + Shift + R</kbd></li>
-                <li><strong>Mac:</strong> Press <kbd class="px-2 py-1 bg-gray-200 dark:bg-gray-700 rounded">Cmd + Shift + R</kbd></li>
-                <li><strong>Chrome DevTools:</strong> Right-click refresh button → "Empty Cache and Hard Reload"</li>
+                <li><strong>Windows/Linux:</strong> {{ _('Press %(key1)s or %(key2)s', key1='<kbd class="px-2 py-1 bg-gray-200 dark:bg-gray-700 rounded">Ctrl + F5</kbd>', key2='<kbd class="px-2 py-1 bg-gray-200 dark:bg-gray-700 rounded">Ctrl + Shift + R</kbd>')|safe }}</li>
+                <li><strong>Mac:</strong> {{ _('Press %(key)s', key='<kbd class="px-2 py-1 bg-gray-200 dark:bg-gray-700 rounded">Cmd + Shift + R</kbd>')|safe }}</li>
+                <li><strong>Chrome DevTools:</strong> {{ _('Right-click refresh button → "Empty Cache and Hard Reload"') }}</li>
             </ul>
         </div>
     </div>
@@ -65,7 +65,7 @@ async function checkSWStatus() {
     const statusDiv = document.getElementById('sw-status');
     
     if (!('serviceWorker' in navigator)) {
-        statusDiv.innerHTML = '<p class="text-yellow-600">ServiceWorker not supported in this browser</p>';
+        statusDiv.innerHTML = '<p class="text-yellow-600">' + {{ _('ServiceWorker not supported in this browser')|tojson }} + '</p>';
         return;
     }
     
@@ -73,7 +73,7 @@ async function checkSWStatus() {
         const registration = await navigator.serviceWorker.getRegistration();
         
         if (!registration) {
-            statusDiv.innerHTML = '<p class="text-green-600">✓ No ServiceWorker registered</p>';
+            statusDiv.innerHTML = '<p class="text-green-600">✓ ' + {{ _('No ServiceWorker registered')|tojson }} + '</p>';
             return;
         }
         
@@ -82,13 +82,13 @@ async function checkSWStatus() {
         
         statusDiv.innerHTML = `
             <div class="space-y-2 text-sm">
-                <p><strong>Status:</strong> <span class="text-blue-600">${state}</span></p>
-                <p><strong>Scope:</strong> ${scope}</p>
-                <p><strong>Version:</strong> v1.0.1 (with uploads fix)</p>
+                <p><strong>${ {{ _('Status:')|tojson }} }</strong> <span class="text-blue-600">${state}</span></p>
+                <p><strong>${ {{ _('Scope:')|tojson }} }</strong> ${scope}</p>
+                <p><strong>${ {{ _('Version:')|tojson }} }</strong> v1.0.1 ${ {{ _('(with uploads fix)')|tojson }} }</p>
             </div>
         `;
     } catch (error) {
-        statusDiv.innerHTML = `<p class="text-red-600">Error checking ServiceWorker: ${error.message}</p>`;
+        statusDiv.innerHTML = `<p class="text-red-600">${ {{ _('Error checking ServiceWorker: %(error)s')|tojson }}.replace('%(error)s', error.message) }</p>`;
     }
 }
 
@@ -97,7 +97,7 @@ async function clearAllCaches() {
     const statusDiv = document.getElementById('cache-status');
     statusDiv.classList.remove('hidden');
     statusDiv.className = 'mt-4 p-3 rounded bg-blue-50 dark:bg-blue-900/20 text-blue-800 dark:text-blue-200';
-    statusDiv.textContent = 'Clearing caches...';
+    statusDiv.textContent = {{ _('Clearing caches...')|tojson }};
     
     try {
         if ('serviceWorker' in navigator) {
@@ -112,14 +112,14 @@ async function clearAllCaches() {
             await Promise.all(cacheNames.map(name => caches.delete(name)));
             
             statusDiv.className = 'mt-4 p-3 rounded bg-green-50 dark:bg-green-900/20 text-green-800 dark:text-green-200';
-            statusDiv.textContent = `✓ Successfully cleared ${cacheNames.length} cache(s). Refresh the page to see changes.`;
+            statusDiv.textContent = '✓ ' + {{ _('Successfully cleared %(count)s cache(s). Refresh the page to see changes.')|tojson }}.replace('%(count)s', cacheNames.length);
         } else {
             statusDiv.className = 'mt-4 p-3 rounded bg-yellow-50 dark:bg-yellow-900/20 text-yellow-800 dark:text-yellow-200';
-            statusDiv.textContent = 'Cache API not available in this browser';
+            statusDiv.textContent = {{ _('Cache API not available in this browser')|tojson }};
         }
     } catch (error) {
         statusDiv.className = 'mt-4 p-3 rounded bg-red-50 dark:bg-red-900/20 text-red-800 dark:text-red-200';
-        statusDiv.textContent = `Error clearing caches: ${error.message}`;
+        statusDiv.textContent = {{ _('Error clearing caches: %(error)s')|tojson }}.replace('%(error)s', error.message);
     }
 }
 
@@ -128,12 +128,12 @@ async function unregisterSW() {
     const statusDiv = document.getElementById('sw-action-status');
     statusDiv.classList.remove('hidden');
     statusDiv.className = 'mt-4 p-3 rounded bg-blue-50 dark:bg-blue-900/20 text-blue-800 dark:text-blue-200';
-    statusDiv.textContent = 'Unregistering ServiceWorker...';
+    statusDiv.textContent = {{ _('Unregistering ServiceWorker...')|tojson }};
     
     try {
         if (!('serviceWorker' in navigator)) {
             statusDiv.className = 'mt-4 p-3 rounded bg-yellow-50 dark:bg-yellow-900/20 text-yellow-800 dark:text-yellow-200';
-            statusDiv.textContent = 'ServiceWorker not supported';
+            statusDiv.textContent = {{ _('ServiceWorker not supported')|tojson }};
             return;
         }
         
@@ -141,7 +141,7 @@ async function unregisterSW() {
         
         if (!registration) {
             statusDiv.className = 'mt-4 p-3 rounded bg-yellow-50 dark:bg-yellow-900/20 text-yellow-800 dark:text-yellow-200';
-            statusDiv.textContent = 'No ServiceWorker registered';
+            statusDiv.textContent = {{ _('No ServiceWorker registered')|tojson }};
             return;
         }
         
@@ -149,15 +149,15 @@ async function unregisterSW() {
         
         if (success) {
             statusDiv.className = 'mt-4 p-3 rounded bg-green-50 dark:bg-green-900/20 text-green-800 dark:text-green-200';
-            statusDiv.textContent = '✓ ServiceWorker unregistered successfully. Refresh the page.';
+            statusDiv.textContent = '✓ ' + {{ _('ServiceWorker unregistered successfully. Refresh the page.')|tojson }};
             setTimeout(() => checkSWStatus(), 1000);
         } else {
             statusDiv.className = 'mt-4 p-3 rounded bg-red-50 dark:bg-red-900/20 text-red-800 dark:text-red-200';
-            statusDiv.textContent = 'Failed to unregister ServiceWorker';
+            statusDiv.textContent = {{ _('Failed to unregister ServiceWorker')|tojson }};
         }
     } catch (error) {
         statusDiv.className = 'mt-4 p-3 rounded bg-red-50 dark:bg-red-900/20 text-red-800 dark:text-red-200';
-        statusDiv.textContent = `Error: ${error.message}`;
+        statusDiv.textContent = {{ _('Error: %(error)s')|tojson }}.replace('%(error)s', error.message);
     }
 }
 
@@ -166,12 +166,12 @@ async function updateSW() {
     const statusDiv = document.getElementById('sw-action-status');
     statusDiv.classList.remove('hidden');
     statusDiv.className = 'mt-4 p-3 rounded bg-blue-50 dark:bg-blue-900/20 text-blue-800 dark:text-blue-200';
-    statusDiv.textContent = 'Checking for ServiceWorker updates...';
+    statusDiv.textContent = {{ _('Checking for ServiceWorker updates...')|tojson }};
     
     try {
         if (!('serviceWorker' in navigator)) {
             statusDiv.className = 'mt-4 p-3 rounded bg-yellow-50 dark:bg-yellow-900/20 text-yellow-800 dark:text-yellow-200';
-            statusDiv.textContent = 'ServiceWorker not supported';
+            statusDiv.textContent = {{ _('ServiceWorker not supported')|tojson }};
             return;
         }
         
@@ -179,18 +179,18 @@ async function updateSW() {
         
         if (!registration) {
             statusDiv.className = 'mt-4 p-3 rounded bg-yellow-50 dark:bg-yellow-900/20 text-yellow-800 dark:text-yellow-200';
-            statusDiv.textContent = 'No ServiceWorker registered';
+            statusDiv.textContent = {{ _('No ServiceWorker registered')|tojson }};
             return;
         }
         
         await registration.update();
         
         statusDiv.className = 'mt-4 p-3 rounded bg-green-50 dark:bg-green-900/20 text-green-800 dark:text-green-200';
-        statusDiv.textContent = '✓ ServiceWorker update checked. Refresh the page to activate new version.';
+        statusDiv.textContent = '✓ ' + {{ _('ServiceWorker update checked. Refresh the page to activate new version.')|tojson }};
         setTimeout(() => checkSWStatus(), 1000);
     } catch (error) {
         statusDiv.className = 'mt-4 p-3 rounded bg-red-50 dark:bg-red-900/20 text-red-800 dark:text-red-200';
-        statusDiv.textContent = `Error: ${error.message}`;
+        statusDiv.textContent = {{ _('Error: %(error)s')|tojson }}.replace('%(error)s', error.message);
     }
 }
 

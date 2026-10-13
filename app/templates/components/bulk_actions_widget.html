@@ -9,7 +9,7 @@
                 <button onclick="closeBulkActions()" class="text-white hover:text-gray-200">
                     <i class="fas fa-times"></i>
                 </button>
-                <span id="selectedCount" class="font-semibold">0 tasks selected</span>
+                <span id="selectedCount" class="font-semibold">{{ _('%(count)s tasks selected', count=0) }}</span>
             </div>
 
             <!-- Bulk Actions -->
@@ -19,21 +19,21 @@
                     <button onclick="toggleBulkDropdown('statusDropdown')" 
                             class="bg-white text-blue-600 px-4 py-2 rounded-lg hover:bg-gray-100 inline-flex items-center">
                         <i class="fas fa-tasks mr-2"></i>
-                        Change Status
+                        {{ _('Change Status') }}
                         <i class="fas fa-chevron-down ml-2"></i>
                     </button>
                     <div id="statusDropdown" class="hidden absolute bottom-full mb-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1">
                         <button onclick="bulkUpdateStatus('active')" class="w-full text-left px-4 py-2 hover:bg-gray-100 text-gray-900">
-                            <i class="fas fa-circle text-green-500 mr-2"></i>Active
+                            <i class="fas fa-circle text-green-500 mr-2"></i>{{ _('Active') }}
                         </button>
                         <button onclick="bulkUpdateStatus('completed')" class="w-full text-left px-4 py-2 hover:bg-gray-100 text-gray-900">
-                            <i class="fas fa-check-circle text-blue-500 mr-2"></i>Completed
+                            <i class="fas fa-check-circle text-blue-500 mr-2"></i>{{ _('Completed') }}
                         </button>
                         <button onclick="bulkUpdateStatus('on_hold')" class="w-full text-left px-4 py-2 hover:bg-gray-100 text-gray-900">
-                            <i class="fas fa-pause-circle text-yellow-500 mr-2"></i>On Hold
+                            <i class="fas fa-pause-circle text-yellow-500 mr-2"></i>{{ _('On Hold') }}
                         </button>
                         <button onclick="bulkUpdateStatus('cancelled')" class="w-full text-left px-4 py-2 hover:bg-gray-100 text-gray-900">
-                            <i class="fas fa-times-circle text-red-500 mr-2"></i>Cancelled
+                            <i class="fas fa-times-circle text-red-500 mr-2"></i>{{ _('Cancelled') }}
                         </button>
                     </div>
                 </div>
@@ -43,21 +43,21 @@
                     <button onclick="toggleBulkDropdown('priorityDropdown')" 
                             class="bg-white text-blue-600 px-4 py-2 rounded-lg hover:bg-gray-100 inline-flex items-center">
                         <i class="fas fa-flag mr-2"></i>
-                        Change Priority
+                        {{ _('Change Priority') }}
                         <i class="fas fa-chevron-down ml-2"></i>
                     </button>
                     <div id="priorityDropdown" class="hidden absolute bottom-full mb-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1">
                         <button onclick="bulkUpdatePriority('low')" class="w-full text-left px-4 py-2 hover:bg-gray-100 text-gray-900">
-                            <i class="fas fa-flag text-gray-400 mr-2"></i>Low
+                            <i class="fas fa-flag text-gray-400 mr-2"></i>{{ _('Low') }}
                         </button>
                         <button onclick="bulkUpdatePriority('medium')" class="w-full text-left px-4 py-2 hover:bg-gray-100 text-gray-900">
-                            <i class="fas fa-flag text-yellow-500 mr-2"></i>Medium
+                            <i class="fas fa-flag text-yellow-500 mr-2"></i>{{ _('Medium') }}
                         </button>
                         <button onclick="bulkUpdatePriority('high')" class="w-full text-left px-4 py-2 hover:bg-gray-100 text-gray-900">
-                            <i class="fas fa-flag text-orange-500 mr-2"></i>High
+                            <i class="fas fa-flag text-orange-500 mr-2"></i>{{ _('High') }}
                         </button>
                         <button onclick="bulkUpdatePriority('urgent')" class="w-full text-left px-4 py-2 hover:bg-gray-100 text-gray-900">
-                            <i class="fas fa-flag text-red-500 mr-2"></i>Urgent
+                            <i class="fas fa-flag text-red-500 mr-2"></i>{{ _('Urgent') }}
                         </button>
                     </div>
                 </div>
@@ -67,7 +67,7 @@
                     <button onclick="toggleBulkDropdown('assignDropdown')" 
                             class="bg-white text-blue-600 px-4 py-2 rounded-lg hover:bg-gray-100 inline-flex items-center">
                         <i class="fas fa-user mr-2"></i>
-                        Assign To
+                        {{ _('Assign To') }}
                         <i class="fas fa-chevron-down ml-2"></i>
                     </button>
                     <div id="assignDropdown" class="hidden absolute bottom-full mb-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1 max-h-64 overflow-y-auto">
@@ -78,7 +78,7 @@
                         </button>
                         {% endfor %}
                         {% else %}
-                        <div class="px-4 py-2 text-gray-500 text-sm">No users available</div>
+                        <div class="px-4 py-2 text-gray-500 text-sm">{{ _('No users available') }}</div>
                         {% endif %}
                     </div>
                 </div>
@@ -86,7 +86,7 @@
                 <!-- Delete Button -->
                 <button onclick="bulkDelete()" 
                         class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 inline-flex items-center">
-                    <i class="fas fa-trash mr-2"></i>Delete
+                    <i class="fas fa-trash mr-2"></i>{{ _('Delete') }}
                 </button>
             </div>
         </div>
@@ -159,7 +159,7 @@ function updateBulkActionsBar() {
     
     if (selectedTaskIds.size > 0) {
         bulkActionsBar.classList.remove('hidden');
-        selectedCount.textContent = `${selectedTaskIds.size} task${selectedTaskIds.size !== 1 ? 's' : ''} selected`;
+        selectedCount.textContent = (selectedTaskIds.size !== 1 ? {{ _('%(count)s tasks selected')|tojson }} : {{ _('%(count)s task selected')|tojson }}).replace('%(count)s', selectedTaskIds.size);
     } else {
         bulkActionsBar.classList.add('hidden');
     }
@@ -216,23 +216,23 @@ function submitBulkAction(url, extraData = {}) {
 }
 
 function bulkUpdateStatus(status) {
-    const msg = `Change status of ${selectedTaskIds.size} task(s) to ${status}?`;
-    if (window.showConfirm){ window.showConfirm(msg, { title: 'Change Task Status', confirmText: 'Change' }).then(function(ok){ if (ok) submitBulkAction('{{ url_for("tasks.bulk_update_status") }}', { status: status }); }); }
+    const msg = {{ _('Change status of %(count)s task(s) to %(status)s?')|tojson }}.replace('%(count)s', selectedTaskIds.size).replace('%(status)s', status);
+    if (window.showConfirm){ window.showConfirm(msg, { title: {{ _('Change Task Status')|tojson }}, confirmText: {{ _('Change')|tojson }} }).then(function(ok){ if (ok) submitBulkAction('{{ url_for("tasks.bulk_update_status") }}', { status: status }); }); }
 }
 
 function bulkUpdatePriority(priority) {
-    const msg = `Change priority of ${selectedTaskIds.size} task(s) to ${priority}?`;
-    if (window.showConfirm){ window.showConfirm(msg, { title: 'Change Task Priority', confirmText: 'Change' }).then(function(ok){ if (ok) submitBulkAction('{{ url_for("tasks.bulk_update_priority") }}', { priority: priority }); }); }
+    const msg = {{ _('Change priority of %(count)s task(s) to %(priority)s?')|tojson }}.replace('%(count)s', selectedTaskIds.size).replace('%(priority)s', priority);
+    if (window.showConfirm){ window.showConfirm(msg, { title: {{ _('Change Task Priority')|tojson }}, confirmText: {{ _('Change')|tojson }} }).then(function(ok){ if (ok) submitBulkAction('{{ url_for("tasks.bulk_update_priority") }}', { priority: priority }); }); }
 }
 
 function bulkAssign(userId) {
-    const msg = `Assign ${selectedTaskIds.size} task(s) to selected user?`;
-    if (window.showConfirm){ window.showConfirm(msg, { title: 'Assign Tasks', confirmText: 'Assign' }).then(function(ok){ if (ok) submitBulkAction('{{ url_for("tasks.bulk_assign_tasks") }}', { assigned_to: userId }); }); }
+    const msg = {{ _('Assign %(count)s task(s) to selected user?')|tojson }}.replace('%(count)s', selectedTaskIds.size);
+    if (window.showConfirm){ window.showConfirm(msg, { title: {{ _('Assign Tasks')|tojson }}, confirmText: {{ _('Assign')|tojson }} }).then(function(ok){ if (ok) submitBulkAction('{{ url_for("tasks.bulk_assign_tasks") }}', { assigned_to: userId }); }); }
 }
 
 function bulkDelete() {
-    const msg = `Are you sure you want to delete ${selectedTaskIds.size} task(s)? This action cannot be undone.`;
-    if (window.showConfirm){ window.showConfirm(msg, { title: 'Delete Tasks', confirmText: 'Delete', variant: 'danger' }).then(function(ok){ if (ok) submitBulkAction('{{ url_for("tasks.bulk_delete_tasks") }}'); }); }
+    const msg = {{ _('Are you sure you want to delete %(count)s task(s)? This action cannot be undone.')|tojson }}.replace('%(count)s', selectedTaskIds.size);
+    if (window.showConfirm){ window.showConfirm(msg, { title: {{ _('Delete Tasks')|tojson }}, confirmText: {{ _('Delete')|tojson }}, variant: 'danger' }).then(function(ok){ if (ok) submitBulkAction('{{ url_for("tasks.bulk_delete_tasks") }}'); }); }
 }
 
 // Close dropdowns when clicking outside

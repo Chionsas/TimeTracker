@@ -3,13 +3,13 @@
 
 {% block content %}
 {% set breadcrumbs = [
-    {'text': 'Admin Dashboard'}
+    {'text': _('Admin Dashboard')}
 ] %}
 
 {{ page_header(
     icon_class='fas fa-cog',
-    title_text='Admin Dashboard',
-    subtitle_text='System overview and management',
+    title_text=_('Admin Dashboard'),
+    subtitle_text=_('System overview and management'),
     breadcrumbs=breadcrumbs,
     actions_html=None
 ) }}
@@ -230,92 +230,92 @@
         <a href="{{ url_for('admin.list_users') }}" class="group bg-gradient-to-br from-blue-500 to-blue-600 text-white p-5 rounded-lg text-center hover:from-blue-600 hover:to-blue-700 hover:shadow-lg hover:scale-105 transition-all duration-200 relative overflow-hidden">
             <div class="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
             <i class="fas fa-users text-2xl mb-2 relative z-10"></i>
-            <div class="font-semibold relative z-10">Manage Users</div>
+            <div class="font-semibold relative z-10">{{ _('Manage Users') }}</div>
         </a>
         
         <!-- Roles & Permissions -->
         <a href="{{ url_for('permissions.list_roles') }}" class="group bg-gradient-to-br from-blue-500 to-blue-600 text-white p-5 rounded-lg text-center hover:from-blue-600 hover:to-blue-700 hover:shadow-lg hover:scale-105 transition-all duration-200 relative overflow-hidden">
             <div class="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
             <i class="fas fa-shield-alt text-2xl mb-2 relative z-10"></i>
-            <div class="font-semibold relative z-10">Roles & Permissions</div>
+            <div class="font-semibold relative z-10">{{ _('Roles & Permissions') }}</div>
         </a>
         
         <!-- API Tokens -->
         <a href="{{ url_for('admin.api_tokens') }}" class="group bg-gradient-to-br from-green-500 to-green-600 text-white p-5 rounded-lg text-center hover:from-green-600 hover:to-green-700 hover:shadow-lg hover:scale-105 transition-all duration-200 relative overflow-hidden">
             <div class="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
             <i class="fas fa-key text-2xl mb-2 relative z-10"></i>
-            <div class="font-semibold relative z-10">API Tokens</div>
-            <div class="text-xs mt-1 opacity-90 relative z-10">REST API Access</div>
+            <div class="font-semibold relative z-10">{{ _('API Tokens') }}</div>
+            <div class="text-xs mt-1 opacity-90 relative z-10">{{ _('REST API Access') }}</div>
         </a>
         
         <!-- Webhooks -->
         <a href="{{ url_for('webhooks.list_webhooks') }}" class="group bg-gradient-to-br from-indigo-500 to-indigo-600 text-white p-5 rounded-lg text-center hover:from-indigo-600 hover:to-indigo-700 hover:shadow-lg hover:scale-105 transition-all duration-200 relative overflow-hidden">
             <div class="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
             <i class="fas fa-plug text-2xl mb-2 relative z-10"></i>
-            <div class="font-semibold relative z-10">Webhooks</div>
-            <div class="text-xs mt-1 opacity-90 relative z-10">Outgoing Events</div>
+            <div class="font-semibold relative z-10">{{ _('Webhooks') }}</div>
+            <div class="text-xs mt-1 opacity-90 relative z-10">{{ _('Outgoing Events') }}</div>
         </a>
         
         <!-- Integrations -->
         <a href="{{ url_for('integrations.list_integrations') }}" class="group bg-gradient-to-br from-purple-500 to-purple-600 text-white p-5 rounded-lg text-center hover:from-purple-600 hover:to-purple-700 hover:shadow-lg hover:scale-105 transition-all duration-200 relative overflow-hidden">
             <div class="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
             <i class="fas fa-plug text-2xl mb-2 relative z-10"></i>
-            <div class="font-semibold relative z-10">Integrations</div>
-            <div class="text-xs mt-1 opacity-90 relative z-10">OAuth Setup</div>
+            <div class="font-semibold relative z-10">{{ _('Integrations') }}</div>
+            <div class="text-xs mt-1 opacity-90 relative z-10">{{ _('OAuth Setup') }}</div>
         </a>
         
         <!-- Email Configuration -->
         <a href="{{ url_for('admin.email_support') }}" class="group bg-gradient-to-br from-purple-500 to-purple-600 text-white p-5 rounded-lg text-center hover:from-purple-600 hover:to-purple-700 hover:shadow-lg hover:scale-105 transition-all duration-200 relative overflow-hidden">
             <div class="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
             <i class="fas fa-envelope text-2xl mb-2 relative z-10"></i>
-            <div class="font-semibold relative z-10">Email Configuration</div>
-            <div class="text-xs mt-1 opacity-90 relative z-10">Test & Configure</div>
+            <div class="font-semibold relative z-10">{{ _('Email Configuration') }}</div>
+            <div class="text-xs mt-1 opacity-90 relative z-10">{{ _('Test & Configure') }}</div>
         </a>
         
         <!-- Email Templates -->
         <a href="{{ url_for('admin.list_email_templates') }}" class="group bg-gradient-to-br from-purple-500 to-purple-600 text-white p-5 rounded-lg text-center hover:from-purple-600 hover:to-purple-700 hover:shadow-lg hover:scale-105 transition-all duration-200 relative overflow-hidden">
             <div class="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
             <i class="fas fa-file-alt text-2xl mb-2 relative z-10"></i>
-            <div class="font-semibold relative z-10">Email Templates</div>
-            <div class="text-xs mt-1 opacity-90 relative z-10">Invoice Email Templates</div>
+            <div class="font-semibold relative z-10">{{ _('Email Templates') }}</div>
+            <div class="text-xs mt-1 opacity-90 relative z-10">{{ _('Invoice Email Templates') }}</div>
         </a>
         
         <!-- Settings -->
         <a href="{{ url_for('admin.settings') }}" class="group bg-gradient-to-br from-blue-500 to-blue-600 text-white p-5 rounded-lg text-center hover:from-blue-600 hover:to-blue-700 hover:shadow-lg hover:scale-105 transition-all duration-200 relative overflow-hidden">
             <div class="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
             <i class="fas fa-cog text-2xl mb-2 relative z-10"></i>
-            <div class="font-semibold relative z-10">Settings</div>
+            <div class="font-semibold relative z-10">{{ _('Settings') }}</div>
         </a>
         
         <!-- System Info -->
         <a href="{{ url_for('admin.system_info') }}" class="group bg-gradient-to-br from-blue-500 to-blue-600 text-white p-5 rounded-lg text-center hover:from-blue-600 hover:to-blue-700 hover:shadow-lg hover:scale-105 transition-all duration-200 relative overflow-hidden">
             <div class="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
             <i class="fas fa-info-circle text-2xl mb-2 relative z-10"></i>
-            <div class="font-semibold relative z-10">System Info</div>
+            <div class="font-semibold relative z-10">{{ _('System Info') }}</div>
         </a>
         
         <!-- Custom Fields -->
         <a href="{{ url_for('custom_field_definitions.list_custom_field_definitions') }}" class="group bg-gradient-to-br from-orange-500 to-orange-600 text-white p-5 rounded-lg text-center hover:from-orange-600 hover:to-orange-700 hover:shadow-lg hover:scale-105 transition-all duration-200 relative overflow-hidden">
             <div class="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
             <i class="fas fa-tags text-2xl mb-2 relative z-10"></i>
-            <div class="font-semibold relative z-10">Custom Fields</div>
-            <div class="text-xs mt-1 opacity-90 relative z-10">Global Field Definitions</div>
+            <div class="font-semibold relative z-10">{{ _('Custom Fields') }}</div>
+            <div class="text-xs mt-1 opacity-90 relative z-10">{{ _('Global Field Definitions') }}</div>
         </a>
         
         <!-- Link Templates -->
         <a href="{{ url_for('link_templates.list_link_templates') }}" class="group bg-gradient-to-br from-teal-500 to-teal-600 text-white p-5 rounded-lg text-center hover:from-teal-600 hover:to-teal-700 hover:shadow-lg hover:scale-105 transition-all duration-200 relative overflow-hidden">
             <div class="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
             <i class="fas fa-link text-2xl mb-2 relative z-10"></i>
-            <div class="font-semibold relative z-10">Link Templates</div>
-            <div class="text-xs mt-1 opacity-90 relative z-10">URL Templates for Fields</div>
+            <div class="font-semibold relative z-10">{{ _('Link Templates') }}</div>
+            <div class="text-xs mt-1 opacity-90 relative z-10">{{ _('URL Templates for Fields') }}</div>
         </a>
         
         <!-- Salesman Email Mappings -->
         <a href="{{ url_for('salesman_reports.list_email_mappings') }}" class="group bg-gradient-to-br from-amber-500 to-amber-600 text-white p-5 rounded-lg text-center hover:from-amber-600 hover:to-amber-700 hover:shadow-lg hover:scale-105 transition-all duration-200 relative overflow-hidden">
             <div class="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
             <i class="fas fa-envelope text-2xl mb-2 relative z-10"></i>
-            <div class="font-semibold relative z-10">Salesman Email Mappings</div>
-            <div class="text-xs mt-1 opacity-90 relative z-10">Report Distribution</div>
+            <div class="font-semibold relative z-10">{{ _('Salesman Email Mappings') }}</div>
+            <div class="text-xs mt-1 opacity-90 relative z-10">{{ _('Report Distribution') }}</div>
         </a>
     </div>
 </div>
@@ -370,7 +370,7 @@
         </table>
     </div>
     {% else %}
-    {{ empty_state('fas fa-inbox', 'No Recent Activity', 'There are no recent time entries to display.', None, type='no-data') }}
+    {{ empty_state('fas fa-inbox', _('No Recent Activity'), _('There are no recent time entries to display.'), None, type='no-data') }}
     {% endif %}
 </div>
 

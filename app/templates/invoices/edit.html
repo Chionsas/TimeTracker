@@ -47,13 +47,13 @@
                         <select name="vat_category" id="vat_category" class="form-input text-base min-h-[44px]">
                             <option value="">{{ _('Use default from settings') }}</option>
                             {% set vc = invoice.vat_category or '' %}
-                            <option value="S" {% if vc == 'S' %}selected{% endif %}>S — Standard</option>
-                            <option value="Z" {% if vc == 'Z' %}selected{% endif %}>Z — Zero rated</option>
-                            <option value="E" {% if vc == 'E' %}selected{% endif %}>E — Exempt</option>
-                            <option value="AE" {% if vc == 'AE' %}selected{% endif %}>AE — Reverse charge</option>
-                            <option value="K" {% if vc == 'K' %}selected{% endif %}>K — Intra-Community</option>
-                            <option value="G" {% if vc == 'G' %}selected{% endif %}>G — Export</option>
-                            <option value="O" {% if vc == 'O' %}selected{% endif %}>O — Not subject to VAT</option>
+                            <option value="S" {% if vc == 'S' %}selected{% endif %}>S — {{ _('Standard') }}</option>
+                            <option value="Z" {% if vc == 'Z' %}selected{% endif %}>Z — {{ _('Zero rated') }}</option>
+                            <option value="E" {% if vc == 'E' %}selected{% endif %}>E — {{ _('Exempt') }}</option>
+                            <option value="AE" {% if vc == 'AE' %}selected{% endif %}>AE — {{ _('Reverse charge') }}</option>
+                            <option value="K" {% if vc == 'K' %}selected{% endif %}>K — {{ _('Intra-Community') }}</option>
+                            <option value="G" {% if vc == 'G' %}selected{% endif %}>G — {{ _('Export') }}</option>
+                            <option value="O" {% if vc == 'O' %}selected{% endif %}>O — {{ _('Not subject to VAT') }}</option>
                         </select>
                     </div>
                     <div class="min-w-0">
@@ -773,17 +773,17 @@ document.addEventListener('DOMContentLoaded', function() {
 <div id="sendEmailModal" class="hidden fixed inset-0 bg-black/50 overflow-y-auto h-full w-full z-50">
   <div class="relative top-20 mx-auto p-5 max-w-sm w-full sm:w-96 bg-card-light dark:bg-card-dark rounded-xl shadow-xl border border-border-light dark:border-border-dark mx-4 sm:mx-auto">
     <div class="mt-3">
-      <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Send Invoice via Email</h3>
+      <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">{{ _('Send Invoice via Email') }}</h3>
       <form id="sendEmailForm" onsubmit="sendInvoiceEmail(event)">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <div class="mb-4">
-          <label for="recipient_email" class="form-label">Recipient Email *</label>
+          <label for="recipient_email" class="form-label">{{ _('Recipient Email') }} *</label>
           <input type="email" id="recipient_email" name="recipient_email" value="{{ invoice.client_email }}" required class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
         </div>
         <div class="mb-4">
-          <label for="email_template_id" class="form-label">Email Template (Optional)</label>
+          <label for="email_template_id" class="form-label">{{ _('Email Template') }} ({{ _('Optional') }})</label>
           <select id="email_template_id" name="email_template_id" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
-            <option value="">Default Template</option>
+            <option value="">{{ _('Default Template') }}</option>
             {% for template in email_templates %}
             <option value="{{ template.id }}">{{ template.name }}</option>
             {% endfor %}
@@ -794,8 +794,8 @@ document.addEventListener('DOMContentLoaded', function() {
           <textarea id="custom_message" name="custom_message" rows="4" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"></textarea>
         </div>
         <div class="flex flex-wrap justify-end gap-3">
-          <button type="button" onclick="hideSendEmailModal()" class="btn btn-secondary">Cancel</button>
-          <button type="submit" class="btn bg-blue-500 text-white hover:bg-blue-600">Send Email</button>
+          <button type="button" onclick="hideSendEmailModal()" class="btn btn-secondary">{{ _('Cancel') }}</button>
+          <button type="submit" class="btn bg-blue-500 text-white hover:bg-blue-600">{{ _('Send Email') }}</button>
         </div>
       </form>
     </div>
@@ -822,7 +822,7 @@ function sendInvoiceEmail(event) {
   const submitBtn = form.querySelector('button[type="submit"]');
   const originalText = submitBtn.textContent;
   submitBtn.disabled = true;
-  submitBtn.textContent = 'Sending...';
+  submitBtn.textContent = {{ _('Sending...')|tojson }};
   
   fetch("{{ url_for('invoices.send_invoice_email_route', invoice_id=invoice.id) }}", {
     method: 'POST',
@@ -848,26 +848,26 @@ function sendInvoiceEmail(event) {
         throw new Error(text || `HTTP ${response.status}: ${response.statusText}`);
       }
       // If successful but not JSON, return error format
-      return { success: false, error: text || 'Unexpected response format' };
+      return { success: false, error: text || {{ _('Unexpected response format')|tojson }} };
     }
   })
   .then(data => {
     if (data.success) {
       if (window.toastManager) {
-        window.toastManager.success('Invoice email sent successfully!');
+        window.toastManager.success({{ _('Invoice email sent successfully!')|tojson }});
       } else {
-        alert('Invoice email sent successfully!');
+        alert({{ _('Invoice email sent successfully!')|tojson }});
       }
       hideSendEmailModal();
       // Optionally reload the page to show updated status
       setTimeout(() => window.location.reload(), 1000);
     } else {
-      const errorMsg = data.error || 'Failed to send email';
+      const errorMsg = data.error || {{ _('Failed to send email')|tojson }};
       console.error('Email send error:', errorMsg);
       if (window.toastManager) {
-        window.toastManager.error('Error: ' + errorMsg);
+        window.toastManager.error({{ _('Error: %(error)s')|tojson }}.replace('%(error)s', errorMsg));
       } else {
-        alert('Error: ' + errorMsg);
+        alert({{ _('Error: %(error)s')|tojson }}.replace('%(error)s', errorMsg));
       }
       submitBtn.disabled = false;
       submitBtn.textContent = originalText;
@@ -875,7 +875,7 @@ function sendInvoiceEmail(event) {
   })
   .catch(error => {
     console.error('Email send error:', error);
-    const errorMsg = error.message || 'Failed to send email. Please check server logs for details.';
+    const errorMsg = error.message || {{ _('Failed to send email. Please check server logs for details.')|tojson }};
     if (window.toastManager) {
       window.toastManager.error(errorMsg);
     } else {

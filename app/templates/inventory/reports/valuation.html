@@ -3,15 +3,15 @@
 
 {% block content %}
 {% set breadcrumbs = [
-    {'text': 'Inventory', 'url': url_for('inventory.list_stock_items')},
-    {'text': 'Reports', 'url': url_for('inventory.reports_dashboard')},
-    {'text': 'Stock Valuation'}
+    {'text': _('Inventory'), 'url': url_for('inventory.list_stock_items')},
+    {'text': _('Reports'), 'url': url_for('inventory.reports_dashboard')},
+    {'text': _('Stock Valuation')}
 ] %}
 
 {{ page_header(
     icon_class='fas fa-coins',
-    title_text='Stock Valuation Report',
-    subtitle_text='Inventory value by warehouse and category',
+    title_text=_('Stock Valuation Report'),
+    subtitle_text=_('Inventory value by warehouse and category'),
     breadcrumbs=breadcrumbs
 ) }}
 
