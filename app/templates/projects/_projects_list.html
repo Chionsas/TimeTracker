@@ -1,7 +1,7 @@
 <div id="projectsListContainer">
     <div class="flex justify-between items-center mb-4">
         <h3 class="text-sm font-medium text-text-muted-light dark:text-text-muted-dark">
-            {{ projects|length }} project{{ 's' if projects|length != 1 else '' }} found
+            {{ ngettext('%(num)s project found', '%(num)s projects found', projects|length) }}
         </h3>
         <div class="flex items-center gap-2">
             <!-- View Toggle -->
@@ -17,19 +17,19 @@
                class="px-3 py-1.5 text-sm bg-background-light dark:bg-background-dark rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors inline-flex items-center export-btn" 
                title="{{ _('Export to CSV') }}"
                onclick="showExportLoading(this); return true;">
-                <i class="fas fa-download mr-1"></i> <span class="export-text">Export</span>
+                <i class="fas fa-download mr-1"></i> <span class="export-text">{{ _('Export') }}</span>
             </a>
             {% if current_user.is_admin %}
             <div class="relative">
                 <button type="button" id="bulkActionsBtn" class="px-3 py-1.5 text-sm border rounded-lg text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-600 disabled:opacity-60" onclick="openMenu(this, 'projectsBulkMenu')" disabled>
-                    <i class="fas fa-tasks mr-1"></i> Bulk Actions (<span id="selectedCount">0</span>)
+                    <i class="fas fa-tasks mr-1"></i> {{ _('Bulk Actions') }} (<span id="selectedCount">0</span>)
                 </button>
                 <ul id="projectsBulkMenu" class="bulk-menu hidden absolute right-0 mt-2 w-56 bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark rounded-md shadow-lg z-50">
-                    <li><a class="block px-4 py-2 text-sm text-text-light dark:text-text-dark hover:bg-gray-100 dark:hover:bg-gray-700" href="#" onclick="return showBulkStatusChange('active')"><i class="fas fa-check-circle mr-2 text-green-600"></i>Mark as Active</a></li>
-                    <li><a class="block px-4 py-2 text-sm text-text-light dark:text-text-dark hover:bg-gray-100 dark:hover:bg-gray-700" href="#" onclick="return showBulkStatusChange('inactive')"><i class="fas fa-pause-circle mr-2 text-amber-500"></i>Mark as Inactive</a></li>
-                    <li><a class="block px-4 py-2 text-sm text-text-light dark:text-text-dark hover:bg-gray-100 dark:hover:bg-gray-700" href="#" onclick="return showBulkArchiveDialog()"><i class="fas fa-archive mr-2 text-gray-600"></i>Archive</a></li>
+                    <li><a class="block px-4 py-2 text-sm text-text-light dark:text-text-dark hover:bg-gray-100 dark:hover:bg-gray-700" href="#" onclick="return showBulkStatusChange('active')"><i class="fas fa-check-circle mr-2 text-green-600"></i>{{ _('Mark as Active') }}</a></li>
+                    <li><a class="block px-4 py-2 text-sm text-text-light dark:text-text-dark hover:bg-gray-100 dark:hover:bg-gray-700" href="#" onclick="return showBulkStatusChange('inactive')"><i class="fas fa-pause-circle mr-2 text-amber-500"></i>{{ _('Mark as Inactive') }}</a></li>
+                    <li><a class="block px-4 py-2 text-sm text-text-light dark:text-text-dark hover:bg-gray-100 dark:hover:bg-gray-700" href="#" onclick="return showBulkArchiveDialog()"><i class="fas fa-archive mr-2 text-gray-600"></i>{{ _('Archive') }}</a></li>
                     <li><hr class="my-1 border-border-light dark:border-border-dark"></li>
-                    <li><a class="block px-4 py-2 text-sm text-rose-600 hover:bg-gray-100 dark:hover:bg-gray-700" href="#" onclick="return showBulkDeleteConfirm()"><i class="fas fa-trash mr-2"></i>Delete</a></li>
+                    <li><a class="block px-4 py-2 text-sm text-rose-600 hover:bg-gray-100 dark:hover:bg-gray-700" href="#" onclick="return showBulkDeleteConfirm()"><i class="fas fa-trash mr-2"></i>{{ _('Delete') }}</a></li>
                 </ul>
             </div>
             {% endif %}
@@ -48,13 +48,13 @@
                 </th>
                 {% endif %}
                 <th class="px-4 py-3 w-10"></th>
-                <th class="px-4 py-3" data-sortable>Name</th>
-                <th class="px-4 py-3" data-sortable>Client</th>
-                <th class="px-4 py-3" data-sortable>Status</th>
-                <th class="px-4 py-3" data-sortable>Billable</th>
-                <th class="px-4 py-3" data-sortable>Rate</th>
-                <th class="px-4 py-3" data-sortable>Budget</th>
-                <th class="px-4 py-3">Actions</th>
+                <th class="px-4 py-3" data-sortable>{{ _('Name') }}</th>
+                <th class="px-4 py-3" data-sortable>{{ _('Client') }}</th>
+                <th class="px-4 py-3" data-sortable>{{ _('Status') }}</th>
+                <th class="px-4 py-3" data-sortable>{{ _('Billable') }}</th>
+                <th class="px-4 py-3" data-sortable>{{ _('Rate') }}</th>
+                <th class="px-4 py-3" data-sortable>{{ _('Budget') }}</th>
+                <th class="px-4 py-3">{{ _('Actions') }}</th>
             </tr>
         </thead>
         <tbody>
@@ -86,18 +86,18 @@
                 </td>
                 <td class="p-4" data-label="{{ _('Status') }}">
                     {% if project.status == 'active' %}
-                        <span class="px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300">Active</span>
+                        <span class="px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300">{{ _('Active') }}</span>
                     {% elif project.status == 'inactive' %}
-                        <span class="px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300">Inactive</span>
+                        <span class="px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300">{{ _('Inactive') }}</span>
                     {% else %}
-                        <span class="px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-200">Archived</span>
+                        <span class="px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-200">{{ _('Archived') }}</span>
                     {% endif %}
                 </td>
                 <td class="p-4" data-label="{{ _('Billable') }}">
                     {% if project.billable %}
-                        <span class="px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300">Billable</span>
+                        <span class="px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300">{{ _('Billable') }}</span>
                     {% else %}
-                        <span class="px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300">Non-billable</span>
+                        <span class="px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300">{{ _('Non-billable') }}</span>
                     {% endif %}
                 </td>
                 <td class="p-4" data-label="{{ _('Rate') }}">
@@ -125,7 +125,7 @@
                     {% endif %}
                 </td>
                 <td class="p-4 mobile-actions" data-label="{{ _('Actions') }}">
-                    <a href="{{ url_for('projects.view_project', project_id=project.id) }}" class="text-primary hover:underline">View</a>
+                    <a href="{{ url_for('projects.view_project', project_id=project.id) }}" class="text-primary hover:underline">{{ _('View') }}</a>
                 </td>
             </tr>
             {% else %}
@@ -206,7 +206,7 @@
                         {% set pct = (consumed / total * 100) if total > 0 else 0 %}
                         <div>
                             <div class="flex justify-between items-center mb-1">
-                                <span class="text-xs font-medium text-text-muted-light dark:text-text-muted-dark">Budget</span>
+                                <span class="text-xs font-medium text-text-muted-light dark:text-text-muted-dark">{{ _('Budget') }}</span>
                                 <span class="text-xs font-semibold 
                                     {% if pct >= 90 %}text-red-600
                                     {% elif pct >= 70 %}text-amber-600
@@ -231,7 +231,7 @@
                     <!-- Hours Progress -->
                     <div>
                         <div class="flex justify-between items-center mb-1">
-                            <span class="text-xs font-medium text-text-muted-light dark:text-text-muted-dark">Hours</span>
+                            <span class="text-xs font-medium text-text-muted-light dark:text-text-muted-dark">{{ _('Hours') }}</span>
                             <span class="text-xs font-semibold text-text-light dark:text-text-dark">
                                 {{ "%.1f"|format(project.total_hours) }}h
                             </span>
@@ -256,7 +256,7 @@
                         <div class="flex items-center gap-3 text-sm">
                             {% if project.billable %}
                             <span class="px-2 py-1 rounded-full text-xs font-medium bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300">
-                                <i class="fas fa-dollar-sign mr-1"></i>Billable
+                                <i class="fas fa-dollar-sign mr-1"></i>{{ _('Billable') }}
                             </span>
                             {% endif %}
                             {% if project.hourly_rate %}
@@ -267,7 +267,7 @@
                         </div>
                         <a href="{{ url_for('projects.view_project', project_id=project.id) }}" 
                            class="text-primary hover:text-primary/80 text-sm font-medium">
-                            View <i class="fas fa-arrow-right ml-1"></i>
+                            {{ _('View') }} <i class="fas fa-arrow-right ml-1"></i>
                         </a>
                     </div>
                 </div>
@@ -281,17 +281,17 @@
     {% set actions %}
         {% if current_user.is_admin %}
         <a href="{{ url_for('projects.create_project') }}" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors">
-            <i class="fas fa-plus mr-2"></i>Create Your First Project
+            <i class="fas fa-plus mr-2"></i>{{ _('Create Your First Project') }}
         </a>
         {% endif %}
         <a href="{{ url_for('main.help') }}" class="bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-4 py-2 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
-            <i class="fas fa-question-circle mr-2"></i>Learn More
+            <i class="fas fa-question-circle mr-2"></i>{{ _('Learn More') }}
         </a>
     {% endset %}
     {% if request.args.get('search') or request.args.get('client') or request.args.get('status') != 'all' %}
-        {{ empty_state('fas fa-search', 'No Projects Match Your Filters', 'Try adjusting your filters to see more results. You can clear filters or create a new project that matches your criteria.', actions, type='no-results') }}
+        {{ empty_state('fas fa-search', _('No Projects Match Your Filters'), _('Try adjusting your filters to see more results. You can clear filters or create a new project that matches your criteria.'), actions, type='no-results') }}
     {% else %}
-        {{ empty_state('fas fa-folder-open', 'No Projects Yet', 'Projects help you organize your work and track time efficiently. Create your first project to get started!', actions, type='no-data') }}
+        {{ empty_state('fas fa-folder-open', _('No Projects Yet'), _('Projects help you organize your work and track time efficiently. Create your first project to get started!'), actions, type='no-data') }}
     {% endif %}
     {% endif %}
 </div>

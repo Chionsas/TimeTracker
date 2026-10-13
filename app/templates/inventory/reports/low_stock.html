@@ -3,15 +3,15 @@
 
 {% block content %}
 {% set breadcrumbs = [
-    {'text': 'Inventory', 'url': url_for('inventory.list_stock_items')},
-    {'text': 'Reports', 'url': url_for('inventory.reports_dashboard')},
-    {'text': 'Low Stock Report'}
+    {'text': _('Inventory'), 'url': url_for('inventory.list_stock_items')},
+    {'text': _('Reports'), 'url': url_for('inventory.reports_dashboard')},
+    {'text': _('Low Stock Report')}
 ] %}
 
 {{ page_header(
     icon_class='fas fa-exclamation-triangle',
-    title_text='Low Stock Report',
-    subtitle_text='Items below reorder point',
+    title_text=_('Low Stock Report'),
+    subtitle_text=_('Items below reorder point'),
     breadcrumbs=breadcrumbs
 ) }}
 

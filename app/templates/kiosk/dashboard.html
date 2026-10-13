@@ -6,26 +6,26 @@
     <div id="keyboard-help" class="hidden fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
         <div class="bg-card-light dark:bg-card-dark rounded-2xl shadow-2xl p-6 max-w-md w-full border border-gray-200 dark:border-gray-700 animate-in fade-in zoom-in duration-200">
             <div class="flex justify-between items-center mb-6">
-                <h3 class="text-xl font-bold text-gray-900 dark:text-white">Keyboard Shortcuts</h3>
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white">{{ _('Keyboard Shortcuts') }}</h3>
                 <button onclick="document.getElementById('keyboard-help').classList.add('hidden')" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 dark:focus:ring-offset-gray-800 rounded-lg p-1 min-w-[48px] min-h-[48px] flex items-center justify-center" aria-label="{{ _('Close keyboard shortcuts') }}">
                     <i class="fas fa-times text-xl" aria-hidden="true"></i>
                 </button>
             </div>
             <div class="space-y-3">
                 <div class="flex justify-between items-center py-3 border-b border-gray-200 dark:border-gray-700">
-                    <span class="text-gray-700 dark:text-gray-300 text-sm">Focus barcode input</span>
+                    <span class="text-gray-700 dark:text-gray-300 text-sm">{{ _('Focus barcode input') }}</span>
                     <kbd class="px-3 py-1.5 bg-gray-100 dark:bg-gray-700 rounded-md border border-gray-300 dark:border-gray-600 font-mono text-xs font-semibold text-gray-800 dark:text-gray-200">Ctrl+K</kbd>
                 </div>
                 <div class="flex justify-between items-center py-3 border-b border-gray-200 dark:border-gray-700">
-                    <span class="text-gray-700 dark:text-gray-300 text-sm">Switch tabs</span>
+                    <span class="text-gray-700 dark:text-gray-300 text-sm">{{ _('Switch tabs') }}</span>
                     <kbd class="px-3 py-1.5 bg-gray-100 dark:bg-gray-700 rounded-md border border-gray-300 dark:border-gray-600 font-mono text-xs font-semibold text-gray-800 dark:text-gray-200">1-3</kbd>
                 </div>
                 <div class="flex justify-between items-center py-3 border-b border-gray-200 dark:border-gray-700">
-                    <span class="text-gray-700 dark:text-gray-300 text-sm">Submit form</span>
+                    <span class="text-gray-700 dark:text-gray-300 text-sm">{{ _('Submit form') }}</span>
                     <kbd class="px-3 py-1.5 bg-gray-100 dark:bg-gray-700 rounded-md border border-gray-300 dark:border-gray-600 font-mono text-xs font-semibold text-gray-800 dark:text-gray-200">Ctrl+Enter</kbd>
                 </div>
                 <div class="flex justify-between items-center py-3">
-                    <span class="text-gray-700 dark:text-gray-300 text-sm">Close/clear</span>
+                    <span class="text-gray-700 dark:text-gray-300 text-sm">{{ _('Close/clear') }}</span>
                     <kbd class="px-3 py-1.5 bg-gray-100 dark:bg-gray-700 rounded-md border border-gray-300 dark:border-gray-600 font-mono text-xs font-semibold text-gray-800 dark:text-gray-200">Esc</kbd>
                 </div>
             </div>

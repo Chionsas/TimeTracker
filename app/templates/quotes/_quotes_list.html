@@ -1,12 +1,12 @@
 <div id="quotesListContainer">
     <div class="flex justify-between items-center mb-4">
         <h3 class="text-sm font-medium text-text-muted-light dark:text-text-muted-dark">
-            {{ quotes|length }} quote{{ 's' if quotes|length != 1 else '' }} found
+            {{ ngettext('%(num)s quote found', '%(num)s quotes found', quotes|length) }}
         </h3>
         {% if current_user.is_admin or has_permission('create_quotes') %}
         <div class="relative">
             <button type="button" id="bulkActionsBtn" class="px-3 py-1.5 text-sm border rounded-lg text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-600 disabled:opacity-60" onclick="openMenu(this, 'quotesBulkMenu')" disabled>
-                <i class="fas fa-tasks mr-1"></i> Bulk Actions (<span id="selectedCount">0</span>)
+                <i class="fas fa-tasks mr-1"></i> {{ _('Bulk Actions') }} (<span id="selectedCount">0</span>)
             </button>
             <ul id="quotesBulkMenu" class="bulk-menu hidden absolute right-0 mt-2 w-56 bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark rounded-md shadow-lg z-50">
                 <li><a class="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700" href="#" onclick="return showBulkAction('duplicate')"><i class="fas fa-copy mr-2 text-blue-600"></i>{{ _('Duplicate') }}</a></li>
@@ -95,9 +95,9 @@
         </a>
     {% endset %}
     {% if search or status != 'all' %}
-        {{ empty_state('fas fa-search', 'No Quotes Match Your Filters', 'Try adjusting your filters to see more results. You can clear filters or create a new quote that matches your criteria.', actions, type='no-results') }}
+        {{ empty_state('fas fa-search', _('No Quotes Match Your Filters'), _('Try adjusting your filters to see more results. You can clear filters or create a new quote that matches your criteria.'), actions, type='no-results') }}
     {% else %}
-        {{ empty_state('fas fa-file-contract', 'No Quotes Yet', 'Quotes help you manage client proposals and track acceptance rates. Create your first quote to get started!', actions, type='no-data') }}
+        {{ empty_state('fas fa-file-contract', _('No Quotes Yet'), _('Quotes help you manage client proposals and track acceptance rates. Create your first quote to get started!'), actions, type='no-data') }}
     {% endif %}
     {% endif %}
 </div>

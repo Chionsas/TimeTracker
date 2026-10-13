@@ -508,7 +508,8 @@ function updatePreviewContent(htmlContent) {
             iframe.contentDocument.close();
         } catch (e) {
             console.error('Error writing to iframe:', e);
-            previewDiv.innerHTML = '<div class="text-red-500 p-4">Preview unavailable. Please check browser console.</div>';
+            previewDiv.innerHTML = '<div class="text-red-500 p-4"></div>';
+            previewDiv.firstChild.textContent = {{ _('Preview unavailable. Please check browser console.')|tojson }};
         }
     }
 }

@@ -5,7 +5,7 @@
 
 {% block content %}
 {% set breadcrumbs = [
-    {'text': 'Gantt Chart'}
+    {'text': _('Gantt Chart')}
 ] %}
 
 {% set gantt_actions %}
@@ -16,8 +16,8 @@
 
 {{ page_header(
     icon_class='fas fa-project-diagram',
-    title_text='Gantt Chart',
-    subtitle_text='Project timeline visualization',
+    title_text=_('Gantt Chart'),
+    subtitle_text=_('Project timeline visualization'),
     breadcrumbs=breadcrumbs,
     actions_html=gantt_actions
 ) }}
@@ -175,7 +175,7 @@ async function loadGanttChart() {
     } catch (error) {
         console.error('Error loading Gantt chart:', error);
         document.getElementById('gantt-chart').innerHTML = 
-            '<div class="text-center text-red-600 py-8">Error loading Gantt chart. Please try again.</div>';
+            '<div class="text-center text-red-600 py-8">' + {{ _('Error loading Gantt chart. Please try again.')|tojson }} + '</div>';
     }
 }
 </script>

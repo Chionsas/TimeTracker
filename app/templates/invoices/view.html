@@ -4,7 +4,7 @@
 {% block content %}
 {% set actions %}
 <div class="flex flex-wrap gap-2 items-center">
-<a href="{{ url_for('invoices.edit_invoice', invoice_id=invoice.id) }}" class="btn btn-primary">Edit</a>
+<a href="{{ url_for('invoices.edit_invoice', invoice_id=invoice.id) }}" class="btn btn-primary">{{ _('Edit') }}</a>
 <div class="flex flex-wrap gap-2 items-center">
     <select id="pdf-size-selector" class="bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
         <option value="A4">A4</option>
@@ -17,14 +17,14 @@
     <a id="export-pdf-link" href="{{ url_for('invoices.export_invoice_pdf', invoice_id=invoice.id) }}" class="btn bg-secondary text-white hover:bg-secondary-dark">{{ _('Export PDF') }}</a>
 </div>
 <button type="button" onclick="showSendEmailModal()" class="btn bg-blue-500 text-white hover:bg-blue-600">
-    <i class="fas fa-envelope mr-1"></i>Send Email
+    <i class="fas fa-envelope mr-1"></i>{{ _('Send Email') }}
 </button>
 {% if peppol_enabled %}
 <button type="button"
         onclick="sendInvoicePeppol()"
         class="btn bg-indigo-600 text-white hover:bg-indigo-700 {% if not peppol_recipient_ready %}opacity-50 cursor-not-allowed{% endif %}"
-        {% if not peppol_recipient_ready %}disabled title="Client is missing Peppol endpoint details (peppol_endpoint_id / peppol_scheme_id)"{% endif %}>
-    <i class="fas fa-paper-plane mr-1"></i>Send via Peppol
+        {% if not peppol_recipient_ready %}disabled title="{{ _('Client is missing Peppol endpoint details (peppol_endpoint_id / peppol_scheme_id)') }}"{% endif %}>
+    <i class="fas fa-paper-plane mr-1"></i>{{ _('Send via Peppol') }}
 </button>
 {% endif %}
 {% if peppol_recipient_ready and (invoices_peppol_compliant or peppol_enabled) %}
@@ -39,11 +39,11 @@
 {% endif %}
 <a href="{{ url_for('payments.create_payment', invoice_id=invoice.id) }}" class="btn bg-green-500 text-white hover:bg-green-600">{{ _('Record Payment') }}</a>
 <button type="button" onclick="showDeleteModal('{{ invoice.id }}', '{{ invoice.invoice_number }}')" class="btn btn-danger">
-    <i class="fas fa-trash mr-1"></i>Delete
+    <i class="fas fa-trash mr-1"></i>{{ _('Delete') }}
 </button>
 </div>
 {% endset %}
-{{ page_header('fas fa-file-invoice', 'Invoice ' ~ invoice.invoice_number, actions_html=actions, breadcrumbs=[{'text': _('Invoices'), 'url': url_for('invoices.list_invoices')}, {'text': invoice.invoice_number or _('View Invoice')}]) }}
+{{ page_header('fas fa-file-invoice', _('Invoice %(number)s', number=invoice.invoice_number), actions_html=actions, breadcrumbs=[{'text': _('Invoices'), 'url': url_for('invoices.list_invoices')}, {'text': invoice.invoice_number or _('View Invoice')}]) }}
 <script nonce="{{ csp_nonce() }}">
     document.addEventListener('DOMContentLoaded', function() {
         const sizeSelector = document.getElementById('pdf-size-selector');
@@ -63,16 +63,16 @@
 <div class="bg-card-light dark:bg-card-dark p-6 rounded-xl border border-border-light dark:border-border-dark shadow-sm">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-            <h2 class="text-lg font-semibold">Client</h2>
+            <h2 class="text-lg font-semibold">{{ _('Client') }}</h2>
             <p>{{ invoice.client_name }}</p>
             <p>{{ invoice.client_email }}</p>
             <p>{{ invoice.client_address }}</p>
         </div>
         <div>
-            <h2 class="text-lg font-semibold">Details</h2>
-            <p><strong>Issue Date:</strong> {{ invoice.issue_date|format_date }}</p>
-            <p><strong>Due Date:</strong> {{ invoice.due_date|format_date }}</p>
-            <p><strong>Status:</strong> {{ invoice.status }}</p>
+            <h2 class="text-lg font-semibold">{{ _('Details') }}</h2>
+            <p><strong>{{ _('Issue Date:') }}</strong> {{ invoice.issue_date|format_date }}</p>
+            <p><strong>{{ _('Due Date:') }}</strong> {{ invoice.due_date|format_date }}</p>
+            <p><strong>{{ _('Status:') }}</strong> {{ invoice.status }}</p>
             {% if invoice.payment_reference %}
             <p><strong>{{ _('Payment Reference') }}:</strong> 
                 {% set link_template = link_templates_by_field.get('payment_reference') if link_templates_by_field else None %}
@@ -145,14 +145,14 @@
     {% endif %}
 
     <div class="mt-6">
-        <h2 class="text-lg font-semibold mb-4">Items</h2>
+        <h2 class="text-lg font-semibold mb-4">{{ _('Items') }}</h2>
         <table class="w-full text-left">
             <thead>
                 <tr>
-                    <th class="p-2">Description</th>
-                    <th class="p-2">Quantity</th>
-                    <th class="p-2">Unit Price</th>
-                    <th class="p-2">Total</th>
+                    <th class="p-2">{{ _('Description') }}</th>
+                    <th class="p-2">{{ _('Quantity') }}</th>
+                    <th class="p-2">{{ _('Unit Price') }}</th>
+                    <th class="p-2">{{ _('Total') }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -170,16 +170,16 @@
 
     {% if invoice.expenses.count() > 0 %}
     <div class="mt-6">
-        <h2 class="text-lg font-semibold mb-4">Expenses</h2>
+        <h2 class="text-lg font-semibold mb-4">{{ _('Expenses') }}</h2>
         <table class="w-full text-left">
             <thead>
                 <tr>
-                    <th class="p-2">Title</th>
-                    <th class="p-2">Description</th>
-                    <th class="p-2">Category</th>
-                    <th class="p-2">Date</th>
-                    <th class="p-2">Vendor</th>
-                    <th class="p-2">Amount</th>
+                    <th class="p-2">{{ _('Title') }}</th>
+                    <th class="p-2">{{ _('Description') }}</th>
+                    <th class="p-2">{{ _('Category') }}</th>
+                    <th class="p-2">{{ _('Date') }}</th>
+                    <th class="p-2">{{ _('Vendor') }}</th>
+                    <th class="p-2">{{ _('Amount') }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -204,12 +204,12 @@
         <table class="w-full text-left">
             <thead>
                 <tr>
-                    <th class="p-2">Name</th>
-                    <th class="p-2">Description</th>
-                    <th class="p-2">Category</th>
-                    <th class="p-2">Quantity</th>
-                    <th class="p-2">Unit Price</th>
-                    <th class="p-2">Total</th>
+                    <th class="p-2">{{ _('Name') }}</th>
+                    <th class="p-2">{{ _('Description') }}</th>
+                    <th class="p-2">{{ _('Category') }}</th>
+                    <th class="p-2">{{ _('Quantity') }}</th>
+                    <th class="p-2">{{ _('Unit Price') }}</th>
+                    <th class="p-2">{{ _('Total') }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -231,23 +231,23 @@
     <div class="mt-6 flex justify-end">
         <div class="w-full md:w-1/3">
             <div class="flex justify-between">
-                <span>Subtotal</span>
+                <span>{{ _('Subtotal') }}</span>
                 <span>{{ "%.2f"|format(invoice.subtotal) }} {{ invoice.currency_code }}</span>
             </div>
             <div class="flex justify-between">
-                <span>Tax ({{ "%.2f"|format(invoice.tax_rate) }}%)</span>
+                <span>{{ _('Tax (%(rate).2f%%)', rate=invoice.tax_rate) }}</span>
                 <span>{{ "%.2f"|format(invoice.tax_amount) }} {{ invoice.currency_code }}</span>
             </div>
             <div class="flex justify-between font-bold text-lg border-t border-gray-300 dark:border-gray-600 pt-2">
-                <span>Total</span>
+                <span>{{ _('Total') }}</span>
                 <span>{{ "%.2f"|format(invoice.total_amount) }} {{ invoice.currency_code }}</span>
             </div>
             <div class="flex justify-between text-green-600 dark:text-green-400 mt-2">
-                <span>Amount Paid</span>
+                <span>{{ _('Amount Paid') }}</span>
                 <span>{{ "%.2f"|format(invoice.amount_paid or 0) }} {{ invoice.currency_code }}</span>
             </div>
             <div class="flex justify-between font-semibold text-red-600 dark:text-red-400 border-t border-gray-300 dark:border-gray-600 pt-2 mt-2">
-                <span>Outstanding</span>
+                <span>{{ _('Outstanding') }}</span>
                 <span>{{ "%.2f"|format(invoice.outstanding_amount) }} {{ invoice.currency_code }}</span>
             </div>
         </div>
@@ -259,31 +259,31 @@
         <div class="flex justify-between items-center mb-4">
             <h2 class="text-lg font-semibold">{{ _('Payment History') }}</h2>
             <a href="{{ url_for('payments.create_payment', invoice_id=invoice.id) }}" class="btn bg-green-500 text-white hover:bg-green-600">
-                <i class="fas fa-plus mr-2"></i>Add Payment
+                <i class="fas fa-plus mr-2"></i>{{ _('Add Payment') }}
             </a>
         </div>
         <table class="w-full text-left">
             <thead>
                 <tr class="border-b border-gray-300 dark:border-gray-600">
-                    <th class="p-2">Date</th>
-                    <th class="p-2">Amount</th>
-                    <th class="p-2">Method</th>
-                    <th class="p-2">Reference</th>
-                    <th class="p-2">Status</th>
-                    <th class="p-2">Actions</th>
+                    <th class="p-2">{{ _('Date') }}</th>
+                    <th class="p-2">{{ _('Amount') }}</th>
+                    <th class="p-2">{{ _('Method') }}</th>
+                    <th class="p-2">{{ _('Reference') }}</th>
+                    <th class="p-2">{{ _('Status') }}</th>
+                    <th class="p-2">{{ _('Actions') }}</th>
                 </tr>
             </thead>
             <tbody>
                 {% for payment in invoice.sorted_payments %}
                 <tr class="border-b border-border-light dark:border-border-dark hover:bg-gray-50 dark:hover:bg-gray-700">
-                    <td class="p-2">{{ payment.payment_date|format_date if payment.payment_date else 'N/A' }}</td>
+                    <td class="p-2">{{ payment.payment_date|format_date if payment.payment_date else _('N/A') }}</td>
                     <td class="p-2 font-semibold text-green-600 dark:text-green-400">
                         {{ "%.2f"|format(payment.amount) }} {{ payment.currency or invoice.currency_code }}
                         {% if payment.gateway_fee %}
-                        <span class="text-xs text-gray-500 dark:text-gray-400">(Fee: {{ "%.2f"|format(payment.gateway_fee) }})</span>
+                        <span class="text-xs text-gray-500 dark:text-gray-400">({{ _('Fee: %(amount)s', amount="%.2f"|format(payment.gateway_fee)) }})</span>
                         {% endif %}
                     </td>
-                    <td class="p-2">{{ payment.method or 'N/A' }}</td>
+                    <td class="p-2">{{ payment.method or _('N/A') }}</td>
                     <td class="p-2 text-sm">
                         {% if payment.reference %}
                             {% set link_template = link_templates_by_field.get('payment_reference') if link_templates_by_field else None %}
@@ -317,25 +317,25 @@
                     <td class="p-2">
                         {% if payment.status == 'completed' %}
                         <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100">
-                            Completed
+                            {{ _('Completed') }}
                         </span>
                         {% elif payment.status == 'pending' %}
                         <span class="px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-100">
-                            Pending
+                            {{ _('Pending') }}
                         </span>
                         {% elif payment.status == 'failed' %}
                         <span class="px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-100">
-                            Failed
+                            {{ _('Failed') }}
                         </span>
                         {% elif payment.status == 'refunded' %}
                         <span class="px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800 dark:bg-gray-600 dark:text-gray-100">
-                            Refunded
+                            {{ _('Refunded') }}
                         </span>
                         {% endif %}
                     </td>
                     <td class="p-2">
                         <a href="{{ url_for('payments.view_payment', payment_id=payment.id) }}" class="text-primary hover:text-primary-dark text-sm">
-                            View
+                            {{ _('View') }}
                         </a>
                     </td>
                 </tr>
@@ -348,10 +348,10 @@
         <div class="flex justify-between items-center mb-4">
             <h2 class="text-lg font-semibold">{{ _('Payment History') }}</h2>
             <a href="{{ url_for('payments.create_payment', invoice_id=invoice.id) }}" class="btn bg-green-500 text-white hover:bg-green-600">
-                <i class="fas fa-plus mr-2"></i>Record First Payment
+                <i class="fas fa-plus mr-2"></i>{{ _('Record First Payment') }}
             </a>
         </div>
-        <p class="text-gray-500 dark:text-gray-400 text-center py-4">No payments recorded yet.</p>
+        <p class="text-gray-500 dark:text-gray-400 text-center py-4">{{ _('No payments recorded yet.') }}</p>
     </div>
     {% endif %}
 </div>
@@ -396,24 +396,24 @@
 {% if email_history|length > 0 %}
 <div class="mt-6 bg-card-light dark:bg-card-dark p-6 rounded-xl border border-border-light dark:border-border-dark shadow-sm">
     <h2 class="text-lg font-semibold mb-4 flex items-center">
-        <i class="fas fa-envelope mr-2"></i>Email History
+        <i class="fas fa-envelope mr-2"></i>{{ _('Email History') }}
     </h2>
     <div class="overflow-x-auto">
         <table class="w-full text-left">
             <thead>
                 <tr class="border-b border-border-light dark:border-border-dark">
-                    <th class="p-2 text-sm font-medium">Sent At</th>
-                    <th class="p-2 text-sm font-medium">Recipient</th>
-                    <th class="p-2 text-sm font-medium">Status</th>
-                    <th class="p-2 text-sm font-medium">Subject</th>
-                    <th class="p-2 text-sm font-medium">Actions</th>
+                    <th class="p-2 text-sm font-medium">{{ _('Sent At') }}</th>
+                    <th class="p-2 text-sm font-medium">{{ _('Recipient') }}</th>
+                    <th class="p-2 text-sm font-medium">{{ _('Status') }}</th>
+                    <th class="p-2 text-sm font-medium">{{ _('Subject') }}</th>
+                    <th class="p-2 text-sm font-medium">{{ _('Actions') }}</th>
                 </tr>
             </thead>
             <tbody>
                 {% for email in email_history %}
                 <tr class="border-b border-border-light dark:border-border-dark">
                     <td class="p-2 text-sm">
-                        {{ email.sent_at|user_datetime if email.sent_at else 'N/A' }}
+                        {{ email.sent_at|user_datetime if email.sent_at else _('N/A') }}
                     </td>
                     <td class="p-2 text-sm">{{ email.recipient_email }}</td>
                     <td class="p-2 text-sm">
@@ -432,14 +432,14 @@
                     <td class="p-2 text-sm">
                         <button onclick="resendInvoiceEmail({{ invoice.id }}, {{ email.id }}, '{{ email.recipient_email }}')" 
                                 class="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 text-sm font-medium">
-                            <i class="fas fa-redo mr-1"></i>Resend
+                            <i class="fas fa-redo mr-1"></i>{{ _('Resend') }}
                         </button>
                     </td>
                 </tr>
                 {% if email.error_message %}
                 <tr class="bg-red-50 dark:bg-red-900/20">
                     <td colspan="5" class="p-2 text-sm text-red-600 dark:text-red-400">
-                        <i class="fas fa-exclamation-circle mr-1"></i>Error: {{ email.error_message }}
+                        <i class="fas fa-exclamation-circle mr-1"></i>{{ _('Error: %(error)s', error=email.error_message) }}
                     </td>
                 </tr>
                 {% endif %}
@@ -454,23 +454,23 @@
 {% if peppol_history is defined and peppol_history|length > 0 %}
 <div class="mt-6 bg-card-light dark:bg-card-dark p-6 rounded-xl border border-border-light dark:border-border-dark shadow-sm">
     <h2 class="text-lg font-semibold mb-4 flex items-center">
-        <i class="fas fa-paper-plane mr-2"></i>Peppol History
+        <i class="fas fa-paper-plane mr-2"></i>{{ _('Peppol History') }}
     </h2>
     <div class="overflow-x-auto">
         <table class="w-full text-left">
             <thead>
                 <tr class="border-b border-border-light dark:border-border-dark">
-                    <th class="p-2 text-sm font-medium">Created</th>
-                    <th class="p-2 text-sm font-medium">Status</th>
-                    <th class="p-2 text-sm font-medium">Recipient</th>
-                    <th class="p-2 text-sm font-medium">Message ID</th>
-                    <th class="p-2 text-sm font-medium">Error</th>
+                    <th class="p-2 text-sm font-medium">{{ _('Created') }}</th>
+                    <th class="p-2 text-sm font-medium">{{ _('Status') }}</th>
+                    <th class="p-2 text-sm font-medium">{{ _('Recipient') }}</th>
+                    <th class="p-2 text-sm font-medium">{{ _('Message ID') }}</th>
+                    <th class="p-2 text-sm font-medium">{{ _('Error') }}</th>
                 </tr>
             </thead>
             <tbody>
                 {% for tx in peppol_history %}
                 <tr class="border-b border-border-light dark:border-border-dark">
-                    <td class="p-2 text-sm">{{ tx.created_at|user_datetime if tx.created_at else 'N/A' }}</td>
+                    <td class="p-2 text-sm">{{ tx.created_at|user_datetime if tx.created_at else _('N/A') }}</td>
                     <td class="p-2 text-sm">
                         <span class="px-2 py-1 rounded text-xs font-medium
                             {% if tx.status == 'sent' %}bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200
@@ -498,13 +498,13 @@
       <form id="sendEmailForm" onsubmit="sendInvoiceEmail(event)">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <div class="mb-4">
-          <label for="recipient_email" class="form-label">Recipient Email *</label>
+          <label for="recipient_email" class="form-label">{{ _('Recipient Email') }} *</label>
           <input type="email" id="recipient_email" name="recipient_email" value="{{ invoice.client_email }}" required class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
         </div>
         <div class="mb-4">
-          <label for="email_template_id" class="form-label">Email Template (Optional)</label>
+          <label for="email_template_id" class="form-label">{{ _('Email Template (Optional)') }}</label>
           <select id="email_template_id" name="email_template_id" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
-            <option value="">Default Template</option>
+            <option value="">{{ _('Default Template') }}</option>
             {% for template in email_templates %}
             <option value="{{ template.id }}">{{ template.name }}</option>
             {% endfor %}
@@ -515,7 +515,7 @@
           <textarea id="custom_message" name="custom_message" rows="4" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"></textarea>
         </div>
         <div class="flex flex-wrap justify-end gap-3">
-          <button type="button" onclick="hideSendEmailModal()" class="btn btn-secondary">Cancel</button>
+          <button type="button" onclick="hideSendEmailModal()" class="btn btn-secondary">{{ _('Cancel') }}</button>
           <button type="submit" class="btn bg-blue-500 text-white hover:bg-blue-600">{{ _('Send Email') }}</button>
         </div>
       </form>
@@ -543,7 +543,7 @@ function sendInvoiceEmail(event) {
   const submitBtn = form.querySelector('button[type="submit"]');
   const originalText = submitBtn.textContent;
   submitBtn.disabled = true;
-  submitBtn.textContent = 'Sending...';
+  submitBtn.textContent = {{ _('Sending...')|tojson }};
   
   fetch("{{ url_for('invoices.send_invoice_email_route', invoice_id=invoice.id) }}", {
     method: 'POST',
@@ -569,26 +569,26 @@ function sendInvoiceEmail(event) {
         throw new Error(text || `HTTP ${response.status}: ${response.statusText}`);
       }
       // If successful but not JSON, return error format
-      return { success: false, error: text || 'Unexpected response format' };
+      return { success: false, error: text || {{ _('Unexpected response format')|tojson }} };
     }
   })
   .then(data => {
     if (data.success) {
       if (window.toastManager) {
-        window.toastManager.success('Invoice email sent successfully!');
+        window.toastManager.success({{ _('Invoice email sent successfully!')|tojson }});
       } else {
-        ttAlert('Invoice email sent successfully!');
+        ttAlert({{ _('Invoice email sent successfully!')|tojson }});
       }
       hideSendEmailModal();
       // Optionally reload the page to show updated status
       setTimeout(() => window.location.reload(), 1000);
     } else {
-      const errorMsg = data.error || 'Failed to send email';
+      const errorMsg = data.error || {{ _('Failed to send email')|tojson }};
       console.error('Email send error:', errorMsg);
       if (window.toastManager) {
-        window.toastManager.error('Error: ' + errorMsg);
+        window.toastManager.error({{ _('Error: %(error)s')|tojson }}.replace('%(error)s', errorMsg));
       } else {
-        ttAlert('Error: ' + errorMsg);
+        ttAlert({{ _('Error: %(error)s')|tojson }}.replace('%(error)s', errorMsg));
       }
       submitBtn.disabled = false;
       submitBtn.textContent = originalText;
@@ -596,7 +596,7 @@ function sendInvoiceEmail(event) {
   })
   .catch(error => {
     console.error('Email send error:', error);
-    const errorMsg = error.message || 'Failed to send email. Please check server logs for details.';
+    const errorMsg = error.message || {{ _('Failed to send email. Please check server logs for details.')|tojson }};
     if (window.toastManager) {
       window.toastManager.error(errorMsg);
     } else {
@@ -622,7 +622,7 @@ function hideDeleteModal() {
 }
 
 async function resendInvoiceEmail(invoiceId, emailId, recipientEmail) {
-  if (!(await ttConfirm(`Resend invoice email to ${recipientEmail}?`, { confirmText: 'Resend' }))) {
+  if (!(await ttConfirm({{ _('Resend invoice email to %(email)s?')|tojson }}.replace('%(email)s', recipientEmail), { confirmText: {{ _('Resend')|tojson }} }))) {
     return;
   }
   
@@ -645,7 +645,7 @@ async function resendInvoiceEmail(invoiceId, emailId, recipientEmail) {
         const submitBtn = form.querySelector('button[type="submit"]');
         const originalText = submitBtn.textContent;
         submitBtn.disabled = true;
-        submitBtn.textContent = 'Resending...';
+        submitBtn.textContent = {{ _('Resending...')|tojson }};
         
         fetch(`/invoices/${invoiceId}/resend-email/${emailId}`, {
           method: 'POST',
@@ -666,25 +666,25 @@ async function resendInvoiceEmail(invoiceId, emailId, recipientEmail) {
             if (!response.ok) {
               throw new Error(text || `HTTP ${response.status}: ${response.statusText}`);
             }
-            return { success: false, error: text || 'Unexpected response format' };
+            return { success: false, error: text || {{ _('Unexpected response format')|tojson }} };
           }
         })
         .then(data => {
           if (data.success) {
             if (window.toastManager) {
-              window.toastManager.success('Invoice email resent successfully!');
+              window.toastManager.success({{ _('Invoice email resent successfully!')|tojson }});
             } else {
-              ttAlert('Invoice email resent successfully!');
+              ttAlert({{ _('Invoice email resent successfully!')|tojson }});
             }
             hideSendEmailModal();
             setTimeout(() => window.location.reload(), 1000);
           } else {
-            const errorMsg = data.error || 'Failed to resend email';
+            const errorMsg = data.error || {{ _('Failed to resend email')|tojson }};
             console.error('Email resend error:', errorMsg);
             if (window.toastManager) {
-              window.toastManager.error('Error: ' + errorMsg);
+              window.toastManager.error({{ _('Error: %(error)s')|tojson }}.replace('%(error)s', errorMsg));
             } else {
-              ttAlert('Error: ' + errorMsg);
+              ttAlert({{ _('Error: %(error)s')|tojson }}.replace('%(error)s', errorMsg));
             }
             submitBtn.disabled = false;
             submitBtn.textContent = originalText;
@@ -692,11 +692,11 @@ async function resendInvoiceEmail(invoiceId, emailId, recipientEmail) {
         })
         .catch(error => {
           console.error('Email resend error:', error);
-          const errorMsg = error.message || 'Failed to resend email';
+          const errorMsg = error.message || {{ _('Failed to resend email')|tojson }};
           if (window.toastManager) {
-            window.toastManager.error('Error: ' + errorMsg);
+            window.toastManager.error({{ _('Error: %(error)s')|tojson }}.replace('%(error)s', errorMsg));
           } else {
-            ttAlert('Error: ' + errorMsg);
+            ttAlert({{ _('Error: %(error)s')|tojson }}.replace('%(error)s', errorMsg));
           }
           submitBtn.disabled = false;
           submitBtn.textContent = originalText;
@@ -717,7 +717,7 @@ async function sendInvoicePeppol() {
   return;
   {% endif %}
 
-  if (!(await ttConfirm('Send this invoice via Peppol?', { confirmText: 'Send' }))) {
+  if (!(await ttConfirm({{ _('Send this invoice via Peppol?')|tojson }}, { confirmText: {{ _('Send')|tojson }} }))) {
     return;
   }
 
@@ -740,26 +740,26 @@ async function sendInvoicePeppol() {
   .then(data => {
     if (data.success) {
       if (window.toastManager) {
-        window.toastManager.success(data.message || 'Sent via Peppol');
+        window.toastManager.success(data.message || {{ _('Sent via Peppol')|tojson }});
       } else {
-        ttAlert(data.message || 'Sent via Peppol');
+        ttAlert(data.message || {{ _('Sent via Peppol')|tojson }});
       }
       setTimeout(() => window.location.reload(), 800);
     } else {
-      const errorMsg = data.error || 'Failed to send via Peppol';
+      const errorMsg = data.error || {{ _('Failed to send via Peppol')|tojson }};
       if (window.toastManager) {
         window.toastManager.error(errorMsg);
       } else {
-        ttAlert('Error: ' + errorMsg);
+        ttAlert({{ _('Error: %(error)s')|tojson }}.replace('%(error)s', errorMsg));
       }
     }
   })
   .catch(err => {
-    const msg = err && err.message ? err.message : 'Failed to send via Peppol';
+    const msg = err && err.message ? err.message : {{ _('Failed to send via Peppol')|tojson }};
     if (window.toastManager) {
       window.toastManager.error(msg);
     } else {
-      ttAlert('Error: ' + msg);
+      ttAlert({{ _('Error: %(error)s')|tojson }}.replace('%(error)s', msg));
     }
   });
 }

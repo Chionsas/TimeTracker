@@ -72,34 +72,34 @@
     </div>
     
     <div class="content">
-        <p>Hello {{ user.display_name }},</p>
+        <p>{{ _('Hello %(name)s,', name=user.display_name) }}</p>
         
-        <p><strong>{{ assigned_by.display_name }}</strong> has assigned you to a task:</p>
+        <p>{{ _('%(name)s has assigned you to a task:', name='<strong>%s</strong>'|format(assigned_by.display_name|e))|safe }}</p>
         
         <div class="task-details">
             <table>
                 <tr>
-                    <td>Task:</td>
+                    <td>{{ _('Task:') }}</td>
                     <td><strong>{{ task.name }}</strong></td>
                 </tr>
                 <tr>
-                    <td>Project:</td>
-                    <td>{{ task.project.name if task.project else 'N/A' }}</td>
+                    <td>{{ _('Project:') }}</td>
+                    <td>{{ task.project.name if task.project else _('N/A') }}</td>
                 </tr>
                 {% if task.priority %}
                 <tr>
-                    <td>Priority:</td>
+                    <td>{{ _('Priority:') }}</td>
                     <td>{{ task.priority }}</td>
                 </tr>
                 {% endif %}
                 {% if task.due_date %}
                 <tr>
-                    <td>Due Date:</td>
+                    <td>{{ _('Due Date:') }}</td>
                     <td>{{ task.due_date }}</td>
                 </tr>
                 {% endif %}
                 <tr>
-                    <td>Status:</td>
+                    <td>{{ _('Status:') }}</td>
                     <td>{{ task.status|replace('_', ' ')|title }}</td>
                 </tr>
             </table>
@@ -107,7 +107,7 @@
         
         {% if task.description %}
         <div class="description">
-            <strong>Description:</strong>
+            <strong>{{ _('Description:') }}</strong>
             <p>{{ task.description }}</p>
         </div>
         {% endif %}
@@ -122,8 +122,8 @@
     </div>
     
     <div class="footer">
-        <p>TimeTracker - Time Tracking & Project Management</p>
-        <p>To manage your notification preferences, visit your user settings.</p>
+        <p>{{ _('TimeTracker - Time Tracking & Project Management') }}</p>
+        <p>{{ _('To manage your notification preferences, visit your user settings.') }}</p>
     </div>
 </body>
 </html>

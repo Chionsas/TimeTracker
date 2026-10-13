@@ -8,10 +8,10 @@
 
 {{ page_header(
     icon_class='fas fa-user-circle',
-    title_text='My Profile',
+    title_text=_('My Profile'),
     actions_html=actions,
     breadcrumbs=[
-        {'text': 'Profile'}
+        {'text': _('Profile')}
     ]
 ) }}
 
@@ -40,12 +40,12 @@
             </div>
         </div>
         <div>
-            <h2 class="text-sm font-medium text-text-muted-light dark:text-text-muted-dark">Username</h2>
+            <h2 class="text-sm font-medium text-text-muted-light dark:text-text-muted-dark">{{ _('Username') }}</h2>
             <p class="mt-1 text-lg">{{ current_user.username }}</p>
         </div>
         <div class="border-t border-border-light dark:border-border-dark"></div>
         <div>
-            <h2 class="text-sm font-medium text-text-muted-light dark:text-text-muted-dark">Role</h2>
+            <h2 class="text-sm font-medium text-text-muted-light dark:text-text-muted-dark">{{ _('Role') }}</h2>
             <p class="mt-1 text-lg">{{ current_user.primary_role_name | capitalize }}</p>
         </div>
         <div class="border-t border-border-light dark:border-border-dark"></div>
@@ -56,7 +56,7 @@
         <div class="border-t border-border-light dark:border-border-dark"></div>
         <div>
             <h2 class="text-sm font-medium text-text-muted-light dark:text-text-muted-dark">{{ _('Last Login') }}</h2>
-            <p class="mt-1 text-lg">{{ current_user.last_login|user_datetime if current_user.last_login else 'Never' }}</p>
+            <p class="mt-1 text-lg">{{ current_user.last_login|user_datetime if current_user.last_login else _('Never') }}</p>
         </div>
     </div>
 </div>

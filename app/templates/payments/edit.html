@@ -4,10 +4,10 @@
 <div class="container mx-auto px-4 py-6">
     <!-- Header -->
     <div class="flex justify-between items-center mb-6">
-        <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100">Edit Payment #{{ payment.id }}</h1>
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100">{{ _('Edit Payment #%(id)s', id=payment.id) }}</h1>
         <div class="space-x-2">
             <a href="{{ url_for('payments.view_payment', payment_id=payment.id) }}" class="text-primary hover:text-primary-dark">
-                <i class="fas fa-arrow-left mr-2"></i>Back to Payment
+                <i class="fas fa-arrow-left mr-2"></i>{{ _('Back to Payment') }}
             </a>
         </div>
     </div>
@@ -19,7 +19,7 @@
             
             <!-- Invoice Info (Read-only) -->
             <div class="mb-6 p-4 bg-background-light dark:bg-background-dark rounded-lg">
-                <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Invoice</h3>
+                <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">{{ _('Invoice') }}</h3>
                 <a href="{{ url_for('invoices.view_invoice', invoice_id=payment.invoice_id) }}" class="text-primary hover:text-primary-dark font-semibold">
                     {{ payment.invoice.invoice_number }} - {{ payment.invoice.client_name }}
                 </a>
@@ -29,7 +29,7 @@
                 <!-- Amount -->
                 <div>
                     <label for="amount" class="form-label">
-                        Amount <span class="text-red-500">*</span>
+                        {{ _('Amount') }} <span class="text-red-500">*</span>
                     </label>
                     <input type="number" name="amount" id="amount" step="0.01" min="0.01" required
                            value="{{ payment.amount }}"
@@ -38,7 +38,7 @@
 
                 <!-- Currency -->
                 <div>
-                    <label for="currency" class="form-label">Currency</label>
+                    <label for="currency" class="form-label">{{ _('Currency') }}</label>
                     <input type="text" name="currency" id="currency" maxlength="3"
                            value="{{ payment.currency or 'EUR' }}"
                            class="form-input">
@@ -47,7 +47,7 @@
                 <!-- Payment Date -->
                 <div>
                     <label for="payment_date" class="form-label">
-                        Payment Date <span class="text-red-500">*</span>
+                        {{ _('Payment Date') }} <span class="text-red-500">*</span>
                     </label>
                     <input type="date" name="payment_date" id="payment_date" required
                            value="{{ payment.payment_date.strftime('%Y-%m-%d') if payment.payment_date else '' }}"
@@ -56,37 +56,37 @@
 
                 <!-- Payment Method -->
                 <div>
-                    <label for="method" class="form-label">Payment Method</label>
+                    <label for="method" class="form-label">{{ _('Payment Method') }}</label>
                     <select name="method" id="method"
                             class="form-input">
-                        <option value="">Select method</option>
-                        <option value="bank_transfer" {% if payment.method == 'bank_transfer' %}selected{% endif %}>Bank Transfer</option>
-                        <option value="cash" {% if payment.method == 'cash' %}selected{% endif %}>Cash</option>
-                        <option value="check" {% if payment.method == 'check' %}selected{% endif %}>Check</option>
-                        <option value="credit_card" {% if payment.method == 'credit_card' %}selected{% endif %}>Credit Card</option>
-                        <option value="debit_card" {% if payment.method == 'debit_card' %}selected{% endif %}>Debit Card</option>
+                        <option value="">{{ _('Select method') }}</option>
+                        <option value="bank_transfer" {% if payment.method == 'bank_transfer' %}selected{% endif %}>{{ _('Bank Transfer') }}</option>
+                        <option value="cash" {% if payment.method == 'cash' %}selected{% endif %}>{{ _('Cash') }}</option>
+                        <option value="check" {% if payment.method == 'check' %}selected{% endif %}>{{ _('Check') }}</option>
+                        <option value="credit_card" {% if payment.method == 'credit_card' %}selected{% endif %}>{{ _('Credit Card') }}</option>
+                        <option value="debit_card" {% if payment.method == 'debit_card' %}selected{% endif %}>{{ _('Debit Card') }}</option>
                         <option value="paypal" {% if payment.method == 'paypal' %}selected{% endif %}>PayPal</option>
                         <option value="stripe" {% if payment.method == 'stripe' %}selected{% endif %}>Stripe</option>
-                        <option value="wire_transfer" {% if payment.method == 'wire_transfer' %}selected{% endif %}>Wire Transfer</option>
-                        <option value="other" {% if payment.method == 'other' %}selected{% endif %}>Other</option>
+                        <option value="wire_transfer" {% if payment.method == 'wire_transfer' %}selected{% endif %}>{{ _('Wire Transfer') }}</option>
+                        <option value="other" {% if payment.method == 'other' %}selected{% endif %}>{{ _('Other') }}</option>
                     </select>
                 </div>
 
                 <!-- Status -->
                 <div>
-                    <label for="status" class="form-label">Status</label>
+                    <label for="status" class="form-label">{{ _('Status') }}</label>
                     <select name="status" id="status"
                             class="form-input">
-                        <option value="completed" {% if payment.status == 'completed' %}selected{% endif %}>Completed</option>
-                        <option value="pending" {% if payment.status == 'pending' %}selected{% endif %}>Pending</option>
-                        <option value="failed" {% if payment.status == 'failed' %}selected{% endif %}>Failed</option>
-                        <option value="refunded" {% if payment.status == 'refunded' %}selected{% endif %}>Refunded</option>
+                        <option value="completed" {% if payment.status == 'completed' %}selected{% endif %}>{{ _('Completed') }}</option>
+                        <option value="pending" {% if payment.status == 'pending' %}selected{% endif %}>{{ _('Pending') }}</option>
+                        <option value="failed" {% if payment.status == 'failed' %}selected{% endif %}>{{ _('Failed') }}</option>
+                        <option value="refunded" {% if payment.status == 'refunded' %}selected{% endif %}>{{ _('Refunded') }}</option>
                     </select>
                 </div>
 
                 <!-- Reference -->
                 <div>
-                    <label for="reference" class="form-label">Reference/Transaction ID</label>
+                    <label for="reference" class="form-label">{{ _('Reference/Transaction ID') }}</label>
                     <input type="text" name="reference" id="reference" maxlength="100"
                            value="{{ payment.reference or '' }}"
                            class="form-input">
@@ -94,7 +94,7 @@
 
                 <!-- Gateway Transaction ID -->
                 <div>
-                    <label for="gateway_transaction_id" class="form-label">Gateway Transaction ID</label>
+                    <label for="gateway_transaction_id" class="form-label">{{ _('Gateway Transaction ID') }}</label>
                     <input type="text" name="gateway_transaction_id" id="gateway_transaction_id" maxlength="255"
                            value="{{ payment.gateway_transaction_id or '' }}"
                            class="form-input">
@@ -102,7 +102,7 @@
 
                 <!-- Gateway Fee -->
                 <div>
-                    <label for="gateway_fee" class="form-label">Gateway Fee</label>
+                    <label for="gateway_fee" class="form-label">{{ _('Gateway Fee') }}</label>
                     <input type="number" name="gateway_fee" id="gateway_fee" step="0.01" min="0"
                            value="{{ payment.gateway_fee or '' }}"
                            class="form-input">
@@ -110,7 +110,7 @@
 
                 <!-- Notes -->
                 <div class="md:col-span-2">
-                    <label for="notes" class="form-label">Notes</label>
+                    <label for="notes" class="form-label">{{ _('Notes') }}</label>
                     <textarea name="notes" id="notes" rows="3"
                               class="form-input">{{ payment.notes or '' }}</textarea>
                 </div>
@@ -119,10 +119,10 @@
             <!-- Form Actions -->
             <div class="mt-6 flex flex-col sm:flex-row justify-end gap-3">
                 <a href="{{ url_for('payments.view_payment', payment_id=payment.id) }}" class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700">
-                    Cancel
+                    {{ _('Cancel') }}
                 </a>
                 <button type="submit" class="px-4 py-2 bg-primary hover:bg-primary-dark text-white rounded-md transition-colors">
-                    <i class="fas fa-save mr-2"></i>Update Payment
+                    <i class="fas fa-save mr-2"></i>{{ _('Update Payment') }}
                 </button>
             </div>
         </form>

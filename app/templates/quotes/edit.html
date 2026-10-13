@@ -5,17 +5,17 @@
 
 {% block content %}
 {% set breadcrumbs = [
-    {'text': 'Quotes', 'url': url_for('quotes.list_quotes')},
+    {'text': _('Quotes'), 'url': url_for('quotes.list_quotes')},
     {'text': quote.quote_number, 'url': url_for('quotes.view_quote', quote_id=quote.id)},
-    {'text': 'Edit'}
+    {'text': _('Edit')}
 ] %}
 
 {{ page_header(
     icon_class='fas fa-file-contract',
-    title_text='Edit Quote',
+    title_text=_('Edit Quote'),
     subtitle_text=quote.quote_number,
     breadcrumbs=breadcrumbs,
-    actions_html='<a href="' + url_for("quotes.view_quote", quote_id=quote.id) + '" class="bg-gray-200 dark:bg-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"><i class="fas fa-arrow-left mr-2"></i>Back</a>'
+    actions_html='<a href="' + url_for("quotes.view_quote", quote_id=quote.id) + '" class="bg-gray-200 dark:bg-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"><i class="fas fa-arrow-left mr-2"></i>' + _('Back') + '</a>'
 ) }}
 
 <div class="bg-card-light dark:bg-card-dark p-6 rounded-xl border border-border-light dark:border-border-dark shadow-sm">
@@ -280,12 +280,12 @@
                 <select id="payment_terms" name="payment_terms" class="form-input">
                     <option value="">{{ _('Select payment terms') }}</option>
                     <option value="Due on Receipt" {% if quote.payment_terms == 'Due on Receipt' %}selected{% endif %}>{{ _('Due on Receipt') }}</option>
-                    <option value="Net 15" {% if quote.payment_terms == 'Net 15' %}selected{% endif %}>Net 15</option>
-                    <option value="Net 30" {% if quote.payment_terms == 'Net 30' %}selected{% endif %}>Net 30</option>
-                    <option value="Net 45" {% if quote.payment_terms == 'Net 45' %}selected{% endif %}>Net 45</option>
-                    <option value="Net 60" {% if quote.payment_terms == 'Net 60' %}selected{% endif %}>Net 60</option>
-                    <option value="Net 90" {% if quote.payment_terms == 'Net 90' %}selected{% endif %}>Net 90</option>
-                    <option value="2/10 Net 30" {% if quote.payment_terms == '2/10 Net 30' %}selected{% endif %}>2/10 Net 30</option>
+                    <option value="Net 15" {% if quote.payment_terms == 'Net 15' %}selected{% endif %}>{{ _('Net 15') }}</option>
+                    <option value="Net 30" {% if quote.payment_terms == 'Net 30' %}selected{% endif %}>{{ _('Net 30') }}</option>
+                    <option value="Net 45" {% if quote.payment_terms == 'Net 45' %}selected{% endif %}>{{ _('Net 45') }}</option>
+                    <option value="Net 60" {% if quote.payment_terms == 'Net 60' %}selected{% endif %}>{{ _('Net 60') }}</option>
+                    <option value="Net 90" {% if quote.payment_terms == 'Net 90' %}selected{% endif %}>{{ _('Net 90') }}</option>
+                    <option value="2/10 Net 30" {% if quote.payment_terms == '2/10 Net 30' %}selected{% endif %}>{{ _('2/10 Net 30') }}</option>
                 </select>
                 <input type="text" id="payment_terms_custom" name="payment_terms" value="{{ quote.payment_terms or '' }}" placeholder="{{ _('Or enter custom payment terms') }}" class="form-input mt-2" {% if quote.payment_terms and quote.payment_terms not in ['Due on Receipt', 'Net 15', 'Net 30', 'Net 45', 'Net 60', 'Net 90', '2/10 Net 30'] %}style="display: block;"{% else %}style="display: none;"{% endif %}>
                 <button type="button" onclick="document.getElementById('payment_terms').style.display='none'; document.getElementById('payment_terms_custom').style.display='block';" class="text-sm text-primary mt-1 hover:underline">

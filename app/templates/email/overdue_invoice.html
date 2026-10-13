@@ -66,40 +66,42 @@
     </div>
     
     <div class="content">
-        <p>Hello {{ user.display_name }},</p>
+        <p>{{ _('Hello %(name)s,', name=user.display_name) }}</p>
         
-        <p>This is a notification that <strong>Invoice {{ invoice.invoice_number }}</strong> is now <strong>{{ days_overdue }} days overdue</strong>.</p>
+        {% set invoice_label %}<strong>{{ _('Invoice %(number)s', number=invoice.invoice_number) }}</strong>{% endset %}
+        {% set overdue_label %}<strong>{{ ngettext('%(num)s day overdue', '%(num)s days overdue', days_overdue) }}</strong>{% endset %}
+        <p>{{ _('This is a notification that %(invoice)s is now %(overdue)s.', invoice=invoice_label, overdue=overdue_label)|safe }}</p>
         
         <div class="invoice-details">
             <table>
                 <tr>
-                    <td>Invoice Number:</td>
+                    <td>{{ _('Invoice Number:') }}</td>
                     <td>{{ invoice.invoice_number }}</td>
                 </tr>
                 <tr>
-                    <td>Client:</td>
+                    <td>{{ _('Client:') }}</td>
                     <td>{{ invoice.client_name }}</td>
                 </tr>
                 <tr>
-                    <td>Amount:</td>
+                    <td>{{ _('Amount:') }}</td>
                     <td>{{ invoice.currency_code }} {{ invoice.total_amount }}</td>
                 </tr>
                 <tr>
-                    <td>Due Date:</td>
+                    <td>{{ _('Due Date:') }}</td>
                     <td>{{ invoice.due_date }}</td>
                 </tr>
                 <tr>
-                    <td>Days Overdue:</td>
+                    <td>{{ _('Days Overdue:') }}</td>
                     <td><strong>{{ days_overdue }}</strong></td>
                 </tr>
                 <tr>
-                    <td>Status:</td>
+                    <td>{{ _('Status:') }}</td>
                     <td>{{ invoice.status|upper }}</td>
                 </tr>
             </table>
         </div>
         
-        <p><strong>Recommended Action:</strong> Please follow up with the client or update the invoice status if payment has been received.</p>
+        <p><strong>{{ _('Recommended Action:') }}</strong> {{ _('Please follow up with the client or update the invoice status if payment has been received.') }}</p>
         
         {% if invoice_url %}
         <center>
@@ -111,8 +113,8 @@
     </div>
     
     <div class="footer">
-        <p>TimeTracker - Time Tracking & Project Management</p>
-        <p>This is an automated notification. To manage your notification preferences, visit your user settings.</p>
+        <p>{{ _('TimeTracker - Time Tracking & Project Management') }}</p>
+        <p>{{ _('This is an automated notification. To manage your notification preferences, visit your user settings.') }}</p>
     </div>
 </body>
 </html>

@@ -5,14 +5,14 @@
 
 {% block content %}
 {% set breadcrumbs = [
-    {'text': 'Admin', 'url': url_for('admin.admin_dashboard')},
-    {'text': 'Integrations'}
+    {'text': _('Admin'), 'url': url_for('admin.admin_dashboard')},
+    {'text': _('Integrations')}
 ] %}
 
 {{ page_header(
     icon_class='fas fa-plug',
-    title_text='Integration Setup',
-    subtitle_text='Configure OAuth credentials for integrations',
+    title_text=_('Integration Setup'),
+    subtitle_text=_('Configure OAuth credentials for integrations'),
     breadcrumbs=breadcrumbs
 ) }}
 

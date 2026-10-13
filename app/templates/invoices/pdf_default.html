@@ -12,7 +12,7 @@
                 {% set image_data = get_image_base64(image.file_path) %}
                 {% if image_data %}
                     <img src="{{ image_data }}" 
-                         alt="Decorative image"
+                         alt="{{ _('Decorative image') }}"
                          style="position: absolute; 
                                 left: {{ image.position_x }}mm; 
                                 top: {{ image.position_y }}mm; 

@@ -60,7 +60,7 @@
     <div class="lg:col-span-1 space-y-6">
         <div class="bg-card-light dark:bg-card-dark p-6 rounded-xl border border-border-light dark:border-border-dark shadow-sm">
             <div class="flex justify-between items-center mb-4">
-                <h2 class="text-lg font-semibold">Contacts</h2>
+                <h2 class="text-lg font-semibold">{{ _('Contacts') }}</h2>
                 <a href="{{ url_for('contacts.list_contacts', client_id=client.id) }}" class="text-primary hover:underline text-sm">
                     {{ _('Manage') }} <i class="fas fa-arrow-right ml-1"></i>
                 </a>
@@ -104,13 +104,13 @@
             <div class="space-y-4">
                 {% if client.contact_person %}
                 <div>
-                    <h3 class="text-sm font-medium text-text-muted-light dark:text-text-muted-dark">Contact Person</h3>
+                    <h3 class="text-sm font-medium text-text-muted-light dark:text-text-muted-dark">{{ _('Contact Person') }}</h3>
                     <p>{{ client.contact_person }}</p>
                 </div>
                 {% endif %}
                 {% if client.email %}
                 <div>
-                    <h3 class="text-sm font-medium text-text-muted-light dark:text-text-muted-dark">Email</h3>
+                    <h3 class="text-sm font-medium text-text-muted-light dark:text-text-muted-dark">{{ _('Email') }}</h3>
                     <p>
                         <a href="mailto:{{ client.email }}" class="text-primary hover:underline">{{ client.email }}</a>
                     </p>
@@ -118,13 +118,13 @@
                 {% endif %}
                 {% if client.phone %}
                 <div>
-                    <h3 class="text-sm font-medium text-text-muted-light dark:text-text-muted-dark">Phone</h3>
+                    <h3 class="text-sm font-medium text-text-muted-light dark:text-text-muted-dark">{{ _('Phone') }}</h3>
                     <p>{{ client.phone }}</p>
                 </div>
                 {% endif %}
                 {% if client.address %}
                 <div>
-                    <h3 class="text-sm font-medium text-text-muted-light dark:text-text-muted-dark">Address</h3>
+                    <h3 class="text-sm font-medium text-text-muted-light dark:text-text-muted-dark">{{ _('Address') }}</h3>
                     <p>{{ client.address }}</p>
                 </div>
                 {% endif %}
@@ -297,14 +297,14 @@
     <!-- Right Column: Projects -->
     <div class="lg:col-span-2">
         <div class="bg-card-light dark:bg-card-dark p-6 rounded-xl border border-border-light dark:border-border-dark shadow-sm">
-            <h2 class="text-lg font-semibold mb-4">Projects</h2>
+            <h2 class="text-lg font-semibold mb-4">{{ _('Projects') }}</h2>
             <div class="overflow-x-auto">
                 <table class="w-full text-left">
                     <thead class="border-b border-border-light dark:border-border-dark">
                         <tr>
-                            <th class="p-4">Name</th>
-                            <th class="p-4">Status</th>
-                            <th class="p-4">Actions</th>
+                            <th class="p-4">{{ _('Name') }}</th>
+                            <th class="p-4">{{ _('Status') }}</th>
+                            <th class="p-4">{{ _('Actions') }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -328,12 +328,12 @@
                                 <span class="px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap {{ st.cls }}">{{ st.label }}</span>
                             </td>
                             <td class="p-4">
-                                <a href="{{ url_for('projects.view_project', project_id=project.id) }}" class="text-primary hover:underline">View</a>
+                                <a href="{{ url_for('projects.view_project', project_id=project.id) }}" class="text-primary hover:underline">{{ _('View') }}</a>
                             </td>
                         </tr>
                         {% else %}
                         <tr>
-                            <td colspan="3" class="p-4 text-center text-text-muted-light dark:text-text-muted-dark">No projects found for this client.</td>
+                            <td colspan="3" class="p-4 text-center text-text-muted-light dark:text-text-muted-dark">{{ _('No projects found for this client.') }}</td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -645,10 +645,10 @@ async function confirmDeleteNote(noteId) {
 {% if current_user.is_admin or has_permission('delete_clients') %}
 {{ confirm_dialog(
     'confirmDeleteClient-' ~ client.id,
-    'Delete Client',
-    'Are you sure you want to delete this client? This action cannot be undone.',
-    'Delete',
-    'Cancel',
+    _('Delete Client'),
+    _('Are you sure you want to delete this client? This action cannot be undone.'),
+    _('Delete'),
+    _('Cancel'),
     'danger'
 ) }}
 {% endif %}

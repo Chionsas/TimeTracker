@@ -4,13 +4,13 @@
 <div class="container mx-auto px-4 py-6">
     <!-- Header -->
     <div class="flex justify-between items-center mb-6">
-        <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100">Payment #{{ payment.id }}</h1>
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100">{{ _('Payment #%(id)s', id=payment.id) }}</h1>
         <div class="space-x-2">
             <a href="{{ url_for('payments.list_payments') }}" class="text-primary hover:text-primary-dark">
-                <i class="fas fa-arrow-left mr-2"></i>Back to Payments
+                <i class="fas fa-arrow-left mr-2"></i>{{ _('Back to Payments') }}
             </a>
             <a href="{{ url_for('payments.edit_payment', payment_id=payment.id) }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
-                <i class="fas fa-edit mr-2"></i>Edit
+                <i class="fas fa-edit mr-2"></i>{{ _('Edit') }}
             </a>
         </div>
     </div>
@@ -23,7 +23,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- Amount -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Amount</label>
+                    <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">{{ _('Amount') }}</label>
                     <p class="text-2xl font-bold text-green-600 dark:text-green-400">
                         {{ payment.amount }} {{ payment.currency or 'EUR' }}
                     </p>
@@ -31,23 +31,23 @@
 
                 <!-- Status -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Status</label>
+                    <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">{{ _('Status') }}</label>
                     <div class="mt-2">
                         {% if payment.status == 'completed' %}
                         <span class="px-3 py-1 text-sm font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100">
-                            <i class="fas fa-check-circle mr-1"></i>Completed
+                            <i class="fas fa-check-circle mr-1"></i>{{ _('Completed') }}
                         </span>
                         {% elif payment.status == 'pending' %}
                         <span class="px-3 py-1 text-sm font-semibold rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-100">
-                            <i class="fas fa-clock mr-1"></i>Pending
+                            <i class="fas fa-clock mr-1"></i>{{ _('Pending') }}
                         </span>
                         {% elif payment.status == 'failed' %}
                         <span class="px-3 py-1 text-sm font-semibold rounded-full bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-100">
-                            <i class="fas fa-times-circle mr-1"></i>Failed
+                            <i class="fas fa-times-circle mr-1"></i>{{ _('Failed') }}
                         </span>
                         {% elif payment.status == 'refunded' %}
                         <span class="px-3 py-1 text-sm font-semibold rounded-full bg-gray-100 text-gray-800 dark:bg-gray-600 dark:text-gray-100">
-                            <i class="fas fa-undo mr-1"></i>Refunded
+                            <i class="fas fa-undo mr-1"></i>{{ _('Refunded') }}
                         </span>
                         {% endif %}
                     </div>
@@ -55,20 +55,20 @@
 
                 <!-- Payment Date -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Payment Date</label>
+                    <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">{{ _('Payment Date') }}</label>
                     <p class="text-lg text-gray-900 dark:text-gray-100">
-                        {{ payment.payment_date|format_date if payment.payment_date else 'N/A' }}
+                        {{ payment.payment_date|format_date if payment.payment_date else _('N/A') }}
                     </p>
                 </div>
 
                 <!-- Payment Method -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Payment Method</label>
+                    <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">{{ _('Payment Method') }}</label>
                     <p class="text-lg text-gray-900 dark:text-gray-100">
                         {% if payment.method %}
                         <i class="fas fa-credit-card mr-2 text-gray-500"></i>{{ payment.method }}
                         {% else %}
-                        N/A
+                        {{ _('N/A') }}
                         {% endif %}
                     </p>
                 </div>
@@ -76,7 +76,7 @@
                 {% if payment.reference %}
                 <!-- Reference -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Reference</label>
+                    <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">{{ _('Reference') }}</label>
                     <p class="text-lg text-gray-900 dark:text-gray-100">{{ payment.reference }}</p>
                 </div>
                 {% endif %}
@@ -84,7 +84,7 @@
                 {% if payment.gateway_transaction_id %}
                 <!-- Gateway Transaction ID -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Gateway Transaction ID</label>
+                    <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">{{ _('Gateway Transaction ID') }}</label>
                     <p class="text-sm text-gray-900 dark:text-gray-100 font-mono">{{ payment.gateway_transaction_id }}</p>
                 </div>
                 {% endif %}
@@ -92,7 +92,7 @@
                 {% if payment.gateway_fee %}
                 <!-- Gateway Fee -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Gateway Fee</label>
+                    <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">{{ _('Gateway Fee') }}</label>
                     <p class="text-lg text-red-600 dark:text-red-400">
                         {{ payment.gateway_fee }} {{ payment.currency or 'EUR' }}
                     </p>
@@ -100,7 +100,7 @@
                 
                 <!-- Net Amount -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Net Amount</label>
+                    <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">{{ _('Net Amount') }}</label>
                     <p class="text-lg text-green-600 dark:text-green-400">
                         {{ payment.net_amount or payment.amount }} {{ payment.currency or 'EUR' }}
                     </p>
@@ -110,26 +110,26 @@
                 {% if payment.received_by %}
                 <!-- Received By -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Received By</label>
+                    <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">{{ _('Received By') }}</label>
                     <p class="text-lg text-gray-900 dark:text-gray-100">
-                        {{ payment.receiver.username if payment.receiver else 'Unknown' }}
+                        {{ payment.receiver.username if payment.receiver else _('Unknown') }}
                     </p>
                 </div>
                 {% endif %}
 
                 <!-- Created At -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Created</label>
+                    <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">{{ _('Created') }}</label>
                     <p class="text-sm text-gray-700 dark:text-gray-300">
-                        {{ payment.created_at|user_datetime if payment.created_at else 'N/A' }}
+                        {{ payment.created_at|user_datetime if payment.created_at else _('N/A') }}
                     </p>
                 </div>
 
                 <!-- Updated At -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Last Updated</label>
+                    <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">{{ _('Last Updated') }}</label>
                     <p class="text-sm text-gray-700 dark:text-gray-300">
-                        {{ payment.updated_at|user_datetime if payment.updated_at else 'N/A' }}
+                        {{ payment.updated_at|user_datetime if payment.updated_at else _('N/A') }}
                     </p>
                 </div>
             </div>
@@ -137,7 +137,7 @@
             {% if payment.notes %}
             <!-- Notes -->
             <div class="mt-6 pt-6 border-t border-border-light dark:border-border-dark">
-                <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Notes</label>
+                <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">{{ _('Notes') }}</label>
                 <div class="bg-background-light dark:bg-background-dark p-4 rounded-lg">
                     <p class="text-gray-900 dark:text-gray-100 whitespace-pre-wrap">{{ payment.notes }}</p>
                 </div>
@@ -160,44 +160,44 @@
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Client</label>
+                        <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">{{ _('Client') }}</label>
                         <p class="text-gray-900 dark:text-gray-100">{{ payment.invoice.client_name }}</p>
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Total Amount</label>
+                        <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">{{ _('Total Amount') }}</label>
                         <p class="text-lg font-semibold text-gray-900 dark:text-gray-100">
                             {{ payment.invoice.total_amount }} {{ payment.invoice.currency_code }}
                         </p>
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Amount Paid</label>
+                        <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">{{ _('Amount Paid') }}</label>
                         <p class="text-lg font-semibold text-green-600 dark:text-green-400">
                             {{ payment.invoice.amount_paid or 0 }} {{ payment.invoice.currency_code }}
                         </p>
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Outstanding</label>
+                        <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">{{ _('Outstanding') }}</label>
                         <p class="text-lg font-semibold text-red-600 dark:text-red-400">
                             {{ payment.invoice.outstanding_amount }} {{ payment.invoice.currency_code }}
                         </p>
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Payment Status</label>
+                        <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">{{ _('Payment Status') }}</label>
                         {% if payment.invoice.payment_status == 'fully_paid' %}
                         <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100">
-                            Fully Paid
+                            {{ _('Fully Paid') }}
                         </span>
                         {% elif payment.invoice.payment_status == 'partially_paid' %}
                         <span class="px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-100">
-                            Partially Paid
+                            {{ _('Partially Paid') }}
                         </span>
                         {% else %}
                         <span class="px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-100">
-                            Unpaid
+                            {{ _('Unpaid') }}
                         </span>
                         {% endif %}
                     </div>
@@ -205,7 +205,7 @@
                     <div class="pt-4 border-t border-border-light dark:border-border-dark">
                         <a href="{{ url_for('invoices.view_invoice', invoice_id=payment.invoice_id) }}" 
                            class="block w-full text-center bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-900 dark:text-gray-100 px-4 py-2 rounded-lg transition-colors">
-                            <i class="fas fa-file-invoice mr-2"></i>View Invoice
+                            <i class="fas fa-file-invoice mr-2"></i>{{ _('View Invoice') }}
                         </a>
                     </div>
                 </div>
@@ -213,18 +213,18 @@
 
             <!-- Actions -->
             <div class="bg-card-light dark:bg-card-dark rounded-lg shadow p-6 mt-6">
-                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Actions</h3>
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">{{ _('Actions') }}</h3>
                 
                 <div class="space-y-2">
                     <a href="{{ url_for('payments.edit_payment', payment_id=payment.id) }}" 
                        class="block w-full text-center bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors">
-                        <i class="fas fa-edit mr-2"></i>Edit Payment
+                        <i class="fas fa-edit mr-2"></i>{{ _('Edit Payment') }}
                     </a>
                     
                     <form id="deletePaymentForm" method="POST" action="{{ url_for('payments.delete_payment', payment_id=payment.id) }}">
                         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                         <button type="button" onclick="confirmDeletePayment()" class="block w-full text-center bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors">
-                            <i class="fas fa-trash mr-2"></i>Delete Payment
+                            <i class="fas fa-trash mr-2"></i>{{ _('Delete Payment') }}
                         </button>
                     </form>
                 </div>
@@ -237,11 +237,11 @@
 {% block scripts_extra %}
 <script nonce="{{ csp_nonce() }}">
 async function confirmDeletePayment() {
-    const message = 'Are you sure you want to delete this payment? This will affect the invoice payment status and cannot be undone.';
+    const message = {{ _('Are you sure you want to delete this payment? This will affect the invoice payment status and cannot be undone.')|tojson }};
     const confirmed = await showConfirm(message, {
-        title: 'Delete Payment',
-        confirmText: 'Delete',
-        cancelText: 'Cancel',
+        title: {{ _('Delete Payment')|tojson }},
+        confirmText: {{ _('Delete')|tojson }},
+        cancelText: {{ _('Cancel')|tojson }},
         variant: 'danger'
     });
     if (confirmed) {

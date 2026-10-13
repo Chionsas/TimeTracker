@@ -3,14 +3,14 @@
 
 {% block content %}
 {% set breadcrumbs = [
-    {'text': 'Recurring Invoices', 'url': url_for('recurring_invoices.list_recurring_invoices')},
+    {'text': _('Recurring Invoices'), 'url': url_for('recurring_invoices.list_recurring_invoices')},
     {'text': recurring.name, 'url': url_for('recurring_invoices.view_recurring_invoice', recurring_id=recurring.id)},
-    {'text': 'Edit'}
+    {'text': _('Edit')}
 ] %}
 
 {{ page_header(
     icon_class='fas fa-sync-alt',
-    title_text='Edit Recurring Invoice',
+    title_text=_('Edit Recurring Invoice'),
     subtitle_text=recurring.name,
     breadcrumbs=breadcrumbs
 ) }}
@@ -20,94 +20,94 @@
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-                <label for="name" class="form-label">Template Name *</label>
+                <label for="name" class="form-label">{{ _('Template Name') }} *</label>
                 <input type="text" id="name" name="name" value="{{ recurring.name }}" required class="form-input">
             </div>
             
             <div>
-                <label for="frequency" class="form-label">Frequency *</label>
+                <label for="frequency" class="form-label">{{ _('Frequency') }} *</label>
                 <select id="frequency" name="frequency" required class="form-input">
-                    <option value="daily" {% if recurring.frequency == 'daily' %}selected{% endif %}>Daily</option>
-                    <option value="weekly" {% if recurring.frequency == 'weekly' %}selected{% endif %}>Weekly</option>
-                    <option value="monthly" {% if recurring.frequency == 'monthly' %}selected{% endif %}>Monthly</option>
-                    <option value="yearly" {% if recurring.frequency == 'yearly' %}selected{% endif %}>Yearly</option>
+                    <option value="daily" {% if recurring.frequency == 'daily' %}selected{% endif %}>{{ _('Daily') }}</option>
+                    <option value="weekly" {% if recurring.frequency == 'weekly' %}selected{% endif %}>{{ _('Weekly') }}</option>
+                    <option value="monthly" {% if recurring.frequency == 'monthly' %}selected{% endif %}>{{ _('Monthly') }}</option>
+                    <option value="yearly" {% if recurring.frequency == 'yearly' %}selected{% endif %}>{{ _('Yearly') }}</option>
                 </select>
             </div>
             
             <div>
-                <label for="interval" class="form-label">Interval</label>
+                <label for="interval" class="form-label">{{ _('Interval') }}</label>
                 <input type="number" id="interval" name="interval" value="{{ recurring.interval }}" min="1" class="form-input">
             </div>
             
             <div>
-                <label for="next_run_date" class="form-label">Next Run Date *</label>
+                <label for="next_run_date" class="form-label">{{ _('Next Run Date') }} *</label>
                 <input type="date" id="next_run_date" name="next_run_date" value="{{ recurring.next_run_date.strftime('%Y-%m-%d') if recurring.next_run_date else '' }}" required class="form-input">
             </div>
             
             <div>
-                <label for="end_date" class="form-label">End Date (Optional)</label>
+                <label for="end_date" class="form-label">{{ _('End Date (Optional)') }}</label>
                 <input type="date" id="end_date" name="end_date" value="{{ recurring.end_date.strftime('%Y-%m-%d') if recurring.end_date else '' }}" class="form-input">
             </div>
             
             <div>
-                <label for="due_date_days" class="form-label">Due Date (Days from Issue)</label>
+                <label for="due_date_days" class="form-label">{{ _('Due Date (Days from Issue)') }}</label>
                 <input type="number" id="due_date_days" name="due_date_days" value="{{ recurring.due_date_days }}" min="1" class="form-input">
             </div>
             
             <div>
-                <label for="tax_rate" class="form-label">Tax Rate (%)</label>
+                <label for="tax_rate" class="form-label">{{ _('Tax Rate (%)') }}</label>
                 <input type="number" id="tax_rate" name="tax_rate" value="{{ recurring.tax_rate }}" step="0.01" min="0" class="form-input">
             </div>
         </div>
         
         <div>
-            <label for="client_name" class="form-label">Client Name</label>
+            <label for="client_name" class="form-label">{{ _('Client Name') }}</label>
             <input type="text" id="client_name" name="client_name" value="{{ recurring.client_name }}" class="form-input">
         </div>
         
         <div>
-            <label for="client_email" class="form-label">Client Email</label>
+            <label for="client_email" class="form-label">{{ _('Client Email') }}</label>
             <input type="email" id="client_email" name="client_email" value="{{ recurring.client_email or '' }}" class="form-input">
         </div>
         
         <div>
-            <label for="client_address" class="form-label">Client Address</label>
+            <label for="client_address" class="form-label">{{ _('Client Address') }}</label>
             <textarea id="client_address" name="client_address" rows="3" class="form-input">{{ recurring.client_address or '' }}</textarea>
         </div>
         
         <div>
-            <label for="notes" class="form-label">Notes</label>
+            <label for="notes" class="form-label">{{ _('Notes') }}</label>
             <textarea id="notes" name="notes" rows="3" class="form-input">{{ recurring.notes or '' }}</textarea>
         </div>
         
         <div>
-            <label for="terms" class="form-label">Terms</label>
+            <label for="terms" class="form-label">{{ _('Terms') }}</label>
             <textarea id="terms" name="terms" rows="3" class="form-input">{{ recurring.terms or '' }}</textarea>
         </div>
         
         <div class="flex items-center space-x-4">
             <label class="flex items-center">
                 <input type="checkbox" name="auto_send" {% if recurring.auto_send %}checked{% endif %} class="mr-2">
-                <span class="text-sm text-gray-700 dark:text-gray-300">Automatically send invoices via email when generated</span>
+                <span class="text-sm text-gray-700 dark:text-gray-300">{{ _('Automatically send invoices via email when generated') }}</span>
             </label>
         </div>
         
         <div class="flex items-center space-x-4">
             <label class="flex items-center">
                 <input type="checkbox" name="auto_include_time_entries" {% if recurring.auto_include_time_entries %}checked{% endif %} class="mr-2">
-                <span class="text-sm text-gray-700 dark:text-gray-300">Automatically include unbilled time entries</span>
+                <span class="text-sm text-gray-700 dark:text-gray-300">{{ _('Automatically include unbilled time entries') }}</span>
             </label>
         </div>
         
         <div class="flex items-center space-x-4">
             <label class="flex items-center">
                 <input type="checkbox" name="is_active" {% if recurring.is_active %}checked{% endif %} class="mr-2">
-                <span class="text-sm text-gray-700 dark:text-gray-300">Active</span>
+                <span class="text-sm text-gray-700 dark:text-gray-300">{{ _('Active') }}</span>
             </label>
         </div>
         
         <div class="flex justify-end space-x-4">
-            <a href="{{ url_for('recurring_invoices.view_recurring_invoice', recurring_id=recurring.id) }}" class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800">Cancel</a>
+            <a href="{{ url_for('recurring_invoices.view_recurring_invoice', recurring_id=recurring.id) }}" class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800">{{ _('Cancel') }}</a>
             <button type="submit" class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90">{{ _('Update Recurring Invoice') }}</button>
         </div>
     </form>

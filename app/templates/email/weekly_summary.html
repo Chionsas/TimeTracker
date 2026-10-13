@@ -87,18 +87,18 @@
 <body>
     <div class="header">
         <h1>📊 {{ _('Your Weekly Summary') }}</h1>
-        <p>{{ start_date }} to {{ end_date }}</p>
+        <p>{{ _('%(start)s to %(end)s', start=start_date, end=end_date) }}</p>
     </div>
     
     <div class="content">
-        <p>Hello {{ user.display_name }},</p>
+        <p>{{ _('Hello %(name)s,', name=user.display_name) }}</p>
         
-        <p>Here's your time tracking summary for the past week:</p>
+        <p>{{ _("Here's your time tracking summary for the past week:") }}</p>
         
         <div class="summary-box">
-            <p>Total Hours Worked</p>
+            <p>{{ _('Total Hours Worked') }}</p>
             <h2>{{ "%.1f"|format(hours_worked) }}</h2>
-            <p>hours</p>
+            <p>{{ _('hours') }}</p>
         </div>
         
         <h3 style="margin-top: 30px;">{{ _('Hours by Project') }}</h3>
@@ -107,8 +107,8 @@
             <table>
                 <thead>
                     <tr>
-                        <th>Project</th>
-                        <th style="text-align: right;">Hours</th>
+                        <th>{{ _('Project') }}</th>
+                        <th style="text-align: right;">{{ _('Hours') }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -122,20 +122,20 @@
             </table>
         </div>
         
-        <p style="margin-top: 20px;">Keep up the great work! 🎉</p>
+        <p style="margin-top: 20px;">{{ _('Keep up the great work!') }} 🎉</p>
         
         {% if reports_url %}
         <center>
             <a href="{{ reports_url }}" class="button">
-                View Detailed Reports
+                {{ _('View Detailed Reports') }}
             </a>
         </center>
         {% endif %}
     </div>
     
     <div class="footer">
-        <p>TimeTracker - Time Tracking & Project Management</p>
-        <p>To manage your notification preferences, visit your user settings.</p>
+        <p>{{ _('TimeTracker - Time Tracking & Project Management') }}</p>
+        <p>{{ _('To manage your notification preferences, visit your user settings.') }}</p>
     </div>
 </body>
 </html>

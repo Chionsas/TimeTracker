@@ -5,15 +5,15 @@
 
 {% block content %}
 {% set breadcrumbs = [
-    {'text': 'Reports', 'url': url_for('reports.reports')},
-    {'text': 'Report Builder', 'url': url_for('custom_reports.report_builder')},
+    {'text': _('Reports'), 'url': url_for('reports.reports')},
+    {'text': _('Report Builder'), 'url': url_for('custom_reports.report_builder')},
     {'text': saved_view.name}
 ] %}
 
 {{ page_header(
     icon_class='fas fa-chart-bar',
     title_text=saved_view.name,
-    subtitle_text='Custom Report',
+    subtitle_text=_('Custom Report'),
     breadcrumbs=breadcrumbs
 ) }}
 
@@ -111,7 +111,7 @@ if (ctx) {
             data: {
                 labels: {{ report_data.data|map(attribute='date')|list|tojson }},
                 datasets: [{
-                    label: 'Hours',
+                    label: {{ _('Hours')|tojson }},
                     data: {{ report_data.data|map(attribute='duration')|list|tojson }},
                     backgroundColor: 'rgba(59, 130, 246, 0.5)',
                     borderColor: 'rgba(59, 130, 246, 1)',

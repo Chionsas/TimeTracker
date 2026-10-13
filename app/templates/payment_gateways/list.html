@@ -5,15 +5,15 @@
 
 {% block content %}
 {% set breadcrumbs = [
-    {'text': 'Payment Gateways'}
+    {'text': _('Payment Gateways')}
 ] %}
 
 {{ page_header(
     icon_class='fas fa-credit-card',
-    title_text='Payment Gateways',
-    subtitle_text='Configure payment processing',
+    title_text=_('Payment Gateways'),
+    subtitle_text=_('Configure payment processing'),
     breadcrumbs=breadcrumbs,
-    actions_html='<a href="' + url_for("payment_gateways.create_gateway") + '" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors"><i class="fas fa-plus mr-2"></i>Add Gateway</a>' if (current_user.is_admin or has_permission('manage_payment_gateways')) else None
+    actions_html='<a href="' + url_for("payment_gateways.create_gateway") + '" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors"><i class="fas fa-plus mr-2"></i>' + _('Add Gateway') + '</a>' if (current_user.is_admin or has_permission('manage_payment_gateways')) else None
 ) }}
 
 <div class="bg-card-light dark:bg-card-dark p-6 rounded-xl border border-border-light dark:border-border-dark shadow-sm">

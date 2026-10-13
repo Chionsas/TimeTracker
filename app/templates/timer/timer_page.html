@@ -281,14 +281,14 @@
                             {% endfor %}
                             <a href="{{ url_for('time_entry_templates.list_templates') }}" 
                                class="block text-center text-sm text-blue-600 dark:text-blue-400 hover:underline pt-2">
-                                View all templates →
+                                {{ _('View all templates') }} →
                             </a>
                         </div>
                     </div>
                     {% endif %}
                     
                     <button type="submit" class="bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary/90 transition-colors shadow-md w-full">
-                        <i class="fas fa-play mr-2"></i>Start Timer
+                        <i class="fas fa-play mr-2"></i>{{ _('Start Timer') }}
                     </button>
                 </div>
             </form>
@@ -365,13 +365,13 @@
             <h2 class="text-lg font-semibold mb-4">{{ _("Today's Stats") }}</h2>
             <div class="space-y-3">
                 <div class="flex justify-between items-center">
-                    <span class="text-text-muted-light dark:text-text-muted-dark">Total Hours</span>
+                    <span class="text-text-muted-light dark:text-text-muted-dark">{{ _('Total Hours') }}</span>
                     <span class="text-lg font-semibold text-text-light dark:text-text-dark" id="today-total-hours">—</span>
                 </div>
                 <div class="flex justify-between items-center">
-                    <span class="text-text-muted-light dark:text-text-muted-dark">Active Timer</span>
+                    <span class="text-text-muted-light dark:text-text-muted-dark">{{ _('Active Timer') }}</span>
                     <span class="text-lg font-semibold {% if active_timer %}text-green-600{% else %}text-text-muted-light dark:text-text-muted-dark{% endif %}">
-                        {% if active_timer %}Running{% else %}Stopped{% endif %}
+                        {% if active_timer %}{{ _('Running') }}{% else %}{{ _('Stopped') }}{% endif %}
                     </span>
                 </div>
             </div>
@@ -598,12 +598,12 @@ function updateEstimatedCompletion(elapsedSeconds) {
         const minutes = Math.floor((remaining % 3600) / 60);
         const completionEl = document.getElementById('estimated-completion');
         if (completionEl) {
-            completionEl.textContent = `${hours}h ${minutes}m remaining`;
+            completionEl.textContent = {{ _('%(hours)sh %(minutes)sm remaining')|tojson }}.replace('%(hours)s', hours).replace('%(minutes)s', minutes);
         }
     } else {
         const completionEl = document.getElementById('estimated-completion');
         if (completionEl) {
-            completionEl.textContent = 'Session complete';
+            completionEl.textContent = {{ _('Session complete')|tojson }};
         }
     }
 }
@@ -751,7 +751,7 @@ window.applyTemplate = async function(templateId) {
         
     } catch (error) {
         console.error('Error applying template:', error);
-        ttAlert('Failed to load template. Please try again.');
+        ttAlert({{ _('Failed to load template. Please try again.')|tojson }});
     }
 };
 </script>

@@ -84,7 +84,7 @@
                 <div class="flex justify-between"><dt class="text-text-muted-light dark:text-text-muted-dark">{{ _('Focus length') }}</dt><dd>{{ current_user.pomodoro_length or 25 }} {{ _('min') }}</dd></div>
                 <div class="flex justify-between"><dt class="text-text-muted-light dark:text-text-muted-dark">{{ _('Short break') }}</dt><dd>{{ current_user.pomodoro_short_break or 5 }} {{ _('min') }}</dd></div>
                 <div class="flex justify-between"><dt class="text-text-muted-light dark:text-text-muted-dark">{{ _('Long break') }}</dt><dd>{{ current_user.pomodoro_long_break or 15 }} {{ _('min') }}</dd></div>
-                <div class="flex justify-between"><dt class="text-text-muted-light dark:text-text-muted-dark">{{ _('Long break every') }}</dt><dd>{{ current_user.pomodoro_long_break_interval or 4 }} {{ _('cycles') }}</dd></div>
+                <div class="flex justify-between"><dt class="text-text-muted-light dark:text-text-muted-dark">{{ _('Long break every') }}</dt><dd>{{ ngettext('%(num)s cycle', '%(num)s cycles', current_user.pomodoro_long_break_interval or 4) }}</dd></div>
             </dl>
             <p class="text-xs text-text-muted-light dark:text-text-muted-dark mt-4">
                 {{ _('Change defaults in your user settings.') }}

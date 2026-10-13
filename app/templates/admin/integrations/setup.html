@@ -5,9 +5,9 @@
 
 {% block content %}
 {% set breadcrumbs = [
-    {'text': 'Admin', 'url': url_for('admin.admin_dashboard')},
-    {'text': 'Integrations', 'url': url_for('admin.list_integrations_admin')},
-    {'text': display_name + ' Setup'}
+    {'text': _('Admin'), 'url': url_for('admin.admin_dashboard')},
+    {'text': _('Integrations'), 'url': url_for('admin.list_integrations_admin')},
+    {'text': _('%(name)s Setup', name=display_name)}
 ] %}
 
 {{ page_header(

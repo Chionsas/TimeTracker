@@ -5,14 +5,14 @@
 
 {% block content %}
 {% set breadcrumbs = [
-    {'text': 'Admin', 'url': url_for('admin.admin_dashboard')},
-    {'text': 'Salesman Email Mappings'}
+    {'text': _('Admin'), 'url': url_for('admin.admin_dashboard')},
+    {'text': _('Salesman Email Mappings')}
 ] %}
 
 {{ page_header(
     icon_class='fas fa-envelope',
-    title_text='Salesman Email Mappings',
-    subtitle_text='Configure email addresses for salesman-based report distribution',
+    title_text=_('Salesman Email Mappings'),
+    subtitle_text=_('Configure email addresses for salesman-based report distribution'),
     breadcrumbs=breadcrumbs
 ) }}
 
@@ -178,7 +178,7 @@ function loadMappings() {
         .catch(error => {
             console.error('Error loading mappings:', error);
             document.getElementById('mappingsTableBody').innerHTML = 
-                '<tr><td colspan="5" class="px-6 py-4 text-center text-red-500">Error loading mappings</td></tr>';
+                '<tr><td colspan="5" class="px-6 py-4 text-center text-red-500">' + {{ _('Error loading mappings')|tojson }} + '</td></tr>';
         });
 }
 
@@ -211,8 +211,8 @@ function renderMappings() {
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-sm" data-label="{{ _('Status') }}">
                 ${m.is_active 
-                    ? '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">Active</span>'
-                    : '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200">Inactive</span>'}
+                    ? '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">' + {{ _('Active')|tojson }} + '</span>'
+                    : '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200">' + {{ _('Inactive')|tojson }} + '</span>'}
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium mobile-actions" data-label="{{ _('Actions') }}">
                 <button onclick="editMapping(${m.id})" class="text-blue-600 hover:text-blue-900 dark:text-blue-400 mr-3">

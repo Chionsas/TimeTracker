@@ -1,21 +1,21 @@
 {% extends "base.html" %}
 {% from "components/ui.html" import page_header, breadcrumb_nav, empty_state %}
 
-{% block title %}Contacts - {{ client.name }} - {{ config.APP_NAME }}{% endblock %}
+{% block title %}{{ _('Contacts') }} - {{ client.name }} - {{ config.APP_NAME }}{% endblock %}
 
 {% block content %}
 {% set breadcrumbs = [
-    {'text': 'Clients', 'url': url_for('clients.list_clients')},
+    {'text': _('Clients'), 'url': url_for('clients.list_clients')},
     {'text': client.name, 'url': url_for('clients.view_client', client_id=client.id)},
-    {'text': 'Contacts'}
+    {'text': _('Contacts')}
 ] %}
 
 {{ page_header(
     icon_class='fas fa-address-book',
-    title_text='Contacts',
-    subtitle_text='Manage contacts for ' + client.name,
+    title_text=_('Contacts'),
+    subtitle_text=_('Manage contacts for %(client)s', client=client.name),
     breadcrumbs=breadcrumbs,
-    actions_html='<a href="' + url_for("contacts.create_contact", client_id=client.id) + '" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors"><i class="fas fa-plus mr-2"></i>Add Contact</a>'
+    actions_html='<a href="' + url_for("contacts.create_contact", client_id=client.id) + '" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors"><i class="fas fa-plus mr-2"></i>' + _('Add Contact') + '</a>'
 ) }}
 
 <div class="bg-card-light dark:bg-card-dark p-6 rounded-xl border border-border-light dark:border-border-dark shadow-sm">
@@ -43,15 +43,15 @@
                             {% endif %}
                         </div>
                     </td>
-                    <td class="py-3" data-label="{{ _('Title') }}">{{ contact.title or 'N/A' }}</td>
+                    <td class="py-3" data-label="{{ _('Title') }}">{{ contact.title or _('N/A') }}</td>
                     <td class="py-3" data-label="{{ _('Email') }}">
                         {% if contact.email %}
                         <a href="mailto:{{ contact.email }}" class="text-primary hover:underline">{{ contact.email }}</a>
                         {% else %}
-                        N/A
+                        {{ _('N/A') }}
                         {% endif %}
                     </td>
-                    <td class="py-3" data-label="{{ _('Phone') }}">{{ contact.phone or 'N/A' }}</td>
+                    <td class="py-3" data-label="{{ _('Phone') }}">{{ contact.phone or _('N/A') }}</td>
                     <td class="py-3" data-label="{{ _('Role') }}">{{ contact.role|title }}</td>
                     <td class="py-3 mobile-actions" data-label="{{ _('Actions') }}">
                         <div class="flex flex-wrap gap-2">
@@ -76,7 +76,7 @@
             <i class="fas fa-plus mr-2"></i>{{ _('Add First Contact') }}
         </a>
     {% endset %}
-    {{ empty_state('fas fa-address-book', 'No Contacts Yet', 'Add contacts for this client to keep billing and project communication organized.', actions, type='no-data') }}
+    {{ empty_state('fas fa-address-book', _('No Contacts Yet'), _('Add contacts for this client to keep billing and project communication organized.'), actions, type='no-data') }}
     {% endif %}
 </div>
 {% endblock %}

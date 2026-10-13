@@ -3,15 +3,15 @@
 
 {% block content %}
 {% set breadcrumbs = [
-    {'text': 'Inventory', 'url': url_for('inventory.list_stock_items')},
-    {'text': 'Transfers', 'url': url_for('inventory.list_transfers')},
-    {'text': 'New Transfer'}
+    {'text': _('Inventory'), 'url': url_for('inventory.list_stock_items')},
+    {'text': _('Transfers'), 'url': url_for('inventory.list_transfers')},
+    {'text': _('New Transfer')}
 ] %}
 
 {{ page_header(
     icon_class='fas fa-truck',
-    title_text='New Stock Transfer',
-    subtitle_text='Transfer stock between warehouses',
+    title_text=_('New Stock Transfer'),
+    subtitle_text=_('Transfer stock between warehouses'),
     breadcrumbs=breadcrumbs
 ) }}
 

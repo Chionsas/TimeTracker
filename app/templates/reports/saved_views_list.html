@@ -5,17 +5,17 @@
 
 {% block content %}
 {% set breadcrumbs = [
-    {'text': 'Reports', 'url': url_for('reports.reports')},
-    {'text': 'Report Builder', 'url': url_for('custom_reports.report_builder')},
-    {'text': 'Saved Views'}
+    {'text': _('Reports'), 'url': url_for('reports.reports')},
+    {'text': _('Report Builder'), 'url': url_for('custom_reports.report_builder')},
+    {'text': _('Saved Views')}
 ] %}
 
 {{ page_header(
     icon_class='fas fa-save',
-    title_text='Saved Report Views',
-    subtitle_text='Manage your saved report configurations',
+    title_text=_('Saved Report Views'),
+    subtitle_text=_('Manage your saved report configurations'),
     breadcrumbs=breadcrumbs,
-    actions_html='<a href="' + url_for("custom_reports.report_builder") + '" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors"><i class="fas fa-plus mr-2"></i>Create New Report</a>'
+    actions_html='<a href="' + url_for("custom_reports.report_builder") + '" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors"><i class="fas fa-plus mr-2"></i>' + _('Create New Report') + '</a>'
 ) }}
 
 <div class="bg-card-light dark:bg-card-dark p-6 rounded-xl border border-border-light dark:border-border-dark shadow-sm">

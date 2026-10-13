@@ -3,14 +3,14 @@
 
 {% block content %}
 {% set breadcrumbs = [
-    {'text': 'Inventory', 'url': url_for('inventory.list_stock_items')},
-    {'text': 'Reports'}
+    {'text': _('Inventory'), 'url': url_for('inventory.list_stock_items')},
+    {'text': _('Reports')}
 ] %}
 
 {{ page_header(
     icon_class='fas fa-chart-pie',
-    title_text='Inventory Reports',
-    subtitle_text='Inventory analytics and reporting',
+    title_text=_('Inventory Reports'),
+    subtitle_text=_('Inventory analytics and reporting'),
     breadcrumbs=breadcrumbs
 ) }}
 

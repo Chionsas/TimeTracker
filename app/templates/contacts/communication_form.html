@@ -1,21 +1,21 @@
 {% extends "base.html" %}
 {% from "components/ui.html" import page_header, breadcrumb_nav %}
 
-{% block title %}Add Communication - {{ contact.full_name }} - {{ config.APP_NAME }}{% endblock %}
+{% block title %}{{ _('Add Communication') }} - {{ contact.full_name }} - {{ config.APP_NAME }}{% endblock %}
 
 {% block content %}
 {% set breadcrumbs = [
-    {'text': 'Clients', 'url': url_for('clients.list_clients')},
+    {'text': _('Clients'), 'url': url_for('clients.list_clients')},
     {'text': contact.client.name, 'url': url_for('clients.view_client', client_id=contact.client_id)},
-    {'text': 'Contacts', 'url': url_for('contacts.list_contacts', client_id=contact.client_id)},
+    {'text': _('Contacts'), 'url': url_for('contacts.list_contacts', client_id=contact.client_id)},
     {'text': contact.full_name, 'url': url_for('contacts.view_contact', contact_id=contact.id)},
-    {'text': 'Add Communication'}
+    {'text': _('Add Communication')}
 ] %}
 
 {{ page_header(
     icon_class='fas fa-comments',
-    title_text='Add Communication',
-    subtitle_text='Record communication with ' + contact.full_name,
+    title_text=_('Add Communication'),
+    subtitle_text=_('Record communication with %(name)s', name=contact.full_name),
     breadcrumbs=breadcrumbs
 ) }}
 

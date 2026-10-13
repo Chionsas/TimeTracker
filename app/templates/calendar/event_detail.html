@@ -13,7 +13,7 @@
                 <span class="badge badge-info">{{ event.event_type|title }}</span>
                 {% endif %}
                 {% if event.is_private %}
-                <span class="badge badge-secondary"><i class="fas fa-lock mr-1"></i>Private</span>
+                <span class="badge badge-secondary"><i class="fas fa-lock mr-1"></i>{{ _('Private') }}</span>
                 {% endif %}
             </div>
             
@@ -45,7 +45,7 @@
                         {% if event.start_time.date() != event.end_time.date() %}
                         - {{ event.end_time|user_date }}
                         {% endif %}
-                        <span class="badge badge-secondary ml-2">All Day</span>
+                        <span class="badge badge-secondary ml-2">{{ _('All Day') }}</span>
                         {% else %}
                         {{ event.start_time|user_datetime }}
                         - {{ event.end_time|user_time }}
@@ -54,7 +54,7 @@
                         {% endif %}
                         {% endif %}
                     </p>
-                    <p class="text-sm text-muted">{{ _('Duration') }}: {{ '%.2f'|format(event.duration_hours()) }} hours</p>
+                    <p class="text-sm text-muted">{{ _('Duration') }}: {{ _('%(hours)s hours', hours='%.2f'|format(event.duration_hours())) }}</p>
                 </div>
             </div>
             
@@ -154,7 +154,7 @@
                 <div>
                     <p class="font-semibold">{{ _('Recurring') }}</p>
                     <p class="text-muted">
-                        {% if event.recurrence_rule %}{{ event.recurrence_rule }}{% else %}Yes{% endif %}
+                        {% if event.recurrence_rule %}{{ event.recurrence_rule }}{% else %}{{ _('Yes') }}{% endif %}
                         {% if event.recurrence_end_date %}
                         <br>{{ _('Until') }}: {{ event.recurrence_end_date|format_date }}
                         {% endif %}

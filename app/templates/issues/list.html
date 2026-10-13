@@ -4,23 +4,23 @@
 
 {% block content %}
 {% set breadcrumbs = [
-    {'text': 'Issues'}
+    {'text': _('Issues')}
 ] %}
 
 {{ page_header(
     icon_class='fas fa-bug',
-    title_text='Issues',
-    subtitle_text='Manage client-reported issues and bugs',
+    title_text=_('Issues'),
+    subtitle_text=_('Manage client-reported issues and bugs'),
     breadcrumbs=breadcrumbs,
     actions_html='<a href="' + url_for("issues.new_issue") + '" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors"><i class="fas fa-plus mr-2"></i>' + _('Create Issue') + '</a>' if (current_user.is_admin or has_permission('create_issues')) else None
 ) }}
 
 <!-- Issue Summary Cards -->
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-    {{ stat_card('Total Issues', total_issues, 'fas fa-bug', 'slate-500') }}
-    {{ stat_card('Open Issues', open_issues, 'fas fa-exclamation-circle', 'blue-500') }}
-    {{ stat_card('Resolved', resolved_issues, 'fas fa-check-circle', 'green-500') }}
-    {{ stat_card('Closed', closed_issues, 'fas fa-times-circle', 'gray-500') }}
+    {{ stat_card(_('Total Issues'), total_issues, 'fas fa-bug', 'slate-500') }}
+    {{ stat_card(_('Open Issues'), open_issues, 'fas fa-exclamation-circle', 'blue-500') }}
+    {{ stat_card(_('Resolved'), resolved_issues, 'fas fa-check-circle', 'green-500') }}
+    {{ stat_card(_('Closed'), closed_issues, 'fas fa-times-circle', 'gray-500') }}
 </div>
 
 <!-- Filters -->

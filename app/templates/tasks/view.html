@@ -51,7 +51,7 @@
     <div class="lg:col-span-2 space-y-6">
         {% if task.description %}
         <div class="bg-card-light dark:bg-card-dark p-6 rounded-xl border border-border-light dark:border-border-dark shadow-sm">
-            <h2 class="text-lg font-semibold mb-4">Description</h2>
+            <h2 class="text-lg font-semibold mb-4">{{ _('Description') }}</h2>
             <div class="prose prose-sm dark:prose-invert max-w-none">{{ task.description | markdown | safe }}</div>
         </div>
         {% endif %}
@@ -160,11 +160,11 @@
                 <table class="w-full text-left responsive-cards">
                     <thead class="border-b border-border-light dark:border-border-dark">
                         <tr>
-                            <th class="p-4">Date</th>
-                            <th class="p-4">Duration</th>
-                            <th class="p-4">User</th>
-                            <th class="p-4">Notes</th>
-                            <th class="p-4">Actions</th>
+                            <th class="p-4">{{ _('Date') }}</th>
+                            <th class="p-4">{{ _('Duration') }}</th>
+                            <th class="p-4">{{ _('User') }}</th>
+                            <th class="p-4">{{ _('Notes') }}</th>
+                            <th class="p-4">{{ _('Actions') }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -195,7 +195,7 @@
                         </tr>
                         {% else %}
                         <tr>
-                            <td colspan="5" class="p-4 text-center text-text-muted-light dark:text-text-muted-dark">No time has been logged for this task.</td>
+                            <td colspan="5" class="p-4 text-center text-text-muted-light dark:text-text-muted-dark">{{ _('No time has been logged for this task.') }}</td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -212,18 +212,18 @@
     <!-- Right Column: Metadata -->
     <div class="lg:col-span-1 space-y-6">
         <div class="bg-card-light dark:bg-card-dark p-6 rounded-xl border border-border-light dark:border-border-dark shadow-sm">
-            <h2 class="text-lg font-semibold mb-4">Details</h2>
+            <h2 class="text-lg font-semibold mb-4">{{ _('Details') }}</h2>
             <div class="space-y-4">
                 <div>
-                    <h3 class="text-sm font-medium text-text-muted-light dark:text-text-muted-dark">Status</h3>
+                    <h3 class="text-sm font-medium text-text-muted-light dark:text-text-muted-dark">{{ _('Status') }}</h3>
                     <p>{{ task.status_display }}{% if task.is_blocked %} <span class="ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-200">{{ _('Blocked') }}</span>{% endif %}</p>
                 </div>
                 <div>
-                    <h3 class="text-sm font-medium text-text-muted-light dark:text-text-muted-dark">Priority</h3>
+                    <h3 class="text-sm font-medium text-text-muted-light dark:text-text-muted-dark">{{ _('Priority') }}</h3>
                     <p>{{ task.priority_display }}</p>
                 </div>
                 <div>
-                    <h3 class="text-sm font-medium text-text-muted-light dark:text-text-muted-dark">Project</h3>
+                    <h3 class="text-sm font-medium text-text-muted-light dark:text-text-muted-dark">{{ _('Project') }}</h3>
                     <p class="flex items-center gap-2">
                         <span>{{ task.project.name }}</span>
                         {% if task.project.code_display %}
@@ -233,7 +233,7 @@
                 </div>
                 {% if task.assigned_user %}
                 <div>
-                    <h3 class="text-sm font-medium text-text-muted-light dark:text-text-muted-dark">Assigned To</h3>
+                    <h3 class="text-sm font-medium text-text-muted-light dark:text-text-muted-dark">{{ _('Assigned To') }}</h3>
                     <p>{{ task.assigned_user.display_name }}</p>
                 </div>
                 {% endif %}
@@ -249,7 +249,7 @@
                 {% endif %}
                 {% if task.due_date %}
                 <div>
-                    <h3 class="text-sm font-medium text-text-muted-light dark:text-text-muted-dark">Due Date</h3>
+                    <h3 class="text-sm font-medium text-text-muted-light dark:text-text-muted-dark">{{ _('Due Date') }}</h3>
                     <p class="{{ 'text-red-500' if task.is_overdue else '' }}">{{ task.due_date|format_date }}</p>
                 </div>
                 {% endif %}
@@ -274,10 +274,10 @@
 {% if current_user.is_admin or task.created_by == current_user.id %}
 {{ confirm_dialog(
     'confirmDeleteTask-' ~ task.id,
-    'Delete Task',
-    'Are you sure you want to delete this task? This action cannot be undone.',
-    'Delete',
-    'Cancel',
+    _('Delete Task'),
+    _('Are you sure you want to delete this task? This action cannot be undone.'),
+    _('Delete'),
+    _('Cancel'),
     'danger'
 ) }}
 {% endif %}
@@ -287,10 +287,10 @@
 {% if current_user.is_admin or entry.user_id == current_user.id %}
 {{ confirm_dialog(
     'confirmDeleteEntry-' ~ entry.id,
-    'Delete Time Entry',
-    'Are you sure you want to delete this time entry? This action cannot be undone.',
-    'Delete',
-    'Cancel',
+    _('Delete Time Entry'),
+    _('Are you sure you want to delete this time entry? This action cannot be undone.'),
+    _('Delete'),
+    _('Cancel'),
     'danger'
 ) }}
 {% endif %}

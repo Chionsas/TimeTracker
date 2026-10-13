@@ -3,15 +3,15 @@
 
 {% block content %}
 {% set breadcrumbs = [
-    {'text': 'Projects', 'url': url_for('projects.list_projects')},
+    {'text': _('Projects'), 'url': url_for('projects.list_projects')},
     {'text': project.name, 'url': url_for('projects.view_project', project_id=project.id)},
-    {'text': 'Archive'}
+    {'text': _('Archive')}
 ] %}
 
 {{ page_header(
     icon_class='fas fa-archive',
-    title_text='Archive Project',
-    subtitle_text='Archive "' + project.name + '"',
+    title_text=_('Archive Project'),
+    subtitle_text=_('Archive "%(project)s"', project=project.name),
     breadcrumbs=breadcrumbs
 ) }}
 

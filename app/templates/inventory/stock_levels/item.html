@@ -3,15 +3,15 @@
 
 {% block content %}
 {% set breadcrumbs = [
-    {'text': 'Inventory', 'url': url_for('inventory.list_stock_items')},
-    {'text': 'Stock Items', 'url': url_for('inventory.list_stock_items')},
+    {'text': _('Inventory'), 'url': url_for('inventory.list_stock_items')},
+    {'text': _('Stock Items'), 'url': url_for('inventory.list_stock_items')},
     {'text': item.name, 'url': url_for('inventory.view_stock_item', item_id=item.id)},
-    {'text': 'Stock Levels'}
+    {'text': _('Stock Levels')}
 ] %}
 
 {{ page_header(
     icon_class='fas fa-list-ul',
-    title_text='Stock Levels - ' + item.name,
+    title_text=_('Stock Levels - %(name)s', name=item.name),
     subtitle_text=item.sku,
     breadcrumbs=breadcrumbs
 ) }}

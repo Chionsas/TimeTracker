@@ -3,15 +3,15 @@
 
 {% block content %}
 {% set breadcrumbs = [
-    {'text': 'Inventory', 'url': url_for('inventory.list_stock_items')},
-    {'text': 'Reports', 'url': url_for('inventory.reports_dashboard')},
-    {'text': 'Turnover Analysis'}
+    {'text': _('Inventory'), 'url': url_for('inventory.list_stock_items')},
+    {'text': _('Reports'), 'url': url_for('inventory.reports_dashboard')},
+    {'text': _('Turnover Analysis')}
 ] %}
 
 {{ page_header(
     icon_class='fas fa-chart-line',
-    title_text='Inventory Turnover Analysis',
-    subtitle_text='Item turnover rates and sales analysis',
+    title_text=_('Inventory Turnover Analysis'),
+    subtitle_text=_('Item turnover rates and sales analysis'),
     breadcrumbs=breadcrumbs
 ) }}
 

@@ -3,16 +3,16 @@
 
 {% block content %}
 {% set breadcrumbs = [
-    {'text': 'Admin', 'url': url_for('admin.admin_dashboard')},
-    {'text': 'Email Templates'}
+    {'text': _('Admin'), 'url': url_for('admin.admin_dashboard')},
+    {'text': _('Email Templates')}
 ] %}
 
 {{ page_header(
     icon_class='fas fa-envelope',
-    title_text='Email Templates',
-    subtitle_text='Manage email templates for invoice emails',
+    title_text=_('Email Templates'),
+    subtitle_text=_('Manage email templates for invoice emails'),
     breadcrumbs=breadcrumbs,
-    actions_html='<a href="' + url_for("admin.create_email_template") + '" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors"><i class="fas fa-plus mr-2"></i>Create Template</a>'
+    actions_html='<a href="' + url_for("admin.create_email_template") + '" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors"><i class="fas fa-plus mr-2"></i>' + _('Create Template') + '</a>'
 ) }}
 
 {% if templates %}
@@ -21,11 +21,11 @@
         <table class="min-w-full divide-y divide-border-light dark:divide-border-dark enhanced-table responsive-cards">
             <thead class="bg-background-light dark:bg-background-dark">
                 <tr>
-                    <th class="px-4 py-3 text-left text-xs font-medium text-text-muted-light dark:text-text-muted-dark uppercase tracking-wider">Name</th>
-                    <th class="px-4 py-3 text-left text-xs font-medium text-text-muted-light dark:text-text-muted-dark uppercase tracking-wider">Description</th>
-                    <th class="px-4 py-3 text-left text-xs font-medium text-text-muted-light dark:text-text-muted-dark uppercase tracking-wider">Status</th>
-                    <th class="px-4 py-3 text-left text-xs font-medium text-text-muted-light dark:text-text-muted-dark uppercase tracking-wider">Created</th>
-                    <th class="px-4 py-3 text-right text-xs font-medium text-text-muted-light dark:text-text-muted-dark uppercase tracking-wider">Actions</th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-text-muted-light dark:text-text-muted-dark uppercase tracking-wider">{{ _('Name') }}</th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-text-muted-light dark:text-text-muted-dark uppercase tracking-wider">{{ _('Description') }}</th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-text-muted-light dark:text-text-muted-dark uppercase tracking-wider">{{ _('Status') }}</th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-text-muted-light dark:text-text-muted-dark uppercase tracking-wider">{{ _('Created') }}</th>
+                    <th class="px-4 py-3 text-right text-xs font-medium text-text-muted-light dark:text-text-muted-dark uppercase tracking-wider">{{ _('Actions') }}</th>
                 </tr>
             </thead>
             <tbody class="bg-card-light dark:bg-card-dark divide-y divide-border-light dark:divide-border-dark">
@@ -39,18 +39,18 @@
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm" data-label="Status">
                         {% if template.is_default %}
-                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300">Default</span>
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300">{{ _('Default') }}</span>
                         {% else %}
-                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300">Active</span>
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300">{{ _('Active') }}</span>
                         {% endif %}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-text-muted-light dark:text-text-muted-dark" data-label="Created">
                         {{ template.created_at|user_date if template.created_at else '-' }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium mobile-actions" data-label="Actions">
-                        <a href="{{ url_for('admin.view_email_template', template_id=template.id) }}" class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300 mr-3">View</a>
-                        <a href="{{ url_for('admin.edit_email_template', template_id=template.id) }}" class="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300 mr-3">Edit</a>
-                        <button type="button" onclick="showDeleteModal('{{ template.id }}', '{{ template.name }}')" class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300">Delete</button>
+                        <a href="{{ url_for('admin.view_email_template', template_id=template.id) }}" class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300 mr-3">{{ _('View') }}</a>
+                        <a href="{{ url_for('admin.edit_email_template', template_id=template.id) }}" class="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300 mr-3">{{ _('Edit') }}</a>
+                        <button type="button" onclick="showDeleteModal('{{ template.id }}', '{{ template.name }}')" class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300">{{ _('Delete') }}</button>
                     </td>
                 </tr>
                 {% endfor %}
@@ -65,7 +65,7 @@
             <i class="fas fa-plus mr-2"></i>{{ _('Create Email Template') }}
         </a>
     {% endset %}
-    {{ empty_state('fas fa-envelope', 'No Email Templates Yet', 'Create templates to customize invoice and notification emails.', actions, type='no-data') }}
+    {{ empty_state('fas fa-envelope', _('No Email Templates Yet'), _('Create templates to customize invoice and notification emails.'), actions, type='no-data') }}
 </div>
 {% endif %}
 

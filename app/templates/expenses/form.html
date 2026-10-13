@@ -5,11 +5,11 @@
 {% block content %}
 {{ page_header(
     icon_class='fas fa-receipt',
-    title_text=('Edit Expense' if expense else 'Create Expense'),
-    subtitle_text=('Update expense details' if expense else 'Create a new expense record'),
+    title_text=(_('Edit Expense') if expense else _('Create Expense')),
+    subtitle_text=(_('Update expense details') if expense else _('Create a new expense record')),
     breadcrumbs=[
-        {'text': 'Expenses', 'url': url_for('expenses.list_expenses')},
-        {'text': 'Edit Expense' if expense else 'Create Expense'}
+        {'text': _('Expenses'), 'url': url_for('expenses.list_expenses')},
+        {'text': _('Edit Expense') if expense else _('Create Expense')}
     ]
 ) }}
 
@@ -26,7 +26,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div class="md:col-span-2">
                     <label for="title" class="form-label">
-                        Title <span class="text-red-500">*</span>
+                        {{ _('Title') }} <span class="text-red-500">*</span>
                     </label>
                     <input type="text" name="title" id="title" required
                            value="{{ expense.title if expense else '' }}"
@@ -36,7 +36,7 @@
                 
                 <div class="md:col-span-2">
                     <label for="description" class="form-label">
-                        Description
+                        {{ _('Description') }}
                     </label>
                     <textarea name="description" id="description" rows="3"
                               placeholder="{{ _('Additional details about the expense...') }}"
@@ -45,7 +45,7 @@
                 
                 <div>
                     <label for="category" class="form-label">
-                        Category <span class="text-red-500">*</span>
+                        {{ _('Category') }} <span class="text-red-500">*</span>
                     </label>
                     <select name="category" id="category" required
                             class="form-input">
@@ -60,7 +60,7 @@
                 
                 <div>
                     <label for="expense_date" class="form-label">
-                        Expense Date <span class="text-red-500">*</span>
+                        {{ _('Expense Date') }} <span class="text-red-500">*</span>
                     </label>
                     <input type="date" name="expense_date" id="expense_date" required
                            value="{{ expense.expense_date.strftime('%Y-%m-%d') if expense else '' }}"
@@ -78,7 +78,7 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
                     <label for="amount" class="form-label">
-                        Amount <span class="text-red-500">*</span>
+                        {{ _('Amount') }} <span class="text-red-500">*</span>
                     </label>
                     <input type="number" name="amount" id="amount" step="0.01" required
                            value="{{ expense.amount if expense else '' }}"
@@ -88,7 +88,7 @@
                 
                 <div>
                     <label for="tax_amount" class="form-label">
-                        Tax Amount
+                        {{ _('Tax Amount') }}
                     </label>
                     <input type="number" name="tax_amount" id="tax_amount" step="0.01"
                            value="{{ expense.tax_amount if expense else '0.00' }}"
@@ -98,7 +98,7 @@
                 
                 <div>
                     <label for="currency_code" class="form-label">
-                        Currency
+                        {{ _('Currency') }}
                     </label>
                     <select name="currency_code" id="currency_code"
                             class="form-input">
@@ -113,7 +113,7 @@
             <div class="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
                 <p class="text-sm text-blue-800 dark:text-blue-200">
                     <i class="fas fa-info-circle mr-1"></i>
-                    <strong>Total Amount:</strong> <span id="total_display">{{ (expense.amount + (expense.tax_amount or 0)) if expense else '0.00' }}</span> {{ expense.currency_code if expense else 'EUR' }}
+                    <strong>{{ _('Total Amount:') }}</strong> <span id="total_display">{{ (expense.amount + (expense.tax_amount or 0)) if expense else '0.00' }}</span> {{ expense.currency_code if expense else 'EUR' }}
                 </p>
             </div>
         </div>
@@ -127,11 +127,11 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                     <label for="project_id" class="form-label">
-                        Project
+                        {{ _('Project') }}
                     </label>
                     <select name="project_id" id="project_id"
                             class="form-input">
-                        <option value="">No Project</option>
+                        <option value="">{{ _('No Project') }}</option>
                         {% for project in projects %}
                         <option value="{{ project.id }}" 
                                 data-client-id="{{ project.client_id if project.client_id else '' }}"
@@ -140,12 +140,12 @@
                         </option>
                         {% endfor %}
                     </select>
-                    <p class="text-xs text-gray-500 mt-1"><i class="fas fa-info-circle"></i> Selecting a project will auto-fill the client</p>
+                    <p class="text-xs text-gray-500 mt-1"><i class="fas fa-info-circle"></i> {{ _('Selecting a project will auto-fill the client') }}</p>
                 </div>
                 
                 <div>
                     <label for="client_id" class="form-label">
-                        Client
+                        {{ _('Client') }}
                     </label>
                     {{ client_select('client_id', clients, selected_id=expense.client_id if expense else none, required=False, only_one_client=only_one_client|default(false), single_client=single_client) }}
                 </div>
@@ -161,11 +161,11 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
                     <label for="payment_method" class="form-label">
-                        Payment Method
+                        {{ _('Payment Method') }}
                     </label>
                     <select name="payment_method" id="payment_method"
                             class="form-input">
-                        <option value="">Select Method</option>
+                        <option value="">{{ _('Select Method') }}</option>
                         {% for method in payment_methods %}
                         <option value="{{ method }}" {% if expense and expense.payment_method == method %}selected{% endif %}>
                             {{ method.replace('_', ' ')|title }}
@@ -176,7 +176,7 @@
                 
                 <div>
                     <label for="payment_date" class="form-label">
-                        Payment Date
+                        {{ _('Payment Date') }}
                     </label>
                     <input type="date" name="payment_date" id="payment_date"
                            value="{{ expense.payment_date.strftime('%Y-%m-%d') if expense and expense.payment_date else '' }}"
@@ -185,7 +185,7 @@
                 
                 <div>
                     <label for="vendor" class="form-label">
-                        Vendor
+                        {{ _('Vendor') }}
                     </label>
                     <input type="text" name="vendor" id="vendor"
                            value="{{ expense.vendor if expense else '' }}"
@@ -204,15 +204,15 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <div>
                     <label for="receipt_file" class="form-label">
-                        Receipt File
+                        {{ _('Receipt File') }}
                     </label>
                     <input type="file" name="receipt_file" id="receipt_file"
                            accept=".png,.jpg,.jpeg,.gif,.pdf"
                            class="form-input">
-                    <p class="text-xs text-gray-500 mt-1">Allowed: PNG, JPG, GIF, PDF (Max 10MB)</p>
+                    <p class="text-xs text-gray-500 mt-1">{{ _('Allowed: PNG, JPG, GIF, PDF (Max 10MB)') }}</p>
                     {% if expense and expense.receipt_path %}
                     <p class="text-xs text-green-600 mt-1">
-                        <i class="fas fa-check-circle"></i> Receipt uploaded
+                        <i class="fas fa-check-circle"></i> {{ _('Receipt uploaded') }}
                     </p>
                     {% endif %}
                 </div>
@@ -230,7 +230,7 @@
             
             <div class="mb-4">
                 <label for="tags" class="form-label">
-                    Tags (comma-separated)
+                    {{ _('Tags (comma-separated)') }}
                 </label>
                 <input type="text" name="tags" id="tags"
                        value="{{ expense.tags if expense else '' }}"
@@ -240,7 +240,7 @@
             
             <div>
                 <label for="notes" class="form-label">
-                    Notes
+                    {{ _('Notes') }}
                 </label>
                 <textarea name="notes" id="notes" rows="3"
                           placeholder="{{ _('Additional notes...') }}"
@@ -260,8 +260,8 @@
                            {% if expense and expense.billable %}checked{% endif %}
                            class="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded">
                     <label for="billable" class="ml-2 text-sm text-gray-700 dark:text-gray-300">
-                        <strong>Billable to Client</strong>
-                        <span class="block text-xs text-gray-500">This expense can be billed to the client</span>
+                        <strong>{{ _('Billable to Client') }}</strong>
+                        <span class="block text-xs text-gray-500">{{ _('This expense can be billed to the client') }}</span>
                     </label>
                 </div>
                 
@@ -270,8 +270,8 @@
                            {% if not expense or expense.reimbursable %}checked{% endif %}
                            class="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded">
                     <label for="reimbursable" class="ml-2 text-sm text-gray-700 dark:text-gray-300">
-                        <strong>Reimbursable</strong>
-                        <span class="block text-xs text-gray-500">Request reimbursement for this expense</span>
+                        <strong>{{ _('Reimbursable') }}</strong>
+                        <span class="block text-xs text-gray-500">{{ _('Request reimbursement for this expense') }}</span>
                     </label>
                 </div>
             </div>
@@ -281,11 +281,11 @@
         <div class="flex items-center justify-between pt-4 border-t border-gray-200 dark:border-gray-700">
             <a href="{{ url_for('expenses.view_expense', expense_id=expense.id) if expense else url_for('expenses.list_expenses') }}" 
                class="btn btn-secondary">
-                <i class="fas fa-times mr-2"></i>Cancel
+                <i class="fas fa-times mr-2"></i>{{ _('Cancel') }}
             </a>
             
             <button type="submit" class="btn btn-primary">
-                <i class="fas fa-save mr-2"></i>{{ 'Update Expense' if expense else 'Create Expense' }}
+                <i class="fas fa-save mr-2"></i>{{ _('Update Expense') if expense else _('Create Expense') }}
             </button>
         </div>
     </form>

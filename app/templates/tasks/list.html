@@ -4,15 +4,15 @@
 
 {% block content %}
 {% set breadcrumbs = [
-    {'text': 'Tasks'}
+    {'text': _('Tasks')}
 ] %}
 
 {{ page_header(
     icon_class='fas fa-tasks',
-    title_text='Tasks',
-    subtitle_text='Manage your tasks here',
+    title_text=_('Tasks'),
+    subtitle_text=_('Manage your tasks here'),
     breadcrumbs=breadcrumbs,
-    actions_html='<a href="' + url_for("tasks.create_task") + '" class="btn btn-primary btn-press shadow-md"><i class="fas fa-plus mr-2"></i>Create Task</a>'
+    actions_html='<a href="' + url_for("tasks.create_task") + '" class="btn btn-primary btn-press shadow-md"><i class="fas fa-plus mr-2"></i>' + _('Create Task') + '</a>'
 ) }}
 
 <!-- Task Summary Cards -->
@@ -22,10 +22,10 @@
     {% set review_count = task_counts.get('review', 0) if task_counts else (tasks|selectattr('status', 'equalto', 'review')|list|length) %}
     {% set done_count = task_counts.get('done', 0) if task_counts else (tasks|selectattr('status', 'equalto', 'done')|list|length) %}
     
-    {{ stat_card('To Do', todo_count, 'fas fa-list', 'slate-500') }}
-    {{ stat_card('In Progress', in_progress_count, 'fas fa-spinner', 'blue-500') }}
-    {{ stat_card('In Review', review_count, 'fas fa-eye', 'amber-500') }}
-    {{ stat_card('Completed', done_count, 'fas fa-check-circle', 'green-500') }}
+    {{ stat_card(_('To Do'), todo_count, 'fas fa-list', 'slate-500') }}
+    {{ stat_card(_('In Progress'), in_progress_count, 'fas fa-spinner', 'blue-500') }}
+    {{ stat_card(_('In Review'), review_count, 'fas fa-eye', 'amber-500') }}
+    {{ stat_card(_('Completed'), done_count, 'fas fa-check-circle', 'green-500') }}
 </div>
 
 <div class="bg-card-light dark:bg-card-dark p-6 rounded-xl border border-border-light dark:border-border-dark shadow-sm mb-6">
@@ -38,7 +38,7 @@
     <div id="filterBody">
     <form method="GET" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="tasksFilterForm" data-filter-form>
         <div class="lg:col-span-1">
-            <label for="tasks-filter-search" class="form-label">Search</label>
+            <label for="tasks-filter-search" class="form-label">{{ _('Search') }}</label>
             <input type="text" name="search" id="tasks-filter-search" value="{{ search or '' }}" class="form-input">
         </div>
         <div class="lg:col-span-1">
@@ -46,35 +46,35 @@
             <input type="text" name="tags" id="tags" value="{{ tags or '' }}" class="form-input" placeholder="{{ _('e.g. bug, frontend') }}">
         </div>
         <div>
-            <label for="status" class="form-label">Status</label>
+            <label for="status" class="form-label">{{ _('Status') }}</label>
             <select name="status" id="status" class="form-input">
-                <option value="">All</option>
-                <option value="todo" {% if status == 'todo' %}selected{% endif %}>To Do</option>
-                <option value="in_progress" {% if status == 'in_progress' %}selected{% endif %}>In Progress</option>
-                <option value="review" {% if status == 'review' %}selected{% endif %}>Review</option>
-                <option value="done" {% if status == 'done' %}selected{% endif %}>Done</option>
-                <option value="cancelled" {% if status == 'cancelled' %}selected{% endif %}>Cancelled</option>
+                <option value="">{{ _('All') }}</option>
+                <option value="todo" {% if status == 'todo' %}selected{% endif %}>{{ _('To Do') }}</option>
+                <option value="in_progress" {% if status == 'in_progress' %}selected{% endif %}>{{ _('In Progress') }}</option>
+                <option value="review" {% if status == 'review' %}selected{% endif %}>{{ _('Review') }}</option>
+                <option value="done" {% if status == 'done' %}selected{% endif %}>{{ _('Done') }}</option>
+                <option value="cancelled" {% if status == 'cancelled' %}selected{% endif %}>{{ _('Cancelled') }}</option>
             </select>
         </div>
         <div>
-            <label for="priority" class="form-label">Priority</label>
+            <label for="priority" class="form-label">{{ _('Priority') }}</label>
             <select name="priority" id="priority" class="form-input">
-                <option value="">All</option>
-                <option value="low" {% if priority == 'low' %}selected{% endif %}>Low</option>
-                <option value="medium" {% if priority == 'medium' %}selected{% endif %}>Medium</option>
-                <option value="high" {% if priority == 'high' %}selected{% endif %}>High</option>
-                <option value="urgent" {% if priority == 'urgent' %}selected{% endif %}>Urgent</option>
+                <option value="">{{ _('All') }}</option>
+                <option value="low" {% if priority == 'low' %}selected{% endif %}>{{ _('Low') }}</option>
+                <option value="medium" {% if priority == 'medium' %}selected{% endif %}>{{ _('Medium') }}</option>
+                <option value="high" {% if priority == 'high' %}selected{% endif %}>{{ _('High') }}</option>
+                <option value="urgent" {% if priority == 'urgent' %}selected{% endif %}>{{ _('Urgent') }}</option>
             </select>
         </div>
         <div>
             {{ multi_select(
                 field_name='project_ids',
-                label='Project',
+                label=_('Project'),
                 items=projects,
                 selected_ids=project_ids,
                 item_id_attr='id',
                 item_label_attr='name',
-                placeholder='All Projects',
+                placeholder=_('All Projects'),
                 show_search=True,
                 form_id='tasksFilterForm'
             ) }}
@@ -82,19 +82,19 @@
         <div>
             {{ multi_select(
                 field_name='assigned_to_ids',
-                label='Assigned To',
+                label=_('Assigned To'),
                 items=users,
                 selected_ids=assigned_to_ids,
                 item_id_attr='id',
                 item_label_attr='display_name',
-                placeholder='All Users',
+                placeholder=_('All Users'),
                 show_search=True,
                 form_id='tasksFilterForm'
             ) }}
         </div>
         <div class="flex items-center pt-5">
             <input type="checkbox" name="overdue" id="overdue" value="1" {% if overdue %}checked{% endif %} class="h-4 w-4 rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-            <label for="overdue" class="ml-2 block text-sm text-gray-900 dark:text-gray-300">Overdue only</label>
+            <label for="overdue" class="ml-2 block text-sm text-gray-900 dark:text-gray-300">{{ _('Overdue only') }}</label>
         </div>
         {% if milestones %}
         <div>
@@ -148,15 +148,15 @@
                 </div>
                 <div class="ml-4 flex-1">
                     <h3 class="text-lg font-semibold text-text-light dark:text-text-dark mb-2">{{ _('Delete Selected Tasks') }}</h3>
-                    <p class="text-sm text-text-muted-light dark:text-text-muted-dark">Are you sure you want to delete the selected tasks? This action cannot be undone. Tasks with existing time entries will be skipped.</p>
+                    <p class="text-sm text-text-muted-light dark:text-text-muted-dark">{{ _('Are you sure you want to delete the selected tasks? This action cannot be undone. Tasks with existing time entries will be skipped.') }}</p>
                 </div>
             </div>
             <div class="flex justify-end gap-3 mt-6">
                 <button type="button" class="btn btn-secondary" onclick="closeBulkDeleteDialog()">
-                    Cancel
+                    {{ _('Cancel') }}
                 </button>
                 <button type="button" class="btn btn-danger" onclick="submitBulkDelete()">
-                    Delete
+                    {{ _('Delete') }}
                 </button>
             </div>
         </div>
@@ -168,23 +168,23 @@
     <div class="bg-card-light dark:bg-card-dark rounded-xl shadow-xl border border-border-light dark:border-border-dark max-w-md w-full mx-4">
         <div class="p-6">
             <h3 class="text-lg font-semibold mb-4">{{ _('Change Status for Selected Tasks') }}</h3>
-            <label for="bulkStatusSelect" class="form-label">Select Status</label>
+            <label for="bulkStatusSelect" class="form-label">{{ _('Select Status') }}</label>
             <select id="bulkStatusSelect" class="form-input w-full mb-4">
-                <option value="">-- Select Status --</option>
+                <option value="">-- {{ _('Select Status') }} --</option>
                 {% if kanban_columns %}
                     {% for column in kanban_columns %}
                     <option value="{{ column.status_key }}">{{ column.name }}</option>
                     {% endfor %}
                 {% else %}
-                    <option value="todo">To Do</option>
-                    <option value="in_progress">In Progress</option>
-                    <option value="review">Review</option>
-                    <option value="done">Done</option>
-                    <option value="cancelled">Cancelled</option>
+                    <option value="todo">{{ _('To Do') }}</option>
+                    <option value="in_progress">{{ _('In Progress') }}</option>
+                    <option value="review">{{ _('Review') }}</option>
+                    <option value="done">{{ _('Done') }}</option>
+                    <option value="cancelled">{{ _('Cancelled') }}</option>
                 {% endif %}
             </select>
             <div class="flex justify-end gap-2">
-                <button type="button" onclick="closeBulkStatusDialog()" class="btn btn-secondary">Cancel</button>
+                <button type="button" onclick="closeBulkStatusDialog()" class="btn btn-secondary">{{ _('Cancel') }}</button>
                 <button type="button" onclick="submitBulkStatus()" class="btn btn-primary">{{ _('Update Status') }}</button>
             </div>
         </div>
@@ -196,15 +196,15 @@
     <div class="bg-card-light dark:bg-card-dark rounded-xl shadow-xl border border-border-light dark:border-border-dark max-w-md w-full mx-4">
         <div class="p-6">
             <h3 class="text-lg font-semibold mb-4">{{ _('Assign Selected Tasks') }}</h3>
-            <label for="bulkAssignSelect" class="form-label">Select User</label>
+            <label for="bulkAssignSelect" class="form-label">{{ _('Select User') }}</label>
             <select id="bulkAssignSelect" class="form-input w-full mb-4">
-                <option value="">-- Select User --</option>
+                <option value="">-- {{ _('Select User') }} --</option>
                 {% for user in users %}
                 <option value="{{ user.id }}">{{ user.display_name }}</option>
                 {% endfor %}
             </select>
             <div class="flex justify-end gap-2">
-                <button type="button" onclick="closeBulkAssignDialog()" class="btn btn-secondary">Cancel</button>
+                <button type="button" onclick="closeBulkAssignDialog()" class="btn btn-secondary">{{ _('Cancel') }}</button>
                 <button type="button" onclick="submitBulkAssign()" class="btn btn-primary">{{ _('Assign Tasks') }}</button>
             </div>
         </div>
@@ -320,7 +320,7 @@ function closeBulkStatusDialog() {
 function submitBulkStatus() {
     const status = document.getElementById('bulkStatusSelect').value;
     if (!status) {
-        alert('Please select a status');
+        alert({{ _('Please select a status')|tojson }});
         return;
     }
     
@@ -356,7 +356,7 @@ function closeBulkAssignDialog() {
 function submitBulkAssign() {
     const assignedTo = document.getElementById('bulkAssignSelect').value;
     if (!assignedTo) {
-        alert('Please select a user');
+        alert({{ _('Please select a user')|tojson }});
         return;
     }
     
@@ -392,7 +392,7 @@ function closeBulkProjectDialog() {
 function submitBulkProject() {
     const projectId = document.getElementById('bulkProjectSelect').value;
     if (!projectId) {
-        alert('Please select a project');
+        alert({{ _('Please select a project')|tojson }});
         return;
     }
     
@@ -603,9 +603,9 @@ document.addEventListener('DOMContentLoaded', function() {
             container.style.opacity = '';
             container.style.pointerEvents = '';
             if (window.toastManager) {
-                window.toastManager.show('Failed to filter tasks. Please refresh the page.', 'error');
+                window.toastManager.show({{ _('Failed to filter tasks. Please refresh the page.')|tojson }}, 'error');
             } else if (window.showToast) {
-                window.showToast('Failed to filter tasks. Please refresh the page.', 'error');
+                window.showToast({{ _('Failed to filter tasks. Please refresh the page.')|tojson }}, 'error');
             }
         })
         .finally(() => {

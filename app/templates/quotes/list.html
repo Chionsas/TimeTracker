@@ -3,15 +3,15 @@
 
 {% block content %}
 {% set breadcrumbs = [
-    {'text': 'Quotes'}
+    {'text': _('Quotes')}
 ] %}
 
 {{ page_header(
     icon_class='fas fa-file-contract',
-    title_text='Quotes',
-    subtitle_text='Manage client quotes',
+    title_text=_('Quotes'),
+    subtitle_text=_('Manage client quotes'),
     breadcrumbs=breadcrumbs,
-    actions_html='<div class="flex gap-2"><a href="' + url_for("quotes.list_quotes", analytics='true' if not show_analytics else 'false') + '" class="bg-gray-200 dark:bg-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">' + ('Hide Analytics' if show_analytics else 'Show Analytics') + '</a>' + ('<a href="' + url_for("quotes.create_quote") + '" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors"><i class="fas fa-plus mr-2"></i>Create Quote</a>' if (current_user.is_admin or has_permission('create_quotes')) else '') + '</div>'
+    actions_html='<div class="flex gap-2"><a href="' + url_for("quotes.list_quotes", analytics='true' if not show_analytics else 'false') + '" class="bg-gray-200 dark:bg-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">' + (_('Hide Analytics') if show_analytics else _('Show Analytics')) + '</a>' + ('<a href="' + url_for("quotes.create_quote") + '" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors"><i class="fas fa-plus mr-2"></i>' + _('Create Quote') + '</a>' if (current_user.is_admin or has_permission('create_quotes')) else '') + '</div>'
 ) }}
 
 {% if show_analytics and analytics %}
@@ -244,9 +244,9 @@ document.addEventListener('DOMContentLoaded', function() {
             container.style.opacity = '';
             container.style.pointerEvents = '';
             if (window.toastManager) {
-                window.toastManager.show('Failed to filter quotes. Please refresh the page.', 'error');
+                window.toastManager.show({{ _('Failed to filter quotes. Please refresh the page.')|tojson }}, 'error');
             } else if (window.showToast) {
-                window.showToast('Failed to filter quotes. Please refresh the page.', 'error');
+                window.showToast({{ _('Failed to filter quotes. Please refresh the page.')|tojson }}, 'error');
             }
         })
         .finally(() => {

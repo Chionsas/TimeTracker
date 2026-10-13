@@ -3,16 +3,16 @@
 
 {% block content %}
 {% set breadcrumbs = [
-    {'text': 'Inventory', 'url': url_for('inventory.list_stock_items')},
-    {'text': 'Suppliers'}
+    {'text': _('Inventory'), 'url': url_for('inventory.list_stock_items')},
+    {'text': _('Suppliers')}
 ] %}
 
 {{ page_header(
     icon_class='fas fa-truck',
-    title_text='Suppliers',
-    subtitle_text='Manage suppliers and vendors',
+    title_text=_('Suppliers'),
+    subtitle_text=_('Manage suppliers and vendors'),
     breadcrumbs=breadcrumbs,
-    actions_html='<a href="' + url_for("inventory.new_supplier") + '" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors"><i class="fas fa-plus mr-2"></i>Create Supplier</a>' if (current_user.is_admin or has_permission('manage_suppliers')) else None
+    actions_html='<a href="' + url_for("inventory.new_supplier") + '" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors"><i class="fas fa-plus mr-2"></i>' + _('Create Supplier') + '</a>' if (current_user.is_admin or has_permission('manage_suppliers')) else None
 ) }}
 
 <div class="bg-card-light dark:bg-card-dark p-6 rounded-xl border border-border-light dark:border-border-dark shadow-sm mb-6">
@@ -104,9 +104,9 @@
     {% endif %}
     {% endset %}
     {% if search %}
-        {{ empty_state('fas fa-truck', 'No Suppliers Match Your Filters', 'Try adjusting your filters to see more results.', actions, type='no-results') }}
+        {{ empty_state('fas fa-truck', _('No Suppliers Match Your Filters'), _('Try adjusting your filters to see more results.'), actions, type='no-results') }}
     {% else %}
-        {{ empty_state('fas fa-truck', 'No Suppliers Yet', 'Add suppliers to link purchase orders and receiving.', actions, type='no-data') }}
+        {{ empty_state('fas fa-truck', _('No Suppliers Yet'), _('Add suppliers to link purchase orders and receiving.'), actions, type='no-data') }}
     {% endif %}
     {% endif %}
 </div>

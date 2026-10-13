@@ -3,15 +3,15 @@
 
 {% block content %}
 {% set breadcrumbs = [
-    {'text': 'Inventory', 'url': url_for('inventory.list_stock_items')},
-    {'text': 'Adjustments', 'url': url_for('inventory.list_adjustments')},
-    {'text': 'New Adjustment'}
+    {'text': _('Inventory'), 'url': url_for('inventory.list_stock_items')},
+    {'text': _('Adjustments'), 'url': url_for('inventory.list_adjustments')},
+    {'text': _('New Adjustment')}
 ] %}
 
 {{ page_header(
     icon_class='fas fa-edit',
-    title_text='New Stock Adjustment',
-    subtitle_text='Record stock adjustment or correction',
+    title_text=_('New Stock Adjustment'),
+    subtitle_text=_('Record stock adjustment or correction'),
     breadcrumbs=breadcrumbs
 ) }}
 

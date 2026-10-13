@@ -1,19 +1,19 @@
 {% extends "base.html" %}
 {% from "components/ui.html" import page_header, breadcrumb_nav, empty_state %}
 
-{% block title %}Leads - {{ config.APP_NAME }}{% endblock %}
+{% block title %}{{ _('Leads') }} - {{ config.APP_NAME }}{% endblock %}
 
 {% block content %}
 {% set breadcrumbs = [
-    {'text': 'Leads'}
+    {'text': _('Leads')}
 ] %}
 
 {{ page_header(
     icon_class='fas fa-user-plus',
-    title_text='Leads',
-    subtitle_text='Manage potential clients',
+    title_text=_('Leads'),
+    subtitle_text=_('Manage potential clients'),
     breadcrumbs=breadcrumbs,
-    actions_html='<a href="' + url_for("leads.create_lead") + '" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors"><i class="fas fa-plus mr-2"></i>New Lead</a>'
+    actions_html='<a href="' + url_for("leads.create_lead") + '" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors"><i class="fas fa-plus mr-2"></i>' + _('New Lead') + '</a>'
 ) }}
 
 <div class="bg-card-light dark:bg-card-dark p-6 rounded-xl border border-border-light dark:border-border-dark shadow-sm mb-6">
@@ -62,12 +62,12 @@
                     <td class="py-3 mobile-card-header" data-label="{{ _('Name') }}">
                         <a href="{{ url_for('leads.view_lead', lead_id=lead.id) }}" class="text-primary hover:underline font-medium">{{ lead.full_name }}</a>
                     </td>
-                    <td class="py-3" data-label="{{ _('Company') }}">{{ lead.company_name or 'N/A' }}</td>
+                    <td class="py-3" data-label="{{ _('Company') }}">{{ lead.company_name or _('N/A') }}</td>
                     <td class="py-3" data-label="{{ _('Email') }}">
                         {% if lead.email %}
                         <a href="mailto:{{ lead.email }}" class="text-primary hover:underline">{{ lead.email }}</a>
                         {% else %}
-                        N/A
+                        {{ _('N/A') }}
                         {% endif %}
                     </td>
                     <td class="py-3" data-label="{{ _('Status') }}">
@@ -80,7 +80,7 @@
                             {{ lead.score }}
                         </span>
                     </td>
-                    <td class="py-3" data-label="{{ _('Source') }}">{{ lead.source or 'N/A' }}</td>
+                    <td class="py-3" data-label="{{ _('Source') }}">{{ lead.source or _('N/A') }}</td>
                     <td class="py-3 mobile-actions" data-label="{{ _('Actions') }}">
                         <a href="{{ url_for('leads.view_lead', lead_id=lead.id) }}" class="text-primary hover:underline text-sm">{{ _('View') }}</a>
                     </td>
@@ -96,9 +96,9 @@
         </a>
     {% endset %}
     {% if search or status or source %}
-        {{ empty_state('fas fa-search', 'No Leads Match Your Filters', 'Try adjusting your filters to see more results. You can clear filters or create a new lead that matches your criteria.', actions, type='no-results') }}
+        {{ empty_state('fas fa-search', _('No Leads Match Your Filters'), _('Try adjusting your filters to see more results. You can clear filters or create a new lead that matches your criteria.'), actions, type='no-results') }}
     {% else %}
-        {{ empty_state('fas fa-user-plus', 'No Leads Yet', 'Leads help you track potential clients before they become customers. Create your first lead to get started!', actions, type='no-data') }}
+        {{ empty_state('fas fa-user-plus', _('No Leads Yet'), _('Leads help you track potential clients before they become customers. Create your first lead to get started!'), actions, type='no-data') }}
     {% endif %}
     {% endif %}
 </div>

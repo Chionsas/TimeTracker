@@ -18,12 +18,12 @@
         <div class="min-w-[200px]">
             {{ multi_select(
                 field_name='project_ids',
-                label='Project',
+                label=_('Project'),
                 items=projects,
                 selected_ids=project_ids,
                 item_id_attr='id',
                 item_label_attr='name',
-                placeholder='All Projects',
+                placeholder=_('All Projects'),
                 show_search=True,
                 form_id='kanbanFilterForm'
             ) }}
@@ -31,12 +31,12 @@
         <div class="min-w-[200px]">
             {{ multi_select(
                 field_name='user_ids',
-                label='Assigned To',
+                label=_('Assigned To'),
                 items=users,
                 selected_ids=user_ids,
                 item_id_attr='id',
                 item_label_attr='display_name',
-                placeholder='All Users',
+                placeholder=_('All Users'),
                 show_search=True,
                 form_id='kanbanFilterForm'
             ) }}
@@ -110,7 +110,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (!res.ok) throw new Error('Failed'); card.dataset.status = targetStatus;
                     updateColumnCounts();
                     toggleEmptyStatesForBodies([body, originalParent]);
-                    announce(`${card.querySelector('h4, .kanban-card-title')?.textContent || 'Task'} {{ _('moved to') }} ${targetStatus}`);
+                    announce(`${card.querySelector('h4, .kanban-card-title')?.textContent || {{ _('Task')|tojson }}} {{ _('moved to') }} ${targetStatus}`);
                 } catch (err) {
                     // Revert DOM move and empty states
                     originalParent.appendChild(card);

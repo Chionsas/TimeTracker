@@ -3,16 +3,16 @@
 
 {% block content %}
 {% set breadcrumbs = [
-    {'text': 'Inventory', 'url': url_for('inventory.list_stock_items')},
-    {'text': 'Transfers'}
+    {'text': _('Inventory'), 'url': url_for('inventory.list_stock_items')},
+    {'text': _('Transfers')}
 ] %}
 
 {{ page_header(
     icon_class='fas fa-truck',
-    title_text='Stock Transfers',
-    subtitle_text='View transfers between warehouses',
+    title_text=_('Stock Transfers'),
+    subtitle_text=_('View transfers between warehouses'),
     breadcrumbs=breadcrumbs,
-    actions_html='<a href="' + url_for("inventory.new_transfer") + '" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors"><i class="fas fa-plus mr-2"></i>New Transfer</a>' if (current_user.is_admin or has_permission('transfer_stock')) else None
+    actions_html='<a href="' + url_for("inventory.new_transfer") + '" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors"><i class="fas fa-plus mr-2"></i>' + _('New Transfer') + '</a>' if (current_user.is_admin or has_permission('transfer_stock')) else None
 ) }}
 
 <div class="bg-card-light dark:bg-card-dark p-6 rounded-xl border border-border-light dark:border-border-dark shadow-sm mb-6">
@@ -86,9 +86,9 @@
     {% endif %}
     {% endset %}
     {% if date_from or date_to %}
-        {{ empty_state('fas fa-dolly', 'No Transfers Match Your Filters', 'Try adjusting your filters to see more results.', actions, type='no-results') }}
+        {{ empty_state('fas fa-dolly', _('No Transfers Match Your Filters'), _('Try adjusting your filters to see more results.'), actions, type='no-results') }}
     {% else %}
-        {{ empty_state('fas fa-dolly', 'No Transfers Yet', 'Transfer stock between warehouses to balance inventory.', actions, type='no-data') }}
+        {{ empty_state('fas fa-dolly', _('No Transfers Yet'), _('Transfer stock between warehouses to balance inventory.'), actions, type='no-data') }}
     {% endif %}
     {% endif %}
 </div>

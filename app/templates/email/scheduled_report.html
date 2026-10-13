@@ -60,32 +60,32 @@
     <div class="header">
         <h1>{{ report_name }}</h1>
         {% if custom_field_name and custom_field_value %}
-        <p>Filter: {{ custom_field_name }} = {{ custom_field_value }}</p>
+        <p>{{ _('Filter:') }} {{ custom_field_name }} = {{ custom_field_value }}</p>
         {% endif %}
     </div>
     
     <div class="content">
         <div class="summary">
-            <h2>Summary</h2>
+            <h2>{{ _('Summary') }}</h2>
             {% if report_data.summary %}
-            <p><strong>Total Entries:</strong> {{ report_data.summary.get('total_entries', 0) }}</p>
+            <p><strong>{{ _('Total Entries:') }}</strong> {{ report_data.summary.get('total_entries', 0) }}</p>
             {% if report_data.summary.get('total_hours') %}
-            <p><strong>Total Hours:</strong> {{ "%.2f"|format(report_data.summary.get('total_hours', 0)) }}</p>
+            <p><strong>{{ _('Total Hours:') }}</strong> {{ "%.2f"|format(report_data.summary.get('total_hours', 0)) }}</p>
             {% endif %}
             {% if report_data.summary.get('total_amount') is not none %}
-            <p><strong>Total Amount:</strong> {{ "%.2f"|format(report_data.summary.get('total_amount', 0)) }}</p>
+            <p><strong>{{ _('Total Amount:') }}</strong> {{ "%.2f"|format(report_data.summary.get('total_amount', 0)) }}</p>
             {% endif %}
             {% if report_data.summary.get('invoice_count') is not none %}
-            <p><strong>Invoice Count:</strong> {{ report_data.summary.get('invoice_count', 0) }}</p>
+            <p><strong>{{ _('Invoice Count:') }}</strong> {{ report_data.summary.get('invoice_count', 0) }}</p>
             {% endif %}
             {% if report_data.summary.get('unpaid_only') %}
-            <p><strong>Unpaid Hours Only:</strong> Yes</p>
+            <p><strong>{{ _('Unpaid Hours Only:') }}</strong> {{ _('Yes') }}</p>
             {% endif %}
             {% endif %}
         </div>
         
         {% if report_data.data and report_data.data|length > 0 %}
-        <h2>Report Data</h2>
+        <h2>{{ _('Report Data') }}</h2>
         <table>
             <thead>
                 <tr>
@@ -111,13 +111,13 @@
             </tbody>
         </table>
         {% else %}
-        <p>No data found for this report.</p>
+        <p>{{ _('No data found for this report.') }}</p>
         {% endif %}
     </div>
     
     <div class="footer">
-        <p>Generated at: {{ generated_at|user_datetime if generated_at else 'N/A' }}</p>
-        <p>This is an automated report from TimeTracker.</p>
+        <p>{{ _('Generated at:') }} {{ generated_at|user_datetime if generated_at else _('N/A') }}</p>
+        <p>{{ _('This is an automated report from TimeTracker.') }}</p>
     </div>
 </body>
 </html>

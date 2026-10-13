@@ -3,14 +3,14 @@
 
 {% block content %}
 {% set breadcrumbs = [
-    {'text': 'Inventory', 'url': url_for('inventory.list_stock_items')},
-    {'text': 'Stock Levels', 'url': url_for('inventory.stock_levels')},
+    {'text': _('Inventory'), 'url': url_for('inventory.list_stock_items')},
+    {'text': _('Stock Levels'), 'url': url_for('inventory.stock_levels')},
     {'text': warehouse.code}
 ] %}
 
 {{ page_header(
     icon_class='fas fa-list-ul',
-    title_text='Stock Levels - ' + warehouse.code,
+    title_text=_('Stock Levels - %(warehouse)s', warehouse=warehouse.code),
     subtitle_text=warehouse.name,
     breadcrumbs=breadcrumbs
 ) }}

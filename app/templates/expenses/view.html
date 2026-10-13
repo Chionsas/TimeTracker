@@ -4,17 +4,17 @@
 {% block content %}
 {% set actions %}
 {% if current_user.is_admin or expense.user_id == current_user.id %}
-<a href="{{ url_for('expenses.edit_expense', expense_id=expense.id) }}" class="btn btn-primary"><i class="fas fa-edit mr-2"></i>Edit</a>
+<a href="{{ url_for('expenses.edit_expense', expense_id=expense.id) }}" class="btn btn-primary"><i class="fas fa-edit mr-2"></i>{{ _('Edit') }}</a>
 {% endif %}
 {% endset %}
 
 {{ page_header(
     icon_class='fas fa-receipt',
-    title_text='Expense Details',
+    title_text=_('Expense Details'),
     actions_html=actions,
     breadcrumbs=[
-        {'text': 'Expenses', 'url': url_for('expenses.list_expenses')},
-        {'text': 'Expense Details'}
+        {'text': _('Expenses'), 'url': url_for('expenses.list_expenses')},
+        {'text': _('Expense Details')}
     ]
 ) }}
 
@@ -24,19 +24,19 @@
         <!-- Basic Information -->
         <div class="bg-card-light dark:bg-card-dark p-6 rounded-xl border border-border-light dark:border-border-dark shadow-sm">
             <h3 class="text-lg font-semibold mb-4 pb-2 border-b border-gray-200 dark:border-gray-700">
-                <i class="fas fa-info-circle mr-2"></i>Expense Information
+                <i class="fas fa-info-circle mr-2"></i>{{ _('Expense Information') }}
             </h3>
             
             <dl class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Date</dt>
+                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ _('Date') }}</dt>
                     <dd class="mt-1 text-sm text-gray-900 dark:text-gray-100">
                         {{ expense.expense_date|format_date }}
                     </dd>
                 </div>
                 
                 <div>
-                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Category</dt>
+                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ _('Category') }}</dt>
                     <dd class="mt-1 text-sm">
                         <span class="px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
                             {{ expense.category|title }}
@@ -45,21 +45,21 @@
                 </div>
                 
                 <div>
-                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Amount</dt>
+                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ _('Amount') }}</dt>
                     <dd class="mt-1 text-sm font-semibold text-gray-900 dark:text-gray-100">
                         {{ expense.currency_code }} {{ '%.2f'|format(expense.amount) }}
                     </dd>
                 </div>
                 
                 <div>
-                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Tax Amount</dt>
+                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ _('Tax Amount') }}</dt>
                     <dd class="mt-1 text-sm text-gray-900 dark:text-gray-100">
                         {{ expense.currency_code }} {{ '%.2f'|format(expense.tax_amount or 0) }}
                     </dd>
                 </div>
                 
                 <div class="md:col-span-2 bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg">
-                    <dt class="text-sm font-medium text-blue-800 dark:text-blue-200">Total Amount (incl. tax)</dt>
+                    <dt class="text-sm font-medium text-blue-800 dark:text-blue-200">{{ _('Total Amount (incl. tax)') }}</dt>
                     <dd class="mt-1 text-xl font-bold text-blue-900 dark:text-blue-100">
                         {{ expense.currency_code }} {{ '%.2f'|format(expense.total_amount) }}
                     </dd>
@@ -67,7 +67,7 @@
                 
                 {% if expense.description %}
                 <div class="md:col-span-2">
-                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Description</dt>
+                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ _('Description') }}</dt>
                     <dd class="mt-1 text-sm text-gray-900 dark:text-gray-100">
                         {{ expense.description }}
                     </dd>
@@ -80,20 +80,20 @@
         {% if expense.payment_method or expense.payment_date or expense.vendor or expense.receipt_number %}
         <div class="bg-card-light dark:bg-card-dark p-6 rounded-xl border border-border-light dark:border-border-dark shadow-sm">
             <h3 class="text-lg font-semibold mb-4 pb-2 border-b border-gray-200 dark:border-gray-700">
-                <i class="fas fa-credit-card mr-2"></i>Payment Details
+                <i class="fas fa-credit-card mr-2"></i>{{ _('Payment Details') }}
             </h3>
             
             <dl class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {% if expense.vendor %}
                 <div>
-                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Vendor</dt>
+                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ _('Vendor') }}</dt>
                     <dd class="mt-1 text-sm text-gray-900 dark:text-gray-100">{{ expense.vendor }}</dd>
                 </div>
                 {% endif %}
                 
                 {% if expense.payment_method %}
                 <div>
-                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Payment Method</dt>
+                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ _('Payment Method') }}</dt>
                     <dd class="mt-1 text-sm text-gray-900 dark:text-gray-100">
                         {{ expense.payment_method.replace('_', ' ')|title }}
                     </dd>
@@ -102,7 +102,7 @@
                 
                 {% if expense.payment_date %}
                 <div>
-                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Payment Date</dt>
+                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ _('Payment Date') }}</dt>
                     <dd class="mt-1 text-sm text-gray-900 dark:text-gray-100">
                         {{ expense.payment_date|format_date }}
                     </dd>
@@ -111,7 +111,7 @@
                 
                 {% if expense.receipt_number %}
                 <div>
-                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Receipt Number</dt>
+                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ _('Receipt Number') }}</dt>
                     <dd class="mt-1 text-sm text-gray-900 dark:text-gray-100">{{ expense.receipt_number }}</dd>
                 </div>
                 {% endif %}
@@ -123,14 +123,14 @@
         {% if expense.receipt_path %}
         <div class="bg-card-light dark:bg-card-dark p-6 rounded-xl border border-border-light dark:border-border-dark shadow-sm">
             <h3 class="text-lg font-semibold mb-4 pb-2 border-b border-gray-200 dark:border-gray-700">
-                <i class="fas fa-file-alt mr-2"></i>Receipt
+                <i class="fas fa-file-alt mr-2"></i>{{ _('Receipt') }}
             </h3>
             <div class="flex items-center gap-2">
                 <i class="fas fa-paperclip text-gray-400"></i>
                 {% set receipt_filename = expense.receipt_path.split('/')[-1] %}
                 <a href="{{ url_for('expenses.serve_receipt', filename=receipt_filename) }}" target="_blank" 
                    class="text-primary hover:underline">
-                    View Receipt
+                    {{ _('View Receipt') }}
                 </a>
             </div>
         </div>
@@ -140,7 +140,7 @@
         {% if expense.notes %}
         <div class="bg-card-light dark:bg-card-dark p-6 rounded-xl border border-border-light dark:border-border-dark shadow-sm">
             <h3 class="text-lg font-semibold mb-4 pb-2 border-b border-gray-200 dark:border-gray-700">
-                <i class="fas fa-sticky-note mr-2"></i>Notes
+                <i class="fas fa-sticky-note mr-2"></i>{{ _('Notes') }}
             </h3>
             <p class="text-sm text-gray-900 dark:text-gray-100 whitespace-pre-wrap">{{ expense.notes }}</p>
         </div>
@@ -150,19 +150,19 @@
         {% if current_user.is_admin and expense.status == 'pending' %}
         <div class="bg-yellow-50 dark:bg-yellow-900/20 p-6 rounded-lg border border-yellow-200 dark:border-yellow-800">
             <h3 class="text-lg font-semibold mb-4 text-yellow-800 dark:text-yellow-200">
-                <i class="fas fa-exclamation-triangle mr-2"></i>Pending Approval
+                <i class="fas fa-exclamation-triangle mr-2"></i>{{ _('Pending Approval') }}
             </h3>
             
             <div class="flex gap-3">
                 <form method="POST" action="{{ url_for('expenses.approve_expense', expense_id=expense.id) }}" class="flex-1">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                     <button type="submit" class="w-full bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
-                        <i class="fas fa-check mr-2"></i>Approve
+                        <i class="fas fa-check mr-2"></i>{{ _('Approve') }}
                     </button>
                 </form>
                 
                 <button onclick="showRejectModal()" class="btn btn-danger flex-1">
-                    <i class="fas fa-times mr-2"></i>Reject
+                    <i class="fas fa-times mr-2"></i>{{ _('Reject') }}
                 </button>
             </div>
         </div>
@@ -172,13 +172,13 @@
         {% if current_user.is_admin and expense.status == 'approved' and expense.reimbursable and not expense.reimbursed %}
         <div class="bg-blue-50 dark:bg-blue-900/20 p-6 rounded-lg border border-blue-200 dark:border-blue-800">
             <h3 class="text-lg font-semibold mb-4 text-blue-800 dark:text-blue-200">
-                <i class="fas fa-money-check-alt mr-2"></i>Reimbursement Pending
+                <i class="fas fa-money-check-alt mr-2"></i>{{ _('Reimbursement Pending') }}
             </h3>
             
             <form method="POST" action="{{ url_for('expenses.mark_reimbursed', expense_id=expense.id) }}">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                 <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
-                    <i class="fas fa-check mr-2"></i>Mark as Reimbursed
+                    <i class="fas fa-check mr-2"></i>{{ _('Mark as Reimbursed') }}
                 </button>
             </form>
         </div>
@@ -189,59 +189,59 @@
     <div class="space-y-6">
         <!-- Status Card -->
         <div class="bg-card-light dark:bg-card-dark p-6 rounded-xl border border-border-light dark:border-border-dark shadow-sm">
-            <h3 class="text-lg font-semibold mb-4">Status</h3>
+            <h3 class="text-lg font-semibold mb-4">{{ _('Status') }}</h3>
             
             <div class="space-y-3">
                 <div class="flex items-center justify-between">
-                    <span class="text-sm text-gray-600 dark:text-gray-400">Approval Status</span>
+                    <span class="text-sm text-gray-600 dark:text-gray-400">{{ _('Approval Status') }}</span>
                     {% if expense.status == 'pending' %}
                     <span class="px-2 py-1 text-xs rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200">
-                        Pending
+                        {{ _('Pending') }}
                     </span>
                     {% elif expense.status == 'approved' %}
                     <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
-                        Approved
+                        {{ _('Approved') }}
                     </span>
                     {% elif expense.status == 'rejected' %}
                     <span class="px-2 py-1 text-xs rounded-full bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200">
-                        Rejected
+                        {{ _('Rejected') }}
                     </span>
                     {% elif expense.status == 'reimbursed' %}
                     <span class="px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
-                        Reimbursed
+                        {{ _('Reimbursed') }}
                     </span>
                     {% endif %}
                 </div>
                 
                 <div class="flex items-center justify-between">
-                    <span class="text-sm text-gray-600 dark:text-gray-400">Billable</span>
+                    <span class="text-sm text-gray-600 dark:text-gray-400">{{ _('Billable') }}</span>
                     {% if expense.billable %}
-                    <span class="text-green-600"><i class="fas fa-check-circle"></i> Yes</span>
+                    <span class="text-green-600"><i class="fas fa-check-circle"></i> {{ _('Yes') }}</span>
                     {% else %}
-                    <span class="text-gray-400"><i class="fas fa-times-circle"></i> No</span>
+                    <span class="text-gray-400"><i class="fas fa-times-circle"></i> {{ _('No') }}</span>
                     {% endif %}
                 </div>
                 
                 <div class="flex items-center justify-between">
-                    <span class="text-sm text-gray-600 dark:text-gray-400">Reimbursable</span>
+                    <span class="text-sm text-gray-600 dark:text-gray-400">{{ _('Reimbursable') }}</span>
                     {% if expense.reimbursable %}
-                    <span class="text-green-600"><i class="fas fa-check-circle"></i> Yes</span>
+                    <span class="text-green-600"><i class="fas fa-check-circle"></i> {{ _('Yes') }}</span>
                     {% else %}
-                    <span class="text-gray-400"><i class="fas fa-times-circle"></i> No</span>
+                    <span class="text-gray-400"><i class="fas fa-times-circle"></i> {{ _('No') }}</span>
                     {% endif %}
                 </div>
                 
                 {% if expense.invoiced %}
                 <div class="flex items-center justify-between">
-                    <span class="text-sm text-gray-600 dark:text-gray-400">Invoiced</span>
-                    <span class="text-green-600"><i class="fas fa-check-circle"></i> Yes</span>
+                    <span class="text-sm text-gray-600 dark:text-gray-400">{{ _('Invoiced') }}</span>
+                    <span class="text-green-600"><i class="fas fa-check-circle"></i> {{ _('Yes') }}</span>
                 </div>
                 {% endif %}
             </div>
             
             {% if expense.rejection_reason %}
             <div class="mt-4 p-3 bg-red-50 dark:bg-red-900/20 rounded-lg">
-                <p class="text-sm font-medium text-red-800 dark:text-red-200 mb-1">Rejection Reason:</p>
+                <p class="text-sm font-medium text-red-800 dark:text-red-200 mb-1">{{ _('Rejection Reason:') }}</p>
                 <p class="text-sm text-red-700 dark:text-red-300">{{ expense.rejection_reason }}</p>
             </div>
             {% endif %}
@@ -253,13 +253,13 @@
             
             <div class="space-y-3">
                 <div>
-                    <span class="text-sm text-gray-600 dark:text-gray-400 block mb-1">User</span>
+                    <span class="text-sm text-gray-600 dark:text-gray-400 block mb-1">{{ _('User') }}</span>
                     <span class="text-sm font-medium">{{ expense.user.username if expense.user else '-' }}</span>
                 </div>
                 
                 {% if expense.project %}
                 <div>
-                    <span class="text-sm text-gray-600 dark:text-gray-400 block mb-1">Project</span>
+                    <span class="text-sm text-gray-600 dark:text-gray-400 block mb-1">{{ _('Project') }}</span>
                     <a href="{{ url_for('projects.view_project', project_id=expense.project_id) }}" 
                        class="text-sm font-medium text-primary hover:underline">
                         {{ expense.project.name }}
@@ -269,7 +269,7 @@
                 
                 {% if expense.client %}
                 <div>
-                    <span class="text-sm text-gray-600 dark:text-gray-400 block mb-1">Client</span>
+                    <span class="text-sm text-gray-600 dark:text-gray-400 block mb-1">{{ _('Client') }}</span>
                     <a href="{{ url_for('clients.view_client', client_id=expense.client_id) }}" 
                        class="text-sm font-medium text-primary hover:underline">
                         {{ expense.client.name }}
@@ -279,7 +279,7 @@
                 
                 {% if expense.approved_by %}
                 <div>
-                    <span class="text-sm text-gray-600 dark:text-gray-400 block mb-1">Approved By</span>
+                    <span class="text-sm text-gray-600 dark:text-gray-400 block mb-1">{{ _('Approved By') }}</span>
                     <span class="text-sm font-medium">{{ expense.approver.username if expense.approver else '-' }}</span>
                     {% if expense.approved_at %}
                     <div class="text-xs text-gray-500">{{ expense.approved_at|user_datetime }}</div>
@@ -292,7 +292,7 @@
         <!-- Tags -->
         {% if expense.tags %}
         <div class="bg-card-light dark:bg-card-dark p-6 rounded-xl border border-border-light dark:border-border-dark shadow-sm">
-            <h3 class="text-lg font-semibold mb-4">Tags</h3>
+            <h3 class="text-lg font-semibold mb-4">{{ _('Tags') }}</h3>
             <div class="flex flex-wrap gap-2">
                 {% for tag in expense.tag_list %}
                 <span class="px-2 py-1 text-xs rounded-full bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300">
@@ -305,14 +305,14 @@
         
         <!-- Metadata -->
         <div class="bg-card-light dark:bg-card-dark p-6 rounded-xl border border-border-light dark:border-border-dark shadow-sm">
-            <h3 class="text-lg font-semibold mb-4">Metadata</h3>
+            <h3 class="text-lg font-semibold mb-4">{{ _('Metadata') }}</h3>
             <div class="space-y-2 text-sm">
                 <div>
-                    <span class="text-gray-600 dark:text-gray-400">Created:</span>
+                    <span class="text-gray-600 dark:text-gray-400">{{ _('Created:') }}</span>
                     <span class="text-gray-900 dark:text-gray-100">{{ expense.created_at|user_datetime }}</span>
                 </div>
                 <div>
-                    <span class="text-gray-600 dark:text-gray-400">Updated:</span>
+                    <span class="text-gray-600 dark:text-gray-400">{{ _('Updated:') }}</span>
                     <span class="text-gray-900 dark:text-gray-100">{{ expense.updated_at|user_datetime }}</span>
                 </div>
             </div>
@@ -321,18 +321,18 @@
         <!-- Actions -->
         {% if current_user.is_admin or expense.user_id == current_user.id %}
         <div class="bg-card-light dark:bg-card-dark p-6 rounded-xl border border-border-light dark:border-border-dark shadow-sm">
-            <h3 class="text-lg font-semibold mb-4">Actions</h3>
+            <h3 class="text-lg font-semibold mb-4">{{ _('Actions') }}</h3>
             <div class="space-y-2">
                 <a href="{{ url_for('expenses.edit_expense', expense_id=expense.id) }}" 
                    class="block w-full text-center bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
-                    <i class="fas fa-edit mr-2"></i>Edit Expense
+                    <i class="fas fa-edit mr-2"></i>{{ _('Edit Expense') }}
                 </a>
                 
                 {% if current_user.is_admin or (expense.user_id == current_user.id and expense.status == 'pending') %}
                 <form id="deleteExpenseForm" method="POST" action="{{ url_for('expenses.delete_expense', expense_id=expense.id) }}">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                     <button type="button" onclick="confirmDeleteExpense()" class="btn btn-danger block w-full">
-                        <i class="fas fa-trash mr-2"></i>Delete Expense
+                        <i class="fas fa-trash mr-2"></i>{{ _('Delete Expense') }}
                     </button>
                 </form>
                 {% endif %}
@@ -350,7 +350,7 @@
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <div class="mb-4">
                 <label for="rejection_reason" class="form-label">
-                    Reason for rejection <span class="text-red-500">*</span>
+                    {{ _('Reason for rejection') }} <span class="text-red-500">*</span>
                 </label>
                 <textarea name="rejection_reason" id="rejection_reason" rows="4" required
                           class="form-input"
@@ -359,10 +359,10 @@
             <div class="flex gap-3">
                 <button type="button" onclick="hideRejectModal()" 
                         class="btn btn-secondary flex-1">
-                    Cancel
+                    {{ _('Cancel') }}
                 </button>
                 <button type="submit" class="btn btn-danger flex-1">
-                    Reject
+                    {{ _('Reject') }}
                 </button>
             </div>
         </form>

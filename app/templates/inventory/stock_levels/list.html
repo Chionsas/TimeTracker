@@ -3,14 +3,14 @@
 
 {% block content %}
 {% set breadcrumbs = [
-    {'text': 'Inventory', 'url': url_for('inventory.list_stock_items')},
-    {'text': 'Stock Levels'}
+    {'text': _('Inventory'), 'url': url_for('inventory.list_stock_items')},
+    {'text': _('Stock Levels')}
 ] %}
 
 {{ page_header(
     icon_class='fas fa-list-ul',
-    title_text='Stock Levels',
-    subtitle_text='View inventory levels across warehouses',
+    title_text=_('Stock Levels'),
+    subtitle_text=_('View inventory levels across warehouses'),
     breadcrumbs=breadcrumbs
 ) }}
 
