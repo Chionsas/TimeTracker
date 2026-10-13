@@ -111,6 +111,8 @@ const DEFERRED_SCRIPTS = ['js/ai_autocomplete.js'];
  * kiosk/base.html load only the toast system, the rest load both.
  */
 const STANDALONE_GROUPS = {
+  // gettext()/ngettext(); partials/_i18n.html loads it before every other script.
+  i18n: ['i18n.js'],
   toast: ['toast-notifications.js'],
   errors: ['error-handling-enhanced.js'],
   'setup-wizard': ['js/setup-wizard.js'],

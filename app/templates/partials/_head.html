@@ -73,72 +73,7 @@
         if (fpDark) fpDark.media = document.documentElement.classList.contains('dark') ? 'all' : 'none';
     </script>
     
-    <!-- i18n translations for JavaScript (use tojson to avoid syntax errors from quotes/ampersands in translations) -->
-    <script nonce="{{ csp_nonce() }}">
-        window.i18n = {
-            toast: {
-                success: {{ _("Success")|tojson }},
-                error: {{ _("Error")|tojson }},
-                warning: {{ _("Warning")|tojson }},
-                info: {{ _("Information")|tojson }}
-            },
-            common: {
-                loading: {{ _("Loading...")|tojson }},
-                saving: {{ _("Saving...")|tojson }},
-                deleting: {{ _("Deleting...")|tojson }},
-                cancel: {{ _("Cancel")|tojson }},
-                confirm: {{ _("Confirm")|tojson }},
-                close: {{ _("Close")|tojson }},
-                save: {{ _("Save")|tojson }},
-                delete: {{ _("Delete")|tojson }},
-                edit: {{ _("Edit")|tojson }},
-                add: {{ _("Add")|tojson }},
-                remove: {{ _("Remove")|tojson }},
-                yes: {{ _("Yes")|tojson }},
-                no: {{ _("No")|tojson }},
-                ok: {{ _("OK")|tojson }}
-            },
-            messages: {
-                confirmDelete: {{ _("Are you sure you want to delete this?")|tojson }},
-                unsavedChanges: {{ _("You have unsaved changes. Are you sure you want to leave?")|tojson }},
-                operationFailed: {{ _("Operation failed")|tojson }},
-                operationSuccess: {{ _("Operation completed successfully")|tojson }},
-                noItemsSelected: {{ _("No items selected")|tojson }},
-                invalidInput: {{ _("Invalid input")|tojson }},
-                requiredField: {{ _("This field is required")|tojson }},
-                noActiveTimer: {{ _("No active timer")|tojson }},
-                timerStopped: {{ _("Timer stopped")|tojson }},
-                timerStopFailed: {{ _("Failed to stop timer")|tojson }},
-                errorStoppingTimer: {{ _("Error stopping timer")|tojson }},
-                noFormToSave: {{ _("No form to save")|tojson }},
-                noTimerFound: {{ _("No timer found")|tojson }},
-                timerStoppedInactivity: {{ _("Timer stopped due to inactivity")|tojson }},
-                selectProjectOrClient: {{ _("Please select either a project or a client")|tojson }},
-                endTimeAfterStartTime: {{ _("End time must be after start time")|tojson }}
-            },
-            commandPalette: {
-                startTimer: {{ _("Start Timer")|tojson }},
-                selectProject: {{ _("Start Timer → Select a project")|tojson }},
-                newTimeEntry: {{ _("New Time Entry")|tojson }},
-                newProject: {{ _("New Project")|tojson }},
-                newInvoice: {{ _("New Invoice")|tojson }},
-                gotoDashboard: {{ _("Go to Dashboard")|tojson }},
-                gotoReports: {{ _("Go to Reports")|tojson }},
-                gotoClients: {{ _("Go to Clients")|tojson }},
-                gotoProjects: {{ _("Go to Projects")|tojson }},
-                gotoTasks: {{ _("Go to Tasks")|tojson }},
-                gotoInvoices: {{ _("Go to Invoices")|tojson }},
-                gotoAnalytics: {{ _("Go to Analytics")|tojson }},
-                gotoCalendar: {{ _("Go to Calendar")|tojson }},
-                gotoExpenses: {{ _("Go to Expenses")|tojson }},
-                gotoTimeEntries: {{ _("Go to Time Entries")|tojson }},
-                gotoSettings: {{ _("Go to Settings")|tojson }},
-                noProjectsFound: {{ _("No projects found.")|tojson }},
-                noCommandsFound: {{ _("No commands found.")|tojson }},
-                timerStarted: {{ _("Timer started")|tojson }}
-            }
-        };
-    </script>
+    {% include 'partials/_i18n.html' %}
 
     <!-- User date/time format preferences for JavaScript (resolved: user override or system default) -->
     <script nonce="{{ csp_nonce() }}">

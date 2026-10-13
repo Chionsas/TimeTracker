@@ -73,6 +73,7 @@ def register_all_blueprints(app, logger=None):
     from app.routes.api_v1_projects import api_v1_projects_bp
     from app.routes.api_v1_tasks import api_v1_tasks_bp
     from app.routes.api_v1_time_entries import api_v1_time_entries_bp
+    from app.routes.i18n import i18n_bp
     from app.routes.api_v1_weekly_goals import api_v1_weekly_goals_bp
     from app.routes.api_v1_recurring_tasks import api_v1_recurring_tasks_bp
     from app.routes.api_v1_project_templates import api_v1_project_templates_bp
@@ -165,6 +166,7 @@ def register_all_blueprints(app, logger=None):
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(main_bp)
+    app.register_blueprint(i18n_bp)
     app.register_blueprint(projects_bp)
     app.register_blueprint(milestones_bp)
     app.register_blueprint(resource_scheduling_bp)

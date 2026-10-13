@@ -306,7 +306,7 @@
                             // Skip toast when this tab answered — respondIdle already toasted.
                             var localAnswer = window.__ttIdleLocalAnswerPending && window.__ttIdleLocalAnswerPending();
                             if (!localAnswer) {
-                                var msg = (window.i18n && window.i18n.messages && window.i18n.messages.timerStoppedInactivity) || 'Timer stopped due to inactivity';
+                                var msg = {{ _('Timer stopped due to inactivity')|tojson }};
                                 if (window.toastManager && window.toastManager.warning) {
                                     window.toastManager.warning(msg, '', 5000);
                                 }
@@ -326,7 +326,7 @@
                     try {
                         if (data && data.reason === 'idle_auto_stop') {
                             if (window.__ttOnIdleAutoStop) window.__ttOnIdleAutoStop();
-                            var msg = (data && data.message) || (window.i18n && window.i18n.messages && window.i18n.messages.timerStoppedInactivity) || 'Timer stopped due to inactivity';
+                            var msg = (data && data.message) || {{ _('Timer stopped due to inactivity')|tojson }};
                             if (window.toastManager && window.toastManager.warning) {
                                 window.toastManager.warning(msg, '', 5000);
                             }
