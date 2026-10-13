@@ -93,7 +93,7 @@
                     ${this.options.filterable ? `
                         <div class="table-search-box">
                             <i class="fas fa-search"></i>
-                            <input type="text" placeholder="Search..." class="table-search-input">
+                            <input type="text" placeholder="${gettext('Search...')}" class="table-search-input">
                         </div>
                     ` : ''}
                 </div>
@@ -101,13 +101,13 @@
                     ${this.options.filterable ? `
                         <button class="table-filter-btn">
                             <i class="fas fa-filter"></i>
-                            <span>Filters</span>
+                            <span>${gettext('Filters')}</span>
                         </button>
                     ` : ''}
                     <div class="position-relative">
                         <button class="table-columns-btn">
                             <i class="fas fa-columns"></i>
-                            <span>Columns</span>
+                            <span>${gettext('Columns')}</span>
                         </button>
                         <div class="table-columns-dropdown"></div>
                     </div>
@@ -115,20 +115,20 @@
                         <div class="position-relative">
                             <button class="table-export-btn">
                                 <i class="fas fa-download"></i>
-                                <span>Export</span>
+                                <span>${gettext('Export')}</span>
                             </button>
                             <div class="table-export-menu">
                                 <div class="table-export-option" data-format="csv">
                                     <i class="fas fa-file-csv"></i>
-                                    <span>Export CSV</span>
+                                    <span>${gettext('Export CSV')}</span>
                                 </div>
                                 <div class="table-export-option" data-format="json">
                                     <i class="fas fa-file-code"></i>
-                                    <span>Export JSON</span>
+                                    <span>${gettext('Export JSON')}</span>
                                 </div>
                                 <div class="table-export-option" data-format="print">
                                     <i class="fas fa-print"></i>
-                                    <span>Print</span>
+                                    <span>${gettext('Print')}</span>
                                 </div>
                             </div>
                         </div>
@@ -189,14 +189,14 @@
             bar.className = 'table-bulk-actions';
             bar.innerHTML = `
                 <div class="table-bulk-actions-info">
-                    <span class="selected-count">0</span> items selected
+                    <span class="selected-count">0</span> ${gettext('items selected')}
                 </div>
                 <div class="table-bulk-actions-buttons">
                     <button class="btn btn-sm btn-danger" data-action="delete">
-                        <i class="fas fa-trash me-1"></i>Delete
+                        <i class="fas fa-trash me-1"></i>${gettext('Delete')}
                     </button>
                     <button class="btn btn-sm btn-secondary" data-action="export">
-                        <i class="fas fa-download me-1"></i>Export Selected
+                        <i class="fas fa-download me-1"></i>${gettext('Export Selected')}
                     </button>
                 </div>
             `;
@@ -506,7 +506,7 @@
             
             // Update info
             const info = this.pagination.querySelector('.table-pagination-info');
-            info.textContent = `Showing ${start}-${end} of ${total}`;
+            info.textContent = gettext('Showing %(start)s-%(end)s of %(total)s', {start: start, end: end, total: total});
             
             // Update controls
             const controls = this.pagination.querySelector('.table-pagination-controls');

@@ -349,7 +349,7 @@
     if (on) {
       if (submitBtn) {
         submitBtn.dataset.originalHtml = submitBtn.innerHTML;
-        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>' + (creatingText || 'Creating...');
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>' + (creatingText || gettext('Creating...'));
         submitBtn.disabled = true;
       }
       form.classList.add('loading');
@@ -387,7 +387,7 @@
           credentials: 'same-origin',
         });
         if (!resp.ok) {
-          var msg = form.dataset.errorText || 'Could not create client. Please try again.';
+          var msg = form.dataset.errorText || gettext('Could not create client. Please try again.');
           try {
             var errData = await resp.json();
             if (errData && (errData.message || (errData.messages && errData.messages[0]))) {
@@ -403,7 +403,7 @@
           var select = clientState.targetSelect || resolveSelect('client', null);
           if (select && select.tagName === 'INPUT' && select.type === 'hidden') {
             hideClientModal();
-            if (window.toastManager) window.toastManager.success(form.dataset.createdText || 'Client created');
+            if (window.toastManager) window.toastManager.success(form.dataset.createdText || gettext('Client created'));
             window.location.reload();
             return;
           }
@@ -420,11 +420,11 @@
             }
           }
           hideClientModal();
-          if (window.toastManager) window.toastManager.success(form.dataset.createdText || 'Client created');
+          if (window.toastManager) window.toastManager.success(form.dataset.createdText || gettext('Client created'));
         }
       } catch (err) {
         if (errorEl) {
-          errorEl.textContent = form.dataset.networkErrorText || 'Network error while creating client';
+          errorEl.textContent = form.dataset.networkErrorText || gettext('Network error while creating client');
           errorEl.classList.remove('hidden');
         }
       } finally {
@@ -452,7 +452,7 @@
       if (!clientSelect || !clientSelect.value) {
         if (wasLocked) clientSelect.disabled = true;
         if (errorEl) {
-          errorEl.textContent = form.dataset.clientRequiredText || 'Please select a client first';
+          errorEl.textContent = form.dataset.clientRequiredText || gettext('Please select a client first');
           errorEl.classList.remove('hidden');
         }
         return;
@@ -483,7 +483,7 @@
           credentials: 'same-origin',
         });
         if (!resp.ok) {
-          var msg = form.dataset.errorText || 'Could not create project. Please try again.';
+          var msg = form.dataset.errorText || gettext('Could not create project. Please try again.');
           try {
             var errData = await resp.json();
             if (errData && (errData.message || (errData.messages && errData.messages[0]))) {
@@ -521,11 +521,11 @@
             }
           }
           hideProjectModal();
-          if (window.toastManager) window.toastManager.success(form.dataset.createdText || 'Project created');
+          if (window.toastManager) window.toastManager.success(form.dataset.createdText || gettext('Project created'));
         }
       } catch (err) {
         if (errorEl) {
-          errorEl.textContent = form.dataset.networkErrorText || 'Network error while creating project';
+          errorEl.textContent = form.dataset.networkErrorText || gettext('Network error while creating project');
           errorEl.classList.remove('hidden');
         }
       } finally {
@@ -557,7 +557,7 @@
       }
       if (!name || !projectId) {
         if (errorEl) {
-          errorEl.textContent = form.dataset.projectRequiredText || 'Select a project and enter a task name';
+          errorEl.textContent = form.dataset.projectRequiredText || gettext('Select a project and enter a task name');
           errorEl.classList.remove('hidden');
         }
         return;
@@ -575,7 +575,7 @@
           credentials: 'same-origin',
         });
         if (!resp.ok) {
-          var msg = form.dataset.errorText || 'Could not create task. Please try again.';
+          var msg = form.dataset.errorText || gettext('Could not create task. Please try again.');
           try {
             var errData = await resp.json();
             if (errData && (errData.message || errData.error)) {
@@ -601,11 +601,11 @@
             }
           }
           hideTaskModal();
-          if (window.toastManager) window.toastManager.success(form.dataset.createdText || 'Task created');
+          if (window.toastManager) window.toastManager.success(form.dataset.createdText || gettext('Task created'));
         }
       } catch (err) {
         if (errorEl) {
-          errorEl.textContent = form.dataset.networkErrorText || 'Network error while creating task';
+          errorEl.textContent = form.dataset.networkErrorText || gettext('Network error while creating task');
           errorEl.classList.remove('hidden');
         }
       } finally {
@@ -620,8 +620,8 @@
   function createTaskDirect(name, projectId, targetSelect) {
     var form = document.getElementById('inlineCreateTaskForm');
     var createUrl = (form && form.dataset.createUrl) || '/api/tasks/create';
-    var createdText = (form && form.dataset.createdText) || 'Task created';
-    var errorText = (form && form.dataset.errorText) || 'Could not create task. Please try again.';
+    var createdText = (form && form.dataset.createdText) || gettext('Task created');
+    var errorText = (form && form.dataset.errorText) || gettext('Could not create task. Please try again.');
     return fetch(createUrl, {
       method: 'POST',
       headers: {

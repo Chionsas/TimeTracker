@@ -43,8 +43,8 @@ class SmartNotificationManager {
                 
                 if (this.permissionGranted) {
                     this.showNotification({
-                        title: 'Notifications Enabled',
-                        body: 'You will now receive notifications for important events',
+                        title: gettext('Notifications Enabled'),
+                        body: gettext('You will now receive notifications for important events'),
                         icon: '/static/images/timetracker-logo.svg',
                         type: 'success'
                     });
@@ -269,8 +269,8 @@ class SmartNotificationManager {
                             // Notify if deadline is within 24 hours
                             if (hoursUntil <= 24 && hoursUntil > 0) {
                                 this.show({
-                                    title: 'Deadline Approaching',
-                                    message: `${deadline.task_name || 'Task'} is due in ${Math.round(hoursUntil)} hours`,
+                                    title: gettext('Deadline Approaching'),
+                                    message: gettext('%(task)s is due in %(hours)s hours', {hours: Math.round(hoursUntil), task: deadline.task_name || gettext('Task')}),
                                     type: 'warning',
                                     priority: 'high',
                                     url: `/tasks/${deadline.task_id}`,
@@ -423,8 +423,8 @@ class SmartNotificationManager {
         }
 
         this.show({
-            title: 'Budget Alert',
-            message: `${project.name} has used ${percentage}% of its budget`,
+            title: gettext('Budget Alert'),
+            message: gettext('%(project)s has used %(percentage)s of its budget', {percentage: percentage + '%', project: project.name}),
             type,
             priority,
             url: `/projects/${project.id}`,
@@ -435,7 +435,7 @@ class SmartNotificationManager {
     // Achievement notifications
     achievement(achievement) {
         this.show({
-            title: '🎉 Achievement Unlocked!',
+            title: gettext('🎉 Achievement Unlocked!'),
             message: achievement.title,
             type: 'success',
             priority: 'normal',
@@ -448,7 +448,7 @@ class SmartNotificationManager {
     // Team activity
     teamActivity(activity) {
         this.show({
-            title: 'Team Update',
+            title: gettext('Team Update'),
             message: activity.message,
             type: 'info',
             priority: 'low',
@@ -689,15 +689,15 @@ class NotificationCenter {
                     <div class="flex items-center gap-3">
                         <i class="fas fa-bell text-yellow-600 dark:text-yellow-400"></i>
                         <div>
-                            <p class="text-sm font-medium text-gray-900 dark:text-gray-100">Enable Notifications</p>
-                            <p class="text-xs text-gray-600 dark:text-gray-400">Get notified about important events</p>
+                            <p class="text-sm font-medium text-gray-900 dark:text-gray-100">${gettext('Enable Notifications')}</p>
+                            <p class="text-xs text-gray-600 dark:text-gray-400">${gettext('Get notified about important events')}</p>
                         </div>
                     </div>
                     <button 
                         onclick="smartNotifications.requestPermission().then(() => { this.closest('.fixed').remove(); smartNotifications.notificationCenter.toggle(); })" 
                         class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors text-sm font-medium"
                     >
-                        Enable
+                        ${gettext('Enable')}
                     </button>
                 </div>
             </div>
@@ -707,10 +707,10 @@ class NotificationCenter {
             <div class="absolute inset-0 bg-black/50" onclick="this.parentElement.remove()"></div>
             <div class="absolute right-0 top-0 h-full w-full max-w-md bg-card-light dark:bg-card-dark shadow-xl transform transition-transform">
                 <div class="p-6 border-b border-border-light dark:border-border-dark flex justify-between items-center">
-                    <h2 class="text-xl font-bold">Notifications</h2>
+                    <h2 class="text-xl font-bold">${gettext('Notifications')}</h2>
                     <div class="flex gap-2">
                         <button onclick="smartNotifications.markAllAsRead(); this.closest('.fixed').remove();" class="text-sm text-primary hover:underline">
-                            Mark all read
+                            ${gettext('Mark all read')}
                         </button>
                         <button onclick="this.closest('.fixed').remove()" class="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded">
                             <i class="fas fa-times"></i>
@@ -734,7 +734,7 @@ class NotificationCenter {
             return `
                 <div class="p-12 text-center text-gray-500">
                     <i class="fas fa-bell-slash text-4xl mb-4"></i>
-                    <p>No notifications</p>
+                    <p>${gettext('No notifications')}</p>
                 </div>
             `;
         }
@@ -782,10 +782,10 @@ class NotificationCenter {
         const hours = Math.floor(minutes / 60);
         const days = Math.floor(hours / 24);
         
-        if (days > 0) return `${days}d ago`;
-        if (hours > 0) return `${hours}h ago`;
-        if (minutes > 0) return `${minutes}m ago`;
-        return 'Just now';
+        if (days > 0) return gettext('%(count)sd ago', {count: days});
+        if (hours > 0) return gettext('%(count)sh ago', {count: hours});
+        if (minutes > 0) return gettext('%(count)sm ago', {count: minutes});
+        return gettext('Just now');
     }
 }
 

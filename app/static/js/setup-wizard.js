@@ -27,18 +27,18 @@
         if (!tzVal) {
             timezone.focus();
             if (typeof window.showToast === 'function') {
-                window.showToast(document.getElementById('wizard-progress-label').getAttribute('data-msg-timezone') || 'Please select a timezone.', 'error');
+                window.showToast(document.getElementById('wizard-progress-label').getAttribute('data-msg-timezone') || gettext('Please select a timezone.'), 'error');
             } else {
-                alert('Please select a timezone.');
+                alert(gettext('Please select a timezone.'));
             }
             return false;
         }
         if (!curVal) {
             currency.focus();
             if (typeof window.showToast === 'function') {
-                window.showToast(document.getElementById('wizard-progress-label').getAttribute('data-msg-currency') || 'Please enter a currency.', 'error');
+                window.showToast(document.getElementById('wizard-progress-label').getAttribute('data-msg-currency') || gettext('Please enter a currency.'), 'error');
             } else {
-                alert('Please enter a currency.');
+                alert(gettext('Please enter a currency.'));
             }
             return false;
         }
@@ -90,7 +90,7 @@
             }
         });
 
-        setProgressLabel('Step ' + currentStep + ' of ' + totalSteps);
+        setProgressLabel(gettext('Step %(current)s of %(total)s', {current: currentStep, total: totalSteps}));
 
         var backBtn = document.getElementById('setup-back-btn');
         var nextBtn = document.getElementById('setup-next-btn');

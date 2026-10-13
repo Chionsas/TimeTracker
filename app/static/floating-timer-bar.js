@@ -24,11 +24,11 @@
             this.elapsedInterval = null;
             this.timerData = null;
             this.startTime = null;
-            this.startLabel = 'Start Timer';
-            this.stopLabel = 'Stop';
-            this.pauseLabel = 'Pause';
-            this.resumeLabel = 'Resume';
-            this.switchLabel = 'Switch project';
+            this.startLabel = gettext('Start Timer');
+            this.stopLabel = gettext('Stop');
+            this.pauseLabel = gettext('Pause');
+            this.resumeLabel = gettext('Resume');
+            this.switchLabel = gettext('Switch project');
             this.projectsCache = null;
             this.switchPopover = null;
             this.backoffUntil = 0;
@@ -39,11 +39,11 @@
         init() {
             if (!document.getElementById('floatingTimerBar')) return;
             this.bar = document.getElementById('floatingTimerBar');
-            this.startLabel = this.bar.dataset.startLabel || 'Start Timer';
-            this.stopLabel = this.bar.dataset.stopLabel || 'Stop';
-            this.pauseLabel = this.bar.dataset.pauseLabel || 'Pause';
-            this.resumeLabel = this.bar.dataset.resumeLabel || 'Resume';
-            this.switchLabel = this.bar.dataset.switchLabel || 'Switch project';
+            this.startLabel = this.bar.dataset.startLabel || gettext('Start Timer');
+            this.stopLabel = this.bar.dataset.stopLabel || gettext('Stop');
+            this.pauseLabel = this.bar.dataset.pauseLabel || gettext('Pause');
+            this.resumeLabel = this.bar.dataset.resumeLabel || gettext('Resume');
+            this.switchLabel = this.bar.dataset.switchLabel || gettext('Switch project');
             this.ensureSwitchPopover();
             this.render();
             this.fetchStatus();
@@ -71,8 +71,8 @@
                 '<p class="text-sm font-semibold text-text-light dark:text-text-dark mb-2">' + escapeHtml(this.switchLabel) + '</p>' +
                 '<select class="form-input w-full text-sm mb-2" data-switch-project-select aria-label="' + escapeHtml(this.switchLabel) + '"></select>' +
                 '<div class="flex justify-end gap-2">' +
-                    '<button type="button" class="btn btn-secondary btn-sm" data-switch-cancel>Cancel</button>' +
-                    '<button type="button" class="btn btn-primary btn-sm" data-switch-apply>Apply</button>' +
+                    '<button type="button" class="btn btn-secondary btn-sm" data-switch-cancel>' + gettext('Cancel') + '</button>' +
+                    '<button type="button" class="btn btn-primary btn-sm" data-switch-apply>' + gettext('Apply') + '</button>' +
                 '</div>';
             document.body.appendChild(pop);
             pop.querySelector('[data-switch-cancel]').addEventListener('click', () => this.hideSwitchPopover());
@@ -108,7 +108,7 @@
         async openSwitchPopover() {
             this.ensureSwitchPopover();
             const select = this.switchPopover.querySelector('[data-switch-project-select]');
-            select.innerHTML = '<option value="">Loading…</option>';
+            select.innerHTML = '<option value="">' + gettext('Loading…') + '</option>';
             this.switchPopover.classList.remove('hidden');
             this.positionSwitchPopover();
 
@@ -124,7 +124,7 @@
                 select.appendChild(opt);
             });
             if (!projects.length) {
-                select.innerHTML = '<option value="">' + escapeHtml('No projects') + '</option>';
+                select.innerHTML = '<option value="">' + escapeHtml(gettext('No projects')) + '</option>';
             }
         }
 
@@ -154,7 +154,7 @@
             } catch (e) {
                 console.error('Switch project failed', e);
                 if (window.toastManager) {
-                    window.toastManager.error('Could not switch project', 'Error', 3000);
+                    window.toastManager.error(gettext('Could not switch project'), gettext('Error'), 3000);
                 }
             }
         }
@@ -260,7 +260,7 @@
             } catch (e) {
                 console.error('Timer action failed:', url, e);
                 if (window.toastManager) {
-                    window.toastManager.error('Timer action failed', 'Error', 3000);
+                    window.toastManager.error(gettext('Timer action failed'), gettext('Error'), 3000);
                 }
             }
         }
@@ -288,7 +288,7 @@
 
         getLabel() {
             if (!this.timerData) return '';
-            return this.timerData.project_name || this.timerData.client_name || 'Timer';
+            return this.timerData.project_name || this.timerData.client_name || gettext('Timer');
         }
 
         getDailyTargetSeconds() {
@@ -324,7 +324,7 @@
 
                 this.bar.className = 'flex shrink-0 items-center gap-1 floating-timer-bar--active';
                 this.bar.innerHTML = `
-                    <div class="relative flex items-center gap-1.5 px-2 py-1 rounded-full bg-gray-100 dark:bg-gray-800 border border-border-light dark:border-border-dark" title="${label}${isPaused ? ' (Paused)' : ''}">
+                    <div class="relative flex items-center gap-1.5 px-2 py-1 rounded-full bg-gray-100 dark:bg-gray-800 border border-border-light dark:border-border-dark" title="${label}${isPaused ? ' ' + gettext('(Paused)') : ''}">
                         <span class="absolute top-0.5 left-2 w-2 h-2 rounded-full ${pulseClass}" aria-hidden="true"></span>
                         <span class="floating-timer-bar__elapsed font-mono text-xs font-semibold tabular-nums text-text-light dark:text-text-dark pl-3 min-w-[4.5rem]" data-timer-elapsed>${elapsed}</span>
                         <button type="button" class="${roundBtn}" data-switch-project-btn title="${escapeHtml(this.switchLabel)}" aria-label="${escapeHtml(this.switchLabel)}">

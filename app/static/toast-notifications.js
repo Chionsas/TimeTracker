@@ -18,7 +18,7 @@ class ToastNotificationManager {
             this.container = document.createElement('div');
             this.container.id = 'toast-notification-container';
             this.container.setAttribute('role', 'region');
-            this.container.setAttribute('aria-label', 'Notifications');
+            this.container.setAttribute('aria-label', gettext('Notifications'));
             Object.assign(this.container.style, {
                 position: 'fixed',
                 top: '5rem',
@@ -270,7 +270,7 @@ class ToastNotificationManager {
             closeBtn = document.createElement('button');
             closeBtn.className = 'tt-toast-close';
             closeBtn.setAttribute('type', 'button');
-            closeBtn.setAttribute('aria-label', 'Close notification');
+            closeBtn.setAttribute('aria-label', gettext('Close notification'));
             closeBtn.innerHTML = '<i class="fas fa-xmark"></i>';
             Object.assign(closeBtn.style, {
                 position: 'static',

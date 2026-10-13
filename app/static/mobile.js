@@ -323,8 +323,8 @@ class MobileOffline {
         window.addEventListener('offline', () => {
             if (window.toastManager) {
                 this.offlineToastId = window.toastManager.warning(
-                    'Some features may not work properly.',
-                    "You're offline",
+                    gettext('Some features may not work properly.'),
+                    gettext("You're offline"),
                     0
                 );
             }
@@ -333,7 +333,7 @@ class MobileOffline {
             if (window.toastManager && this.offlineToastId) {
                 window.toastManager.dismiss(this.offlineToastId);
                 this.offlineToastId = null;
-                window.toastManager.success('Connection restored', "You're online", 3000);
+                window.toastManager.success(gettext('Connection restored'), gettext("You're online"), 3000);
             }
         });
     }

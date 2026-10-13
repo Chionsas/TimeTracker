@@ -151,7 +151,7 @@ import { commandScore } from 'cmdk/command-score';
   async function fetchProjects() {
     if (state.projects) return state.projects;
     const res = await fetch('/api/projects', { credentials: 'same-origin' });
-    if (!res.ok) throw new Error('Failed to load projects');
+    if (!res.ok) throw new Error(gettext('Failed to load projects'));
     const json = await res.json();
     const projects = Array.isArray(json.projects) ? json.projects : [];
     state.projects = projects;
@@ -171,7 +171,7 @@ import { commandScore } from 'cmdk/command-score';
 
     const json = await res.json().catch(() => ({}));
     if (!res.ok || json.success === false) {
-      throw new Error(json.error || json.message || 'Failed to start timer');
+      throw new Error(json.error || json.message || gettext('Failed to start timer'));
     }
     return json;
   }
@@ -207,7 +207,7 @@ import { commandScore } from 'cmdk/command-score';
             await fetchProjects();
             setMode('projects', gettext('Start Timer → Select a project'));
           } catch (e) {
-            showToast(e.message || 'Failed to load projects', 'danger');
+            showToast(e.message || gettext('Failed to load projects'), 'danger');
           }
         },
       },
@@ -233,7 +233,7 @@ import { commandScore } from 'cmdk/command-score';
       const projects = state.projects || [];
       return projects.map((p) => ({
         id: `project:${p.id}`,
-        title: p.name || `Project #${p.id}`,
+        title: p.name || gettext('Project #%(id)s', {id: p.id}),
         keywords: `${p.name || ''} ${p.client_name || ''}`.trim(),
         hint: p.client_name ? String(p.client_name) : '',
         action: async () => {
@@ -242,7 +242,7 @@ import { commandScore } from 'cmdk/command-score';
             closePalette();
             showToast(gettext('Timer started'), 'info');
           } catch (e) {
-            showToast(e.message || 'Failed to start timer', 'danger');
+            showToast(e.message || gettext('Failed to start timer'), 'danger');
           }
         },
       }));

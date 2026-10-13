@@ -99,7 +99,7 @@
             requiredFields.forEach(field => {
                 const value = field.value.trim();
                 if (!value) {
-                    this.showError(field.id || field.name, 'This field is required');
+                    this.showError(field.id || field.name, gettext('This field is required'));
                     isValid = false;
                 } else {
                     this.clearError(field.id || field.name);
@@ -109,7 +109,7 @@
                         try {
                             new URL(value);
                         } catch (e) {
-                            this.showError(field.id || field.name, 'Please enter a valid URL');
+                            this.showError(field.id || field.name, gettext('Please enter a valid URL'));
                             isValid = false;
                         }
                     }
@@ -118,7 +118,7 @@
                     if (field.type === 'email') {
                         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                         if (!emailRegex.test(value)) {
-                            this.showError(field.id || field.name, 'Please enter a valid email address');
+                            this.showError(field.id || field.name, gettext('Please enter a valid email address'));
                             isValid = false;
                         }
                     }
@@ -193,9 +193,9 @@
 
             if (nextBtn) {
                 if (this.currentStep === this.totalSteps) {
-                    nextBtn.innerHTML = '<i class="fas fa-check mr-2"></i>' + (this.options.finishText || 'Finish');
+                    nextBtn.innerHTML = '<i class="fas fa-check mr-2"></i>' + (this.options.finishText || gettext('Finish'));
                 } else {
-                    nextBtn.innerHTML = (this.options.nextText || 'Next') + '<i class="fas fa-arrow-right ml-2"></i>';
+                    nextBtn.innerHTML = (this.options.nextText || gettext('Next')) + '<i class="fas fa-arrow-right ml-2"></i>';
                 }
             }
 
@@ -226,7 +226,7 @@
             if (btn) {
                 const originalText = btn.innerHTML;
                 btn.disabled = true;
-                btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Testing...';
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>' + gettext('Testing...');
 
                 try {
                     const response = await fetch(this.testConnectionUrl, {
@@ -245,7 +245,7 @@
                     console.error('Connection test error:', error);
                     return {
                         success: false,
-                        error: 'Network error: ' + error.message
+                        error: gettext('Network error: %(error)s', {error: error.message})
                     };
                 } finally {
                     btn.disabled = false;
@@ -264,7 +264,7 @@
                     <div class="p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg mb-4">
                         <p class="text-sm text-green-800 dark:text-green-200">
                             <i class="fas fa-check-circle mr-2"></i>
-                            Connection test successful!
+                            ${gettext('Connection test successful!')}
                         </p>
                     </div>
                 `;
@@ -278,7 +278,7 @@
                     <div class="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg mb-4">
                         <p class="text-sm text-red-800 dark:text-red-200">
                             <i class="fas fa-exclamation-triangle mr-2"></i>
-                            Connection test failed.
+                            ${gettext('Connection test failed.')}
                         </p>
                         ${errorDetails}
                     </div>
@@ -343,11 +343,11 @@
                         window.location.href = `/integrations/${this.provider}/manage`;
                     }
                 } else {
-                    ttAlert(result.message || 'Failed to save configuration. Please try again.');
+                    ttAlert(result.message || gettext('Failed to save configuration. Please try again.'));
                 }
             } catch (error) {
                 console.error('Form submission error:', error);
-                ttAlert('An error occurred while saving. Please try again.');
+                ttAlert(gettext('An error occurred while saving. Please try again.'));
             }
         }
 
@@ -369,7 +369,7 @@
             if (navigator.clipboard && navigator.clipboard.writeText) {
                 navigator.clipboard.writeText(text).then(() => {
                     const originalText = button.innerHTML;
-                    button.innerHTML = '<i class="fas fa-check mr-1"></i>Copied!';
+                    button.innerHTML = '<i class="fas fa-check mr-1"></i>' + gettext('Copied!');
                     button.classList.add('bg-green-500');
                     setTimeout(() => {
                         button.innerHTML = originalText;
@@ -377,7 +377,7 @@
                     }, 2000);
                 }).catch(err => {
                     console.error('Failed to copy:', err);
-                    ttAlert('Failed to copy to clipboard');
+                    ttAlert(gettext('Failed to copy to clipboard'));
                 });
             } else {
                 // Fallback for older browsers
@@ -390,12 +390,12 @@
                 try {
                     document.execCommand('copy');
                     const originalText = button.innerHTML;
-                    button.innerHTML = '<i class="fas fa-check mr-1"></i>Copied!';
+                    button.innerHTML = '<i class="fas fa-check mr-1"></i>' + gettext('Copied!');
                     setTimeout(() => {
                         button.innerHTML = originalText;
                     }, 2000);
                 } catch (err) {
-                    ttAlert('Failed to copy to clipboard');
+                    ttAlert(gettext('Failed to copy to clipboard'));
                 }
                 document.body.removeChild(textarea);
             }

@@ -142,16 +142,16 @@ class EnhancedTable {
         bar.className = 'bulk-actions-bar';
         bar.innerHTML = `
             <span class="text-sm font-medium">
-                <span class="selection-count">0</span> items selected
+                <span class="selection-count">0</span> ${gettext('items selected')}
             </span>
             <button class="px-3 py-1.5 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors" onclick="bulkDelete()">
-                <i class="fas fa-trash mr-1"></i> Delete
+                <i class="fas fa-trash mr-1"></i> ${gettext('Delete')}
             </button>
             <button class="px-3 py-1.5 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors" onclick="bulkExport()">
-                <i class="fas fa-download mr-1"></i> Export
+                <i class="fas fa-download mr-1"></i> ${gettext('Export')}
             </button>
             <button class="px-3 py-1.5 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors" onclick="clearSelection()">
-                Cancel
+                ${gettext('Cancel')}
             </button>
         `;
         return bar;
@@ -324,7 +324,7 @@ class LiveSearch {
         if (!this.resultsDropdown) return;
         
         if (results.length === 0) {
-            this.resultsDropdown.innerHTML = '<div class="p-4 text-center text-gray-500">No results found</div>';
+            this.resultsDropdown.innerHTML = '<div class="p-4 text-center text-gray-500">' + gettext('No results found') + '</div>';
         } else {
             this.resultsDropdown.innerHTML = results.map(result => `
                 <a href="${result.url}" class="search-result-item block">
@@ -506,7 +506,7 @@ class FilterManager {
             const clearAll = document.createElement('button');
             clearAll.type = 'button';
             clearAll.className = 'text-sm text-gray-600 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition-colors';
-            clearAll.innerHTML = '<i class="fas fa-times-circle mr-1"></i> Clear all';
+            clearAll.innerHTML = '<i class="fas fa-times-circle mr-1"></i> ' + gettext('Clear all');
             clearAll.addEventListener('click', () => this.clearAll());
             this.chipsContainer.appendChild(clearAll);
         }
@@ -778,7 +778,7 @@ class FilterManager {
                 container.style.opacity = '';
                 container.style.pointerEvents = '';
             }
-            const msg = 'Failed to filter results. Please try again.';
+            const msg = gettext('Failed to filter results. Please try again.');
             if (window.toastManager && typeof window.toastManager.error === 'function') {
                 window.toastManager.error(msg);
             } else if (window.toastManager && typeof window.toastManager.show === 'function') {
@@ -896,7 +896,7 @@ class UndoManager {
         }
         this.currentIndex--;
         
-        window.toastManager?.success('Action undone');
+        window.toastManager?.success(gettext('Action undone'));
     }
 
     showUndoBar(action) {
@@ -907,7 +907,7 @@ class UndoManager {
             bar.innerHTML = `
                 <span class="undo-message"></span>
                 <button class="px-3 py-1 bg-white/20 rounded hover:bg-white/30 transition-colors" onclick="undoManager.undo()">
-                    Undo
+                    ${gettext('Undo')}
                 </button>
             `;
             document.body.appendChild(bar);
@@ -952,7 +952,7 @@ class FormAutoSave {
             this.indicator.className = 'autosave-indicator';
             this.indicator.innerHTML = `
                 <i class="fas fa-circle-notch fa-spin"></i>
-                <span class="autosave-text">Saving...</span>
+                <span class="autosave-text">${gettext('Saving...')}</span>
             `;
             this.indicator.style.cssText = `
                 position: fixed;
@@ -1106,11 +1106,11 @@ class FormAutoSave {
             const textElement = this.indicator.querySelector('.autosave-text');
             if (textElement) {
                 const messages = {
-                    'saving': 'Saving...',
-                    'saved': 'Saved',
-                    'error': 'Error saving'
+                    'saving': gettext('Saving...'),
+                    'saved': gettext('Saved'),
+                    'error': gettext('Error saving')
                 };
-                textElement.textContent = messages[state] || 'Saving...';
+                textElement.textContent = messages[state] || gettext('Saving...');
             }
             
             // Update icon based on state
@@ -1475,7 +1475,7 @@ function setSubmitButtonLoading(button, loading, loadingText) {
     if (!button) return;
     if (loading) {
         button.dataset.originalSubmitText = button.textContent.trim();
-        button.textContent = loadingText || 'Saving...';
+        button.textContent = loadingText || gettext('Saving...');
         button.disabled = true;
         button.setAttribute('aria-busy', 'true');
     } else {
@@ -1494,16 +1494,16 @@ if (typeof window !== 'undefined') {
 // Global functions for inline event handlers
 async function bulkDelete() {
     const confirmed = await showConfirm(
-        'Are you sure you want to delete the selected items?',
+        gettext('Are you sure you want to delete the selected items?'),
         {
-            title: 'Delete Items',
-            confirmText: 'Delete',
-            cancelText: 'Cancel',
+            title: gettext('Delete Items'),
+            confirmText: gettext('Delete'),
+            cancelText: gettext('Cancel'),
             variant: 'danger'
         }
     );
     if (confirmed) {
-        window.toastManager?.success('Items deleted successfully');
+        window.toastManager?.success(gettext('Items deleted successfully'));
         clearSelection();
     }
 }
@@ -1513,7 +1513,7 @@ function bulkExport() {
     if (table) {
         const enhancedTable = table.__enhancedTable;
         const data = enhancedTable?.getSelectedRowData() || [];
-        window.toastManager?.success('Export started');
+        window.toastManager?.success(gettext('Export started'));
     }
 }
 

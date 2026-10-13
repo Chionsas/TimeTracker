@@ -151,7 +151,7 @@ class FormValidator {
         const indicator = document.createElement('span');
         indicator.className = 'required-indicator text-red-500 ml-1';
         indicator.textContent = '*';
-        indicator.setAttribute('aria-label', 'Required field');
+        indicator.setAttribute('aria-label', gettext('Required field'));
         label.appendChild(indicator);
     }
     
@@ -247,7 +247,7 @@ class FormValidator {
                     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                     return emailRegex.test(value);
                 },
-                message: 'Please enter a valid email address'
+                message: gettext('Please enter a valid email address')
             });
         }
         
@@ -267,7 +267,7 @@ class FormValidator {
                     const phoneRegex = /^\+?\d{7,15}$/;
                     return phoneRegex.test(cleaned);
                 },
-                message: 'Please enter a valid phone number (7-15 digits, with optional country code)'
+                message: gettext('Please enter a valid phone number (7-15 digits, with optional country code)')
             });
         }
         
@@ -283,7 +283,7 @@ class FormValidator {
                         return false;
                     }
                 },
-                message: 'Please enter a valid URL'
+                message: gettext('Please enter a valid URL')
             });
         }
         
@@ -298,7 +298,7 @@ class FormValidator {
                         if (!value || value === '') return true;
                         return parseFloat(value) >= parseFloat(min);
                     },
-                    message: `Value must be at least ${min}`
+                    message: gettext('Value must be at least %(min)s', {min: min})
                 });
             }
             
@@ -309,7 +309,7 @@ class FormValidator {
                         if (!value || value === '') return true;
                         return parseFloat(value) <= parseFloat(max);
                     },
-                    message: `Value must be at most ${max}`
+                    message: gettext('Value must be at most %(max)s', {max: max})
                 });
             }
         }
@@ -322,7 +322,7 @@ class FormValidator {
                     if (!value || value.trim() === '') return true;
                     return value.length >= minLength;
                 },
-                message: `Must be at least ${minLength} characters`
+                message: gettext('Must be at least %(count)s characters', {count: minLength})
             });
         }
         
@@ -334,7 +334,7 @@ class FormValidator {
                     if (!value || value.trim() === '') return true;
                     return value.length <= maxLength;
                 },
-                message: `Must be at most ${maxLength} characters`
+                message: gettext('Must be at most %(count)s characters', {count: maxLength})
             });
         }
         
@@ -347,7 +347,7 @@ class FormValidator {
                     if (!value || value.trim() === '') return true;
                     return pattern.test(value);
                 },
-                message: input.getAttribute('title') || 'Please match the required format'
+                message: input.getAttribute('title') || gettext('Please match the required format')
             });
         }
         
@@ -366,7 +366,7 @@ class FormValidator {
                         if (!startDateInput || !startDateInput.value) return true;
                         return new Date(value) >= new Date(startDateInput.value);
                     },
-                    message: 'End date must be after start date'
+                    message: gettext('End date must be after start date')
                 });
             }
         }
@@ -406,7 +406,7 @@ class FormValidator {
                 const validationFn = new Function('value', 'field', customValidation);
                 const result = validationFn(value, field);
                 if (result !== true && result !== undefined) {
-                    field.errors.push(typeof result === 'string' ? result : 'Invalid value');
+                    field.errors.push(typeof result === 'string' ? result : gettext('Invalid value'));
                 }
             } catch (e) {
                 console.warn('Custom validation error:', e);
@@ -467,7 +467,7 @@ class FormValidator {
     showErrorMessage(field) {
         if (!field.errorContainer) return;
         
-        field.errorContainer.textContent = field.errors[0] || 'Invalid value';
+        field.errorContainer.textContent = field.errors[0] || gettext('Invalid value');
         field.errorContainer.classList.remove('hidden');
         field.errorContainer.setAttribute('aria-hidden', 'false');
     }
@@ -490,7 +490,7 @@ class FormValidator {
         }
         
         const successMessage = field.element.getAttribute('data-success-message') || 
-                              'Looks good!';
+                              gettext('Looks good!');
         field.successContainer.textContent = successMessage;
         field.successContainer.classList.remove('hidden');
         field.successContainer.setAttribute('aria-hidden', 'false');
@@ -526,7 +526,7 @@ class FormValidator {
             }
             
             // Show form-level error message
-            this.showFormError('Please fix the errors in the form before submitting.');
+            this.showFormError(gettext('Please fix the errors in the form before submitting.'));
         }
         
         return isValid;

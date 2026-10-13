@@ -203,7 +203,7 @@ async function lookupBarcode(barcode, retryCount = 0) {
     
     // Show loading
     if (statusDiv) {
-        statusDiv.innerHTML = '<div class="flex items-center justify-center gap-2 text-primary"><i class="fas fa-spinner fa-spin"></i><span>Looking up...</span></div>';
+        statusDiv.innerHTML = '<div class="flex items-center justify-center gap-2 text-primary"><i class="fas fa-spinner fa-spin"></i><span>' + gettext('Looking up...') + '</span></div>';
         statusDiv.className = 'bg-primary/10 dark:bg-primary/20 text-primary rounded-xl p-3 border border-primary/20';
     }
     
@@ -251,7 +251,7 @@ async function lookupBarcode(barcode, retryCount = 0) {
         displayItem(data.item, data.stock_levels);
         
         if (statusDiv) {
-            statusDiv.innerHTML = '<div class="flex items-center justify-center gap-2 text-green-600 dark:text-green-400"><i class="fas fa-check-circle"></i><span>Item found</span></div>';
+            statusDiv.innerHTML = '<div class="flex items-center justify-center gap-2 text-green-600 dark:text-green-400"><i class="fas fa-check-circle"></i><span>' + gettext('Item found') + '</span></div>';
             statusDiv.className = 'bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400 rounded-xl p-3 border border-green-200 dark:border-green-800';
             setTimeout(() => {
                 statusDiv.innerHTML = '';
@@ -261,8 +261,8 @@ async function lookupBarcode(barcode, retryCount = 0) {
     } catch (error) {
         console.error('Barcode lookup error:', error);
         const errorMessage = error.name === 'AbortError' 
-            ? 'Request timed out. Please try again.' 
-            : (error.message || 'Item not found');
+            ? gettext('Request timed out. Please try again.')
+            : (error.message || gettext('Item not found'));
         
         // Clear all content on error
         clearItemContent();
@@ -331,7 +331,7 @@ function displayItem(item, stockLevels) {
     const stockLevelsDiv = document.getElementById('stock-levels');
     if (stockLevelsDiv) {
         if (stockLevels && stockLevels.length > 0) {
-            stockLevelsDiv.innerHTML = '<div class="flex items-center gap-3 mb-6"><div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center"><i class="fas fa-warehouse text-primary"></i></div><h4 class="text-lg font-bold text-gray-900 dark:text-white">Stock Levels</h4></div>' + 
+            stockLevelsDiv.innerHTML = '<div class="flex items-center gap-3 mb-6"><div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center"><i class="fas fa-warehouse text-primary"></i></div><h4 class="text-lg font-bold text-gray-900 dark:text-white">' + gettext('Stock Levels') + '</h4></div>' +
                 '<div class="grid grid-cols-1 md:grid-cols-2 gap-4">' +
                 stockLevels.map(stock => {
                     const isLowStock = stock.quantity_available <= 0;
@@ -366,24 +366,24 @@ function displayItem(item, stockLevels) {
                                 <div class="flex justify-between items-center mb-2">
                                     <span class="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide flex items-center gap-1.5">
                                         <i class="fas fa-box text-xs" aria-hidden="true"></i>
-                                        On Hand
+                                        ${gettext('On Hand')}
                                     </span>
                                     <span class="font-bold text-lg text-gray-900 dark:text-white">${stock.quantity_on_hand} ${item.unit}</span>
                                 </div>
                                 <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 overflow-hidden">
-                                    <div class="h-full bg-gray-400 dark:bg-gray-600 rounded-full transition-all duration-300" style="width: ${progressPercent}%" role="progressbar" aria-valuenow="${stock.quantity_on_hand}" aria-valuemin="0" aria-valuemax="${maxStock}" aria-label="On hand: ${stock.quantity_on_hand} ${item.unit}"></div>
+                                    <div class="h-full bg-gray-400 dark:bg-gray-600 rounded-full transition-all duration-300" style="width: ${progressPercent}%" role="progressbar" aria-valuenow="${stock.quantity_on_hand}" aria-valuemin="0" aria-valuemax="${maxStock}" aria-label="${gettext('On hand: %(quantity)s %(unit)s', {quantity: stock.quantity_on_hand, unit: item.unit})}"></div>
                                 </div>
                             </div>
                             <div class="${statusBg} rounded-lg px-3 py-2">
                                 <div class="flex justify-between items-center mb-2">
                                     <span class="text-xs font-semibold ${statusTextColor} uppercase tracking-wide flex items-center gap-1.5">
                                         <i class="fas fa-check-circle text-xs" aria-hidden="true"></i>
-                                        Available
+                                        ${gettext('Available')}
                                     </span>
                                     <span class="font-bold text-lg ${statusTextColor}">${stock.quantity_available} ${item.unit}</span>
                                 </div>
                                 <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 overflow-hidden">
-                                    <div class="h-full ${statusDotColor} rounded-full transition-all duration-300" style="width: ${availablePercent}%" role="progressbar" aria-valuenow="${stock.quantity_available}" aria-valuemin="0" aria-valuemax="${maxStock}" aria-label="Available: ${stock.quantity_available} ${item.unit}"></div>
+                                    <div class="h-full ${statusDotColor} rounded-full transition-all duration-300" style="width: ${availablePercent}%" role="progressbar" aria-valuenow="${stock.quantity_available}" aria-valuemin="0" aria-valuemax="${maxStock}" aria-label="${gettext('Available: %(quantity)s %(unit)s', {quantity: stock.quantity_available, unit: item.unit})}"></div>
                                 </div>
                             </div>
                             ${stock.location ? `<div class="pt-2 mt-2 border-t border-gray-200 dark:border-gray-700"><div class="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1.5"><i class="fas fa-map-marker-alt" aria-hidden="true"></i><span>${stock.location}</span></div></div>` : ''}
@@ -392,7 +392,7 @@ function displayItem(item, stockLevels) {
                 `;
                 }).join('') + '</div>';
         } else {
-            stockLevelsDiv.innerHTML = '<div class="text-center text-gray-500 dark:text-gray-400 py-12 bg-gray-50 dark:bg-gray-900/50 rounded-xl border-2 border-dashed border-gray-300 dark:border-gray-700"><div class="w-16 h-16 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center mx-auto mb-4"><i class="fas fa-inbox text-2xl text-gray-400"></i></div><div class="font-medium">No stock levels found</div><div class="text-sm mt-1">This item is not stocked in any warehouse</div></div>';
+            stockLevelsDiv.innerHTML = '<div class="text-center text-gray-500 dark:text-gray-400 py-12 bg-gray-50 dark:bg-gray-900/50 rounded-xl border-2 border-dashed border-gray-300 dark:border-gray-700"><div class="w-16 h-16 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center mx-auto mb-4"><i class="fas fa-inbox text-2xl text-gray-400"></i></div><div class="font-medium">' + gettext('No stock levels found') + '</div><div class="text-sm mt-1">' + gettext('This item is not stocked in any warehouse') + '</div></div>';
         }
     }
 
@@ -424,7 +424,7 @@ document.addEventListener('DOMContentLoaded', function() {
             e.preventDefault();
             
             if (!currentItem) {
-                showError('Please scan an item first');
+                showError(gettext('Please scan an item first'));
                 return;
             }
 
@@ -433,7 +433,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const reason = document.getElementById('adjust-reason').value;
 
             if (!warehouseId || quantity === 0) {
-                showError('Please select warehouse and enter quantity');
+                showError(gettext('Please select warehouse and enter quantity'));
                 return;
             }
 
@@ -446,7 +446,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (submitBtn) {
                 submitBtn.disabled = true;
                 if (submitIcon) submitIcon.classList.add('hidden');
-                if (submitText) submitText.textContent = 'Processing...';
+                if (submitText) submitText.textContent = gettext('Processing...');
                 if (submitSpinner) submitSpinner.classList.remove('hidden');
             }
             
@@ -472,7 +472,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 if (!response.ok) {
                     const error = await response.json();
-                    throw new Error(error.error || 'Failed to adjust stock');
+                    throw new Error(error.error || gettext('Failed to adjust stock'));
                 }
 
                 const data = await response.json();
@@ -496,10 +496,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Update aria-live region
                 const ariaLive = document.getElementById('aria-live-status');
                 if (ariaLive) {
-                    ariaLive.textContent = data.message || 'Stock adjusted successfully';
+                    ariaLive.textContent = data.message || gettext('Stock adjusted successfully');
                 }
                 
-                showSuccess(data.message || 'Stock adjusted successfully');
+                showSuccess(data.message || gettext('Stock adjusted successfully'));
                 
                 // Reset form
                 document.getElementById('adjust-quantity').value = '0';
@@ -512,7 +512,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             } catch (error) {
                 console.error('Adjust stock error:', error);
-                showErrorWithRetry(error.message || 'Failed to adjust stock', () => {
+                showErrorWithRetry(error.message || gettext('Failed to adjust stock'), () => {
                     adjustForm.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
                 });
             } finally {
@@ -520,7 +520,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (submitBtn) {
                     submitBtn.disabled = false;
                     if (submitIcon) submitIcon.classList.remove('hidden');
-                    if (submitText) submitText.textContent = 'Apply Adjustment';
+                    if (submitText) submitText.textContent = gettext('Apply Adjustment');
                     if (submitSpinner) submitSpinner.classList.add('hidden');
                 }
             }
@@ -534,7 +534,7 @@ document.addEventListener('DOMContentLoaded', function() {
             e.preventDefault();
             
             if (!currentItem) {
-                showError('Please scan an item first');
+                showError(gettext('Please scan an item first'));
                 return;
             }
 
@@ -543,12 +543,12 @@ document.addEventListener('DOMContentLoaded', function() {
             const quantity = parseFloat(document.getElementById('transfer-quantity').value);
 
             if (fromWarehouseId === toWarehouseId) {
-                showError('Source and destination warehouses must be different');
+                showError(gettext('Source and destination warehouses must be different'));
                 return;
             }
 
             if (!quantity || quantity <= 0) {
-                showError('Quantity must be greater than zero');
+                showError(gettext('Quantity must be greater than zero'));
                 return;
             }
 
@@ -561,7 +561,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (submitBtn) {
                 submitBtn.disabled = true;
                 if (submitIcon) submitIcon.classList.add('hidden');
-                if (submitText) submitText.textContent = 'Processing...';
+                if (submitText) submitText.textContent = gettext('Processing...');
                 if (submitSpinner) submitSpinner.classList.remove('hidden');
             }
             
@@ -584,7 +584,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 if (!response.ok) {
                     const error = await response.json();
-                    throw new Error(error.error || 'Failed to transfer stock');
+                    throw new Error(error.error || gettext('Failed to transfer stock'));
                 }
 
                 const data = await response.json();
@@ -592,10 +592,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Update aria-live region
                 const ariaLive = document.getElementById('aria-live-status');
                 if (ariaLive) {
-                    ariaLive.textContent = data.message || 'Stock transferred successfully';
+                    ariaLive.textContent = data.message || gettext('Stock transferred successfully');
                 }
                 
-                showSuccess(data.message || 'Stock transferred successfully');
+                showSuccess(data.message || gettext('Stock transferred successfully'));
                 
                 // Reset form
                 document.getElementById('transfer-quantity').value = '1';
@@ -608,7 +608,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             } catch (error) {
                 console.error('Transfer stock error:', error);
-                showErrorWithRetry(error.message || 'Failed to transfer stock', () => {
+                showErrorWithRetry(error.message || gettext('Failed to transfer stock'), () => {
                     transferForm.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
                 });
             } finally {
@@ -616,7 +616,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (submitBtn) {
                     submitBtn.disabled = false;
                     if (submitIcon) submitIcon.classList.remove('hidden');
-                    if (submitText) submitText.textContent = 'Transfer Stock';
+                    if (submitText) submitText.textContent = gettext('Transfer Stock');
                     if (submitSpinner) submitSpinner.classList.add('hidden');
                 }
             }
@@ -629,10 +629,10 @@ document.addEventListener('DOMContentLoaded', function() {
         undoBtn.addEventListener('click', async function() {
             if (!lastAdjustment) return;
             
-            if (!window.showConfirm || !(await window.showConfirm('Are you sure you want to undo the last adjustment?', {
-                title: 'Undo Adjustment',
-                confirmText: 'Undo',
-                cancelText: 'Cancel',
+            if (!window.showConfirm || !(await window.showConfirm(gettext('Are you sure you want to undo the last adjustment?'), {
+                title: gettext('Undo Adjustment'),
+                confirmText: gettext('Undo'),
+                cancelText: gettext('Cancel'),
                 variant: 'warning'
             }))) {
                 return;
@@ -660,11 +660,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 if (!response.ok) {
                     const error = await response.json();
-                    throw new Error(error.error || 'Failed to undo adjustment');
+                    throw new Error(error.error || gettext('Failed to undo adjustment'));
                 }
                 
                 const data = await response.json();
-                showSuccess('Adjustment undone successfully');
+                showSuccess(gettext('Adjustment undone successfully'));
                 lastAdjustment = null;
                 undoBtn.classList.add('hidden');
                 
@@ -676,7 +676,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             } catch (error) {
                 console.error('Undo error:', error);
-                showError(error.message || 'Failed to undo adjustment');
+                showError(error.message || gettext('Failed to undo adjustment'));
             }
         });
     }
@@ -697,9 +697,9 @@ function showErrorWithRetry(message, retryCallback) {
                 </div>
                 <div class="flex-1">
                     <p class="text-sm font-medium text-red-800 dark:text-red-200">${message}</p>
-                    ${retryCallback ? `<button onclick="this.closest('div').remove(); (${retryCallback.toString()})()" class="mt-2 text-xs font-semibold text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-200 underline focus:outline-none focus:ring-2 focus:ring-red-500 rounded px-2 py-1">Retry</button>` : ''}
+                    ${retryCallback ? `<button onclick="this.closest('div').remove(); (${retryCallback.toString()})()" class="mt-2 text-xs font-semibold text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-200 underline focus:outline-none focus:ring-2 focus:ring-red-500 rounded px-2 py-1">${gettext('Retry')}</button>` : ''}
                 </div>
-                <button onclick="this.closest('div').remove()" class="flex-shrink-0 text-red-400 hover:text-red-600 dark:hover:text-red-300 focus:outline-none focus:ring-2 focus:ring-red-500 rounded p-1" aria-label="Close">
+                <button onclick="this.closest('div').remove()" class="flex-shrink-0 text-red-400 hover:text-red-600 dark:hover:text-red-300 focus:outline-none focus:ring-2 focus:ring-red-500 rounded p-1" aria-label="${gettext('Close')}">
                     <i class="fas fa-times"></i>
                 </button>
             </div>

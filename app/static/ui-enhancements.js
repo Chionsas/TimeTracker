@@ -150,7 +150,7 @@
                 break;
             case 'delete':
                 if (action.confirm) {
-                    ttConfirm(action.confirm, { variant: 'danger', confirmText: 'Delete' }).then(function (confirmed) {
+                    ttConfirm(action.confirm, { variant: 'danger', confirmText: gettext('Delete') }).then(function (confirmed) {
                         if (confirmed && action.url) {
                             submitForm(action.url, action.method || 'POST');
                         }
@@ -219,10 +219,10 @@
         bar.setAttribute('aria-hidden', 'true');
         bar.innerHTML = `
             <span class="bulk-actions-count" id="bulkActionsCount">0</span>
-            <span>items selected</span>
+            <span>${gettext('items selected')}</span>
             <div class="flex gap-2 ml-auto">
-                <button class="px-3 py-1.5 text-sm bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors" id="bulkActionEdit">Edit</button>
-                <button class="px-3 py-1.5 text-sm bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors" id="bulkActionCancel">Cancel</button>
+                <button class="px-3 py-1.5 text-sm bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors" id="bulkActionEdit">${gettext('Edit')}</button>
+                <button class="px-3 py-1.5 text-sm bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors" id="bulkActionCancel">${gettext('Cancel')}</button>
             </div>
         `;
         document.body.appendChild(bar);
@@ -382,7 +382,7 @@
      */
     function showKeyboardShortcutsHint() {
         if (window.toastManager) {
-            window.toastManager.info('Press Shift+? to see all keyboard shortcuts', 5000);
+            window.toastManager.info(gettext('Press Shift+? to see all keyboard shortcuts'), 5000);
         }
     }
 
@@ -530,11 +530,11 @@
                 if (data.success) {
                     showSuccessCheckmark(submitBtn);
                     if (window.toastManager) {
-                        window.toastManager.success(data.message || 'Operation completed successfully');
+                        window.toastManager.success(data.message || gettext('Operation completed successfully'));
                     }
                 } else {
                     if (window.toastManager) {
-                        window.toastManager.error(data.message || 'Operation failed');
+                        window.toastManager.error(data.message || gettext('Operation failed'));
                     }
                 }
             }
@@ -545,7 +545,7 @@
                 removeButtonLoading(submitBtn);
             }
             if (window.toastManager) {
-                window.toastManager.error('An error occurred. Please try again.');
+                window.toastManager.error(gettext('An error occurred. Please try again.'));
             }
             console.error('Form submission error:', error);
         });

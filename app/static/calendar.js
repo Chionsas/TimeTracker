@@ -260,11 +260,11 @@ class Calendar {
             if (!resp.ok) {
                 const data = await resp.json().catch(() => ({}));
                 console.error('Calendar move/resize failed', data);
-                ttAlert(data.error || 'Failed to update event');
+                ttAlert(data.error || gettext('Failed to update event'));
             }
         } catch (err) {
             console.error(err);
-            ttAlert('Failed to update event');
+            ttAlert(gettext('Failed to update event'));
         }
     }
 
@@ -444,7 +444,7 @@ class Calendar {
             }
         } catch (error) {
             console.error('Error loading events:', error);
-            this.container.innerHTML = '<div class="text-center text-red-500 py-12">Error loading calendar data</div>';
+            this.container.innerHTML = '<div class="text-center text-red-500 py-12">' + gettext('Error loading calendar data') + '</div>';
         }
     }
     
@@ -473,11 +473,11 @@ class Calendar {
             if (resp.ok && data.success) {
                 this.loadEvents();
             } else {
-                ttAlert(data.error || 'Failed to save calendar colors');
+                ttAlert(data.error || gettext('Failed to save calendar colors'));
             }
         } catch (e) {
             console.error('Save calendar colors failed', e);
-            ttAlert('Failed to save calendar colors');
+            ttAlert(gettext('Failed to save calendar colors'));
         }
     }
     
@@ -750,7 +750,7 @@ class Calendar {
                         <i class="fas fa-calendar mr-2 text-blue-600 dark:text-blue-400"></i>
                         <strong>${item.title}</strong>
                         <br><small>${item.time}</small>
-                        <div class="event-resize-handle" title="Resize"></div>
+                        <div class="event-resize-handle" title="${gettext('Resize')}"></div>
                     </div>
                 `;
             } else if (item.type === 'time_entry') {
@@ -777,8 +777,8 @@ class Calendar {
                 html += `
                     <div class="event-card task" data-id="${task.id}" data-type="task" style="border-left-color: ${taskColor};" onclick="window.calendar.showEventDetails(${task.id}, 'task', event)">
                         ${priorityIcon} <strong>${taskTitle}</strong>
-                        <br><small>Due: ${task.start}</small>
-                        <br><small class="text-xs">Status: ${task.extendedProps?.status || 'Unknown'}</small>
+                        <br><small>${gettext('Due: %(date)s', {date: task.start})}</small>
+                        <br><small class="text-xs">${gettext('Status: %(status)s', {status: task.extendedProps?.status || gettext('Unknown')})}</small>
                     </div>
                 `;
             });
@@ -932,7 +932,7 @@ class Calendar {
             const { left, width } = this.columnStyle(item.column, item.totalColumns);
             const style = `left: ${left}; width: ${width}; top: ${item.topPosition}px; height: ${item.heightMinutes}px;`;
             if (item.type === 'event') {
-                html += `<div class="week-event-block event" ${this._eventDragAttrs(item.event)} style="border-left-color: ${item.color}; ${style}" onclick="window.calendar.showEventDetails(${item.event.id}, '${item.type}', event)" title="${item.title} (${item.timeStr})"><i class="fas fa-calendar mr-1"></i><strong>${item.title}</strong><br><small>${item.timeStr}</small><div class="event-resize-handle" title="Resize"></div></div>`;
+                html += `<div class="week-event-block event" ${this._eventDragAttrs(item.event)} style="border-left-color: ${item.color}; ${style}" onclick="window.calendar.showEventDetails(${item.event.id}, '${item.type}', event)" title="${item.title} (${item.timeStr})"><i class="fas fa-calendar mr-1"></i><strong>${item.title}</strong><br><small>${item.timeStr}</small><div class="event-resize-handle" title="${gettext('Resize')}"></div></div>`;
             } else if (item.type === 'time_entry') {
                 const durationText = (item.entryEnd != null && item.startTime != null) ? `${item.startTime} - ${item.endTimeStr}` : (item.startTime || item.timeStr || '');
                 const blockId = (item.entry && item.entry.id) != null ? item.entry.id : item.event.id;
@@ -953,7 +953,7 @@ class Calendar {
         startDate.setDate(startDate.getDate() - (startDate.getDay() === 0 ? 6 : startDate.getDay() - 1));
         
         let html = '<div class="calendar-month-view"><table class="month-table"><thead><tr>';
-        const weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+        const weekdays = [gettext('Mon'), gettext('Tue'), gettext('Wed'), gettext('Thu'), gettext('Fri'), gettext('Sat'), gettext('Sun')];
         weekdays.forEach(day => {
             html += `<th>${day}</th>`;
         });
@@ -1065,7 +1065,7 @@ class Calendar {
         }
         
         if (count > maxDisplay) {
-            html += `<div class="event-badge-more">+${count - maxDisplay} more</div>`;
+            html += `<div class="event-badge-more">${gettext('+%(count)s more', {count: count - maxDisplay})}</div>`;
         }
         
         html += '</div>';
@@ -1102,8 +1102,8 @@ class Calendar {
                 this.events.find(e => String(e.id) === idStr);
         }
         if (!item) {
-            bodyEl.innerHTML = '<p class="text-muted">Details not available.</p>';
-            if (modalTitle) modalTitle.textContent = type === 'event' ? 'Event' : type === 'task' ? 'Task' : 'Time Entry';
+            bodyEl.innerHTML = '<p class="text-muted">' + gettext('Details not available.') + '</p>';
+            if (modalTitle) modalTitle.textContent = type === 'event' ? gettext('Event') : type === 'task' ? gettext('Task') : gettext('Time Entry');
             let detailUrl = type === 'event' ? `/calendar/event/${id}` : type === 'task' ? `/tasks/${id}` : `/timer/edit/${id}`;
             if (goToBtn) { goToBtn.href = detailUrl; goToBtn.style.display = ''; }
             if (editEventBtn) { editEventBtn.href = detailUrl; editEventBtn.style.display = ''; }
@@ -1131,43 +1131,43 @@ class Calendar {
         }
 
         let detailUrl = '#';
-        let titleLabel = 'Event';
+        let titleLabel = gettext('Event');
         if (effectiveType === 'event') {
             detailUrl = `/calendar/event/${item.id}`;
-            titleLabel = 'Event Details';
+            titleLabel = gettext('Event Details');
         } else if (effectiveType === 'task') {
             detailUrl = `/tasks/${item.id}`;
-            titleLabel = 'Task';
+            titleLabel = gettext('Task');
         } else {
             detailUrl = `/timer/edit/${item.id}`;
-            titleLabel = 'Time Entry Details';
+            titleLabel = gettext('Time Entry Details');
         }
 
         if (modalTitle) modalTitle.textContent = titleLabel;
         if (goToBtn) { goToBtn.href = detailUrl; goToBtn.style.display = ''; }
-        if (editEventBtn) { editEventBtn.href = detailUrl; editEventBtn.innerHTML = '<i class="fas fa-external-link-alt mr-2"></i>Go to all details'; editEventBtn.style.display = ''; }
+        if (editEventBtn) { editEventBtn.href = detailUrl; editEventBtn.innerHTML = '<i class="fas fa-external-link-alt mr-2"></i>' + gettext('Go to all details'); editEventBtn.style.display = ''; }
         if (deleteEventBtn) deleteEventBtn.style.display = 'none';
 
         if (type === 'task') {
             const dueStr = item.start ? formatDate(item.start) : (props.dueDate || '—');
             bodyEl.innerHTML = `
-                <div class="event-detail-row"><div class="event-detail-label">Title</div><div class="event-detail-value">${this.escapeHtml(item.title || props.title || '')}</div></div>
-                <div class="event-detail-row"><div class="event-detail-label">Due</div><div class="event-detail-value">${dueStr}</div></div>
-                ${props.status ? `<div class="event-detail-row"><div class="event-detail-label">Status</div><div class="event-detail-value">${this.escapeHtml(props.status)}</div></div>` : ''}
-                ${props.project_name ? `<div class="event-detail-row"><div class="event-detail-label">Project</div><div class="event-detail-value">${this.escapeHtml(props.project_name)}</div></div>` : ''}
+                <div class="event-detail-row"><div class="event-detail-label">${gettext('Title')}</div><div class="event-detail-value">${this.escapeHtml(item.title || props.title || '')}</div></div>
+                <div class="event-detail-row"><div class="event-detail-label">${gettext('Due')}</div><div class="event-detail-value">${dueStr}</div></div>
+                ${props.status ? `<div class="event-detail-row"><div class="event-detail-label">${gettext('Status')}</div><div class="event-detail-value">${this.escapeHtml(props.status)}</div></div>` : ''}
+                ${props.project_name ? `<div class="event-detail-row"><div class="event-detail-label">${gettext('Project')}</div><div class="event-detail-value">${this.escapeHtml(props.project_name)}</div></div>` : ''}
             `;
         } else {
             const startStr = item.start ? formatDate(item.start) : '—';
             const endStr = item.end ? formatDate(item.end) : '—';
             const duration = (props.duration_hours != null) ? Number(props.duration_hours).toFixed(2) : '—';
             bodyEl.innerHTML = `
-                <div class="event-detail-row"><div class="event-detail-label">Project</div><div class="event-detail-value">${this.escapeHtml(props.project_name || '')}</div></div>
-                ${props.task_name ? `<div class="event-detail-row"><div class="event-detail-label">Task</div><div class="event-detail-value">${this.escapeHtml(props.task_name)}</div></div>` : ''}
-                <div class="event-detail-row"><div class="event-detail-label">Start</div><div class="event-detail-value">${startStr}</div></div>
-                <div class="event-detail-row"><div class="event-detail-label">End</div><div class="event-detail-value">${endStr}</div></div>
-                <div class="event-detail-row"><div class="event-detail-label">Duration</div><div class="event-detail-value">${duration} hours</div></div>
-                ${props.notes ? `<div class="event-detail-row"><div class="event-detail-label">Notes</div><div class="event-detail-value">${this.escapeHtml(props.notes)}</div></div>` : ''}
-                ${props.tags ? `<div class="event-detail-row"><div class="event-detail-label">Tags</div><div class="event-detail-value">${this.escapeHtml(props.tags)}</div></div>` : ''}
+                <div class="event-detail-row"><div class="event-detail-label">${gettext('Project')}</div><div class="event-detail-value">${this.escapeHtml(props.project_name || '')}</div></div>
+                ${props.task_name ? `<div class="event-detail-row"><div class="event-detail-label">${gettext('Task')}</div><div class="event-detail-value">${this.escapeHtml(props.task_name)}</div></div>` : ''}
+                <div class="event-detail-row"><div class="event-detail-label">${gettext('Start')}</div><div class="event-detail-value">${startStr}</div></div>
+                <div class="event-detail-row"><div class="event-detail-label">${gettext('End')}</div><div class="event-detail-value">${endStr}</div></div>
+                <div class="event-detail-row"><div class="event-detail-label">${gettext('Duration')}</div><div class="event-detail-value">${gettext('%(hours)s hours', {hours: duration})}</div></div>
+                ${props.notes ? `<div class="event-detail-row"><div class="event-detail-label">${gettext('Notes')}</div><div class="event-detail-value">${this.escapeHtml(props.notes)}</div></div>` : ''}
+                ${props.tags ? `<div class="event-detail-row"><div class="event-detail-label">${gettext('Tags')}</div><div class="event-detail-value">${this.escapeHtml(props.tags)}</div></div>` : ''}
             `;
         }
 

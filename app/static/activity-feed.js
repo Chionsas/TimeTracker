@@ -62,7 +62,7 @@ class ActivityFeed {
             this.render();
         } catch (error) {
             console.error('Error loading activities:', error);
-            this.showError('Failed to load activities');
+            this.showError(gettext('Failed to load activities'));
         } finally {
             this.loading = false;
             this.hideLoading();
@@ -76,7 +76,7 @@ class ActivityFeed {
             this.container.innerHTML = `
                 <div class="text-center py-8 text-gray-500">
                     <i class="fas fa-inbox text-4xl mb-4"></i>
-                    <p>No activities found</p>
+                    <p>${gettext('No activities found')}</p>
                 </div>
             `;
             return;
@@ -88,7 +88,7 @@ class ActivityFeed {
             <div class="activity-feed">
                 ${activitiesHtml}
             </div>
-            ${this.hasMore ? '<div class="text-center mt-4"><button class="load-more-btn bg-primary text-white px-4 py-2 rounded">Load More</button></div>' : ''}
+            ${this.hasMore ? '<div class="text-center mt-4"><button class="load-more-btn bg-primary text-white px-4 py-2 rounded">' + gettext('Load More') + '</button></div>' : ''}
         `;
 
         // Setup load more button
@@ -103,7 +103,7 @@ class ActivityFeed {
     renderActivity(activity) {
         const icon = this.getActivityIcon(activity);
         const timeAgo = this.formatTimeAgo(activity.created_at);
-        const userDisplay = activity.display_name || activity.username || 'Unknown';
+        const userDisplay = activity.display_name || activity.username || gettext('Unknown');
 
         return `
             <div class="activity-item flex items-start gap-4 p-4 border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
@@ -152,10 +152,10 @@ class ActivityFeed {
         const diffHours = Math.floor(diffMs / 3600000);
         const diffDays = Math.floor(diffMs / 86400000);
 
-        if (diffMins < 1) return 'just now';
-        if (diffMins < 60) return `${diffMins}m ago`;
-        if (diffHours < 24) return `${diffHours}h ago`;
-        if (diffDays < 7) return `${diffDays}d ago`;
+        if (diffMins < 1) return gettext('just now');
+        if (diffMins < 60) return gettext('%(count)sm ago', {count: diffMins});
+        if (diffHours < 24) return gettext('%(count)sh ago', {count: diffHours});
+        if (diffDays < 7) return gettext('%(count)sd ago', {count: diffDays});
         return window.formatUserDate ? window.formatUserDate(date) : date.toLocaleDateString();
     }
 
@@ -190,7 +190,7 @@ class ActivityFeed {
     showLoading() {
         const loadingEl = document.createElement('div');
         loadingEl.className = 'activity-loading text-center py-4';
-        loadingEl.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
+        loadingEl.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ' + gettext('Loading...');
         this.container.appendChild(loadingEl);
     }
 

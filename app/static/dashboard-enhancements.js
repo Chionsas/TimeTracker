@@ -174,7 +174,7 @@
             activityTimeline.innerHTML = `
                 <div class="text-center py-8 text-text-muted-light dark:text-text-muted-dark">
                     <i class="fas fa-inbox text-4xl mb-4 opacity-50"></i>
-                    <p>No recent activity</p>
+                    <p>${gettext('No recent activity')}</p>
                 </div>
             `;
             return;
@@ -192,7 +192,7 @@
                             <i class="${icon} text-sm"></i>
                         </div>
                         <div class="flex-1">
-                            <p class="text-sm text-text-light dark:text-text-dark">${activity.description || 'Activity'}</p>
+                            <p class="text-sm text-text-light dark:text-text-dark">${activity.description || gettext('Activity')}</p>
                             <p class="text-xs text-text-muted-light dark:text-text-muted-dark">${timeAgo}</p>
                         </div>
                     </div>
@@ -253,11 +253,11 @@
         if (diffMins < 1) {
             return 'Just now';
         } else if (diffMins < 60) {
-            return `${diffMins} minute${diffMins > 1 ? 's' : ''} ago`;
+            return ngettext('%(num)s minute ago', '%(num)s minutes ago', diffMins);
         } else if (diffHours < 24) {
-            return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
+            return ngettext('%(num)s hour ago', '%(num)s hours ago', diffHours);
         } else if (diffDays < 7) {
-            return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
+            return ngettext('%(num)s day ago', '%(num)s days ago', diffDays);
         } else {
             return window.formatUserDate ? window.formatUserDate(date) : date.toLocaleDateString();
         }

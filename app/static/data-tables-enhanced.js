@@ -116,7 +116,7 @@
                 header.style.cursor = 'pointer';
                 header.setAttribute('role', 'button');
                 header.setAttribute('tabindex', '0');
-                header.setAttribute('aria-label', `Sort by ${header.textContent.trim()}`);
+                header.setAttribute('aria-label', gettext('Sort by %(column)s', {column: header.textContent.trim()}));
                 
                 // Add sort indicator container
                 const indicator = document.createElement('span');
@@ -252,8 +252,8 @@
             if (!tableContainer.querySelector('.column-visibility-btn')) {
                 const btn = document.createElement('button');
                 btn.className = 'column-visibility-btn px-3 py-1.5 text-sm bg-background-light dark:bg-background-dark rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors inline-flex items-center gap-2';
-                btn.innerHTML = '<i class="fas fa-columns"></i> <span>Columns</span>';
-                btn.setAttribute('aria-label', 'Toggle column visibility');
+                btn.innerHTML = '<i class="fas fa-columns"></i> <span>' + gettext('Columns') + '</span>';
+                btn.setAttribute('aria-label', gettext('Toggle column visibility'));
                 
                 const dropdown = document.createElement('div');
                 dropdown.className = 'column-visibility-dropdown hidden absolute right-0 mt-2 w-56 bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark rounded-md shadow-lg p-2';
@@ -467,7 +467,7 @@
             // Page size selector
             const pageSizeSelect = `
                 <div class="flex items-center gap-2">
-                    <label class="text-sm text-text-muted-light dark:text-text-muted-dark">Show:</label>
+                    <label class="text-sm text-text-muted-light dark:text-text-muted-dark">${gettext('Show:')}</label>
                     <select class="table-page-size-select px-2 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded bg-background-light dark:bg-background-dark">
                         ${this.options.pageSizeOptions.map(size => 
                             `<option value="${size}" ${size === this.pageSize ? 'selected' : ''}>${size}</option>`
@@ -479,7 +479,7 @@
             // Pagination info
             const paginationInfo = `
                 <div class="text-sm text-text-muted-light dark:text-text-muted-dark">
-                    Showing ${start} to ${end} of ${totalItems} entries
+                    ${gettext('Showing %(start)s to %(end)s of %(total)s entries', {start: start, end: end, total: totalItems})}
                 </div>
             `;
             
