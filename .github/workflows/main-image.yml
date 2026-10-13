@@ -1,0 +1,66 @@
+# Image of this fork: main = upstream main (the release line) plus local
+# commits; "Sync fork" merges new upstream releases in. Fork-only — never part
+# of an upstream PR. Deployments pin the immutable main-<sha> tag; `main` just
+# follows the branch head.
+name: main image
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: main-image
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # git describe needs the release tag the branch is based on
+          fetch-depth: 0
+
+      - name: Version
+        id: version
+        run: |
+          # Release tags come from upstream: forks copy none, and "Sync fork"
+          # merges a release's commits but not its tag.
+          git fetch --tags --force https://github.com/DRYTRIX/TimeTracker.git
+          # e.g. v5.18.1-2-ge55d729 -> 5.18.1-2-ge55d729
+          echo "app=$(git describe --tags --abbrev=7 | sed 's/^v//')" >> "$GITHUB_OUTPUT"
+          echo "image=ghcr.io/$(echo "$GITHUB_REPOSITORY" | tr '[:upper:]' '[:lower:]')" >> "$GITHUB_OUTPUT"
+
+      - uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f  # v3
+
+      - uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9  # v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - id: meta
+        uses: docker/metadata-action@c299e40c65443455700f0fdfc63efafe5b349051  # v5
+        with:
+          images: ${{ steps.version.outputs.image }}
+          tags: |
+            type=sha,prefix=main-,format=short
+            type=raw,value=main
+
+      - uses: docker/build-push-action@ca052bb54ab0790a636c9b5f226502c73d547a25  # v5
+        with:
+          context: .
+          # deployed only on x86_64
+          platforms: linux/amd64
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            APP_VERSION=${{ steps.version.outputs.app }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
