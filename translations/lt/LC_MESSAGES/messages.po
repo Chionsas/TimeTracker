@@ -4039,7 +4039,7 @@ msgstr "Apskaityta %(hours)s val.!"
 
 #: app/routes/main.py:477
 msgid "Get key (€25)"
-msgstr "Įsigyti licencijos raktą (25€)"
+msgstr "Įsigyti licencijos raktą (25 €)"
 
 #: app/routes/main.py:478
 msgid "Buy a coffee"
@@ -6874,7 +6874,7 @@ msgstr ""
 
 #: app/templates/base.html:86
 msgid "Remove prompts forever (€25)"
-msgstr "Visam laikui pašalinti raginimus (25€)"
+msgstr "Visam laikui pašalinti raginimus (25 €)"
 
 #: app/templates/base.html:93
 msgid "Buy me a coffee"
@@ -11645,7 +11645,7 @@ msgid ""
 " one key per instance)."
 msgstr ""
 "Pašalink aukojimo ir paramos raginimus visiems naudotojams vienkartiniu "
-"licencijos raktu (25€, vienas raktas vienam egzemplioriui)."
+"licencijos raktu (25 €, vienas raktas vienam egzemplioriui)."
 
 #: app/templates/admin/settings.html:312
 msgid "Copy your System ID below and use it when buying the key."
@@ -17609,7 +17609,7 @@ msgstr "Paaukoti"
 
 #: app/templates/components/support_modal.html:58
 msgid "Become a Supporter (€25 key — removes all prompts)"
-msgstr "Tapti rėmėju (25€ licencijos raktas — pašalina visus raginimus)"
+msgstr "Tapti rėmėju (25 € licencijos raktas — pašalina visus raginimus)"
 
 #: app/templates/components/support_modal.html:61
 msgid "Love TimeTracker? Share it"
@@ -24312,8 +24312,8 @@ msgid ""
 "You've tracked %(hours)s hours — that's roughly €%(value)s billed at "
 "€%(rate)s/h. TimeTracker helped you capture it all."
 msgstr ""
-"Apskaitei %(hours)s val. — tai maždaug %(value)s€, skaičiuojant po "
-"%(rate)s€/val. TimeTracker padėjo tau visa tai užfiksuoti."
+"Apskaitei %(hours)s val. — tai maždaug %(value)s €, skaičiuojant po "
+"%(rate)s €/val. TimeTracker padėjo tau visa tai užfiksuoti."
 
 #: app/templates/main/dashboard.html:1014
 msgid ""
@@ -24329,7 +24329,7 @@ msgstr "Padėti išlaikyti programą nemokamą"
 
 #: app/templates/main/dashboard.html:1018
 msgid "Get a key — remove prompts (€25)"
-msgstr "Gauti licencijos raktą — pašalinti raginimus (25€)"
+msgstr "Gauti licencijos raktą — pašalinti raginimus (25 €)"
 
 #: app/templates/main/dashboard.html:1049
 msgid "Create new task..."
@@ -24532,7 +24532,7 @@ msgstr "Tapti rėmėju"
 
 #: app/templates/main/donate.html:42
 msgid "Never see this again — €25 key"
-msgstr "Daugiau to nematyti — 25€ licencijos raktas"
+msgstr "Daugiau to nematyti — 25 € licencijos raktas"
 
 #: app/templates/main/donate.html:47
 msgid "Or donate any amount"
@@ -24592,7 +24592,7 @@ msgstr ""
 
 #: app/templates/main/donate.html:102
 msgid "€5 — a coffee"
-msgstr "5€ – kavai"
+msgstr "5 € – kavai"
 
 #: app/templates/main/donate.html:104
 msgid ""
@@ -24604,7 +24604,7 @@ msgstr ""
 
 #: app/templates/main/donate.html:112
 msgid "€10 — infrastructure"
-msgstr "10€ — infrastruktūra"
+msgstr "10 € — infrastruktūra"
 
 #: app/templates/main/donate.html:114
 msgid ""
@@ -24616,7 +24616,7 @@ msgstr ""
 
 #: app/templates/main/donate.html:122
 msgid "€25 — become a Supporter"
-msgstr "25€ — tapk rėmėju"
+msgstr "25 € — tapk rėmėju"
 
 #: app/templates/main/donate.html:124
 msgid ""
@@ -24644,8 +24644,8 @@ msgid ""
 "Supporters get a visible badge; support prompts are minimized as a side "
 "effect. No subscription."
 msgstr ""
-"Vienkartinis 25€ indėlis vienam egzemplioriui. Licencijos raktą gausi el."
-" paštu. Rėmėjai gauna matomą ženklelį; paramos raginimai kartu "
+"Vienkartinis 25 € indėlis vienam egzemplioriui. Licencijos raktą gausi "
+"el. paštu. Rėmėjai gauna matomą ženklelį; paramos raginimai kartu "
 "sumažinami. Jokios prenumeratos."
 
 #: app/templates/main/donate.html:154
@@ -24666,7 +24666,7 @@ msgstr ""
 
 #: app/templates/main/donate.html:170 app/templates/user/license.html:40
 msgid "Support TimeTracker (€25)"
-msgstr "Paremti TimeTracker (25€)"
+msgstr "Paremti TimeTracker (25 €)"
 
 #: app/templates/main/donate.html:180
 msgid "Your TimeTracker Journey"
@@ -24756,7 +24756,9 @@ msgstr "Dalykis savo žiniomis bendruomenėje"
 
 #: app/templates/main/donate.html:322
 msgid "One-time €25 — visible badge, fewer prompts, no subscription"
-msgstr "Vienkartinis 25€ — matomas ženklelis, mažiau raginimų, jokios prenumeratos"
+msgstr ""
+"Vienkartinis 25 € — matomas ženklelis, mažiau raginimų, jokios "
+"prenumeratos"
 
 #: app/templates/main/help.html:9
 msgid "Complete documentation and user guide"
@@ -27059,7 +27061,7 @@ msgstr "Rėmėjas"
 #: app/templates/partials/_sidebar.html:773
 #: app/templates/partials/_sidebar.html:775
 msgid "Remove prompts (€25 key)"
-msgstr "Pašalinti raginimus (25€ licencijos raktas)"
+msgstr "Pašalinti raginimus (25 € licencijos raktas)"
 
 #: app/templates/partials/_topbar.html:4
 msgid "Open sidebar"
@@ -32038,7 +32040,7 @@ msgid ""
 " either way — supporters get a visible badge, fewer prompts, and no "
 "\"Generated with TimeTracker\" line on exported PDFs."
 msgstr ""
-"Tapk rėmėju vienkartiniu 25€ įnašu. Visa prieiga tau išlieka bet kuriuo "
+"Tapk rėmėju vienkartiniu 25 € įnašu. Visa prieiga tau išlieka bet kuriuo "
 "atveju — rėmėjai gauna matomą ženklelį, mažiau raginimų ir eksportuotuose"
 " PDF nėra eilutės „Generated with TimeTracker“."
 
@@ -32120,7 +32122,7 @@ msgid ""
 "contribution. You keep full access either way — supporters get a visible "
 "badge and fewer prompts."
 msgstr ""
-"Jei programa taupo tavo laiką, tapk rėmėju vienkartiniu 25€ įnašu. Visa "
+"Jei programa taupo tavo laiką, tapk rėmėju vienkartiniu 25 € įnašu. Visa "
 "prieiga tau išlieka bet kuriuo atveju — rėmėjai gauna matomą ženklelį ir "
 "mažiau raginimų."
 
