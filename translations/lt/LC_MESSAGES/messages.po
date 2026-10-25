@@ -40122,11 +40122,13 @@ msgstr "Kada darbas baigtas (palik tuščią, jei dar vyksta)"
 msgid "Time the work ended"
 msgstr "Darbo pabaigos laikas"
 
-#: app/templates/timer/edit_timer.html:409
-msgid "Break duration (HH:MM). Subtracted from total to get worked duration."
+#: app/templates/timer/edit_timer.html:476
+msgid ""
+"Break duration. Subtracted from total to get worked duration. Accepts "
+"1:30, 0130, 1.5h or 90."
 msgstr ""
-"Pertraukos trukmė (HH:MM). Atimama iš bendros trukmės — taip gaunama "
-"darbo trukmė."
+"Pertraukos trukmė. Atimama iš bendros trukmės — taip gaunama darbo "
+"trukmė. Tinka 1:30, 0130, 1.5h arba 90."
 
 #: app/templates/timer/edit_timer.html:422
 #: app/templates/timer/edit_timer.html:554
