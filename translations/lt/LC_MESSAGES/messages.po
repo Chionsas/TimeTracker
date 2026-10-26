@@ -9583,7 +9583,7 @@ msgstr ""
 
 #: app/static/onboarding.js:678 app/static/onboarding.js:763
 msgid "Skip Tour"
-msgstr "Praleisti apžvalgą"
+msgstr "Praleisti pristatymą"
 
 #: app/static/onboarding.js:682 app/templates/clients/messages.html:8
 #: app/templates/comments/edit.html:15 app/templates/invoices/edit.html:7
@@ -9639,7 +9639,7 @@ msgid ""
 "Are you sure you want to skip the tour? You can restart it later from the"
 " Help menu."
 msgstr ""
-"Ar tikrai nori praleisti apžvalgą? Vėliau ją galėsi paleisti iš naujo "
+"Ar tikrai nori praleisti pristatymą? Vėliau jį galėsi paleisti iš naujo "
 "meniu „Pagalba“."
 
 #: app/static/onboarding.js:764
@@ -9648,11 +9648,11 @@ msgstr "Praleisti"
 
 #: app/static/onboarding.js:765
 msgid "Continue Tour"
-msgstr "Tęsti apžvalgą"
+msgstr "Tęsti pristatymą"
 
 #: app/static/onboarding.js:827
 msgid "Tour completed! You're all set to start tracking time."
-msgstr "Apžvalga baigta! Viskas paruošta – gali pradėti apskaityti laiką."
+msgstr "Pristatymas baigtas! Viskas paruošta – gali pradėti apskaityti laiką."
 
 #: app/static/onboarding.js:856
 msgid ""
@@ -32163,7 +32163,7 @@ msgstr "API dokumentacija"
 
 #: app/templates/main/help.html:72
 msgid "Restart Product Tour"
-msgstr "Iš naujo paleisti programos apžvalgą"
+msgstr "Iš naujo paleisti programos pristatymą"
 
 #: app/templates/main/help.html:79
 msgid "Quick Start Guide"
