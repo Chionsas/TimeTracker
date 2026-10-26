@@ -8073,7 +8073,7 @@ msgstr "Eiti į prisijungimą"
 #: app/templates/errors/generic.html:24 app/templates/errors/generic.html:42
 #: app/templates/main/help.html:538
 msgid "Go to Dashboard"
-msgstr "Eiti į skydelį"
+msgstr "Eiti į apžvalgą"
 
 #: app/static/error-handling-enhanced.js:642
 #: app/templates/client_portal/error.html:59 app/templates/errors/400.html:26
@@ -9319,7 +9319,7 @@ msgstr ""
 #: app/templates/partials/_sidebar.html:49
 #: app/templates/partials/_sidebar.html:51 app/templates/projects/view.html:35
 msgid "Dashboard"
-msgstr "Skydelis"
+msgstr "Apžvalga"
 
 #: app/static/onboarding-enhanced.js:536
 msgid ""
@@ -9499,7 +9499,7 @@ msgstr ""
 #: app/templates/analytics/dashboard_improved.html:3
 #: app/templates/analytics/dashboard_improved.html:8
 msgid "Analytics Dashboard"
-msgstr "Analitikos skydelis"
+msgstr "Analitikos apžvalga"
 
 #: app/static/onboarding-enhanced.js:590 app/static/onboarding.js:916
 msgid ""
@@ -11764,7 +11764,7 @@ msgstr "Apklausų dar nėra."
 #: app/templates/admin/dashboard.html:6 app/templates/admin/dashboard.html:11
 #: app/templates/partials/_sidebar.html:535
 msgid "Admin Dashboard"
-msgstr "Administratoriaus skydelis"
+msgstr "Administratoriaus apžvalga"
 
 #: app/templates/admin/dashboard.html:12
 msgid "System overview and management"
@@ -12801,7 +12801,7 @@ msgid ""
 "are always enabled and cannot be disabled."
 msgstr ""
 "Išjunk modulius, kad jie nebūtų rodomi jokiam naudotojui. Išjungti "
-"moduliai nebus rodomi šoninėje juostoje. Pagrindiniai moduliai (skydelis,"
+"moduliai nebus rodomi šoninėje juostoje. Pagrindiniai moduliai (apžvalga,"
 " projektai, laikmatis ir kt.) visada įjungti, jų išjungti negalima."
 
 #: app/templates/admin/modules.html:143 app/templates/admin/modules.html:245
@@ -13017,7 +13017,7 @@ msgstr "Patikros klaidos:"
 
 #: app/templates/admin/oidc_debug.html:4 app/templates/admin/oidc_debug.html:14
 msgid "OIDC Debug Dashboard"
-msgstr "OIDC derinimo skydelis"
+msgstr "OIDC derinimo apžvalga"
 
 #: app/templates/admin/oidc_debug.html:9
 #: app/templates/admin/oidc_setup_wizard.html:9
@@ -17218,7 +17218,7 @@ msgstr "Dabartinis dydis"
 
 #: app/templates/admin/telemetry.html:3 app/templates/admin/telemetry.html:8
 msgid "Telemetry & Analytics Dashboard"
-msgstr "Telemetrijos ir analitikos skydelis"
+msgstr "Telemetrijos ir analitikos apžvalga"
 
 #: app/templates/admin/telemetry.html:9
 msgid "Monitor what data is being collected and manage your privacy settings"
@@ -20079,7 +20079,7 @@ msgstr "Biudžeto analizė ir prognozavimas"
 
 #: app/templates/budget/project_detail.html:13
 msgid "Back to Dashboard"
-msgstr "Atgal į skydelį"
+msgstr "Atgal į apžvalgą"
 
 #: app/templates/budget/project_detail.html:17
 #: app/templates/projects/_projects_list.html:148
@@ -20943,7 +20943,7 @@ msgstr ""
 #: app/templates/client_portal/dashboard.html:37
 #: app/templates/client_portal/dashboard.html:83
 msgid "Customize dashboard"
-msgstr "Tinkinti skydelį"
+msgstr "Tinkinti apžvalgą"
 
 #: app/templates/client_portal/dashboard.html:84
 msgid "Choose which widgets to show and their order."
@@ -24956,11 +24956,11 @@ msgstr "Atmesti išlaidą"
 
 #: app/templates/expenses/dashboard.html:12
 msgid "Expense Dashboard"
-msgstr "Išlaidų skydelis"
+msgstr "Išlaidų apžvalga"
 
 #: app/templates/expenses/dashboard.html:13
 msgid "Overview of your expenses"
-msgstr "Išlaidų apžvalga"
+msgstr "Išlaidų suvestinė"
 
 #: app/templates/expenses/dashboard.html:47 app/templates/expenses/list.html:28
 msgid "Total Expenses"
@@ -25178,7 +25178,7 @@ msgstr "Naujas dienpinigių prašymas"
 
 #: app/templates/expenses/list.html:53
 msgid "View Dashboard"
-msgstr "Peržiūrėti skydelį"
+msgstr "Peržiūrėti apžvalgą"
 
 #: app/templates/expenses/list.html:66
 msgid "Filter Expenses"
@@ -32179,7 +32179,7 @@ msgstr "Prisijunk su savo naudotojo vardu (slaptažodžio nereikia)"
 
 #: app/templates/main/help.html:85
 msgid "Explore the dashboard to see your overview"
-msgstr "Apžvelk skydelį ir pamatyk savo suvestinę"
+msgstr "Atsidaryk apžvalgą ir pamatyk savo suvestinę"
 
 #: app/templates/main/help.html:86
 msgid "Start your first timer on an existing project"
@@ -32250,7 +32250,7 @@ msgstr ""
 
 #: app/templates/main/help.html:124
 msgid "Or navigate to the Timer page or dashboard"
-msgstr "Arba eik į laikmačio puslapį ar skydelį"
+msgstr "Arba eik į laikmačio puslapį ar apžvalgą"
 
 #: app/templates/main/help.html:125
 msgid "Select a project from the dropdown"
@@ -32285,7 +32285,7 @@ msgid ""
 "Pause and Stop on the dashboard — Pause saves your time so you can resume"
 " later"
 msgstr ""
-"Pristabdymas ir sustabdymas skydelyje — pristabdžius laikas išsaugomas, "
+"Pristabdymas ir sustabdymas apžvalgoje — pristabdžius laikas išsaugomas, "
 "kad vėliau galėtum tęsti"
 
 #: app/templates/main/help.html:137
@@ -33251,7 +33251,7 @@ msgstr "Apatinė skirtukų juosta patogiai prieigai"
 
 #: app/templates/main/help.html:668
 msgid "Quick access to dashboard"
-msgstr "Greita prieiga prie skydelio"
+msgstr "Greita prieiga prie apžvalgos"
 
 #: app/templates/main/help.html:669
 msgid "One-tap time logging"
@@ -33346,7 +33346,7 @@ msgid ""
 "timeout period."
 msgstr ""
 "Laikmatis veiks tol, kol jo nesustabdysi rankiniu būdu. Aktyvų laikmatį "
-"matysi skydelyje ir laikmačio puslapyje. Laikmatis veiks net uždarius "
+"matysi apžvalgoje ir laikmačio puslapyje. Laikmatis veiks net uždarius "
 "naršyklę ar iš naujo paleidus įrenginį. Jei įjungtas neveiklumo "
 "aptikimas, laikmatis gali būti automatiškai pristabdytas praėjus "
 "nustatytam laikui."
@@ -33473,7 +33473,7 @@ msgid ""
 msgstr ""
 "Paspausk klaustuko klavišą (?), kad atidarytum komandų paletę. Joje gali "
 "rašyti ir ieškoti bet kokio veiksmo ar puslapio. Naudok klavišų sekas, "
-"pvz., „g d“ – skydelis, „g p“ – projektai arba „n e“ – naujas įrašas. "
+"pvz., „g d“ – apžvalga, „g p“ – projektai arba „n e“ – naujas įrašas. "
 "Paspausk Shift+?, kad pamatytum visus galimus sparčiuosius klavišus. "
 "Greitajai paieškai spausk Ctrl+K (arba Cmd+K Mac kompiuteryje)."
 
@@ -35772,7 +35772,7 @@ msgstr "Pasirink tinkamą klientą, kad projektai būtų tvarkingai suskirstyti"
 
 #: app/templates/projects/dashboard.html:19
 msgid "Project Dashboard & Analytics"
-msgstr "Projekto skydelis ir analitika"
+msgstr "Projekto apžvalga ir analitika"
 
 #: app/templates/projects/dashboard.html:27 app/templates/projects/view.html:13
 msgid "Entries Overview"
@@ -38426,7 +38426,7 @@ msgstr "Paspausk %(keys)s, kad atidarytum komandų paletę"
 #: app/templates/settings/keyboard_shortcuts.html:214
 #, python-format
 msgid "Navigate quickly with sequences like %(keys)s for dashboard"
-msgstr "Greitai naršyk klavišų sekomis (pvz., %(keys)s atidaro skydelį)"
+msgstr "Greitai naršyk klavišų sekomis (pvz., %(keys)s atidaro apžvalgą)"
 
 #: app/templates/settings/keyboard_shortcuts.html:218
 msgid ""
@@ -39689,7 +39689,7 @@ msgid ""
 "time manually."
 msgstr ""
 "Užregistruok laiką, kad čia matytum savo įrašus. Naudok laikmatį "
-"skydelyje arba registruok laiką rankiniu būdu."
+"apžvalgoje arba registruok laiką rankiniu būdu."
 
 #: app/templates/timer/_time_entries_list.html:222
 msgid "Time entries pagination"
@@ -41174,7 +41174,7 @@ msgstr "Pradėk atsargiai: tikslą visada galėsi pakoreguoti vėliau"
 
 #: app/templates/weekly_goals/create.html:149
 msgid "Track progress: Check your dashboard regularly to stay on track"
-msgstr "Stebėk pažangą: reguliariai tikrink skydelį, kad neatsiliktum"
+msgstr "Stebėk pažangą: reguliariai tikrink apžvalgą, kad neatsiliktum"
 
 #: app/templates/weekly_goals/create.html:150
 msgid "Typical full-time: 40 hours per week (8 hours/day, 5 days)"
