@@ -6,6 +6,8 @@ import logging
 from datetime import datetime, timedelta
 from typing import Any, Dict, List, Optional
 
+from flask_babel import gettext as _
+
 from app import db
 from app.models import Project, Task, TimeEntry
 from app.models.focus_session import FocusSession
@@ -34,7 +36,7 @@ class PomodoroService:
         active = FocusSession.query.filter_by(user_id=user_id, ended_at=None).first()
 
         if active:
-            return {"success": False, "message": "Active session already exists", "session": active.to_dict()}
+            return {"success": False, "message": _("Active session already exists"), "session": active.to_dict()}
 
         # Create new session
         session = FocusSession(

@@ -18,6 +18,7 @@ from datetime import datetime, timedelta, timezone
 from typing import TYPE_CHECKING, Any, Dict, List, Optional
 
 import requests
+from flask_babel import gettext as _
 
 if TYPE_CHECKING:
     from app.models import Integration
@@ -165,11 +166,11 @@ class GoogleCalendarConnector(BaseConnector):
 
     def test_connection(self) -> Dict[str, Any]:
         if not self.integration or not self.integration.is_active:
-            return {"success": False, "message": "Integration not configured"}
+            return {"success": False, "message": _("Integration not configured")}
         try:
             token = self._refresh_token_if_needed()
         except Exception:
-            return {"success": False, "message": "Token refresh failed"}
+            return {"success": False, "message": _("Token refresh failed")}
         try:
             resp = requests.get(
                 f"{GOOGLE_CALENDAR_API}/users/me/calendarList",
@@ -177,10 +178,13 @@ class GoogleCalendarConnector(BaseConnector):
                 timeout=HTTP_TIMEOUT,
             )
         except requests.RequestException:
-            return {"success": False, "message": "Connection error"}
+            return {"success": False, "message": _("Connection error")}
         if resp.status_code != 200:
-            return {"success": False, "message": f"Google returned HTTP {resp.status_code}"}
-        return {"success": True, "message": f"Connected ({len(resp.json().get('items') or [])} calendars)"}
+            return {"success": False, "message": _("Google returned HTTP %(status)s", status=resp.status_code)}
+        return {
+            "success": True,
+            "message": _("Connected (%(count)s calendars)", count=len(resp.json().get("items") or [])),
+        }
 
     # ------------------------------------------------------------------
     # Config / persistence
@@ -211,7 +215,7 @@ class GoogleCalendarConnector(BaseConnector):
         from app.utils.db import safe_commit
 
         if not integration:
-            return {"ok": False, "error": "Integration not configured"}
+            return {"ok": False, "error": _("Integration not configured")}
 
         cfg: Dict[str, Any] = dict(integration.config or {})
         cfg["access_token"] = _enc(tokens.get("access_token"))
@@ -228,7 +232,7 @@ class GoogleCalendarConnector(BaseConnector):
         integration.is_active = True
         integration.updated_at = datetime.utcnow()
         if not safe_commit("google_connector_save_tokens", {"integration_id": integration.id}):
-            return {"ok": False, "error": "Database error while saving tokens"}
+            return {"ok": False, "error": _("Database error while saving tokens")}
         return {"ok": True}
 
     @classmethod
@@ -237,7 +241,7 @@ class GoogleCalendarConnector(BaseConnector):
         from app.utils.db import safe_commit
 
         if not integration:
-            return {"ok": False, "error": "Integration not configured"}
+            return {"ok": False, "error": _("Integration not configured")}
 
         cfg: Dict[str, Any] = dict(integration.config or {})
         if "calendar_id" in payload:
@@ -261,7 +265,7 @@ class GoogleCalendarConnector(BaseConnector):
         integration.config = cfg
         integration.updated_at = datetime.utcnow()
         if not safe_commit("google_connector_save_settings", {"integration_id": integration.id}):
-            return {"ok": False, "error": "Database error while saving settings"}
+            return {"ok": False, "error": _("Database error while saving settings")}
         return {"ok": True}
 
     @classmethod
@@ -269,7 +273,7 @@ class GoogleCalendarConnector(BaseConnector):
         from app.utils.db import safe_commit
 
         if not integration:
-            return {"ok": False, "error": "Integration not configured"}
+            return {"ok": False, "error": _("Integration not configured")}
         cfg = dict(integration.config or {})
         for key in ("access_token", "refresh_token", "token_expiry", "email"):
             cfg.pop(key, None)
@@ -357,14 +361,14 @@ class GoogleCalendarConnector(BaseConnector):
     # ------------------------------------------------------------------
     def sync(self) -> Dict[str, Any]:
         if not self.integration or not self.integration.is_active:
-            return {"ok": False, "error": "Integration not configured"}
+            return {"ok": False, "error": _("Integration not configured")}
         cfg = self._cfg()
         direction = cfg.get("sync_direction", "import")
         result = {"ok": True, "imported": 0, "skipped": 0, "exported": 0, "errors": []}
         try:
             token = self._refresh_token_if_needed()
         except Exception:
-            return {"ok": False, "error": "Token refresh failed"}
+            return {"ok": False, "error": _("Token refresh failed")}
 
         try:
             if direction in ("import", "both"):
@@ -566,7 +570,7 @@ class GoogleCalendarConnector(BaseConnector):
     # ------------------------------------------------------------------
     def revoke(self) -> Dict[str, Any]:
         if not self.integration:
-            return {"ok": False, "error": "Integration not configured"}
+            return {"ok": False, "error": _("Integration not configured")}
         cfg = self._cfg()
         token = _dec(cfg.get("refresh_token")) or _dec(cfg.get("access_token"))
         if token:

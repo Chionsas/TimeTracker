@@ -5,6 +5,8 @@ from __future__ import annotations
 from datetime import datetime
 from typing import Any, Dict, Optional
 
+from flask_babel import gettext as _
+
 from app import db
 from app.models import ApiToken, AuditLog, User
 from app.utils.db import safe_commit
@@ -27,10 +29,10 @@ class UserGdprService:
     ) -> Dict[str, Any]:
         user = User.query.get(user_id)
         if not user:
-            return {"success": False, "message": "User not found", "error": "not_found"}
+            return {"success": False, "message": _("User not found"), "error": "not_found"}
 
         if getattr(user, "anonymized_at", None):
-            return {"success": False, "message": "User is already anonymized", "error": "already_anonymized"}
+            return {"success": False, "message": _("User is already anonymized"), "error": "already_anonymized"}
 
         if user.is_admin:
             admin_count = User.query.filter(User.role == "admin", User.is_active == True).count()  # noqa: E712
@@ -38,7 +40,7 @@ class UserGdprService:
             if user.is_active and other_admins < 1:
                 return {
                     "success": False,
-                    "message": "Cannot anonymize the last active administrator",
+                    "message": _("Cannot anonymize the last active administrator"),
                     "error": "last_admin",
                 }
 
@@ -87,13 +89,13 @@ class UserGdprService:
         if not safe_commit("gdpr_anonymize_user", {"user_id": user_id, "actor_id": actor_id}):
             return {
                 "success": False,
-                "message": "Could not anonymize user due to a database error",
+                "message": _("Could not anonymize user due to a database error"),
                 "error": "database_error",
             }
 
         return {
             "success": True,
-            "message": "User anonymized successfully",
+            "message": _("User anonymized successfully"),
             "user_id": user.id,
             "username": user.username,
         }

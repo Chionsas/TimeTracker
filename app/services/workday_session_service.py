@@ -6,6 +6,8 @@ Delegates to AttendanceComplianceService for unified compliance records.
 from datetime import datetime, time, timedelta
 from typing import Any, Dict, Optional
 
+from flask_babel import gettext as _
+
 from app import db
 from app.models import WorkdaySession
 from app.models.attendance_compliance import AttendanceCorrection, AttendanceCorrectionStatus, AttendanceWorkPeriod
@@ -110,7 +112,7 @@ class WorkdaySessionService:
         if not safe_commit("start_workday", {"user_id": user_id}):
             return {
                 "success": False,
-                "message": "Could not start workday due to a database error",
+                "message": _("Could not start workday due to a database error"),
                 "error": "database_error",
             }
 
@@ -128,7 +130,7 @@ class WorkdaySessionService:
     ) -> Dict[str, Any]:
         session = self.get_active_session(user_id)
         if not session:
-            return {"success": False, "message": "No active workday session", "error": "no_active_workday"}
+            return {"success": False, "message": _("No active workday session"), "error": "no_active_workday"}
 
         if at_time is not None:
             if at_time.tzinfo is not None:
@@ -137,13 +139,13 @@ class WorkdaySessionService:
             if at_time <= session.start_time:
                 return {
                     "success": False,
-                    "message": "Leave time must be after workday start",
+                    "message": _("Leave time must be after workday start"),
                     "error": "invalid_end_time",
                 }
             if at_time > now:
                 return {
                     "success": False,
-                    "message": "Leave time cannot be in the future",
+                    "message": _("Leave time cannot be in the future"),
                     "error": "invalid_end_time",
                 }
 
@@ -171,7 +173,7 @@ class WorkdaySessionService:
         if not safe_commit("end_workday", {"user_id": user_id, "session_id": session.id}):
             return {
                 "success": False,
-                "message": "Could not end workday due to a database error",
+                "message": _("Could not end workday due to a database error"),
                 "error": "database_error",
             }
 
@@ -224,9 +226,9 @@ class WorkdaySessionService:
         """Confirm or correct an auto-closed workday session."""
         session = WorkdaySession.query.filter_by(id=session_id, user_id=user_id).first()
         if not session:
-            return {"success": False, "message": "Workday session not found", "error": "not_found"}
+            return {"success": False, "message": _("Workday session not found"), "error": "not_found"}
         if not session.auto_closed:
-            return {"success": False, "message": "Session was not auto-closed", "error": "not_auto_closed"}
+            return {"success": False, "message": _("Session was not auto-closed"), "error": "not_auto_closed"}
         if session.auto_close_confirmed_at is not None:
             return {
                 "success": True,
@@ -238,16 +240,16 @@ class WorkdaySessionService:
         now = local_now()
         auto_closed_end = session.end_time
         if not auto_closed_end:
-            return {"success": False, "message": "Auto-closed session has no end time", "error": "invalid_session"}
+            return {"success": False, "message": _("Auto-closed session has no end time"), "error": "invalid_session"}
 
         if keep:
             session.auto_close_confirmed_at = now
             if not safe_commit("confirm_auto_closed_workday", {"session_id": session_id}):
-                return {"success": False, "message": "Could not save confirmation", "error": "database_error"}
+                return {"success": False, "message": _("Could not save confirmation"), "error": "database_error"}
             return {"success": True, "message": "Recorded time accepted", "session": session, "applied": True}
 
         if end_time is None:
-            return {"success": False, "message": "Leave time is required", "error": "missing_end_time"}
+            return {"success": False, "message": _("Leave time is required"), "error": "missing_end_time"}
 
         if end_time.tzinfo is not None:
             end_time = end_time.replace(tzinfo=None)
@@ -256,19 +258,19 @@ class WorkdaySessionService:
         if end_time <= session.start_time:
             return {
                 "success": False,
-                "message": "Leave time must be after workday start",
+                "message": _("Leave time must be after workday start"),
                 "error": "invalid_end_time",
             }
         if end_time > now:
             return {
                 "success": False,
-                "message": "Leave time cannot be in the future",
+                "message": _("Leave time cannot be in the future"),
                 "error": "invalid_end_time",
             }
         if end_time > auto_closed_end:
             return {
                 "success": False,
-                "message": "Leave time cannot be later than the auto-closed end time",
+                "message": _("Leave time cannot be later than the auto-closed end time"),
                 "error": "invalid_end_time",
             }
 
@@ -301,7 +303,7 @@ class WorkdaySessionService:
             audit_note = f"Auto-close correction submitted for review (requested leave: {end_time.isoformat()})"
             session.notes = (session.notes or "") + ("\n" if session.notes else "") + audit_note
             if not safe_commit("submit_auto_closed_correction", {"session_id": session_id}):
-                return {"success": False, "message": "Could not save correction request", "error": "database_error"}
+                return {"success": False, "message": _("Could not save correction request"), "error": "database_error"}
             return {
                 "success": True,
                 "message": "Correction submitted for admin review",
@@ -332,7 +334,7 @@ class WorkdaySessionService:
         db.session.add(correction)
 
         if not safe_commit("resolve_auto_closed_workday", {"session_id": session_id}):
-            return {"success": False, "message": "Could not save corrected workday", "error": "database_error"}
+            return {"success": False, "message": _("Could not save corrected workday"), "error": "database_error"}
 
         return {"success": True, "message": "Leave time corrected", "session": session, "applied": True}
 

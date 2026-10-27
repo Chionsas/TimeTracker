@@ -7,6 +7,7 @@ from typing import Any, Dict
 from urllib.parse import urlencode
 
 import requests
+from flask_babel import gettext as _
 
 from app.integrations.base import BaseConnector
 
@@ -107,7 +108,7 @@ class AdpConnector(BaseConnector):
     def test_connection(self) -> Dict[str, Any]:
         token = self.get_access_token()
         if not token:
-            return {"success": False, "message": "Not authenticated"}
+            return {"success": False, "message": _("Not authenticated")}
         r = requests.get(
             f"{self.API_BASE}/hr/v2/workers",
             headers={"Authorization": f"Bearer {token}", "Accept": "application/json"},
@@ -117,8 +118,8 @@ class AdpConnector(BaseConnector):
         if r.status_code in (200, 401, 403):
             # 401/403 still prove reachability; partnership scopes vary
             if r.status_code == 200:
-                return {"success": True, "message": "ADP connection OK"}
-            return {"success": True, "message": f"ADP reachable (HTTP {r.status_code} — check scopes)"}
+                return {"success": True, "message": _("ADP connection OK")}
+            return {"success": True, "message": _("ADP reachable (HTTP %(status)s — check scopes)", status=r.status_code)}
         return {"success": False, "message": f"HTTP {r.status_code}: {r.text[:200]}"}
 
     def sync_data(self, sync_type: str = "full") -> Dict[str, Any]:
@@ -133,7 +134,7 @@ class AdpConnector(BaseConnector):
     def push_payroll_batch(self, batch: Dict[str, Any]) -> Dict[str, Any]:
         token = self.get_access_token()
         if not token:
-            return {"success": False, "message": "Missing access token"}
+            return {"success": False, "message": _("Missing access token")}
         payload = {
             "events": [
                 {

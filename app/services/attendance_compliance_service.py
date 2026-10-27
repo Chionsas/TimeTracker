@@ -8,6 +8,7 @@ from datetime import date, datetime, timedelta
 from typing import Any, Dict, List, Optional, Tuple
 
 from flask import current_app
+from flask_babel import gettext as _
 
 from app import db
 from app.models import Settings, User, WorkdaySession
@@ -120,7 +121,7 @@ class AttendanceComplianceService:
         if self.is_day_locked(user_id, work_date):
             return {
                 "success": False,
-                "message": "Attendance record is locked for this date",
+                "message": _("Attendance record is locked for this date"),
                 "error": "attendance_locked",
             }
 
@@ -143,7 +144,7 @@ class AttendanceComplianceService:
         day.recalculate_totals()
 
         if not safe_commit("attendance_clock_in", {"user_id": user_id}):
-            return {"success": False, "message": "Could not start workday", "error": "database_error"}
+            return {"success": False, "message": _("Could not start workday"), "error": "database_error"}
 
         return {"success": True, "message": "Workday started", "period": period, "day": day}
 
@@ -156,12 +157,12 @@ class AttendanceComplianceService:
         now = at_time or local_now()
         period = self.get_active_work_period(user_id)
         if not period:
-            return {"success": False, "message": "No active workday session", "error": "no_active_workday"}
+            return {"success": False, "message": _("No active workday session"), "error": "no_active_workday"}
 
         if self.is_day_locked(user_id, period.start_time.date()):
             return {
                 "success": False,
-                "message": "Attendance record is locked for this date",
+                "message": _("Attendance record is locked for this date"),
                 "error": "attendance_locked",
             }
 
@@ -180,7 +181,7 @@ class AttendanceComplianceService:
         day.recalculate_totals()
 
         if not safe_commit("attendance_clock_out", {"user_id": user_id, "period_id": period.id}):
-            return {"success": False, "message": "Could not end workday", "error": "database_error"}
+            return {"success": False, "message": _("Could not end workday"), "error": "database_error"}
 
         return {"success": True, "message": "Workday ended", "period": period, "day": day}
 
@@ -193,14 +194,14 @@ class AttendanceComplianceService:
         now = at_time or local_now()
         period = self.get_active_work_period(user_id)
         if not period:
-            return {"success": False, "message": "Start work before taking a break", "error": "no_active_workday"}
+            return {"success": False, "message": _("Start work before taking a break"), "error": "no_active_workday"}
         if self.get_active_break(user_id):
-            return {"success": False, "message": "Break already in progress", "error": "break_already_active"}
+            return {"success": False, "message": _("Break already in progress"), "error": "break_already_active"}
 
         if self.is_day_locked(user_id, period.start_time.date()):
             return {
                 "success": False,
-                "message": "Attendance record is locked for this date",
+                "message": _("Attendance record is locked for this date"),
                 "error": "attendance_locked",
             }
 
@@ -220,7 +221,7 @@ class AttendanceComplianceService:
         period.attendance_day.recalculate_totals()
 
         if not safe_commit("attendance_start_break", {"user_id": user_id}):
-            return {"success": False, "message": "Could not start break", "error": "database_error"}
+            return {"success": False, "message": _("Could not start break"), "error": "database_error"}
 
         return {"success": True, "message": "Break started", "break": brk}
 
@@ -228,12 +229,12 @@ class AttendanceComplianceService:
         now = at_time or local_now()
         brk = self.get_active_break(user_id)
         if not brk:
-            return {"success": False, "message": "No active break", "error": "no_active_break"}
+            return {"success": False, "message": _("No active break"), "error": "no_active_break"}
 
         if self.is_day_locked(user_id, brk.start_time.date()):
             return {
                 "success": False,
-                "message": "Attendance record is locked for this date",
+                "message": _("Attendance record is locked for this date"),
                 "error": "attendance_locked",
             }
 
@@ -242,7 +243,7 @@ class AttendanceComplianceService:
         day.recalculate_totals()
 
         if not safe_commit("attendance_end_break", {"user_id": user_id, "break_id": brk.id}):
-            return {"success": False, "message": "Could not end break", "error": "database_error"}
+            return {"success": False, "message": _("Could not end break"), "error": "database_error"}
 
         return {"success": True, "message": "Break ended", "break": brk}
 
@@ -444,7 +445,11 @@ class AttendanceComplianceService:
             warnings.append(
                 {
                     "type": "daily_hours_exceeded",
-                    "message": f"Worked {work_hours:.2f}h exceeds standard {cfg['standard_daily_hours']}h",
+                    "message": _(
+                        "Worked %(hours).2fh exceeds standard %(limit)sh",
+                        hours=work_hours,
+                        limit=cfg["standard_daily_hours"],
+                    ),
                     "actual": work_hours,
                     "limit": cfg["standard_daily_hours"],
                 }
@@ -454,7 +459,11 @@ class AttendanceComplianceService:
             warnings.append(
                 {
                     "type": "break_required",
-                    "message": f"Break of at least {cfg['min_break_minutes']} min required after {cfg['break_after_hours']}h work",
+                    "message": _(
+                        "Break of at least %(minutes)s min required after %(hours)sh work",
+                        minutes=cfg["min_break_minutes"],
+                        hours=cfg["break_after_hours"],
+                    ),
                     "actual_break_minutes": int(break_hours * 60),
                     "required_minutes": cfg["min_break_minutes"],
                 }
@@ -465,7 +474,11 @@ class AttendanceComplianceService:
             warnings.append(
                 {
                     "type": "insufficient_daily_rest",
-                    "message": f"Only {rest_hours:.2f}h rest since previous shift (minimum {cfg['min_daily_rest_hours']}h)",
+                    "message": _(
+                        "Only %(hours).2fh rest since previous shift (minimum %(limit)sh)",
+                        hours=rest_hours,
+                        limit=cfg["min_daily_rest_hours"],
+                    ),
                     "actual": rest_hours,
                     "limit": cfg["min_daily_rest_hours"],
                 }
@@ -490,26 +503,26 @@ class AttendanceComplianceService:
 
         day = DailyAttendanceRecord.query.get(attendance_day_id)
         if not day:
-            return {"success": False, "message": "Attendance day not found"}
+            return {"success": False, "message": _("Attendance day not found")}
         requester = User.query.get(requested_by)
         if day.user_id != requested_by and not (requester and requester.is_admin):
-            return {"success": False, "message": "You can only request corrections for your own attendance"}
+            return {"success": False, "message": _("You can only request corrections for your own attendance")}
         if day.is_locked and not allow_locked:
-            return {"success": False, "message": "Locked attendance records require admin-approved corrections"}
+            return {"success": False, "message": _("Locked attendance records require admin-approved corrections")}
 
         if entity_type == "AddWorkPeriod":
             if day.work_periods.count() > 0:
                 return {
                     "success": False,
-                    "message": "This day already has work periods; edit an existing period instead",
+                    "message": _("This day already has work periods; edit an existing period instead"),
                 }
             if not corrected_values.get("start_time"):
-                return {"success": False, "message": "Start time is required"}
+                return {"success": False, "message": _("Start time is required")}
             original_values: Dict[str, Any] = {}
         else:
             original_values = self._snapshot_entity(entity_type, entity_id)
             if original_values is None:
-                return {"success": False, "message": "Entity not found"}
+                return {"success": False, "message": _("Entity not found")}
 
         correction = AttendanceCorrection(
             attendance_day_id=attendance_day_id,
@@ -523,7 +536,7 @@ class AttendanceComplianceService:
         )
         db.session.add(correction)
         if not safe_commit("request_attendance_correction", {"correction_id": correction.id}):
-            return {"success": False, "message": "Could not save correction request"}
+            return {"success": False, "message": _("Could not save correction request")}
         return {"success": True, "correction": correction}
 
     def request_missing_work_period(
@@ -537,7 +550,7 @@ class AttendanceComplianceService:
         notes: Optional[str] = None,
     ) -> Dict[str, Any]:
         if self.is_day_locked(user_id, work_date):
-            return {"success": False, "message": "Attendance record is locked for this date"}
+            return {"success": False, "message": _("Attendance record is locked for this date")}
         day = self.get_or_create_day(user_id, work_date)
         corrected = {
             "start_time": start_time.isoformat(),
@@ -580,9 +593,9 @@ class AttendanceComplianceService:
     ) -> Dict[str, Any]:
         correction = AttendanceCorrection.query.get(correction_id)
         if not correction:
-            return {"success": False, "message": "Correction not found"}
+            return {"success": False, "message": _("Correction not found")}
         if correction.status != AttendanceCorrectionStatus.PENDING:
-            return {"success": False, "message": "Correction already reviewed"}
+            return {"success": False, "message": _("Correction already reviewed")}
 
         correction.reviewed_by = reviewer_id
         correction.reviewed_at = local_now()
@@ -591,7 +604,7 @@ class AttendanceComplianceService:
         if not approve:
             correction.status = AttendanceCorrectionStatus.REJECTED
             if not safe_commit("reject_attendance_correction", {"correction_id": correction_id}):
-                return {"success": False, "message": "Could not save rejection"}
+                return {"success": False, "message": _("Could not save rejection")}
             return {"success": True, "correction": correction, "applied": False}
 
         try:
@@ -601,16 +614,16 @@ class AttendanceComplianceService:
             current_app.logger.exception(
                 "Failed to apply attendance correction %s", correction_id
             )
-            return {"success": False, "message": "Could not apply correction"}
+            return {"success": False, "message": _("Could not apply correction")}
 
         if not applied:
             db.session.rollback()
-            return {"success": False, "message": "Could not apply correction"}
+            return {"success": False, "message": _("Could not apply correction")}
 
         correction.status = AttendanceCorrectionStatus.APPLIED
         correction.applied_at = local_now()
         if not safe_commit("apply_attendance_correction", {"correction_id": correction_id}):
-            return {"success": False, "message": "Could not save approved correction"}
+            return {"success": False, "message": _("Could not save approved correction")}
         return {"success": True, "correction": correction, "applied": True}
 
     def _snapshot_entity(self, entity_type: str, entity_id: int) -> Optional[Dict[str, Any]]:

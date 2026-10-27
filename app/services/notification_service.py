@@ -7,6 +7,7 @@ from datetime import date, datetime, time, timedelta, timezone
 from typing import Any, Dict, List, Optional, Set, Tuple
 
 from flask import current_app
+from flask_babel import gettext as _
 from sqlalchemy import func
 
 from app import db
@@ -354,11 +355,18 @@ class NotificationService:
                         candidates.append(
                             {
                                 "kind": KIND_LONG_TIMER,
-                                "title": "Timer still running",
+                                "title": _("Timer still running"),
                                 "message": (
-                                    f"Your timer has been running for about {h}h {m}m — still active?"
+                                    _(
+                                        "Your timer has been running for about %(hours)sh %(minutes)sm — still active?",
+                                        hours=h,
+                                        minutes=m,
+                                    )
                                     if h or m
-                                    else f"Your timer has been running for {long_threshold_h:g}h or more — still active?"
+                                    else _(
+                                        "Your timer has been running for %(hours)sh or more — still active?",
+                                        hours=f"{long_threshold_h:g}",
+                                    )
                                 ),
                                 "type": "warning",
                                 "priority": "high",
@@ -376,8 +384,8 @@ class NotificationService:
                     candidates.append(
                         {
                             "kind": KIND_NO_TRACKING,
-                            "title": "No time logged yet",
-                            "message": "You have not tracked anything today. Start a timer or add an entry.",
+                            "title": _("No time logged yet"),
+                            "message": _("You have not tracked anything today. Start a timer or add an entry."),
                             "type": "info",
                             "priority": "normal",
                         }
@@ -389,8 +397,8 @@ class NotificationService:
                 candidates.append(
                     {
                         "kind": KIND_DAILY_SUMMARY,
-                        "title": "Daily summary",
-                        "message": f"Today you logged {hours_today:.1f}h in completed entries.",
+                        "title": _("Daily summary"),
+                        "message": _("Today you logged %(hours).1fh in completed entries.", hours=hours_today),
                         "type": "success",
                         "priority": "normal",
                     }
@@ -421,14 +429,16 @@ class NotificationService:
                             candidates.append(
                                 {
                                     "kind": KIND_BREAK_REMINDER,
-                                    "title": "Time for a break",
-                                    "message": (
-                                        f"You've been tracking for {elapsed_h}h {elapsed_m}m. "
-                                        f"Consider taking a short break."
+                                    "title": _("Time for a break"),
+                                    "message": _(
+                                        "You've been tracking for %(hours)sh %(minutes)sm. "
+                                        "Consider taking a short break.",
+                                        hours=elapsed_h,
+                                        minutes=elapsed_m,
                                     ),
                                     "type": "info",
                                     "priority": "normal",
-                                    "action": {"label": "Pause timer", "url": "/timer/pause"},
+                                    "action": {"label": _("Pause timer"), "url": "/timer/pause"},
                                 }
                             )
 
@@ -439,14 +449,14 @@ class NotificationService:
                 candidates.append(
                     {
                         "kind": KIND_FORGOTTEN_CLOCK_OUT,
-                        "title": "Forgot to end workday?",
-                        "message": (
+                        "title": _("Forgot to end workday?"),
+                        "message": _(
                             "You still have an open workday from yesterday. "
                             "Confirm when you left so today's hours are correct."
                         ),
                         "type": "warning",
                         "priority": "high",
-                        "action": {"label": "Correct leave time", "url": "/"},
+                        "action": {"label": _("Correct leave time"), "url": "/"},
                     }
                 )
 
@@ -458,13 +468,13 @@ class NotificationService:
                     candidates.append(
                         {
                             "kind": KIND_MISSED_CLOCK_IN,
-                            "title": "Workday not started",
-                            "message": (
+                            "title": _("Workday not started"),
+                            "message": _(
                                 "You have not started your workday yet. " "Press Start Workday when you begin working."
                             ),
                             "type": "warning",
                             "priority": "high",
-                            "action": {"label": "Start workday", "url": "/"},
+                            "action": {"label": _("Start workday"), "url": "/"},
                         }
                     )
 
@@ -474,11 +484,11 @@ class NotificationService:
                 candidates.append(
                     {
                         "kind": KIND_END_OF_DAY,
-                        "title": "End of day",
-                        "message": (f"It's nearly end of day. You've logged {hours_today:.1f}h today."),
+                        "title": _("End of day"),
+                        "message": _("It's nearly end of day. You've logged %(hours).1fh today.", hours=hours_today),
                         "type": "info",
                         "priority": "normal",
-                        "action": {"label": "View today's entries", "url": "/time-entries"},
+                        "action": {"label": _("View today's entries"), "url": "/time-entries"},
                     }
                 )
 

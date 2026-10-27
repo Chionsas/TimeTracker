@@ -105,13 +105,13 @@ def get_burn_rate(project_id):
         has_access = TimeEntry.query.filter_by(project_id=project_id, user_id=current_user.id).first() is not None
 
         if not has_access:
-            return jsonify({"error": "Access denied"}), 403
+            return jsonify({"error": _("Access denied")}), 403
 
     days = request.args.get("days", 30, type=int)
     burn_rate = calculate_burn_rate(project_id, days)
 
     if burn_rate is None:
-        return jsonify({"error": "Project not found or no data available"}), 404
+        return jsonify({"error": _("Project not found or no data available")}), 404
 
     log_event("budget_burn_rate_viewed", user_id=current_user.id, project_id=project_id)
 
@@ -132,13 +132,13 @@ def get_completion_estimate(project_id):
         has_access = TimeEntry.query.filter_by(project_id=project_id, user_id=current_user.id).first() is not None
 
         if not has_access:
-            return jsonify({"error": "Access denied"}), 403
+            return jsonify({"error": _("Access denied")}), 403
 
     days = request.args.get("days", 30, type=int)
     estimate = estimate_completion_date(project_id, days)
 
     if estimate is None:
-        return jsonify({"error": "Project not found or no budget set"}), 404
+        return jsonify({"error": _("Project not found or no budget set")}), 404
 
     log_event("budget_completion_estimate_viewed", user_id=current_user.id, project_id=project_id)
 
@@ -159,13 +159,13 @@ def get_resource_allocation(project_id):
         has_access = TimeEntry.query.filter_by(project_id=project_id, user_id=current_user.id).first() is not None
 
         if not has_access:
-            return jsonify({"error": "Access denied"}), 403
+            return jsonify({"error": _("Access denied")}), 403
 
     days = request.args.get("days", 30, type=int)
     allocation = analyze_resource_allocation(project_id, days)
 
     if allocation is None:
-        return jsonify({"error": "Project not found"}), 404
+        return jsonify({"error": _("Project not found")}), 404
 
     log_event("budget_resource_allocation_viewed", user_id=current_user.id, project_id=project_id)
 
@@ -186,18 +186,18 @@ def get_cost_trends(project_id):
         has_access = TimeEntry.query.filter_by(project_id=project_id, user_id=current_user.id).first() is not None
 
         if not has_access:
-            return jsonify({"error": "Access denied"}), 403
+            return jsonify({"error": _("Access denied")}), 403
 
     days = request.args.get("days", 90, type=int)
     granularity = request.args.get("granularity", "week")
 
     if granularity not in ["day", "week", "month"]:
-        return jsonify({"error": "Invalid granularity. Use day, week, or month"}), 400
+        return jsonify({"error": _("Invalid granularity. Use day, week, or month")}), 400
 
     trends = analyze_cost_trends(project_id, days, granularity)
 
     if trends is None:
-        return jsonify({"error": "Project not found"}), 404
+        return jsonify({"error": _("Project not found")}), 404
 
     log_event("budget_cost_trends_viewed", user_id=current_user.id, project_id=project_id)
 
@@ -218,12 +218,12 @@ def get_project_budget_status(project_id):
         has_access = TimeEntry.query.filter_by(project_id=project_id, user_id=current_user.id).first() is not None
 
         if not has_access:
-            return jsonify({"error": "Access denied"}), 403
+            return jsonify({"error": _("Access denied")}), 403
 
     budget_status = get_budget_status(project_id)
 
     if budget_status is None:
-        return jsonify({"error": "Project not found or no budget set"}), 404
+        return jsonify({"error": _("Project not found or no budget set")}), 404
 
     return jsonify(budget_status)
 
@@ -269,16 +269,16 @@ def acknowledge_alert(alert_id):
         has_access = TimeEntry.query.filter_by(project_id=alert.project_id, user_id=current_user.id).first() is not None
 
         if not has_access:
-            return jsonify({"error": "Access denied"}), 403
+            return jsonify({"error": _("Access denied")}), 403
 
     if alert.is_acknowledged:
-        return jsonify({"message": "Alert already acknowledged"}), 200
+        return jsonify({"message": _("Alert already acknowledged")}), 200
 
     alert.acknowledge(current_user.id)
 
     log_event("budget_alert_acknowledged", user_id=current_user.id, alert_id=alert_id, project_id=alert.project_id)
 
-    return jsonify({"message": "Alert acknowledged successfully", "alert": alert.to_dict()})
+    return jsonify({"message": _("Alert acknowledged successfully"), "alert": alert.to_dict()})
 
 
 @budget_alerts_bp.route("/api/budget/check-alerts/<int:project_id>", methods=["POST"])
@@ -287,7 +287,7 @@ def acknowledge_alert(alert_id):
 def check_project_alerts(project_id):
     """Manually check and create alerts for a project (admin only)"""
     if not current_user.is_admin:
-        return jsonify({"error": "Admin access required"}), 403
+        return jsonify({"error": _("Admin access required")}), 403
 
     project = Project.query.get_or_404(project_id)
 
@@ -308,7 +308,7 @@ def check_project_alerts(project_id):
 
     return jsonify(
         {
-            "message": f"Checked alerts for project {project.name}",
+            "message": _("Checked alerts for project %(project)s", project=project.name),
             "alerts_created": len(created_alerts),
             "alerts": created_alerts,
         }

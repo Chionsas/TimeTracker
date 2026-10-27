@@ -930,7 +930,7 @@ def api_search_rates():
     date_str = request.args.get("date", "").strip()
 
     if not country:
-        return jsonify({"error": "Country is required"}), 400
+        return jsonify({"error": _("Country is required")}), 400
 
     search_date = datetime.strptime(date_str, "%Y-%m-%d").date() if date_str else date.today()
 
@@ -939,7 +939,7 @@ def api_search_rates():
     if rate:
         return jsonify(rate.to_dict())
     else:
-        return jsonify({"error": "No rate found for this location"}), 404
+        return jsonify({"error": _("No rate found for this location")}), 404
 
 
 @per_diem_bp.route("/api/per-diem/calculate-days", methods=["POST"])

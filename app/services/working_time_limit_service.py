@@ -5,6 +5,8 @@ Service for daily/weekly working time limit detection and violations.
 from datetime import date, datetime
 from typing import Any, Dict, Optional, Tuple
 
+from flask_babel import gettext as _
+
 from app import db
 from app.models import Settings, User, WorkingTimeViolation
 from app.models.time_entry import local_now
@@ -124,32 +126,32 @@ class WorkingTimeLimitService:
     def submit_justification(self, violation_id: int, user_id: int, justification: str) -> Dict[str, Any]:
         violation = WorkingTimeViolation.query.filter_by(id=violation_id, user_id=user_id).first()
         if not violation:
-            return {"success": False, "message": "Violation not found", "error": "not_found"}
+            return {"success": False, "message": _("Violation not found"), "error": "not_found"}
         if not justification or not justification.strip():
-            return {"success": False, "message": "Justification is required", "error": "validation"}
+            return {"success": False, "message": _("Justification is required"), "error": "validation"}
 
         violation.justification = justification.strip()
         violation.justification_submitted_at = local_now()
         violation.status = WorkingTimeViolation.STATUS_SUBMITTED
 
         if not safe_commit("submit_justification", {"violation_id": violation_id}):
-            return {"success": False, "message": "Database error", "error": "database_error"}
+            return {"success": False, "message": _("Database error"), "error": "database_error"}
 
-        return {"success": True, "message": "Justification submitted", "violation": violation}
+        return {"success": True, "message": _("Justification submitted"), "violation": violation}
 
     def acknowledge_violation(self, violation_id: int, admin_user_id: int) -> Dict[str, Any]:
         violation = WorkingTimeViolation.query.get(violation_id)
         if not violation:
-            return {"success": False, "message": "Violation not found", "error": "not_found"}
+            return {"success": False, "message": _("Violation not found"), "error": "not_found"}
 
         violation.status = WorkingTimeViolation.STATUS_ACKNOWLEDGED
         violation.acknowledged_by_user_id = admin_user_id
         violation.acknowledged_at = local_now()
 
         if not safe_commit("acknowledge_violation", {"violation_id": violation_id}):
-            return {"success": False, "message": "Database error", "error": "database_error"}
+            return {"success": False, "message": _("Database error"), "error": "database_error"}
 
-        return {"success": True, "message": "Acknowledged", "violation": violation}
+        return {"success": True, "message": _("Acknowledged"), "violation": violation}
 
     def get_pending_violations_for_user(self, user_id: int):
         return (

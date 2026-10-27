@@ -84,13 +84,13 @@ def get_events():
     include_time_off = request.args.get("include_time_off", "true").lower() == "true"
 
     if not start_str or not end_str:
-        return jsonify({"error": "Start and end dates are required"}), 400
+        return jsonify({"error": _("Start and end dates are required")}), 400
 
     try:
         start_date = datetime.fromisoformat(start_str.replace("Z", "+00:00"))
         end_date = datetime.fromisoformat(end_str.replace("Z", "+00:00"))
     except (ValueError, AttributeError):
-        return jsonify({"error": "Invalid date format"}), 400
+        return jsonify({"error": _("Invalid date format")}), 400
 
     # Get events using the model's static method
     result = CalendarEvent.get_events_in_range(
@@ -163,13 +163,13 @@ def create_event():
     data = request.get_json()
 
     if not data:
-        return jsonify({"error": "No data provided"}), 400
+        return jsonify({"error": _("No data provided")}), 400
 
     # Validate required fields
     required_fields = ["title", "start", "end"]
     for field in required_fields:
         if field not in data:
-            return jsonify({"error": f"Missing required field: {field}"}), 400
+            return jsonify({"error": _("Missing required field: %(field)s", field=field)}), 400
 
     try:
         # Parse dates
@@ -203,7 +203,7 @@ def create_event():
 
         db.session.add(event)
         if not safe_commit():
-            return jsonify({"error": "Failed to create event"}), 500
+            return jsonify({"error": _("Failed to create event")}), 500
 
         return jsonify({"success": True, "event": event.to_dict(), "message": _("Event created successfully")}), 201
 
@@ -223,7 +223,7 @@ def get_event(event_id):
 
     # Check if user has permission to view this event
     if event.user_id != current_user.id and not current_user.is_admin:
-        return jsonify({"error": "Permission denied"}), 403
+        return jsonify({"error": _("Permission denied")}), 403
 
     return jsonify(event.to_dict())
 
@@ -236,11 +236,11 @@ def update_event(event_id):
 
     # Check if user has permission to edit this event
     if event.user_id != current_user.id and not current_user.is_admin:
-        return jsonify({"error": "Permission denied"}), 403
+        return jsonify({"error": _("Permission denied")}), 403
 
     data = request.get_json()
     if not data:
-        return jsonify({"error": "No data provided"}), 400
+        return jsonify({"error": _("No data provided")}), 400
 
     try:
         # Update fields
@@ -284,7 +284,7 @@ def update_event(event_id):
         event.updated_at = now_in_app_timezone()
 
         if not safe_commit():
-            return jsonify({"error": "Failed to update event"}), 500
+            return jsonify({"error": _("Failed to update event")}), 500
 
         return jsonify({"success": True, "event": event.to_dict(), "message": _("Event updated successfully")})
 
@@ -306,7 +306,7 @@ def delete_event(event_id):
         if request.method == "POST":
             flash(_("You do not have permission to delete this event."), "error")
             return redirect(url_for("calendar.view_calendar"))
-        return jsonify({"error": "Permission denied"}), 403
+        return jsonify({"error": _("Permission denied")}), 403
 
     try:
         db.session.delete(event)
@@ -314,7 +314,7 @@ def delete_event(event_id):
             if request.method == "POST":
                 flash(_("Failed to delete event"), "error")
                 return redirect(url_for("calendar.view_calendar"))
-            return jsonify({"error": "Failed to delete event"}), 500
+            return jsonify({"error": _("Failed to delete event")}), 500
 
         if request.method == "POST":
             flash(_("Event deleted successfully"), "success")
@@ -338,11 +338,11 @@ def move_event(event_id):
 
     # Check if user has permission to edit this event
     if event.user_id != current_user.id and not current_user.is_admin:
-        return jsonify({"error": "Permission denied"}), 403
+        return jsonify({"error": _("Permission denied")}), 403
 
     data = request.get_json()
     if not data or "start" not in data or "end" not in data:
-        return jsonify({"error": "Start and end times are required"}), 400
+        return jsonify({"error": _("Start and end times are required")}), 400
 
     try:
         event.start_time = datetime.fromisoformat(data["start"].replace("Z", "+00:00"))
@@ -350,7 +350,7 @@ def move_event(event_id):
         event.updated_at = now_in_app_timezone()
 
         if not safe_commit():
-            return jsonify({"error": "Failed to move event"}), 500
+            return jsonify({"error": _("Failed to move event")}), 500
 
         return jsonify({"success": True, "event": event.to_dict(), "message": _("Event moved successfully")})
 
@@ -369,11 +369,11 @@ def resize_event(event_id):
 
     # Check if user has permission to edit this event
     if event.user_id != current_user.id and not current_user.is_admin:
-        return jsonify({"error": "Permission denied"}), 403
+        return jsonify({"error": _("Permission denied")}), 403
 
     data = request.get_json()
     if not data:
-        return jsonify({"error": "No data provided"}), 400
+        return jsonify({"error": _("No data provided")}), 400
 
     try:
         if "end" in data:
@@ -384,7 +384,7 @@ def resize_event(event_id):
         event.updated_at = now_in_app_timezone()
 
         if not safe_commit():
-            return jsonify({"error": "Failed to resize event"}), 500
+            return jsonify({"error": _("Failed to resize event")}), 500
 
         return jsonify({"success": True, "event": event.to_dict(), "message": _("Event resized successfully")})
 

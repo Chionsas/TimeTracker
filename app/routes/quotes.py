@@ -1792,12 +1792,12 @@ def send_quote_email(quote_id):
                 {"quote_id": quote.id, "quote_title": quote.title, "recipient_email": recipient_email},
             )
             if request.is_json:
-                return jsonify({"success": True, "message": "Quote email sent successfully"})
+                return jsonify({"success": True, "message": _("Quote email sent successfully")})
             return redirect(url_for("quotes.view_quote", quote_id=quote_id))
         else:
             flash(_("Failed to send quote. Please try again."), "error")
             if request.is_json:
-                return client_error_response("Failed to send quote email", 400)
+                return client_error_response(_("Failed to send quote email"), 400)
             return redirect(url_for("quotes.view_quote", quote_id=quote_id))
     except Exception as e:
         current_app.logger.error(f"Error sending quote email: {e}", exc_info=True)
@@ -2059,7 +2059,7 @@ def upload_quote_image(quote_id):
     # Check permissions
     if not current_user.is_admin and quote.created_by != current_user.id:
         if request.is_json:
-            return jsonify({"error": "Permission denied"}), 403
+            return jsonify({"error": _("Permission denied")}), 403
         flash(_("You do not have permission to upload images to this quote"), "error")
         return redirect(url_for("quotes.view_quote", quote_id=quote_id))
 
@@ -2073,20 +2073,23 @@ def upload_quote_image(quote_id):
 
     if "file" not in request.files:
         if request.is_json:
-            return jsonify({"error": "No file provided"}), 400
+            return jsonify({"error": _("No file provided")}), 400
         flash(_("No file provided"), "error")
         return redirect(url_for("quotes.edit_quote", quote_id=quote_id))
 
     file = request.files["file"]
     if file.filename == "":
         if request.is_json:
-            return jsonify({"error": "No file selected"}), 400
+            return jsonify({"error": _("No file selected")}), 400
         flash(_("No file selected"), "error")
         return redirect(url_for("quotes.edit_quote", quote_id=quote_id))
 
     if not allowed_file(file.filename):
         if request.is_json:
-            return jsonify({"error": "File type not allowed. Only images (PNG, JPG, JPEG, GIF, WEBP) are allowed"}), 400
+            return (
+                jsonify({"error": _("File type not allowed. Only images (PNG, JPG, JPEG, GIF, WEBP) are allowed")}),
+                400,
+            )
         flash(_("File type not allowed. Only images are allowed"), "error")
         return redirect(url_for("quotes.edit_quote", quote_id=quote_id))
 
@@ -2098,7 +2101,14 @@ def upload_quote_image(quote_id):
     if file_size > MAX_FILE_SIZE:
         if request.is_json:
             return (
-                jsonify({"error": f"File size exceeds maximum allowed size ({MAX_FILE_SIZE / (1024*1024):.0f} MB)"}),
+                jsonify(
+                    {
+                        "error": _(
+                            "File size exceeds maximum allowed size (%(size)s MB)",
+                            size=f"{MAX_FILE_SIZE / (1024*1024):.0f}",
+                        )
+                    }
+                ),
                 400,
             )
         flash(_("File size exceeds maximum allowed size (5 MB)"), "error")
@@ -2112,7 +2122,7 @@ def upload_quote_image(quote_id):
     filename = secure_filename(f"{quote_id}_{timestamp}_{original_filename}")
     if not filename:
         if request.is_json:
-            return jsonify({"error": "Invalid filename"}), 400
+            return jsonify({"error": _("Invalid filename")}), 400
         flash(_("Invalid filename"), "error")
         return redirect(url_for("quotes.edit_quote", quote_id=quote_id))
 
@@ -2125,7 +2135,7 @@ def upload_quote_image(quote_id):
         file.save(file_path)
     except PathEscapeError:
         if request.is_json:
-            return jsonify({"error": "Invalid upload path"}), 400
+            return jsonify({"error": _("Invalid upload path")}), 400
         flash(_("Invalid upload path"), "error")
         return redirect(url_for("quotes.edit_quote", quote_id=quote_id))
 
@@ -2161,7 +2171,7 @@ def upload_quote_image(quote_id):
 
     if not safe_commit("upload_quote_image", {"quote_id": quote_id, "image_id": image.id}):
         if request.is_json:
-            return jsonify({"error": "Database error"}), 500
+            return jsonify({"error": _("Database error")}), 500
         flash(_("Could not upload image due to a database error. Please check server logs."), "error")
         # Clean up uploaded file
         try:
@@ -2202,7 +2212,7 @@ def update_quote_image_position(quote_id, image_id):
 
     # Check permissions
     if not current_user.is_admin and quote.created_by != current_user.id:
-        return jsonify({"error": "Permission denied"}), 403
+        return jsonify({"error": _("Permission denied")}), 403
 
     # Get position data from request
     data = request.get_json() if request.is_json else request.form
@@ -2221,7 +2231,7 @@ def update_quote_image_position(quote_id, image_id):
         image.z_index = int(data["z_index"])
 
     if not safe_commit("update_quote_image_position", {"quote_id": quote_id, "image_id": image_id}):
-        return jsonify({"error": "Database error"}), 500
+        return jsonify({"error": _("Database error")}), 500
 
     return jsonify({"success": True, "image": image.to_dict()})
 
@@ -2239,7 +2249,7 @@ def delete_quote_image(quote_id, image_id):
     # Check permissions
     if not current_user.is_admin and quote.created_by != current_user.id:
         if request.is_json:
-            return jsonify({"error": "Permission denied"}), 403
+            return jsonify({"error": _("Permission denied")}), 403
         flash(_("You do not have permission to delete images from this quote"), "error")
         return redirect(url_for("quotes.edit_quote", quote_id=quote_id))
 
@@ -2256,7 +2266,7 @@ def delete_quote_image(quote_id, image_id):
 
     if not safe_commit("delete_quote_image", {"quote_id": quote_id, "image_id": image_id_for_log}):
         if request.is_json:
-            return jsonify({"error": "Database error"}), 500
+            return jsonify({"error": _("Database error")}), 500
         flash(_("Could not delete image due to a database error. Please check server logs."), "error")
         return redirect(url_for("quotes.edit_quote", quote_id=quote_id))
 

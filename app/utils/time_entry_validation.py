@@ -6,6 +6,8 @@ Used when creating/updating time entries and when starting timers.
 
 from typing import TYPE_CHECKING, Any, Dict, Optional
 
+from flask_babel import gettext as _
+
 if TYPE_CHECKING:
     from app.models.settings import Settings
 
@@ -38,7 +40,7 @@ def validate_time_entry_requirements(
     if require_task and project_id and not task_id:
         return {
             "success": False,
-            "message": "A task must be selected when logging time for a project",
+            "message": _("A task must be selected when logging time for a project"),
             "error": "task_required",
         }
 
@@ -48,13 +50,13 @@ def validate_time_entry_requirements(
         if not notes_stripped:
             return {
                 "success": False,
-                "message": "A description is required when logging time",
+                "message": _("A description is required when logging time"),
                 "error": "description_required",
             }
         if len(notes_stripped) < min_length:
             return {
                 "success": False,
-                "message": f"Description must be at least {min_length} characters",
+                "message": _("Description must be at least %(min_length)s characters", min_length=min_length),
                 "error": "description_too_short",
             }
 

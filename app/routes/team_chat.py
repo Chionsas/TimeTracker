@@ -261,13 +261,13 @@ def api_messages(channel_id):
     membership = ChatChannelMember.query.filter_by(channel_id=channel_id, user_id=current_user.id).first()
 
     if not membership and not current_user.is_admin:
-        return jsonify({"error": "Access denied"}), 403
+        return jsonify({"error": _("Access denied")}), 403
 
     if request.method == "POST":
         # Create new message
         data = request.get_json()
         if data is None:
-            return jsonify({"error": "Invalid JSON", "error_code": "validation_error"}), 400
+            return jsonify({"error": _("Invalid JSON"), "error_code": "validation_error"}), 400
 
         # Validate attachment fields if present (API may send attachment_url, attachment_filename, attachment_size)
         attachment_url = data.get("attachment_url")
@@ -370,7 +370,7 @@ def api_message(message_id):
     message = ChatMessage.query.get_or_404(message_id)
 
     if message.user_id != current_user.id and not current_user.is_admin:
-        return jsonify({"error": "Access denied"}), 403
+        return jsonify({"error": _("Access denied")}), 403
 
     if request.method == "PUT":
         # Update message
@@ -402,7 +402,7 @@ def api_react(message_id):
 
     emoji = data.get("emoji")
     if not emoji:
-        return jsonify({"error": "Emoji required"}), 400
+        return jsonify({"error": _("Emoji required")}), 400
 
     reactions = message.reactions or {}
     if emoji not in reactions:

@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 from threading import Thread
 
 from flask import current_app, render_template
+from flask_babel import gettext as _, ngettext
 from flask_mail import Mail, Message
 
 from app import db
@@ -143,13 +144,14 @@ def send_client_portal_password_setup_email(client, token):
         )
 
         # Plain text version
-        text_body = f"""
-Hello {client.name or client.contact_person or 'Client'},
+        text_body = _(
+            """
+Hello %(name)s,
 
 You have been granted access to the TimeTracker Client Portal.
 
 To set your password and access the portal, please click the following link:
-{setup_url}
+%(setup_url)s
 
 This link will expire in 24 hours.
 
@@ -157,9 +159,12 @@ If you did not request this access, please contact your administrator.
 
 Best regards,
 TimeTracker Team
-"""
+""",
+            name=client.name or client.contact_person or _("Client"),
+            setup_url=setup_url,
+        )
 
-        subject = f"Set Your Client Portal Password - {client.name}"
+        subject = _("Set Your Client Portal Password - %(name)s", name=client.name)
 
         # Create message
         msg = Message(
@@ -272,28 +277,42 @@ def send_overdue_invoice_notification(invoice, user):
 
     days_overdue = (datetime.utcnow().date() - invoice.due_date).days
 
-    subject = f"Invoice {invoice.invoice_number} is {days_overdue} days overdue"
+    subject = _(
+        "Invoice %(invoice_number)s is %(days_overdue)s days overdue",
+        invoice_number=invoice.invoice_number,
+        days_overdue=days_overdue,
+    )
 
     invoice_url = safe_external_url_for("invoices.view_invoice", invoice_id=invoice.id)
-    view_line = f"\nView invoice: {invoice_url}\n" if invoice_url else "\n"
+    view_line = _("\nView invoice: %(invoice_url)s\n", invoice_url=invoice_url) if invoice_url else "\n"
 
-    text_body = f"""
-Hello {user.display_name},
+    text_body = _(
+        """
+Hello %(display_name)s,
 
-Invoice {invoice.invoice_number} for {invoice.client_name} is now {days_overdue} days overdue.
+Invoice %(invoice_number)s for %(client_name)s is now %(days_overdue)s days overdue.
 
 Invoice Details:
-- Invoice Number: {invoice.invoice_number}
-- Client: {invoice.client_name}
-- Amount: {invoice.currency_code} {invoice.total_amount}
-- Due Date: {invoice.due_date}
-- Days Overdue: {days_overdue}
+- Invoice Number: %(invoice_number)s
+- Client: %(client_name)s
+- Amount: %(currency_code)s %(total_amount)s
+- Due Date: %(due_date)s
+- Days Overdue: %(days_overdue)s
 
 Please follow up with the client or update the invoice status.
-{view_line}
+%(view_line)s
 ---
 TimeTracker - Time Tracking & Project Management
-    """
+    """,
+        display_name=user.display_name,
+        invoice_number=invoice.invoice_number,
+        client_name=invoice.client_name,
+        days_overdue=days_overdue,
+        currency_code=invoice.currency_code,
+        total_amount=invoice.total_amount,
+        due_date=invoice.due_date,
+        view_line=view_line,
+    )
 
     html_body = render_template(
         "email/overdue_invoice.html",
@@ -317,29 +336,40 @@ def send_task_assigned_notification(task, user, assigned_by):
     if not user.email or not user.email_notifications or not user.notification_task_assigned:
         return
 
-    subject = f"You've been assigned to task: {task.name}"
+    subject = _("You've been assigned to task: %(name)s", name=task.name)
 
     task_url = safe_external_url_for("tasks.edit_task", task_id=task.id)
-    view_line = f"\nView task: {task_url}\n" if task_url else "\n"
+    view_line = _("\nView task: %(task_url)s\n", task_url=task_url) if task_url else "\n"
 
-    text_body = f"""
-Hello {user.display_name},
+    text_body = _(
+        """
+Hello %(display_name)s,
 
-{assigned_by.display_name} has assigned you to a task.
+%(assigned_by)s has assigned you to a task.
 
 Task Details:
-- Task: {task.name}
-- Project: {task.project.name if task.project else 'N/A'}
-- Priority: {task.priority or 'Normal'}
-- Due Date: {task.due_date if task.due_date else 'Not set'}
-- Status: {task.status}
+- Task: %(name)s
+- Project: %(project)s
+- Priority: %(priority)s
+- Due Date: %(due_date)s
+- Status: %(status)s
 
 Description:
-{task.description or 'No description provided'}
-{view_line}
+%(description)s
+%(view_line)s
 ---
 TimeTracker - Time Tracking & Project Management
-    """
+    """,
+        display_name=user.display_name,
+        assigned_by=assigned_by.display_name,
+        name=task.name,
+        project=task.project.name if task.project else _("N/A"),
+        priority=task.priority or _("Normal"),
+        due_date=task.due_date if task.due_date else _("Not set"),
+        status=task.status,
+        description=task.description or _("No description provided"),
+        view_line=view_line,
+    )
 
     html_body = render_template(
         "email/task_assigned.html", user=user, task=task, assigned_by=assigned_by, task_url=task_url
@@ -361,29 +391,39 @@ def send_weekly_summary(user, start_date, end_date, hours_worked, projects_data)
     if not user.email or not user.email_notifications or not user.notification_weekly_summary:
         return
 
-    subject = f"Your Weekly Time Summary ({start_date} to {end_date})"
+    subject = _("Your Weekly Time Summary (%(start_date)s to %(end_date)s)", start_date=start_date, end_date=end_date)
 
     # Build project summary text
-    project_summary = "\n".join([f"- {p['name']}: {p['hours']:.1f} hours" for p in projects_data])
+    project_summary = "\n".join(
+        [_("- %(name)s: %(hours)s hours", name=p["name"], hours=f"{p['hours']:.1f}") for p in projects_data]
+    )
 
     reports_url = safe_external_url_for("reports.reports")
-    reports_line = f"\nView detailed reports: {reports_url}\n" if reports_url else "\n"
+    reports_line = _("\nView detailed reports: %(reports_url)s\n", reports_url=reports_url) if reports_url else "\n"
 
-    text_body = f"""
-Hello {user.display_name},
+    text_body = _(
+        """
+Hello %(display_name)s,
 
-Here's your time tracking summary for the week of {start_date} to {end_date}:
+Here's your time tracking summary for the week of %(start_date)s to %(end_date)s:
 
-Total Hours: {hours_worked:.1f}
+Total Hours: %(hours_worked)s
 
 Hours by Project:
-{project_summary}
+%(project_summary)s
 
 Keep up the great work!
-{reports_line}
+%(reports_line)s
 ---
 TimeTracker - Time Tracking & Project Management
-    """
+    """,
+        display_name=user.display_name,
+        start_date=start_date,
+        end_date=end_date,
+        hours_worked=f"{hours_worked:.1f}",
+        project_summary=project_summary,
+        reports_line=reports_line,
+    )
 
     html_body = render_template(
         "email/weekly_summary.html",
@@ -405,27 +445,37 @@ def send_working_time_limit_exceeded_email(user, violation):
 
     from app.models.working_time_violation import WorkingTimeViolation
 
-    period_label = "daily" if violation.period_type == WorkingTimeViolation.PERIOD_DAILY else "weekly"
-    subject = f"Working time limit exceeded ({period_label})"
+    period_label = _("daily") if violation.period_type == WorkingTimeViolation.PERIOD_DAILY else _("weekly")
+    subject = _("Working time limit exceeded (%(period_label)s)", period_label=period_label)
     justify_url = safe_external_url_for("workday.violation_justify", violation_id=violation.id)
     justify_block = (
-        f"\nPlease provide a brief justification in TimeTracker:\n{justify_url}\n"
+        _("\nPlease provide a brief justification in TimeTracker:\n%(justify_url)s\n", justify_url=justify_url)
         if justify_url
-        else "\nPlease provide a brief justification in TimeTracker.\n"
+        else _("\nPlease provide a brief justification in TimeTracker.\n")
     )
 
-    text_body = f"""Hello {user.display_name},
+    text_body = _(
+        """Hello %(display_name)s,
 
-You have exceeded your {period_label} working time limit.
+You have exceeded your %(period_label)s working time limit.
 
-Period: {violation.period_start} to {violation.period_end}
-Limit: {violation.limit_hours:.1f} hours
-Actual: {violation.actual_hours:.1f} hours
-Over by: {violation.hours_over:.1f} hours
-{justify_block}
+Period: %(period_start)s to %(period_end)s
+Limit: %(limit_hours)s hours
+Actual: %(actual_hours)s hours
+Over by: %(hours_over)s hours
+%(justify_block)s
 ---
 TimeTracker
-"""
+""",
+        display_name=user.display_name,
+        period_label=period_label,
+        period_start=violation.period_start,
+        period_end=violation.period_end,
+        limit_hours=f"{violation.limit_hours:.1f}",
+        actual_hours=f"{violation.actual_hours:.1f}",
+        hours_over=f"{violation.hours_over:.1f}",
+        justify_block=justify_block,
+    )
 
     template_name = (
         "working_time_daily_exceeded"
@@ -450,21 +500,31 @@ def send_remind_to_log_email(user):
     """
     if not user.email or not user.email_notifications or not getattr(user, "notification_remind_to_log", False):
         return
-    subject = "Reminder: log your time today"
+    subject = _("Reminder: log your time today")
     dashboard_url = safe_external_url_for("main.dashboard")
-    dashboard_text = f"\nDashboard: {dashboard_url}\n" if dashboard_url else "\n"
-    dashboard_html = f'<p><a href="{dashboard_url}">Open Dashboard</a></p>' if dashboard_url else ""
-    text_body = f"""Hello {getattr(user, 'full_name', None) or user.username},
+    dashboard_text = _("\nDashboard: %(dashboard_url)s\n", dashboard_url=dashboard_url) if dashboard_url else "\n"
+    dashboard_html = (
+        _('<p><a href="%(dashboard_url)s">Open Dashboard</a></p>', dashboard_url=dashboard_url) if dashboard_url else ""
+    )
+    text_body = _(
+        """Hello %(name)s,
 
 You haven't logged any time today yet. Don't forget to log your work in TimeTracker.
-{dashboard_text}
+%(dashboard_text)s
 ---
 TimeTracker
-"""
-    html_body = f"""<p>Hello {getattr(user, 'full_name', None) or user.username},</p>
+""",
+        name=getattr(user, "full_name", None) or user.username,
+        dashboard_text=dashboard_text,
+    )
+    html_body = _(
+        """<p>Hello %(name)s,</p>
 <p>You haven't logged any time today yet. Don't forget to log your work in TimeTracker.</p>
-{dashboard_html}
-<p style="color:#64748b;font-size:0.875rem;">— TimeTracker</p>"""
+%(dashboard_html)s
+<p style="color:#64748b;font-size:0.875rem;">— TimeTracker</p>""",
+        name=getattr(user, "full_name", None) or user.username,
+        dashboard_html=dashboard_html,
+    )
     send_email(subject, user.email, text_body, html_body)
 
 
@@ -472,33 +532,43 @@ def send_missed_clock_in_email(user):
     """Remind user to start their workday (attendance clock-in)."""
     if not user.email or not user.email_notifications or not getattr(user, "notification_missed_clock_in", False):
         return
-    subject = "Reminder: start your workday"
+    subject = _("Reminder: start your workday")
     dashboard_url = safe_external_url_for("main.dashboard")
     history_url = safe_external_url_for("workday.workday_history")
     display = getattr(user, "full_name", None) or user.username
     link_lines = []
     if dashboard_url:
-        link_lines.append(f"Dashboard: {dashboard_url}")
+        link_lines.append(_("Dashboard: %(dashboard_url)s", dashboard_url=dashboard_url))
     if history_url:
-        link_lines.append(f"Attendance history (request a correction if needed): {history_url}")
+        link_lines.append(
+            _("Attendance history (request a correction if needed): %(history_url)s", history_url=history_url)
+        )
     links_text = ("\n" + "\n".join(link_lines) + "\n") if link_lines else "\n"
     html_links = []
     if dashboard_url:
-        html_links.append(f'<a href="{dashboard_url}">Open Dashboard</a>')
+        html_links.append(_('<a href="%(dashboard_url)s">Open Dashboard</a>', dashboard_url=dashboard_url))
     if history_url:
-        html_links.append(f'<a href="{history_url}">Attendance history</a>')
+        html_links.append(_('<a href="%(history_url)s">Attendance history</a>', history_url=history_url))
     html_links_block = f"<p>{' · '.join(html_links)}</p>" if html_links else ""
-    text_body = f"""Hello {display},
+    text_body = _(
+        """Hello %(display)s,
 
 You have not started your workday yet. Press Start Workday when you begin working.
-{links_text}
+%(links_text)s
 ---
 TimeTracker
-"""
-    html_body = f"""<p>Hello {display},</p>
+""",
+        display=display,
+        links_text=links_text,
+    )
+    html_body = _(
+        """<p>Hello %(display)s,</p>
 <p>You have not started your workday yet. Press <strong>Start Workday</strong> when you begin working.</p>
-{html_links_block}
-<p style="color:#64748b;font-size:0.875rem;">— TimeTracker</p>"""
+%(html_links_block)s
+<p style="color:#64748b;font-size:0.875rem;">— TimeTracker</p>""",
+        display=display,
+        html_links_block=html_links_block,
+    )
     send_email(subject, user.email, text_body, html_body)
 
 
@@ -514,25 +584,33 @@ def send_comment_notification(comment, task, mentioned_users):
         if not user.email or not user.email_notifications or not user.notification_task_comments:
             continue
 
-        subject = f"You were mentioned in a comment on: {task.name}"
+        subject = _("You were mentioned in a comment on: %(name)s", name=task.name)
 
         task_url = safe_external_url_for("tasks.edit_task", task_id=task.id)
-        view_line = f"\nView task: {task_url}\n" if task_url else "\n"
+        view_line = _("\nView task: %(task_url)s\n", task_url=task_url) if task_url else "\n"
 
-        text_body = f"""
-Hello {user.display_name},
+        text_body = _(
+            """
+Hello %(display_name)s,
 
-{comment.user.display_name} mentioned you in a comment on task "{task.name}".
+%(author)s mentioned you in a comment on task "%(name)s".
 
 Comment:
-{comment.content}
+%(content)s
 
-Task: {task.name}
-Project: {task.project.name if task.project else 'N/A'}
-{view_line}
+Task: %(name)s
+Project: %(project)s
+%(view_line)s
 ---
 TimeTracker - Time Tracking & Project Management
-        """
+        """,
+            display_name=user.display_name,
+            author=comment.user.display_name,
+            name=task.name,
+            content=comment.content,
+            project=task.project.name if task.project else _("N/A"),
+            view_line=view_line,
+        )
 
         html_body = render_template(
             "email/comment_mention.html", user=user, comment=comment, task=task, task_url=task_url
@@ -589,30 +667,30 @@ def check_email_configuration():
         mail_default_sender = current_app.config.get("MAIL_DEFAULT_SENDER")
 
     status["settings"] = {
-        "server": mail_server or "Not configured",
-        "port": mail_port or "Not configured",
-        "username": mail_username or "Not configured",
+        "server": mail_server or _("Not configured"),
+        "port": mail_port or _("Not configured"),
+        "username": mail_username or _("Not configured"),
         "password_set": bool(mail_password),
         "use_tls": mail_use_tls,
         "use_ssl": mail_use_ssl,
-        "default_sender": mail_default_sender or "Not configured",
+        "default_sender": mail_default_sender or _("Not configured"),
     }
 
     # Check for configuration issues
     if not mail_server or mail_server == "localhost":
-        status["errors"].append("Mail server not configured or set to localhost")
+        status["errors"].append(_("Mail server not configured or set to localhost"))
 
     if not mail_default_sender or mail_default_sender == "noreply@timetracker.local":
-        status["warnings"].append("Default sender email should be configured with a real email address")
+        status["warnings"].append(_("Default sender email should be configured with a real email address"))
 
     if mail_use_tls and mail_use_ssl:
-        status["errors"].append("Cannot use both TLS and SSL. Choose one.")
+        status["errors"].append(_("Cannot use both TLS and SSL. Choose one."))
 
     if not mail_username and mail_server not in ["localhost", "127.0.0.1"]:
-        status["warnings"].append("MAIL_USERNAME not set (may be required for authentication)")
+        status["warnings"].append(_("MAIL_USERNAME not set (may be required for authentication)"))
 
     if not mail_password and mail_username:
-        status["warnings"].append("MAIL_PASSWORD not set but MAIL_USERNAME is configured")
+        status["warnings"].append(_("MAIL_PASSWORD not set but MAIL_USERNAME is configured"))
 
     # Mark as configured if minimum requirements are met
     status["configured"] = bool(mail_server and mail_server != "localhost" and not status["errors"])
@@ -636,13 +714,13 @@ def send_test_email(recipient_email, sender_name="TimeTracker Admin"):
         # Validate recipient email
         if not recipient_email or "@" not in recipient_email:
             current_app.logger.warning(f"[EMAIL TEST] Invalid recipient email: {recipient_email}")
-            return False, "Invalid recipient email address"
+            return False, _("Invalid recipient email address")
 
         # Check if mail is configured
         mail_server = current_app.config.get("MAIL_SERVER")
         if not mail_server:
             current_app.logger.error("[EMAIL TEST] Mail server not configured")
-            return False, "Mail server not configured. Please set MAIL_SERVER in environment variables."
+            return False, _("Mail server not configured. Please set MAIL_SERVER in environment variables.")
 
         # Log current configuration
         current_app.logger.info(f"[EMAIL TEST] Configuration:")
@@ -652,9 +730,10 @@ def send_test_email(recipient_email, sender_name="TimeTracker Admin"):
         current_app.logger.info(f"  - Username: {current_app.config.get('MAIL_USERNAME')}")
         current_app.logger.info(f"  - Sender: {current_app.config.get('MAIL_DEFAULT_SENDER')}")
 
-        subject = "TimeTracker Email Test"
+        subject = _("TimeTracker Email Test")
 
-        text_body = f"""
+        text_body = _(
+            """
 Hello,
 
 This is a test email from TimeTracker to verify your email configuration is working correctly.
@@ -662,15 +741,22 @@ This is a test email from TimeTracker to verify your email configuration is work
 If you received this email, your email settings are properly configured!
 
 Test Details:
-- Sent at: {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')} UTC
-- Sent by: {sender_name}
-- Mail Server: {current_app.config.get('MAIL_SERVER')}:{current_app.config.get('MAIL_PORT')}
-- TLS Enabled: {current_app.config.get('MAIL_USE_TLS')}
-- SSL Enabled: {current_app.config.get('MAIL_USE_SSL')}
+- Sent at: %(sent_at)s UTC
+- Sent by: %(sender_name)s
+- Mail Server: %(mail_server)s:%(mail_port)s
+- TLS Enabled: %(use_tls)s
+- SSL Enabled: %(use_ssl)s
 
 ---
 TimeTracker - Time Tracking & Project Management
-        """
+        """,
+            sent_at=datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S"),
+            sender_name=sender_name,
+            mail_server=current_app.config.get("MAIL_SERVER"),
+            mail_port=current_app.config.get("MAIL_PORT"),
+            use_tls=current_app.config.get("MAIL_USE_TLS"),
+            use_ssl=current_app.config.get("MAIL_USE_SSL"),
+        )
 
         try:
             html_body = render_template(
@@ -703,12 +789,12 @@ TimeTracker - Time Tracking & Project Management
         mail.send(msg)
         current_app.logger.info(f"[EMAIL TEST] ✓ Email sent successfully to {recipient_email}")
 
-        return True, f"Test email sent successfully to {recipient_email}"
+        return True, _("Test email sent successfully to %(recipient_email)s", recipient_email=recipient_email)
 
     except Exception as e:
         current_app.logger.error(f"[EMAIL TEST] ✗ Failed to send test email: {type(e).__name__}: {str(e)}")
         current_app.logger.exception("[EMAIL TEST] Full exception trace:")
-        return False, "Failed to send test email"
+        return False, _("Failed to send test email")
 
 
 def _build_invoice_email_payload(invoice, email_template_id=None, custom_message=None):
@@ -766,8 +852,12 @@ def _build_invoice_email_payload(invoice, email_template_id=None, custom_message
     if pdfa_err:
         current_app.logger.error(f"[INVOICE EMAIL] PDF/A-3 normalization failed: {pdfa_err}")
         raise ValueError(f"PDF/A-3 normalization failed: {pdfa_err}. Email not sent.") from None
-    company_name = settings.company_name if settings else "Your Company"
-    subject = f"Invoice {invoice.invoice_number} from {company_name}"
+    company_name = settings.company_name if settings else _("Your Company")
+    subject = _(
+        "Invoice %(invoice_number)s from %(company_name)s",
+        invoice_number=invoice.invoice_number,
+        company_name=company_name,
+    )
 
     html_body = None
     text_body = None
@@ -811,36 +901,49 @@ def _build_invoice_email_payload(invoice, email_template_id=None, custom_message
                     company_name=company_name,
                     custom_message=custom_message,
                 )
-                text_body = f"Invoice {invoice.invoice_number} - Please see attached PDF for details."
+                text_body = _(
+                    "Invoice %(invoice_number)s - Please see attached PDF for details.",
+                    invoice_number=invoice.invoice_number,
+                )
         except Exception as template_error:
             current_app.logger.warning(f"[INVOICE EMAIL] Custom template failed: {template_error}")
             current_app.logger.exception("[INVOICE EMAIL] Template error details:")
 
     if not html_body:
-        text_body = f"""
+        text_body = _(
+            """
 Hello,
 
-Please find attached invoice {invoice.invoice_number} for your records.
+Please find attached invoice %(invoice_number)s for your records.
 
 Invoice Details:
-- Invoice Number: {invoice.invoice_number}
-- Issue Date: {invoice.issue_date.strftime('%Y-%m-%d') if invoice.issue_date else 'N/A'}
-- Due Date: {invoice.due_date.strftime('%Y-%m-%d') if invoice.due_date else 'N/A'}
-- Amount: {invoice.currency_code} {invoice.total_amount}
+- Invoice Number: %(invoice_number)s
+- Issue Date: %(issue_date)s
+- Due Date: %(due_date)s
+- Amount: %(currency_code)s %(total_amount)s
 
-"""
+""",
+            invoice_number=invoice.invoice_number,
+            issue_date=invoice.issue_date.strftime("%Y-%m-%d") if invoice.issue_date else _("N/A"),
+            due_date=invoice.due_date.strftime("%Y-%m-%d") if invoice.due_date else _("N/A"),
+            currency_code=invoice.currency_code,
+            total_amount=invoice.total_amount,
+        )
 
         if custom_message:
             text_body += f"\n{custom_message}\n\n"
 
-        text_body += f"""
+        text_body += _(
+            """
 Please remit payment by the due date.
 
 Thank you for your business!
 
 ---
-{company_name}
-"""
+%(company_name)s
+""",
+            company_name=company_name,
+        )
 
         try:
             html_body = render_template(
@@ -869,35 +972,35 @@ def send_invoice_template_test_email(template_id, recipient_email, invoice_id=No
     """
     try:
         if not recipient_email or "@" not in recipient_email:
-            return False, "Invalid recipient email address"
+            return False, _("Invalid recipient email address")
 
         mail_server = current_app.config.get("MAIL_SERVER")
         if not mail_server or mail_server == "localhost":
-            return False, "Mail server not configured"
+            return False, _("Mail server not configured")
 
         from app.models import Invoice, InvoiceTemplate
 
         email_template = InvoiceTemplate.query.get(template_id)
         if not email_template:
-            return False, "Email template not found"
+            return False, _("Email template not found")
         if not email_template.html or not email_template.html.strip():
-            return False, "Email template has no HTML content"
+            return False, _("Email template has no HTML content")
 
         invoice = None
         if invoice_id is not None:
             invoice = Invoice.query.get(invoice_id)
             if not invoice:
-                return False, "Invoice not found for the given invoice_id."
+                return False, _("Invoice not found for the given invoice_id.")
         if not invoice:
             invoice = Invoice.query.order_by(Invoice.id.desc()).first()
         if not invoice:
-            return False, "No invoice found. Create an invoice first to test with real data."
+            return False, _("No invoice found. Create an invoice first to test with real data.")
 
         pdf_bytes, html_body, text_body, _subject = _build_invoice_email_payload(
             invoice, email_template_id=template_id, custom_message=custom_message
         )
 
-        subject = f"Invoice template test: {email_template.name}"
+        subject = _("Invoice template test: %(name)s", name=email_template.name)
         sender = current_app.config.get("MAIL_DEFAULT_SENDER", "noreply@timetracker.local")
 
         msg = Message(
@@ -911,12 +1014,12 @@ def send_invoice_template_test_email(template_id, recipient_email, invoice_id=No
 
         current_app.logger.info(f"[INVOICE TEMPLATE TEST] Sending to {recipient_email} for template id={template_id}")
         mail.send(msg)
-        return True, f"Test email sent successfully to {recipient_email}"
+        return True, _("Test email sent successfully to %(recipient_email)s", recipient_email=recipient_email)
 
     except Exception as e:
         current_app.logger.error(f"[INVOICE TEMPLATE TEST] Failed: {e}")
         current_app.logger.exception("[INVOICE TEMPLATE TEST] Trace:")
-        return False, "Failed to send test email"
+        return False, _("Failed to send test email")
 
 
 def send_invoice_email(invoice, recipient_email, sender_user=None, custom_message=None, email_template_id=None):
@@ -942,7 +1045,7 @@ def send_invoice_email(invoice, recipient_email, sender_user=None, custom_messag
                 invoice, email_template_id=email_template_id, custom_message=custom_message
             )
         except ValueError:
-            return False, None, "Failed to build invoice email"
+            return False, None, _("Failed to build invoice email")
 
         # Get sender user ID
         sender_id = sender_user.id if sender_user else None
@@ -1011,7 +1114,11 @@ def send_invoice_email(invoice, recipient_email, sender_user=None, custom_messag
             except Exception:
                 pass
 
-        return True, invoice_email, f"Invoice email sent successfully to {recipient_email}"
+        return (
+            True,
+            invoice_email,
+            _("Invoice email sent successfully to %(recipient_email)s", recipient_email=recipient_email),
+        )
 
     except Exception as e:
         current_app.logger.error(f"[INVOICE EMAIL] ✗ Failed to send invoice email: {type(e).__name__}: {str(e)}")
@@ -1025,7 +1132,7 @@ def send_invoice_email(invoice, recipient_email, sender_user=None, custom_messag
             invoice_email = InvoiceEmail(
                 invoice_id=invoice.id,
                 recipient_email=recipient_email,
-                subject=f"Invoice {invoice.invoice_number}",
+                subject=_("Invoice %(invoice_number)s", invoice_number=invoice.invoice_number),
                 sent_by=sender_id,
             )
             invoice_email.mark_failed(type(e).__name__)
@@ -1034,7 +1141,7 @@ def send_invoice_email(invoice, recipient_email, sender_user=None, custom_messag
         except Exception:
             db.session.rollback()
 
-        return False, None, "Failed to send invoice email"
+        return False, None, _("Failed to send invoice email")
 
 
 def send_quote_sent_notification(quote, user):
@@ -1047,26 +1154,40 @@ def send_quote_sent_notification(quote, user):
     if not user.email or not user.email_notifications:
         return
 
-    subject = f"Quote {quote.quote_number} has been sent to {quote.client.name if quote.client else 'client'}"
+    subject = _(
+        "Quote %(quote_number)s has been sent to %(client)s",
+        quote_number=quote.quote_number,
+        client=quote.client.name if quote.client else _("client"),
+    )
 
     quote_url = safe_external_url_for("quotes.view_quote", quote_id=quote.id)
-    view_line = f"\nView quote: {quote_url}\n" if quote_url else "\n"
+    view_line = _("\nView quote: %(quote_url)s\n", quote_url=quote_url) if quote_url else "\n"
 
-    text_body = f"""
-Hello {user.display_name or user.username},
+    text_body = _(
+        """
+Hello %(name)s,
 
-Quote {quote.quote_number} has been sent to the client.
+Quote %(quote_number)s has been sent to the client.
 
 Quote Details:
-- Quote Number: {quote.quote_number}
-- Title: {quote.title}
-- Client: {quote.client.name if quote.client else 'N/A'}
-- Total Amount: {quote.currency_code} {quote.total_amount}
-- Sent At: {quote.sent_at.strftime('%Y-%m-%d %H:%M') if quote.sent_at else 'N/A'}
-{view_line}
+- Quote Number: %(quote_number)s
+- Title: %(title)s
+- Client: %(client)s
+- Total Amount: %(currency_code)s %(total_amount)s
+- Sent At: %(sent_at)s
+%(view_line)s
 ---
 TimeTracker - Time Tracking & Project Management
-    """
+    """,
+        name=user.display_name or user.username,
+        quote_number=quote.quote_number,
+        title=quote.title,
+        client=quote.client.name if quote.client else _("N/A"),
+        currency_code=quote.currency_code,
+        total_amount=quote.total_amount,
+        sent_at=quote.sent_at.strftime("%Y-%m-%d %H:%M") if quote.sent_at else _("N/A"),
+        view_line=view_line,
+    )
 
     html_body = render_template("email/quote_sent.html", user=user, quote=quote, quote_url=quote_url)
 
@@ -1083,27 +1204,38 @@ def send_quote_accepted_notification(quote, user):
     if not user.email or not user.email_notifications:
         return
 
-    subject = f"Quote {quote.quote_number} has been accepted"
+    subject = _("Quote %(quote_number)s has been accepted", quote_number=quote.quote_number)
 
     quote_url = safe_external_url_for("quotes.view_quote", quote_id=quote.id)
-    view_line = f"\nView quote: {quote_url}\n" if quote_url else "\n"
+    view_line = _("\nView quote: %(quote_url)s\n", quote_url=quote_url) if quote_url else "\n"
 
-    text_body = f"""
-Hello {user.display_name or user.username},
+    text_body = _(
+        """
+Hello %(name)s,
 
-Great news! Quote {quote.quote_number} has been accepted by the client.
+Great news! Quote %(quote_number)s has been accepted by the client.
 
 Quote Details:
-- Quote Number: {quote.quote_number}
-- Title: {quote.title}
-- Client: {quote.client.name if quote.client else 'N/A'}
-- Total Amount: {quote.currency_code} {quote.total_amount}
-- Accepted At: {quote.accepted_at.strftime('%Y-%m-%d %H:%M') if quote.accepted_at else 'N/A'}
-- Project: {'Created' if quote.has_project else 'Not yet created'}
-{view_line}
+- Quote Number: %(quote_number)s
+- Title: %(title)s
+- Client: %(client)s
+- Total Amount: %(currency_code)s %(total_amount)s
+- Accepted At: %(accepted_at)s
+- Project: %(project)s
+%(view_line)s
 ---
 TimeTracker - Time Tracking & Project Management
-    """
+    """,
+        name=user.display_name or user.username,
+        quote_number=quote.quote_number,
+        title=quote.title,
+        client=quote.client.name if quote.client else _("N/A"),
+        currency_code=quote.currency_code,
+        total_amount=quote.total_amount,
+        accepted_at=quote.accepted_at.strftime("%Y-%m-%d %H:%M") if quote.accepted_at else _("N/A"),
+        project=_("Created") if quote.has_project else _("Not yet created"),
+        view_line=view_line,
+    )
 
     html_body = render_template("email/quote_accepted.html", user=user, quote=quote, quote_url=quote_url)
 
@@ -1120,26 +1252,36 @@ def send_quote_rejected_notification(quote, user):
     if not user.email or not user.email_notifications:
         return
 
-    subject = f"Quote {quote.quote_number} has been rejected"
+    subject = _("Quote %(quote_number)s has been rejected", quote_number=quote.quote_number)
 
     quote_url = safe_external_url_for("quotes.view_quote", quote_id=quote.id)
-    view_line = f"\nView quote: {quote_url}\n" if quote_url else "\n"
+    view_line = _("\nView quote: %(quote_url)s\n", quote_url=quote_url) if quote_url else "\n"
 
-    text_body = f"""
-Hello {user.display_name or user.username},
+    text_body = _(
+        """
+Hello %(name)s,
 
-Quote {quote.quote_number} has been rejected by the client.
+Quote %(quote_number)s has been rejected by the client.
 
 Quote Details:
-- Quote Number: {quote.quote_number}
-- Title: {quote.title}
-- Client: {quote.client.name if quote.client else 'N/A'}
-- Total Amount: {quote.currency_code} {quote.total_amount}
-- Rejected At: {quote.rejected_at.strftime('%Y-%m-%d %H:%M') if quote.rejected_at else 'N/A'}
-{view_line}
+- Quote Number: %(quote_number)s
+- Title: %(title)s
+- Client: %(client)s
+- Total Amount: %(currency_code)s %(total_amount)s
+- Rejected At: %(rejected_at)s
+%(view_line)s
 ---
 TimeTracker - Time Tracking & Project Management
-    """
+    """,
+        name=user.display_name or user.username,
+        quote_number=quote.quote_number,
+        title=quote.title,
+        client=quote.client.name if quote.client else _("N/A"),
+        currency_code=quote.currency_code,
+        total_amount=quote.total_amount,
+        rejected_at=quote.rejected_at.strftime("%Y-%m-%d %H:%M") if quote.rejected_at else _("N/A"),
+        view_line=view_line,
+    )
 
     html_body = render_template("email/quote_rejected.html", user=user, quote=quote, quote_url=quote_url)
 
@@ -1156,28 +1298,38 @@ def send_quote_expired_notification(quote, user):
     if not user.email or not user.email_notifications:
         return
 
-    subject = f"Quote {quote.quote_number} has expired"
+    subject = _("Quote %(quote_number)s has expired", quote_number=quote.quote_number)
 
     quote_url = safe_external_url_for("quotes.view_quote", quote_id=quote.id)
-    view_line = f"\nView quote: {quote_url}\n" if quote_url else "\n"
+    view_line = _("\nView quote: %(quote_url)s\n", quote_url=quote_url) if quote_url else "\n"
 
-    text_body = f"""
-Hello {user.display_name or user.username},
+    text_body = _(
+        """
+Hello %(name)s,
 
-Quote {quote.quote_number} has expired.
+Quote %(quote_number)s has expired.
 
 Quote Details:
-- Quote Number: {quote.quote_number}
-- Title: {quote.title}
-- Client: {quote.client.name if quote.client else 'N/A'}
-- Total Amount: {quote.currency_code} {quote.total_amount}
-- Valid Until: {quote.valid_until.strftime('%Y-%m-%d') if quote.valid_until else 'N/A'}
+- Quote Number: %(quote_number)s
+- Title: %(title)s
+- Client: %(client)s
+- Total Amount: %(currency_code)s %(total_amount)s
+- Valid Until: %(valid_until)s
 
 You may want to follow up with the client or create a new quote.
-{view_line}
+%(view_line)s
 ---
 TimeTracker - Time Tracking & Project Management
-    """
+    """,
+        name=user.display_name or user.username,
+        quote_number=quote.quote_number,
+        title=quote.title,
+        client=quote.client.name if quote.client else _("N/A"),
+        currency_code=quote.currency_code,
+        total_amount=quote.total_amount,
+        valid_until=quote.valid_until.strftime("%Y-%m-%d") if quote.valid_until else _("N/A"),
+        view_line=view_line,
+    )
 
     html_body = render_template("email/quote_expired.html", user=user, quote=quote, quote_url=quote_url)
 
@@ -1195,30 +1347,52 @@ def send_quote_expiring_reminder(quote, user, days_remaining):
     if not user.email or not user.email_notifications:
         return
 
-    day_label = "day" if days_remaining == 1 else "days"
-    subject = f"Quote {quote.quote_number} expires in {days_remaining} {day_label}"
+    subject = ngettext(
+        "Quote %(quote_number)s expires in %(num)d day",
+        "Quote %(quote_number)s expires in %(num)d days",
+        days_remaining,
+        quote_number=quote.quote_number,
+    )
+    expiry_line = ngettext(
+        "Quote %(quote_number)s will expire in %(num)d day.",
+        "Quote %(quote_number)s will expire in %(num)d days.",
+        days_remaining,
+        quote_number=quote.quote_number,
+    )
 
     quote_url = safe_external_url_for("quotes.view_quote", quote_id=quote.id)
-    view_line = f"\nView quote: {quote_url}\n" if quote_url else "\n"
+    view_line = _("\nView quote: %(quote_url)s\n", quote_url=quote_url) if quote_url else "\n"
 
-    text_body = f"""
-Hello {user.display_name or user.username},
+    text_body = _(
+        """
+Hello %(name)s,
 
-Quote {quote.quote_number} will expire in {days_remaining} {day_label}.
+%(expiry_line)s
 
 Quote Details:
-- Quote Number: {quote.quote_number}
-- Title: {quote.title}
-- Client: {quote.client.name if quote.client else 'N/A'}
-- Total Amount: {quote.currency_code} {quote.total_amount}
-- Valid Until: {quote.valid_until.strftime('%Y-%m-%d') if quote.valid_until else 'N/A'}
-- Days Remaining: {days_remaining}
+- Quote Number: %(quote_number)s
+- Title: %(title)s
+- Client: %(client)s
+- Total Amount: %(currency_code)s %(total_amount)s
+- Valid Until: %(valid_until)s
+- Days Remaining: %(days_remaining)s
 
 You may want to follow up with the client before the quote expires.
-{view_line}
+%(view_line)s
 ---
 TimeTracker - Time Tracking & Project Management
-    """
+    """,
+        name=user.display_name or user.username,
+        quote_number=quote.quote_number,
+        expiry_line=expiry_line,
+        days_remaining=days_remaining,
+        title=quote.title,
+        client=quote.client.name if quote.client else _("N/A"),
+        currency_code=quote.currency_code,
+        total_amount=quote.total_amount,
+        valid_until=quote.valid_until.strftime("%Y-%m-%d") if quote.valid_until else _("N/A"),
+        view_line=view_line,
+    )
 
     html_body = render_template(
         "email/quote_expiring.html",
@@ -1241,26 +1415,36 @@ def send_quote_approval_request_notification(quote, user):
     if not user.email or not user.email_notifications:
         return
 
-    subject = f"Approval requested: Quote {quote.quote_number}"
+    subject = _("Approval requested: Quote %(quote_number)s", quote_number=quote.quote_number)
     quote_url = safe_external_url_for("quotes.view_quote", quote_id=quote.id)
-    view_line = f"\nReview quote: {quote_url}\n" if quote_url else "\n"
-    requester = quote.creator.display_name or quote.creator.username if quote.creator else "N/A"
+    view_line = _("\nReview quote: %(quote_url)s\n", quote_url=quote_url) if quote_url else "\n"
+    requester = quote.creator.display_name or quote.creator.username if quote.creator else _("N/A")
 
-    text_body = f"""
-Hello {user.display_name or user.username},
+    text_body = _(
+        """
+Hello %(name)s,
 
 A quote requires your approval.
 
 Quote Details:
-- Quote Number: {quote.quote_number}
-- Title: {quote.title}
-- Client: {quote.client.name if quote.client else 'N/A'}
-- Total Amount: {quote.currency_code} {quote.total_amount}
-- Requested By: {requester}
-{view_line}
+- Quote Number: %(quote_number)s
+- Title: %(title)s
+- Client: %(client)s
+- Total Amount: %(currency_code)s %(total_amount)s
+- Requested By: %(requester)s
+%(view_line)s
 ---
 TimeTracker - Time Tracking & Project Management
-    """
+    """,
+        name=user.display_name or user.username,
+        quote_number=quote.quote_number,
+        title=quote.title,
+        client=quote.client.name if quote.client else _("N/A"),
+        currency_code=quote.currency_code,
+        total_amount=quote.total_amount,
+        requester=requester,
+        view_line=view_line,
+    )
 
     html_body = render_template(
         "email/quote_approval_request.html",
@@ -1281,26 +1465,36 @@ def send_quote_approved_notification(quote, user):
     if not user.email or not user.email_notifications:
         return
 
-    subject = f"Quote {quote.quote_number} has been approved"
+    subject = _("Quote %(quote_number)s has been approved", quote_number=quote.quote_number)
     quote_url = safe_external_url_for("quotes.view_quote", quote_id=quote.id)
-    view_line = f"\nView quote: {quote_url}\n" if quote_url else "\n"
-    approver = quote.approver.display_name or quote.approver.username if quote.approver else "N/A"
+    view_line = _("\nView quote: %(quote_url)s\n", quote_url=quote_url) if quote_url else "\n"
+    approver = quote.approver.display_name or quote.approver.username if quote.approver else _("N/A")
 
-    text_body = f"""
-Hello {user.display_name or user.username},
+    text_body = _(
+        """
+Hello %(name)s,
 
 Great news! Your quote has been approved and is ready to be sent.
 
 Quote Details:
-- Quote Number: {quote.quote_number}
-- Title: {quote.title}
-- Client: {quote.client.name if quote.client else 'N/A'}
-- Total Amount: {quote.currency_code} {quote.total_amount}
-- Approved By: {approver}
-{view_line}
+- Quote Number: %(quote_number)s
+- Title: %(title)s
+- Client: %(client)s
+- Total Amount: %(currency_code)s %(total_amount)s
+- Approved By: %(approver)s
+%(view_line)s
 ---
 TimeTracker - Time Tracking & Project Management
-    """
+    """,
+        name=user.display_name or user.username,
+        quote_number=quote.quote_number,
+        title=quote.title,
+        client=quote.client.name if quote.client else _("N/A"),
+        currency_code=quote.currency_code,
+        total_amount=quote.total_amount,
+        approver=approver,
+        view_line=view_line,
+    )
 
     html_body = render_template(
         "email/quote_approved.html",
@@ -1321,28 +1515,39 @@ def send_quote_approval_rejected_notification(quote, user):
     if not user.email or not user.email_notifications:
         return
 
-    subject = f"Quote {quote.quote_number} approval rejected"
+    subject = _("Quote %(quote_number)s approval rejected", quote_number=quote.quote_number)
     quote_url = safe_external_url_for("quotes.view_quote", quote_id=quote.id)
-    view_line = f"\nView quote: {quote_url}\n" if quote_url else "\n"
-    rejecter = quote.rejecter.display_name or quote.rejecter.username if quote.rejecter else "N/A"
-    reason = quote.rejection_reason or "N/A"
+    view_line = _("\nView quote: %(quote_url)s\n", quote_url=quote_url) if quote_url else "\n"
+    rejecter = quote.rejecter.display_name or quote.rejecter.username if quote.rejecter else _("N/A")
+    reason = quote.rejection_reason or _("N/A")
 
-    text_body = f"""
-Hello {user.display_name or user.username},
+    text_body = _(
+        """
+Hello %(name)s,
 
 Your quote approval request has been rejected.
 
 Quote Details:
-- Quote Number: {quote.quote_number}
-- Title: {quote.title}
-- Client: {quote.client.name if quote.client else 'N/A'}
-- Total Amount: {quote.currency_code} {quote.total_amount}
-- Rejected By: {rejecter}
-- Reason: {reason}
-{view_line}
+- Quote Number: %(quote_number)s
+- Title: %(title)s
+- Client: %(client)s
+- Total Amount: %(currency_code)s %(total_amount)s
+- Rejected By: %(rejecter)s
+- Reason: %(reason)s
+%(view_line)s
 ---
 TimeTracker - Time Tracking & Project Management
-    """
+    """,
+        name=user.display_name or user.username,
+        quote_number=quote.quote_number,
+        title=quote.title,
+        client=quote.client.name if quote.client else _("N/A"),
+        currency_code=quote.currency_code,
+        total_amount=quote.total_amount,
+        rejecter=rejecter,
+        reason=reason,
+        view_line=view_line,
+    )
 
     html_body = render_template(
         "email/quote_approval_rejected.html",
@@ -1398,40 +1603,52 @@ def send_quote_email(quote, recipient_email, sender_user=None, custom_message=No
         except Exception as pdf_error:
             current_app.logger.error(f"[QUOTE EMAIL] PDF generation failed: {pdf_error}")
             current_app.logger.exception("[QUOTE EMAIL] PDF generation error details:")
-            return False, "PDF generation failed"
+            return False, _("PDF generation failed")
 
         # Get settings for email subject/body
         settings = Settings.get_settings()
-        company_name = settings.company_name if settings else "Your Company"
+        company_name = settings.company_name if settings else _("Your Company")
 
         # Create email subject
-        subject = f"Quote {quote.quote_number} from {company_name}"
+        subject = _(
+            "Quote %(quote_number)s from %(company_name)s", quote_number=quote.quote_number, company_name=company_name
+        )
 
         # Create email body
-        text_body = f"""
+        text_body = _(
+            """
 Hello,
 
-Please find attached quote {quote.quote_number} for your review.
+Please find attached quote %(quote_number)s for your review.
 
 Quote Details:
-- Quote Number: {quote.quote_number}
-- Title: {quote.title}
-- Valid Until: {quote.valid_until.strftime('%Y-%m-%d') if quote.valid_until else 'N/A'}
-- Amount: {quote.currency_code} {quote.total_amount}
+- Quote Number: %(quote_number)s
+- Title: %(title)s
+- Valid Until: %(valid_until)s
+- Amount: %(currency_code)s %(total_amount)s
 
-"""
+""",
+            quote_number=quote.quote_number,
+            title=quote.title,
+            valid_until=quote.valid_until.strftime("%Y-%m-%d") if quote.valid_until else _("N/A"),
+            currency_code=quote.currency_code,
+            total_amount=quote.total_amount,
+        )
 
         if custom_message:
             text_body += f"\n{custom_message}\n\n"
 
-        text_body += f"""
+        text_body += _(
+            """
 Please review the attached quote and let us know if you have any questions.
 
 Thank you for your interest!
 
 ---
-{company_name}
-"""
+%(company_name)s
+""",
+            company_name=company_name,
+        )
 
         # Render HTML template
         html_body = None
@@ -1476,8 +1693,8 @@ Thank you for your interest!
             quote.send()
             db.session.commit()
 
-        return True, "Email sent successfully"
+        return True, _("Email sent successfully")
     except Exception as e:
         current_app.logger.error(f"[QUOTE EMAIL] Exception in send_quote_email: {e}", exc_info=True)
         db.session.rollback()
-        return False, "Failed to send email"
+        return False, _("Failed to send email")

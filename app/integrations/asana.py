@@ -8,6 +8,7 @@ from datetime import datetime, timedelta
 from typing import Any, Dict, List, Optional
 
 import requests
+from flask_babel import gettext as _
 
 from app.integrations.base import BaseConnector
 
@@ -156,11 +157,17 @@ class AsanaConnector(BaseConnector):
 
             if response.status_code == 200:
                 user_data = response.json().get("data", {})
-                return {"success": True, "message": f"Connected to Asana as {user_data.get('name', 'Unknown')}"}
+                return {
+                    "success": True,
+                    "message": _("Connected to Asana as %(name)s", name=user_data.get("name", "Unknown")),
+                }
             else:
-                return {"success": False, "message": f"Connection test failed: {response.status_code}"}
+                return {
+                    "success": False,
+                    "message": _("Connection test failed: %(status)s", status=response.status_code),
+                }
         except Exception as e:
-            return {"success": False, "message": f"Connection test failed: {str(e)}"}
+            return {"success": False, "message": _("Connection test failed: %(error)s", error=str(e))}
 
     def sync_data(self, sync_type: str = "full") -> Dict[str, Any]:
         """Sync tasks and projects with Asana."""
@@ -185,7 +192,7 @@ class AsanaConnector(BaseConnector):
             # Get workspace from config
             workspace_gid = self.integration.config.get("workspace_gid")
             if not workspace_gid:
-                return {"success": False, "message": "Workspace GID not configured"}
+                return {"success": False, "message": _("Workspace GID not configured")}
 
             synced_count = 0
             errors = []
@@ -292,7 +299,7 @@ class AsanaConnector(BaseConnector):
             return {"success": True, "synced_count": synced_count, "errors": errors}
 
         except Exception as e:
-            return {"success": False, "message": f"Sync failed: {str(e)}"}
+            return {"success": False, "message": _("Sync failed: %(error)s", error=str(e))}
 
     def get_config_schema(self) -> Dict[str, Any]:
         """Get configuration schema."""

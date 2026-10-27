@@ -8,6 +8,7 @@ from datetime import datetime, timedelta
 from typing import Any, Dict, Optional
 
 import requests
+from flask_babel import gettext as _
 
 from app.integrations.base import BaseConnector
 
@@ -122,7 +123,7 @@ class GitHubConnector(BaseConnector):
         """Test connection to GitHub."""
         token = self.get_access_token()
         if not token:
-            return {"success": False, "message": "No access token available"}
+            return {"success": False, "message": _("No access token available")}
 
         api_url = "https://api.github.com/user"
 
@@ -134,11 +135,14 @@ class GitHubConnector(BaseConnector):
 
             if response.status_code == 200:
                 user_data = response.json()
-                return {"success": True, "message": f"Connected as {user_data.get('login', 'Unknown')}"}
+                return {
+                    "success": True,
+                    "message": _("Connected as %(login)s", login=user_data.get("login", "Unknown")),
+                }
             else:
-                return {"success": False, "message": f"API returned status {response.status_code}"}
+                return {"success": False, "message": _("API returned status %(status)s", status=response.status_code)}
         except Exception as e:
-            return {"success": False, "message": f"Connection error: {str(e)}"}
+            return {"success": False, "message": _("Connection error: %(error)s", error=str(e))}
 
     def sync_data(self, sync_type: str = "full") -> Dict[str, Any]:
         """Sync issues from GitHub repositories and create tasks."""
@@ -159,7 +163,7 @@ class GitHubConnector(BaseConnector):
 
         token = self.get_access_token()
         if not token:
-            return {"success": False, "message": "No access token available. Please reconnect the integration."}
+            return {"success": False, "message": _("No access token available. Please reconnect the integration.")}
 
         try:
             actor_id, client_id = require_sync_context(self.integration)
@@ -182,7 +186,7 @@ class GitHubConnector(BaseConnector):
                 elif repos_response.status_code == 401:
                     return {
                         "success": False,
-                        "message": "GitHub authentication failed. Please reconnect the integration.",
+                        "message": _("GitHub authentication failed. Please reconnect the integration."),
                     }
                 else:
                     error_msg = (
@@ -191,17 +195,17 @@ class GitHubConnector(BaseConnector):
                     logger.error(error_msg)
                     return {"success": False, "message": error_msg}
             except requests.exceptions.Timeout:
-                return {"success": False, "message": "GitHub API request timed out. Please try again."}
+                return {"success": False, "message": _("GitHub API request timed out. Please try again.")}
             except requests.exceptions.ConnectionError as e:
-                return {"success": False, "message": f"Failed to connect to GitHub API: {str(e)}"}
+                return {"success": False, "message": _("Failed to connect to GitHub API: %(error)s", error=str(e))}
             except Exception as e:
                 logger.error(f"Error fetching repositories: {e}", exc_info=True)
-                return {"success": False, "message": f"Error fetching repositories: {str(e)}"}
+                return {"success": False, "message": _("Error fetching repositories: %(error)s", error=str(e))}
         else:
             repos_list = [r.strip() for r in repos_str.split(",") if r.strip()]
 
         if not repos_list:
-            return {"success": False, "message": "No repositories configured or found"}
+            return {"success": False, "message": _("No repositories configured or found")}
 
         synced_count = 0
         errors = []
@@ -354,14 +358,18 @@ class GitHubConnector(BaseConnector):
             if errors:
                 return {
                     "success": True,
-                    "message": f"Sync completed with {len(errors)} error(s). Synced {synced_count} issues.",
+                    "message": _(
+                        "Sync completed with %(errors)s error(s). Synced %(count)s issues.",
+                        errors=len(errors),
+                        count=synced_count,
+                    ),
                     "synced_items": synced_count,
                     "errors": errors,
                 }
 
             return {
                 "success": True,
-                "message": f"Sync completed. Synced {synced_count} issues.",
+                "message": _("Sync completed. Synced %(count)s issues.", count=synced_count),
                 "synced_items": synced_count,
                 "errors": errors,
             }
@@ -373,7 +381,7 @@ class GitHubConnector(BaseConnector):
                 logger.debug("Rollback after GitHub sync failure: %s", rollback_err)
             return {
                 "success": False,
-                "message": f"Sync failed: {str(e)}",
+                "message": _("Sync failed: %(error)s", error=str(e)),
                 "errors": errors,
                 "synced_items": synced_count,
             }

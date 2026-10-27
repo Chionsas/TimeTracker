@@ -8,6 +8,7 @@ from datetime import datetime, timedelta
 from typing import Any, Dict, List, Optional
 
 import requests
+from flask_babel import gettext as _
 
 from app.integrations.base import BaseConnector
 
@@ -188,7 +189,7 @@ class MicrosoftTeamsConnector(BaseConnector):
         """Test connection to Microsoft Teams."""
         token = self.get_access_token()
         if not token:
-            return {"success": False, "message": "No access token available"}
+            return {"success": False, "message": _("No access token available")}
 
         try:
             # Get user info
@@ -198,12 +199,12 @@ class MicrosoftTeamsConnector(BaseConnector):
                 user_data = response.json()
                 return {
                     "success": True,
-                    "message": f"Connected to Microsoft Teams as {user_data.get('displayName', 'Unknown')}",
+                    "message": _("Connected to Microsoft Teams as %(name)s", name=user_data.get("displayName", "Unknown")),
                 }
             else:
-                return {"success": False, "message": f"API returned status {response.status_code}"}
+                return {"success": False, "message": _("API returned status %(status)s", status=response.status_code)}
         except Exception as e:
-            return {"success": False, "message": f"Connection test failed: {str(e)}"}
+            return {"success": False, "message": _("Connection test failed: %(error)s", error=str(e))}
 
     def handle_bot_command(self, activity: Dict[str, Any]) -> Dict[str, Any]:
         """Stub for Teams bot slash-command parity with Slack ``/tt``.
@@ -228,7 +229,7 @@ class MicrosoftTeamsConnector(BaseConnector):
         """Send a message to a Teams channel."""
         token = self.get_access_token()
         if not token:
-            return {"success": False, "message": "No access token available"}
+            return {"success": False, "message": _("No access token available")}
 
         try:
             # Send message to channel
@@ -240,17 +241,17 @@ class MicrosoftTeamsConnector(BaseConnector):
             )
 
             if response.status_code in [200, 201]:
-                return {"success": True, "message": "Message sent successfully"}
+                return {"success": True, "message": _("Message sent successfully")}
             else:
-                return {"success": False, "message": f"API returned status {response.status_code}"}
+                return {"success": False, "message": _("API returned status %(status)s", status=response.status_code)}
         except Exception as e:
-            return {"success": False, "message": f"Error sending message: {str(e)}"}
+            return {"success": False, "message": _("Error sending message: %(error)s", error=str(e))}
 
     def sync_data(self, sync_type: str = "full") -> Dict[str, Any]:
         """Sync data from Microsoft Teams (channels, teams, etc.)."""
         token = self.get_access_token()
         if not token:
-            return {"success": False, "message": "No access token available"}
+            return {"success": False, "message": _("No access token available")}
 
         try:
             # Get teams
@@ -263,13 +264,13 @@ class MicrosoftTeamsConnector(BaseConnector):
                 teams = response.json().get("value", [])
                 return {
                     "success": True,
-                    "message": f"Sync completed. Found {len(teams)} teams.",
+                    "message": _("Sync completed. Found %(count)s teams.", count=len(teams)),
                     "synced_items": len(teams),
                 }
             else:
-                return {"success": False, "message": f"API returned status {response.status_code}"}
+                return {"success": False, "message": _("API returned status %(status)s", status=response.status_code)}
         except Exception as e:
-            return {"success": False, "message": f"Sync failed: {str(e)}"}
+            return {"success": False, "message": _("Sync failed: %(error)s", error=str(e))}
 
     def get_config_schema(self) -> Dict[str, Any]:
         """Get configuration schema."""

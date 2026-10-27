@@ -4,6 +4,8 @@ Service for permission and role management.
 
 from typing import Any, Dict, List
 
+from flask_babel import gettext as _
+
 from app import db
 from app.models import Permission, Role
 from app.repositories import UserRepository
@@ -48,7 +50,7 @@ class PermissionService:
         """
         role = Role.query.filter_by(name=role_name).first()
         if not role:
-            return {"success": False, "message": "Role not found", "error": "invalid_role"}
+            return {"success": False, "message": _("Role not found"), "error": "invalid_role"}
 
         permission = Permission.query.filter_by(name=permission_name).first()
         if not permission:
@@ -61,11 +63,11 @@ class PermissionService:
         if not safe_commit("grant_permission", {"role": role_name, "permission": permission_name}):
             return {
                 "success": False,
-                "message": "Could not grant permission due to a database error",
+                "message": _("Could not grant permission due to a database error"),
                 "error": "database_error",
             }
 
-        return {"success": True, "message": "Permission granted successfully"}
+        return {"success": True, "message": _("Permission granted successfully")}
 
     def revoke_permission(self, role_name: str, permission_name: str) -> Dict[str, Any]:
         """
@@ -76,7 +78,7 @@ class PermissionService:
         """
         role = Role.query.filter_by(name=role_name).first()
         if not role:
-            return {"success": False, "message": "Role not found", "error": "invalid_role"}
+            return {"success": False, "message": _("Role not found"), "error": "invalid_role"}
 
         permission = Permission.query.filter_by(name=permission_name).first()
         if permission and role.has_permission(permission_name):
@@ -85,11 +87,11 @@ class PermissionService:
             if not safe_commit("revoke_permission", {"role": role_name, "permission": permission_name}):
                 return {
                     "success": False,
-                    "message": "Could not revoke permission due to a database error",
+                    "message": _("Could not revoke permission due to a database error"),
                     "error": "database_error",
                 }
 
-        return {"success": True, "message": "Permission revoked successfully"}
+        return {"success": True, "message": _("Permission revoked successfully")}
 
     def get_user_permissions(self, user_id: int) -> List[str]:
         """

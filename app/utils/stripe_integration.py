@@ -8,6 +8,7 @@ from typing import Any, Dict, Optional
 
 import stripe
 from flask import current_app
+from flask_babel import gettext as _
 
 logger = logging.getLogger(__name__)
 
@@ -62,7 +63,7 @@ class StripeIntegration:
             return {"success": False, "message": str(e), "error_code": e.code if hasattr(e, "code") else None}
         except Exception as e:
             logger.error(f"Error creating payment intent: {e}")
-            return {"success": False, "message": f"Error creating payment intent: {str(e)}"}
+            return {"success": False, "message": _("Error creating payment intent: %(error)s", error=str(e))}
 
     def verify_webhook(self, payload: bytes, signature: str, webhook_secret: str) -> Optional[stripe.Event]:
         """
@@ -135,4 +136,4 @@ class StripeIntegration:
             return {"success": False, "message": str(e), "error_code": e.code if hasattr(e, "code") else None}
         except Exception as e:
             logger.error(f"Error creating checkout session: {e}")
-            return {"success": False, "message": f"Error creating checkout session: {str(e)}"}
+            return {"success": False, "message": _("Error creating checkout session: %(error)s", error=str(e))}

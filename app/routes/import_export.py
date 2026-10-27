@@ -7,6 +7,7 @@ import os
 from datetime import datetime, timedelta
 
 from flask import Blueprint, current_app, jsonify, render_template, request, send_file
+from flask_babel import gettext as _
 from flask_login import current_user, login_required
 from werkzeug.utils import secure_filename
 
@@ -51,15 +52,15 @@ def import_csv():
     Expected multipart/form-data with 'file' field
     """
     if "file" not in request.files:
-        return jsonify({"error": "No file provided"}), 400
+        return jsonify({"error": _("No file provided")}), 400
 
     file = request.files["file"]
 
     if file.filename == "":
-        return jsonify({"error": "No file selected"}), 400
+        return jsonify({"error": _("No file selected")}), 400
 
     if not file.filename.endswith(".csv"):
-        return jsonify({"error": "File must be a CSV"}), 400
+        return jsonify({"error": _("File must be a CSV")}), 400
 
     try:
         # Read file content
@@ -79,10 +80,10 @@ def import_csv():
 
     except DataImportError as e:
         current_app.logger.warning("Import validation failed: %s", e)
-        return client_error_response("Import failed", 400)
+        return client_error_response(_("Import failed"), 400)
     except Exception as e:
         current_app.logger.error(f"CSV import error: {str(e)}")
-        return jsonify({"error": "Import failed. Please check the file format."}), 500
+        return jsonify({"error": _("Import failed. Please check the file format.")}), 500
 
 
 @import_export_bp.route("/api/import/toggl", methods=["POST"])
@@ -103,7 +104,7 @@ def import_toggl():
     data = request.get_json()
 
     if not data:
-        return jsonify({"error": "No data provided"}), 400
+        return jsonify({"error": _("No data provided")}), 400
 
     api_token = data.get("api_token")
     workspace_id = data.get("workspace_id")
@@ -111,7 +112,7 @@ def import_toggl():
     end_date_str = data.get("end_date")
 
     if not all([api_token, workspace_id, start_date_str, end_date_str]):
-        return jsonify({"error": "Missing required fields"}), 400
+        return jsonify({"error": _("Missing required fields")}), 400
 
     try:
         # Parse dates
@@ -139,10 +140,10 @@ def import_toggl():
 
     except DataImportError as e:
         current_app.logger.warning("Import validation failed: %s", e)
-        return client_error_response("Import failed", 400)
+        return client_error_response(_("Import failed"), 400)
     except Exception as e:
         current_app.logger.error(f"Toggl import error: {str(e)}")
-        return jsonify({"error": "Import failed. Please check your credentials and try again."}), 500
+        return jsonify({"error": _("Import failed. Please check your credentials and try again.")}), 500
 
 
 @import_export_bp.route("/api/import/harvest", methods=["POST"])
@@ -163,7 +164,7 @@ def import_harvest():
     data = request.get_json()
 
     if not data:
-        return jsonify({"error": "No data provided"}), 400
+        return jsonify({"error": _("No data provided")}), 400
 
     account_id = data.get("account_id")
     api_token = data.get("api_token")
@@ -171,7 +172,7 @@ def import_harvest():
     end_date_str = data.get("end_date")
 
     if not all([account_id, api_token, start_date_str, end_date_str]):
-        return jsonify({"error": "Missing required fields"}), 400
+        return jsonify({"error": _("Missing required fields")}), 400
 
     try:
         # Parse dates
@@ -199,10 +200,10 @@ def import_harvest():
 
     except DataImportError as e:
         current_app.logger.warning("Import validation failed: %s", e)
-        return client_error_response("Import failed", 400)
+        return client_error_response(_("Import failed"), 400)
     except Exception as e:
         current_app.logger.error(f"Harvest import error: {str(e)}")
-        return jsonify({"error": "Import failed. Please check your credentials and try again."}), 500
+        return jsonify({"error": _("Import failed. Please check your credentials and try again.")}), 500
 
 
 @import_export_bp.route("/api/import/status/<int:import_id>")
@@ -214,7 +215,7 @@ def import_status(import_id):
 
     # Check permissions
     if not current_user.is_admin and import_record.user_id != current_user.id:
-        return jsonify({"error": "Unauthorized"}), 403
+        return jsonify({"error": _("Unauthorized")}), 403
 
     return jsonify(import_record.to_dict()), 200
 
@@ -248,7 +249,7 @@ def erase_account_gdpr():
 
     data = request.get_json(silent=True) or {}
     if not data.get("confirm"):
-        return jsonify({"error": 'Confirmation required. Send JSON {"confirm": true}.'}), 400
+        return jsonify({"error": _('Confirmation required. Send JSON {"confirm": true}.')}), 400
 
     result = UserGdprService().anonymize_user(
         user_id=current_user.id,
@@ -266,7 +267,7 @@ def erase_account_gdpr():
 
     logout_user()
     session.clear()
-    return jsonify({"success": True, "message": "Account anonymized"}), 200
+    return jsonify({"success": True, "message": _("Account anonymized")}), 200
 
 
 @import_export_bp.route("/api/export/gdpr", methods=["POST"])
@@ -285,7 +286,7 @@ def export_gdpr():
     export_format = data.get("format", "json")
 
     if export_format not in ["json", "zip"]:
-        return jsonify({"error": 'Invalid format. Use "json" or "zip"'}), 400
+        return jsonify({"error": _('Invalid format. Use "json" or "zip"')}), 400
 
     try:
         # Create export record
@@ -318,7 +319,7 @@ def export_gdpr():
         current_app.logger.error(f"GDPR export error: {str(e)}")
         if "export_record" in locals():
             export_record.fail(str(e))
-        return jsonify({"error": "Export failed. Please try again."}), 500
+        return jsonify({"error": _("Export failed. Please try again.")}), 500
 
 
 @import_export_bp.route("/api/export/filtered", methods=["POST"])
@@ -345,13 +346,13 @@ def export_filtered():
     data = request.get_json()
 
     if not data:
-        return jsonify({"error": "No data provided"}), 400
+        return jsonify({"error": _("No data provided")}), 400
 
     export_format = data.get("format", "json")
     filters = data.get("filters", {})
 
     if export_format not in ["json", "csv"]:
-        return jsonify({"error": 'Invalid format. Use "json" or "csv"'}), 400
+        return jsonify({"error": _('Invalid format. Use "json" or "csv"')}), 400
 
     try:
         # Create export record
@@ -386,7 +387,7 @@ def export_filtered():
         current_app.logger.error(f"Filtered export error: {str(e)}")
         if "export_record" in locals():
             export_record.fail(str(e))
-        return jsonify({"error": "Export failed. Please try again."}), 500
+        return jsonify({"error": _("Export failed. Please try again.")}), 500
 
 
 @import_export_bp.route("/api/export/backup", methods=["POST"])
@@ -397,7 +398,7 @@ def export_backup():
     Create a full database backup (admin only)
     """
     if not current_user.is_admin:
-        return jsonify({"error": "Admin access required"}), 403
+        return jsonify({"error": _("Admin access required")}), 403
 
     try:
         # Create export record
@@ -430,7 +431,7 @@ def export_backup():
         current_app.logger.error(f"Backup creation error: {str(e)}")
         if "export_record" in locals():
             export_record.fail(str(e))
-        return jsonify({"error": "Backup failed. Please try again."}), 500
+        return jsonify({"error": _("Backup failed. Please try again.")}), 500
 
 
 @import_export_bp.route("/api/export/download/<int:export_id>")
@@ -442,19 +443,19 @@ def download_export(export_id):
 
     # Check permissions
     if not current_user.is_admin and export_record.user_id != current_user.id:
-        return jsonify({"error": "Unauthorized"}), 403
+        return jsonify({"error": _("Unauthorized")}), 403
 
     # Check if export is complete
     if export_record.status != "completed":
-        return jsonify({"error": "Export is not ready yet"}), 400
+        return jsonify({"error": _("Export is not ready yet")}), 400
 
     # Check if file exists
     if not export_record.file_path or not os.path.exists(export_record.file_path):
-        return jsonify({"error": "Export file not found"}), 404
+        return jsonify({"error": _("Export file not found")}), 404
 
     # Check if expired
     if export_record.is_expired():
-        return jsonify({"error": "Export has expired"}), 410
+        return jsonify({"error": _("Export has expired")}), 410
 
     return send_file(
         export_record.file_path, as_attachment=True, download_name=os.path.basename(export_record.file_path)
@@ -470,7 +471,7 @@ def export_status(export_id):
 
     # Check permissions
     if not current_user.is_admin and export_record.user_id != current_user.id:
-        return jsonify({"error": "Unauthorized"}), 403
+        return jsonify({"error": _("Unauthorized")}), 403
 
     return jsonify(export_record.to_dict()), 200
 
@@ -505,19 +506,19 @@ def restore_backup():
     Expected multipart/form-data with 'file' field
     """
     if not current_user.is_admin:
-        return jsonify({"error": "Admin access required"}), 403
+        return jsonify({"error": _("Admin access required")}), 403
 
     if "file" not in request.files:
-        return jsonify({"error": "No file provided"}), 400
+        return jsonify({"error": _("No file provided")}), 400
 
     file = request.files["file"]
 
     if file.filename == "":
-        return jsonify({"error": "No file selected"}), 400
+        return jsonify({"error": _("No file selected")}), 400
 
     fn_lower = (file.filename or "").lower()
     if not (fn_lower.endswith(".json") or fn_lower.endswith(".zip")):
-        return jsonify({"error": "File must be a JSON or ZIP backup file"}), 400
+        return jsonify({"error": _("File must be a JSON or ZIP backup file")}), 400
 
     filepath = None
     try:
@@ -537,14 +538,14 @@ def restore_backup():
             success, message = restore_backup_archive(app_obj, filepath)
             if not success:
                 current_app.logger.warning("Backup restore failed: %s", message)
-                return client_error_response("Backup restore failed", 400)
+                return client_error_response(_("Backup restore failed"), 400)
             return (
                 jsonify(
                     {
                         "success": True,
                         "import_id": None,
-                        "statistics": {"message": "Backup restored successfully"},
-                        "message": "Backup restored successfully",
+                        "statistics": {"message": _("Backup restored successfully")},
+                        "message": _("Backup restored successfully"),
                     }
                 ),
                 200,
@@ -563,7 +564,7 @@ def restore_backup():
                         "success": True,
                         "import_id": import_record.id,
                         "statistics": statistics,
-                        "message": "Backup restored successfully",
+                        "message": _("Backup restored successfully"),
                     }
                 ),
                 200,
@@ -571,10 +572,10 @@ def restore_backup():
 
     except DataImportError as e:
         current_app.logger.warning("Import validation failed: %s", e)
-        return client_error_response("Import failed", 400)
+        return client_error_response(_("Import failed"), 400)
     except Exception as e:
         current_app.logger.error(f"Backup restore error: {str(e)}")
-        return jsonify({"error": "Restore failed. Please check the backup file."}), 500
+        return jsonify({"error": _("Restore failed. Please check the backup file.")}), 500
     finally:
         if filepath and os.path.exists(filepath):
             try:
@@ -605,12 +606,12 @@ def start_migration_wizard():
     data = request.get_json()
 
     if not data:
-        return jsonify({"error": "No data provided"}), 400
+        return jsonify({"error": _("No data provided")}), 400
 
     source = data.get("source")
 
     if source not in ["toggl", "harvest", "csv"]:
-        return jsonify({"error": "Invalid source"}), 400
+        return jsonify({"error": _("Invalid source")}), 400
 
     # Store wizard state in session or return wizard ID
     wizard_id = f"wizard_{current_user.id}_{datetime.utcnow().timestamp()}"
@@ -621,7 +622,7 @@ def start_migration_wizard():
                 "success": True,
                 "wizard_id": wizard_id,
                 "next_step": "credentials",
-                "message": f"Migration wizard started for {source}",
+                "message": _("Migration wizard started for %(source)s", source=source),
             }
         ),
         200,
@@ -656,7 +657,7 @@ def execute_migration(wizard_id):
 
     # This would trigger the actual import based on the wizard configuration
 
-    return jsonify({"success": True, "message": "Migration started", "import_id": None}), 200
+    return jsonify({"success": True, "message": _("Migration started"), "import_id": None}), 200
 
 
 # ============================================================================
@@ -681,15 +682,15 @@ def import_csv_clients_route():
     """
     try:
         if "file" not in request.files:
-            return jsonify({"error": "No file provided"}), 400
+            return jsonify({"error": _("No file provided")}), 400
 
         file = request.files["file"]
 
         if file.filename == "":
-            return jsonify({"error": "No file selected"}), 400
+            return jsonify({"error": _("No file selected")}), 400
 
         if not file.filename.endswith(".csv"):
-            return jsonify({"error": "File must be a CSV"}), 400
+            return jsonify({"error": _("File must be a CSV")}), 400
 
         skip_duplicates = request.args.get("skip_duplicates", "true").lower() == "true"
 
@@ -710,12 +711,14 @@ def import_csv_clients_route():
                 csv_content = file_bytes.decode("latin-1")
             except Exception:
                 return (
-                    jsonify({"error": "Could not decode file. Please ensure it's a valid UTF-8 or Latin-1 CSV file."}),
+                    jsonify(
+                        {"error": _("Could not decode file. Please ensure it's a valid UTF-8 or Latin-1 CSV file.")}
+                    ),
                     400,
                 )
 
         if not csv_content or not csv_content.strip():
-            return jsonify({"error": "File is empty"}), 400
+            return jsonify({"error": _("File is empty")}), 400
 
         # Create import record
         import_record = None
@@ -728,7 +731,7 @@ def import_csv_clients_route():
         except Exception as e:
             current_app.logger.error(f"Failed to create import record: {str(e)}")
             db.session.rollback()
-            return client_error_response("Failed to initialize import", 500)
+            return client_error_response(_("Failed to initialize import"), 500)
 
         # Perform import
         try:
@@ -751,7 +754,7 @@ def import_csv_clients_route():
                 except Exception as db_error:
                     db.session.rollback()
                     current_app.logger.error(f"Failed to update import record status: {db_error}")
-            return client_error_response("Import failed", 400)
+            return client_error_response(_("Import failed"), 400)
         except Exception as e:
             current_app.logger.exception(f"Unexpected error in client import: {str(e)}")
             if import_record:
@@ -763,14 +766,14 @@ def import_csv_clients_route():
                     current_app.logger.error(f"Failed to update import record status: {db_error}")
             # Return detailed error in debug mode, generic in production
             error_msg = (
-                "Import failed. Please check the file format and try again."
+                _("Import failed. Please check the file format and try again.")
             )
             return jsonify({"error": error_msg}), 500
 
     except Exception as e:
         current_app.logger.exception(f"Top-level error in client import route: {str(e)}")
         error_msg = (
-            "An unexpected error occurred. Please try again."
+            _("An unexpected error occurred. Please try again.")
         )
         return jsonify({"error": error_msg}), 500
 

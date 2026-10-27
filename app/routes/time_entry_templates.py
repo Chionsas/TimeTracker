@@ -64,7 +64,7 @@ def create_template():
         existing = TimeEntryTemplate.query.filter_by(user_id=current_user.id, name=name).first()
 
         if existing:
-            flash(f'Template "{name}" already exists', "error")
+            flash(_('Template "%(name)s" already exists', name=name), "error")
             return render_template(
                 "time_entry_templates/create.html",
                 projects=Project.query.filter_by(status="active").order_by(Project.name).all(),
@@ -123,7 +123,7 @@ def create_template():
             },
         )
 
-        flash(f'Template "{name}" created successfully', "success")
+        flash(_('Template "%(name)s" created successfully', name=name), "success")
         return redirect(url_for("time_entry_templates.list_templates"))
 
     # GET request
@@ -179,7 +179,7 @@ def edit_template(template_id):
         ).first()
 
         if existing:
-            flash(f'Template "{name}" already exists', "error")
+            flash(_('Template "%(name)s" already exists', name=name), "error")
             return render_template(
                 "time_entry_templates/edit.html",
                 template=template,
@@ -226,7 +226,7 @@ def edit_template(template_id):
         log_event("time_entry_template.updated", user_id=current_user.id, template_id=template.id)
         track_event(current_user.id, "time_entry_template.updated", {"template_id": template.id, "template_name": name})
 
-        flash(f'Template "{name}" updated successfully', "success")
+        flash(_('Template "%(name)s" updated successfully', name=name), "success")
         return redirect(url_for("time_entry_templates.list_templates"))
 
     # GET request
@@ -268,7 +268,7 @@ def delete_template(template_id):
         current_user.id, "time_entry_template.deleted", {"template_id": template_id, "template_name": template_name}
     )
 
-    flash(f'Template "{template_name}" deleted successfully', "success")
+    flash(_('Template "%(name)s" deleted successfully', name=template_name), "success")
     return redirect(url_for("time_entry_templates.list_templates"))
 
 
@@ -315,7 +315,7 @@ def use_template_api(template_id):
     template.record_usage()
 
     if not safe_commit("use_time_entry_template", {"template_id": template_id}):
-        return jsonify({"error": "Could not record template usage"}), 500
+        return jsonify({"error": _("Could not record template usage")}), 500
 
     # Track event
     log_event("time_entry_template.used", user_id=current_user.id, template_id=template.id, template_name=template.name)

@@ -24,6 +24,7 @@ from datetime import datetime
 from typing import Any, Dict, List, Optional
 
 import requests
+from flask_babel import gettext as _
 
 from app.integrations.base import BaseConnector
 from app.utils.secret_crypto import decrypt_if_needed, encrypt_if_possible
@@ -164,7 +165,7 @@ class GitHubConnector(BaseConnector):
     # ------------------------------------------------------------------
     def test_connection(self) -> Dict[str, Any]:
         if not self._is_ready():
-            return {"success": False, "message": "Integration not configured"}
+            return {"success": False, "message": _("Integration not configured")}
         token = self._token()
         logger.debug("GitHubConnector.test_connection using token=%s", _mask(token))
         try:
@@ -175,11 +176,11 @@ class GitHubConnector(BaseConnector):
             )
         except requests.RequestException as exc:
             logger.warning("GitHub test_connection request failed: %s", type(exc).__name__)
-            return {"success": False, "message": "Connection error"}
+            return {"success": False, "message": _("Connection error")}
 
         if resp.status_code == 200:
-            return {"success": True, "message": f"Connected as {resp.json().get('login', 'Unknown')}"}
-        return {"success": False, "message": f"GitHub returned HTTP {resp.status_code}"}
+            return {"success": True, "message": _("Connected as %(login)s", login=resp.json().get("login", "Unknown"))}
+        return {"success": False, "message": _("GitHub returned HTTP %(status)s", status=resp.status_code)}
 
     # ------------------------------------------------------------------
     # Manual sync — POST /api/integrations/github/sync

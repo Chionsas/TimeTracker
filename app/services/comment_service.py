@@ -4,6 +4,8 @@ Service for comment business logic.
 
 from typing import Any, Dict, List, Optional
 
+from flask_babel import gettext as _
+
 from app import db
 from app.models import Comment, Project, Task
 from app.repositories import CommentRepository, ProjectRepository, TaskRepository
@@ -37,21 +39,21 @@ class CommentService:
         """
         # Validate content
         if not content or not content.strip():
-            return {"success": False, "message": "Comment content cannot be empty", "error": "empty_content"}
+            return {"success": False, "message": _("Comment content cannot be empty"), "error": "empty_content"}
 
         # Validate target
         targets = [x for x in [project_id, task_id, quote_id] if x is not None]
         if len(targets) == 0:
             return {
                 "success": False,
-                "message": "Comment must be associated with a project, task, or quote",
+                "message": _("Comment must be associated with a project, task, or quote"),
                 "error": "no_target",
             }
 
         if len(targets) > 1:
             return {
                 "success": False,
-                "message": "Comment cannot be associated with multiple targets",
+                "message": _("Comment cannot be associated with multiple targets"),
                 "error": "multiple_targets",
             }
 
@@ -59,24 +61,24 @@ class CommentService:
         if project_id:
             project = self.project_repo.get_by_id(project_id)
             if not project:
-                return {"success": False, "message": "Project not found", "error": "invalid_project"}
+                return {"success": False, "message": _("Project not found"), "error": "invalid_project"}
         elif task_id:
             task = self.task_repo.get_by_id(task_id)
             if not task:
-                return {"success": False, "message": "Task not found", "error": "invalid_task"}
+                return {"success": False, "message": _("Task not found"), "error": "invalid_task"}
 
         # Validate parent comment if reply
         if parent_id:
             parent = self.comment_repo.get_by_id(parent_id)
             if not parent:
-                return {"success": False, "message": "Parent comment not found", "error": "invalid_parent"}
+                return {"success": False, "message": _("Parent comment not found"), "error": "invalid_parent"}
             # Verify parent is for same target
             if (
                 (project_id and parent.project_id != project_id)
                 or (task_id and parent.task_id != task_id)
                 or (quote_id and parent.quote_id != quote_id)
             ):
-                return {"success": False, "message": "Invalid parent comment", "error": "invalid_parent_target"}
+                return {"success": False, "message": _("Invalid parent comment"), "error": "invalid_parent_target"}
 
         # Create comment
         comment = self.comment_repo.create(
@@ -92,7 +94,7 @@ class CommentService:
         if not safe_commit("create_comment", {"user_id": user_id}):
             return {
                 "success": False,
-                "message": "Could not create comment due to a database error",
+                "message": _("Could not create comment due to a database error"),
                 "error": "database_error",
             }
 
@@ -108,7 +110,7 @@ class CommentService:
             },
         )
 
-        return {"success": True, "message": "Comment created successfully", "comment": comment}
+        return {"success": True, "message": _("Comment created successfully"), "comment": comment}
 
     def get_project_comments(self, project_id: int, include_replies: bool = True) -> List[Comment]:
         """Get comments for a project"""
@@ -130,7 +132,7 @@ class CommentService:
         comment = self.comment_repo.get_by_id(comment_id)
 
         if not comment:
-            return {"success": False, "message": "Comment not found", "error": "not_found"}
+            return {"success": False, "message": _("Comment not found"), "error": "not_found"}
 
         # Check permissions (user can only delete their own comments unless admin)
         from flask_login import current_user
@@ -138,12 +140,12 @@ class CommentService:
         if comment.user_id != user_id and not (hasattr(current_user, "is_admin") and current_user.is_admin):
             return {
                 "success": False,
-                "message": "You do not have permission to delete this comment",
+                "message": _("You do not have permission to delete this comment"),
                 "error": "unauthorized",
             }
 
         if self.comment_repo.delete(comment):
             if safe_commit("delete_comment", {"comment_id": comment_id, "user_id": user_id}):
-                return {"success": True, "message": "Comment deleted successfully"}
+                return {"success": True, "message": _("Comment deleted successfully")}
 
-        return {"success": False, "message": "Could not delete comment", "error": "database_error"}
+        return {"success": False, "message": _("Could not delete comment"), "error": "database_error"}

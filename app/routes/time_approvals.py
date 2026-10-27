@@ -105,7 +105,7 @@ def reject_entry(approval_id):
     reason = data.get("reason") or data.get("rejection_reason")
     if not reason:
         if request.is_json:
-            return jsonify({"success": False, "message": "Rejection reason required"}), 400
+            return jsonify({"success": False, "message": _("Rejection reason required")}), 400
         flash(_("Rejection reason is required"), "error")
         return redirect(url_for("time_approvals.view_approval", approval_id=approval_id))
 
@@ -178,7 +178,7 @@ def bulk_approve():
 
     approval_ids = data.get("approval_ids", [])
     if not approval_ids:
-        return jsonify({"success": False, "message": "No approval IDs provided"}), 400
+        return jsonify({"success": False, "message": _("No approval IDs provided")}), 400
 
     result = service.bulk_approve(approval_ids=approval_ids, approver_id=current_user.id, comment=data.get("comment"))
 

@@ -12,6 +12,8 @@ push is sent but mention resolution and the Socket.IO emit still work.
 
 import re
 
+from flask_babel import gettext as _
+
 from app import db
 
 # @handle: letters, digits, underscore, dot, hyphen. The negative lookbehind
@@ -74,16 +76,19 @@ def _mention_target(comment):
 
 def _build_note(comment, actor):
     """Build the push/socket payload for a mention notification."""
-    actor_name = getattr(actor, "display_name", None) or getattr(actor, "username", None) or "Someone"
+    actor_name = getattr(actor, "display_name", None) or getattr(actor, "username", None) or _("Someone")
     label, url = _mention_target(comment)
     snippet = (comment.content or "").strip()
     if len(snippet) > 140:
         snippet = snippet[:137] + "…"
-    where = f" in {label}" if label and label != "Unknown" else ""
+    if label and label != "Unknown":
+        message = _("%(actor)s mentioned you in %(target)s: %(snippet)s", actor=actor_name, target=label, snippet=snippet)
+    else:
+        message = _("%(actor)s mentioned you: %(snippet)s", actor=actor_name, snippet=snippet)
     return {
         "kind": "mention",
-        "title": f"{actor_name} mentioned you",
-        "message": f"{actor_name} mentioned you{where}: {snippet}",
+        "title": _("%(actor)s mentioned you", actor=actor_name),
+        "message": message,
         "type": "info",
         "action": url,
         "comment_id": comment.id,

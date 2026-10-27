@@ -19,7 +19,7 @@ from flask import (
     send_file,
     url_for,
 )
-from flask_babel import gettext as _
+from flask_babel import gettext as _, ngettext
 from flask_login import current_user, login_required
 
 from app import db, log_event, track_event
@@ -240,7 +240,7 @@ def create_invoice():
             except Exception as e:
                 logger.error(f"Failed to send client notification for invoice {invoice.id}: {e}", exc_info=True)
 
-        flash(f"Invoice {invoice_number} created successfully", "success")
+        flash(_("Invoice %(invoice_number)s created successfully", invoice_number=invoice_number), "success")
         return redirect(url_for("invoices.edit_invoice", invoice_id=invoice.id))
 
     # GET request - show form (scoped for subcontractors)
@@ -488,7 +488,7 @@ def edit_invoice(invoice_id):
                     )
                     db.session.add(item)
                 except ValueError:
-                    flash(f"Invalid quantity or price for item {i+1}", "error")
+                    flash(_("Invalid quantity or price for item %(item)s", item=i + 1), "error")
                     continue
 
         # Update expenses (only when the expenses section was submitted)
@@ -557,7 +557,7 @@ def edit_invoice(invoice_id):
                     )
                     db.session.add(good)
                 except ValueError:
-                    flash(f"Invalid quantity or price for extra good {i+1}", "error")
+                    flash(_("Invalid quantity or price for extra good %(item)s", item=i + 1), "error")
                     continue
 
         # Reserve stock for invoice items with stock items
@@ -656,12 +656,12 @@ def update_invoice_status(invoice_id):
 
     # Check access permissions
     if not current_user.is_admin and invoice.created_by != current_user.id:
-        return jsonify({"error": "Permission denied"}), 403
+        return jsonify({"error": _("Permission denied")}), 403
 
     previous_status = invoice.status
     new_status = request.form.get("new_status")
     if new_status not in ["draft", "issued", "sent", "paid", "overdue", "cancelled", "void"]:
-        return jsonify({"error": "Invalid status"}), 400
+        return jsonify({"error": _("Invalid status")}), 400
 
     # Normalize legacy naming: treat "void" and "cancelled" as the same terminal state.
     if new_status == "void":
@@ -680,11 +680,11 @@ def update_invoice_status(invoice_id):
     if new_status == prev:
         return jsonify({"success": True, "status": new_status})
     if new_status not in allowed.get(prev, set()):
-        return jsonify({"error": "Invalid status transition"}), 400
+        return jsonify({"error": _("Invalid status transition")}), 400
 
     # Once sent/paid/cancelled, the invoice should be treated as immutable (no reverting).
     if prev in {"sent", "paid", "overdue", "cancelled"} and new_status in {"draft", "issued"}:
-        return jsonify({"error": "Cannot revert finalized invoice"}), 400
+        return jsonify({"error": _("Cannot revert finalized invoice")}), 400
 
     invoice.status = new_status
 
@@ -802,7 +802,7 @@ def update_invoice_status(invoice_id):
                 )
 
     if not safe_commit("update_invoice_status", {"invoice_id": invoice.id, "status": new_status}):
-        return jsonify({"error": "Database error while updating status"}), 500
+        return jsonify({"error": _("Database error while updating status")}), 500
 
     if new_status == "paid":
         from app.utils.workflow_bridge import fire_invoice_paid_workflow
@@ -852,7 +852,7 @@ def delete_invoice(invoice_id):
         flash(_("Could not delete invoice due to a database error. Please check server logs."), "error")
         return redirect(url_for("invoices.list_invoices"))
 
-    flash(f"Invoice {invoice_number} deleted successfully", "success")
+    flash(_("Invoice %(invoice_number)s deleted successfully", invoice_number=invoice_number), "success")
     return redirect(url_for("invoices.list_invoices"))
 
 
@@ -912,10 +912,21 @@ def bulk_delete_invoices():
 
     # Show appropriate messages
     if deleted_count > 0:
-        flash(f'Successfully deleted {deleted_count} invoice{"s" if deleted_count != 1 else ""}', "success")
+        flash(
+            ngettext("Successfully deleted %(num)d invoice", "Successfully deleted %(num)d invoices", deleted_count),
+            "success",
+        )
 
     if skipped_count > 0:
-        flash(f'Skipped {skipped_count} invoice{"s" if skipped_count != 1 else ""}: {"; ".join(errors[:3])}', "warning")
+        flash(
+            ngettext(
+                "Skipped %(num)d invoice: %(errors)s",
+                "Skipped %(num)d invoices: %(errors)s",
+                skipped_count,
+                errors="; ".join(errors[:3]),
+            ),
+            "warning",
+        )
 
     return redirect(url_for("invoices.list_invoices"))
 
@@ -985,12 +996,22 @@ def bulk_update_status():
             return redirect(url_for("invoices.list_invoices"))
 
         flash(
-            f'Successfully updated {updated_count} invoice{"s" if updated_count != 1 else ""} to {new_status}',
+            ngettext(
+                "Successfully updated %(num)d invoice to %(status)s",
+                "Successfully updated %(num)d invoices to %(status)s",
+                updated_count,
+                status=new_status,
+            ),
             "success",
         )
 
     if skipped_count > 0:
-        flash(f'Skipped {skipped_count} invoice{"s" if skipped_count != 1 else ""} (no permission)', "warning")
+        flash(
+            ngettext(
+                "Skipped %(num)d invoice (no permission)", "Skipped %(num)d invoices (no permission)", skipped_count
+            ),
+            "warning",
+        )
 
     return redirect(url_for("invoices.list_invoices"))
 
@@ -1510,7 +1531,7 @@ def duplicate_invoice(invoice_id):
         flash(_("Could not finalize duplicated invoice due to a database error. Please check server logs."), "error")
         return redirect(url_for("invoices.list_invoices"))
 
-    flash(f"Invoice {new_invoice_number} created as duplicate", "success")
+    flash(_("Invoice %(invoice_number)s created as duplicate", invoice_number=new_invoice_number), "success")
     return redirect(url_for("invoices.edit_invoice", invoice_id=new_invoice.id))
 
 
@@ -1547,7 +1568,7 @@ def send_invoice_email_route(invoice_id):
 
     # Check access permissions
     if not current_user.is_admin and invoice.created_by != current_user.id:
-        return jsonify({"error": "Permission denied"}), 403
+        return jsonify({"error": _("Permission denied")}), 403
 
     # Get recipient email from request (form POST or JSON API)
     data = request.get_json(silent=True) or {}
@@ -1556,7 +1577,7 @@ def send_invoice_email_route(invoice_id):
         recipient_email = (invoice.client_email or "").strip()
 
     if not recipient_email:
-        return jsonify({"error": "Recipient email address is required"}), 400
+        return jsonify({"error": _("Recipient email address is required")}), 400
 
     # Get custom message if provided
     custom_message = (request.form.get("custom_message") or data.get("custom_message") or "").strip()
@@ -1576,16 +1597,16 @@ def send_invoice_email_route(invoice_id):
         )
 
         if success:
-            flash(f"Invoice email sent successfully to {recipient_email}", "success")
+            flash(_("Invoice email sent successfully to %(email)s", email=recipient_email), "success")
             return jsonify(
                 {
                     "success": True,
-                    "message": "Invoice email sent successfully",
+                    "message": _("Invoice email sent successfully"),
                     "invoice_email_id": invoice_email.id if invoice_email else None,
                 }
             )
         else:
-            return client_error_response("Failed to send invoice email", 500)
+            return client_error_response(_("Failed to send invoice email"), 500)
 
     except Exception as e:
         logger.error(f"Error sending invoice email: {type(e).__name__}: {str(e)}")
@@ -1601,7 +1622,7 @@ def send_invoice_peppol_route(invoice_id):
 
     # Check access permissions
     if not current_user.is_admin and invoice.created_by != current_user.id:
-        return jsonify({"error": "Permission denied"}), 403
+        return jsonify({"error": _("Permission denied")}), 403
 
     try:
         from app.services import PeppolService
@@ -1609,12 +1630,12 @@ def send_invoice_peppol_route(invoice_id):
         service = PeppolService()
         success, tx, message = service.send_invoice(invoice=invoice, triggered_by_user_id=current_user.id)
         if success:
-            flash("Invoice sent via Peppol", "success")
+            flash(_("Invoice sent via Peppol"), "success")
             return jsonify(
-                {"success": True, "message": "Invoice sent via Peppol", "peppol_tx_id": tx.id if tx else None}
+                {"success": True, "message": _("Invoice sent via Peppol"), "peppol_tx_id": tx.id if tx else None}
             )
         return jsonify(
-            {"error": "Failed to send invoice via Peppol", "peppol_tx_id": tx.id if tx else None}
+            {"error": _("Failed to send invoice via Peppol"), "peppol_tx_id": tx.id if tx else None}
         ), 400
     except Exception as e:
         logger.error(f"Error sending invoice via Peppol: {type(e).__name__}: {str(e)}")
@@ -1630,7 +1651,7 @@ def get_invoice_email_history(invoice_id):
 
     # Check access permissions
     if not current_user.is_admin and invoice.created_by != current_user.id:
-        return jsonify({"error": "Permission denied"}), 403
+        return jsonify({"error": _("Permission denied")}), 403
 
     from app.models import InvoiceEmail
 
@@ -1651,7 +1672,7 @@ def resend_invoice_email(invoice_id, email_id):
 
     # Check access permissions
     if not current_user.is_admin and invoice.created_by != current_user.id:
-        return jsonify({"error": "Permission denied"}), 403
+        return jsonify({"error": _("Permission denied")}), 403
 
     from app.models import InvoiceEmail
 
@@ -1659,7 +1680,7 @@ def resend_invoice_email(invoice_id, email_id):
 
     # Verify the email belongs to this invoice
     if original_email.invoice_id != invoice_id:
-        return jsonify({"error": "Email record does not belong to this invoice"}), 400
+        return jsonify({"error": _("Email record does not belong to this invoice")}), 400
 
     # Get recipient email from request or use original
     recipient_email = (
@@ -1692,16 +1713,16 @@ def resend_invoice_email(invoice_id, email_id):
         )
 
         if success:
-            flash(f"Invoice email resent successfully to {recipient_email}", "success")
+            flash(_("Invoice email resent successfully to %(email)s", email=recipient_email), "success")
             return jsonify(
                 {
                     "success": True,
-                    "message": "Invoice email resent successfully",
+                    "message": _("Invoice email resent successfully"),
                     "invoice_email_id": invoice_email.id if invoice_email else None,
                 }
             )
         else:
-            return client_error_response("Failed to resend invoice email", 500)
+            return client_error_response(_("Failed to resend invoice email"), 500)
 
     except Exception as e:
         logger.error(f"Error resending invoice email: {type(e).__name__}: {str(e)}")
@@ -1724,7 +1745,7 @@ def upload_invoice_image(invoice_id):
     # Check permissions
     if not current_user.is_admin and invoice.created_by != current_user.id:
         if request.is_json:
-            return jsonify({"error": "Permission denied"}), 403
+            return jsonify({"error": _("Permission denied")}), 403
         flash(_("You do not have permission to upload images to this invoice"), "error")
         return redirect(url_for("invoices.view_invoice", invoice_id=invoice_id))
 
@@ -1738,20 +1759,23 @@ def upload_invoice_image(invoice_id):
 
     if "file" not in request.files:
         if request.is_json:
-            return jsonify({"error": "No file provided"}), 400
+            return jsonify({"error": _("No file provided")}), 400
         flash(_("No file provided"), "error")
         return redirect(url_for("invoices.edit_invoice", invoice_id=invoice_id))
 
     file = request.files["file"]
     if file.filename == "":
         if request.is_json:
-            return jsonify({"error": "No file selected"}), 400
+            return jsonify({"error": _("No file selected")}), 400
         flash(_("No file selected"), "error")
         return redirect(url_for("invoices.edit_invoice", invoice_id=invoice_id))
 
     if not allowed_file(file.filename):
         if request.is_json:
-            return jsonify({"error": "File type not allowed. Only images (PNG, JPG, JPEG, GIF, WEBP) are allowed"}), 400
+            return (
+                jsonify({"error": _("File type not allowed. Only images (PNG, JPG, JPEG, GIF, WEBP) are allowed")}),
+                400,
+            )
         flash(_("File type not allowed. Only images are allowed"), "error")
         return redirect(url_for("invoices.edit_invoice", invoice_id=invoice_id))
 
@@ -1763,7 +1787,14 @@ def upload_invoice_image(invoice_id):
     if file_size > MAX_FILE_SIZE:
         if request.is_json:
             return (
-                jsonify({"error": f"File size exceeds maximum allowed size ({MAX_FILE_SIZE / (1024*1024):.0f} MB)"}),
+                jsonify(
+                    {
+                        "error": _(
+                            "File size exceeds maximum allowed size (%(size)s MB)",
+                            size=f"{MAX_FILE_SIZE / (1024*1024):.0f}",
+                        )
+                    }
+                ),
                 400,
             )
         flash(_("File size exceeds maximum allowed size (5 MB)"), "error")
@@ -1777,7 +1808,7 @@ def upload_invoice_image(invoice_id):
     filename = secure_filename(f"{invoice_id}_{timestamp}_{original_filename}")
     if not filename:
         if request.is_json:
-            return jsonify({"error": "Invalid filename"}), 400
+            return jsonify({"error": _("Invalid filename")}), 400
         flash(_("Invalid filename"), "error")
         return redirect(url_for("invoices.edit_invoice", invoice_id=invoice_id))
 
@@ -1790,7 +1821,7 @@ def upload_invoice_image(invoice_id):
         file.save(file_path)
     except PathEscapeError:
         if request.is_json:
-            return jsonify({"error": "Invalid upload path"}), 400
+            return jsonify({"error": _("Invalid upload path")}), 400
         flash(_("Invalid upload path"), "error")
         return redirect(url_for("invoices.edit_invoice", invoice_id=invoice_id))
 
@@ -1826,7 +1857,7 @@ def upload_invoice_image(invoice_id):
 
     if not safe_commit("upload_invoice_image", {"invoice_id": invoice_id, "image_id": image.id}):
         if request.is_json:
-            return jsonify({"error": "Database error"}), 500
+            return jsonify({"error": _("Database error")}), 500
         flash(_("Could not upload image due to a database error. Please check server logs."), "error")
         # Clean up uploaded file
         try:
@@ -1867,7 +1898,7 @@ def update_invoice_image_position(invoice_id, image_id):
 
     # Check permissions
     if not current_user.is_admin and invoice.created_by != current_user.id:
-        return jsonify({"error": "Permission denied"}), 403
+        return jsonify({"error": _("Permission denied")}), 403
 
     # Get position data from request
     data = request.get_json() if request.is_json else request.form
@@ -1886,7 +1917,7 @@ def update_invoice_image_position(invoice_id, image_id):
         image.z_index = int(data["z_index"])
 
     if not safe_commit("update_invoice_image_position", {"invoice_id": invoice_id, "image_id": image_id}):
-        return jsonify({"error": "Database error"}), 500
+        return jsonify({"error": _("Database error")}), 500
 
     return jsonify({"success": True, "image": image.to_dict()})
 
@@ -1903,7 +1934,7 @@ def delete_invoice_image(invoice_id, image_id):
     # Check permissions
     if not current_user.is_admin and invoice.created_by != current_user.id:
         if request.is_json:
-            return jsonify({"error": "Permission denied"}), 403
+            return jsonify({"error": _("Permission denied")}), 403
         flash(_("You do not have permission to delete images from this invoice"), "error")
         return redirect(url_for("invoices.edit_invoice", invoice_id=invoice_id))
 
@@ -1920,7 +1951,7 @@ def delete_invoice_image(invoice_id, image_id):
 
     if not safe_commit("delete_invoice_image", {"invoice_id": invoice_id, "image_id": image_id_for_log}):
         if request.is_json:
-            return jsonify({"error": "Database error"}), 500
+            return jsonify({"error": _("Database error")}), 500
         flash(_("Could not delete image due to a database error. Please check server logs."), "error")
         return redirect(url_for("invoices.edit_invoice", invoice_id=invoice_id))
 

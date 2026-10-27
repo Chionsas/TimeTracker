@@ -11,6 +11,7 @@ from datetime import datetime, timedelta
 from typing import Any, Dict, List, Optional
 
 import requests
+from flask_babel import gettext as _
 
 from app.integrations.base import BaseConnector
 
@@ -114,11 +115,14 @@ class TrelloConnector(BaseConnector):
 
             if response.status_code == 200:
                 user_data = response.json()
-                return {"success": True, "message": f"Connected to Trello as {user_data.get('fullName', 'Unknown')}"}
+                return {
+                    "success": True,
+                    "message": _("Connected to Trello as %(name)s", name=user_data.get("fullName", "Unknown")),
+                }
             else:
-                return {"success": False, "message": f"Connection test failed: {response.status_code}"}
+                return {"success": False, "message": _("Connection test failed: %(error)s", error=response.status_code)}
         except Exception as e:
-            return {"success": False, "message": f"Connection test failed: {str(e)}"}
+            return {"success": False, "message": _("Connection test failed: %(error)s", error=str(e))}
 
     def sync_data(self, sync_type: str = "full") -> Dict[str, Any]:
         """Sync boards and cards with Trello."""
@@ -133,7 +137,7 @@ class TrelloConnector(BaseConnector):
 
             token = self.get_access_token()
             if not token or not api_key:
-                return {"success": False, "message": "Trello credentials not configured"}
+                return {"success": False, "message": _("Trello credentials not configured")}
 
             try:
                 actor_id, client_id = require_sync_context(self.integration)
@@ -159,7 +163,11 @@ class TrelloConnector(BaseConnector):
                             "synced_count": trello_result.get("synced_count", 0)
                             + tracker_result.get("synced_count", 0),
                             "errors": trello_result.get("errors", []) + tracker_result.get("errors", []),
-                            "message": f"Bidirectional sync: Trello→TimeTracker: {trello_result.get('synced_count', 0)} items | TimeTracker→Trello: {tracker_result.get('synced_count', 0)} items",
+                            "message": _(
+                                "Bidirectional sync: Trello→TimeTracker: %(imported)s items | TimeTracker→Trello: %(exported)s items",
+                                imported=trello_result.get("synced_count", 0),
+                                exported=tracker_result.get("synced_count", 0),
+                            ),
                         }
                     elif trello_result.get("success"):
                         return trello_result
@@ -168,7 +176,11 @@ class TrelloConnector(BaseConnector):
                     else:
                         return {
                             "success": False,
-                            "message": f"Both sync directions failed. Trello→TimeTracker: {trello_result.get('message')}, TimeTracker→Trello: {tracker_result.get('message')}",
+                            "message": _(
+                                "Both sync directions failed. Trello→TimeTracker: %(import_error)s, TimeTracker→Trello: %(export_error)s",
+                                import_error=trello_result.get("message"),
+                                export_error=tracker_result.get("message"),
+                            ),
                         }
                 return trello_result
 
@@ -176,10 +188,10 @@ class TrelloConnector(BaseConnector):
             if sync_direction == "timetracker_to_trello":
                 return self._sync_timetracker_to_trello(api_key, token, actor_id, client_id)
 
-            return {"success": False, "message": f"Unknown sync direction: {sync_direction}"}
+            return {"success": False, "message": _("Unknown sync direction: %(direction)s", direction=sync_direction)}
 
         except Exception as e:
-            return {"success": False, "message": f"Sync failed: {str(e)}"}
+            return {"success": False, "message": _("Sync failed: %(error)s", error=str(e))}
 
     def _sync_trello_to_timetracker(self, api_key: str, token: str, actor_id: int, client_id: int) -> Dict[str, Any]:
         """Sync Trello boards and cards to TimeTracker projects and tasks."""

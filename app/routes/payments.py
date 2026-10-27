@@ -2,7 +2,7 @@ from datetime import date, datetime
 from decimal import Decimal, InvalidOperation
 
 from flask import Blueprint, current_app, flash, jsonify, redirect, render_template, request, send_file, url_for
-from flask_babel import gettext as _
+from flask_babel import gettext as _, ngettext
 from flask_login import current_user, login_required
 from sqlalchemy import and_, func, or_
 
@@ -301,7 +301,14 @@ def create_payment():
             },
         )
 
-        flash(f"Payment of {amount} {currency or invoice.currency_code} recorded successfully", "success")
+        flash(
+            _(
+                "Payment of %(amount)s %(currency)s recorded successfully",
+                amount=amount,
+                currency=currency or invoice.currency_code,
+            ),
+            "success",
+        )
         return redirect(url_for("payments.view_payment", payment_id=payment.id))
 
     # GET request - show form
@@ -527,10 +534,23 @@ def bulk_delete_payments():
 
     # Show appropriate messages
     if deleted_count > 0:
-        flash(f'Successfully deleted {deleted_count} payment{"s" if deleted_count != 1 else ""}', "success")
+        flash(
+            ngettext(
+                "Successfully deleted %(num)d payment", "Successfully deleted %(num)d payments", deleted_count
+            ),
+            "success",
+        )
 
     if skipped_count > 0:
-        flash(f'Skipped {skipped_count} payment{"s" if skipped_count != 1 else ""}: {"; ".join(errors[:3])}', "warning")
+        flash(
+            ngettext(
+                "Skipped %(num)d payment: %(errors)s",
+                "Skipped %(num)d payments: %(errors)s",
+                skipped_count,
+                errors="; ".join(errors[:3]),
+            ),
+            "warning",
+        )
 
     return redirect(url_for("payments.list_payments"))
 
@@ -599,12 +619,22 @@ def bulk_update_status():
             return redirect(url_for("payments.list_payments"))
 
         flash(
-            f'Successfully updated {updated_count} payment{"s" if updated_count != 1 else ""} to {new_status}',
+            ngettext(
+                "Successfully updated %(num)d payment to %(status)s",
+                "Successfully updated %(num)d payments to %(status)s",
+                updated_count,
+                status=new_status,
+            ),
             "success",
         )
 
     if skipped_count > 0:
-        flash(f'Skipped {skipped_count} payment{"s" if skipped_count != 1 else ""} (no permission)', "warning")
+        flash(
+            ngettext(
+                "Skipped %(num)d payment (no permission)", "Skipped %(num)d payments (no permission)", skipped_count
+            ),
+            "warning",
+        )
 
     return redirect(url_for("payments.list_payments"))
 

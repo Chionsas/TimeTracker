@@ -15,6 +15,7 @@ from datetime import datetime
 from typing import Any, Dict, Optional
 
 import requests
+from flask_babel import gettext as _
 
 from app.integrations.base import BaseConnector
 from app.utils.db import safe_commit
@@ -87,7 +88,7 @@ class SlackAttendanceConnector(BaseConnector):
 
     def test_connection(self) -> Dict[str, Any]:
         if not self._is_ready():
-            return {"success": False, "message": "Integration not configured"}
+            return {"success": False, "message": _("Integration not configured")}
         try:
             resp = requests.post(
                 "https://slack.com/api/auth.test",
@@ -95,10 +96,10 @@ class SlackAttendanceConnector(BaseConnector):
                 timeout=HTTP_TIMEOUT,
             )
         except requests.RequestException as exc:
-            return {"success": False, "message": f"Connection error: {exc}"}
+            return {"success": False, "message": _("Connection error: %(error)s", error=exc)}
         data = resp.json() or {}
         if data.get("ok"):
-            return {"success": True, "message": f"Connected as {data.get('user') or 'Unknown'}"}
+            return {"success": True, "message": _("Connected as %(user)s", user=data.get("user") or "Unknown")}
         return {"success": False, "message": data.get("error") or "auth.test failed"}
 
     def _cfg(self) -> Dict[str, Any]:
@@ -116,7 +117,7 @@ class SlackAttendanceConnector(BaseConnector):
     @classmethod
     def save_config(cls, integration, payload: Dict[str, Any]) -> Dict[str, Any]:
         if not integration:
-            return {"ok": False, "error": "Integration not configured"}
+            return {"ok": False, "error": _("Integration not configured")}
         cfg: Dict[str, Any] = dict(integration.config or {})
 
         bot_token = (payload.get("bot_token") or "").strip()
@@ -134,7 +135,7 @@ class SlackAttendanceConnector(BaseConnector):
         integration.updated_at = datetime.utcnow()
 
         if not safe_commit("slack_attendance_save_config", {"integration_id": integration.id}):
-            return {"ok": False, "error": "Database error while saving configuration"}
+            return {"ok": False, "error": _("Database error while saving configuration")}
         return {"ok": True, "is_active": bool(integration.is_active)}
 
     def verify_signature(
@@ -290,10 +291,10 @@ class SlackAttendanceConnector(BaseConnector):
 
     def send_test_message(self) -> Dict[str, Any]:
         if not self._is_ready():
-            return {"ok": False, "error": "Integration not configured"}
+            return {"ok": False, "error": _("Integration not configured")}
         channel = self._cfg().get("attendance_channel_id")
         if not channel:
-            return {"ok": False, "error": "Attendance channel ID is required for test messages"}
+            return {"ok": False, "error": _("Attendance channel ID is required for test messages")}
         ok = self._post(channel, ":wave: TimeTracker Slack attendance test message.")
         return {"ok": bool(ok)}
 

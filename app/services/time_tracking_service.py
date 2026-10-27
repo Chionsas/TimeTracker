@@ -5,6 +5,7 @@ Service for time tracking business logic.
 from datetime import datetime
 from typing import Any, Dict, List, Optional
 
+from flask_babel import gettext as _
 from flask_login import current_user
 
 from app import db
@@ -43,7 +44,7 @@ class TimeTrackingService:
         display/compatibility but is not consulted for enforcement.
         """
         if self.time_entry_repo.get_active_timer(user_id):
-            return False, "You already have an active timer. Stop it before starting a new one."
+            return False, _("You already have an active timer. Stop it before starting a new one.")
         return True, None
 
     def start_timer(
@@ -66,7 +67,7 @@ class TimeTrackingService:
         if self._is_locked_period(user_id, local_now()):
             return {
                 "success": False,
-                "message": "Timesheet period is closed for this date",
+                "message": _("Timesheet period is closed for this date"),
                 "error": "timesheet_period_locked",
             }
 
@@ -74,7 +75,7 @@ class TimeTrackingService:
         if not ok:
             return {
                 "success": False,
-                "message": conflict_msg or "You already have an active timer. Stop it before starting a new one.",
+                "message": conflict_msg or _("You already have an active timer. Stop it before starting a new one."),
                 "error": "timer_already_running",
             }
 
@@ -95,7 +96,7 @@ class TimeTrackingService:
         if not project_id and not client_id:
             return {
                 "success": False,
-                "message": "Either project or client must be selected",
+                "message": _("Either project or client must be selected"),
                 "error": "missing_project_or_client",
             }
 
@@ -106,19 +107,19 @@ class TimeTrackingService:
         if project_id:
             project = self.project_repo.get_by_id(project_id)
             if not project:
-                return {"success": False, "message": "Invalid project selected", "error": "invalid_project"}
+                return {"success": False, "message": _("Invalid project selected"), "error": "invalid_project"}
 
             if project.status == "archived":
                 return {
                     "success": False,
-                    "message": "Cannot start timer for an archived project. Please unarchive the project first.",
+                    "message": _("Cannot start timer for an archived project. Please unarchive the project first."),
                     "error": "project_archived",
                 }
 
             if project.status != "active":
                 return {
                     "success": False,
-                    "message": "Cannot start timer for an inactive project",
+                    "message": _("Cannot start timer for an inactive project"),
                     "error": "project_inactive",
                 }
 
@@ -127,7 +128,7 @@ class TimeTrackingService:
                 if not task:
                     return {
                         "success": False,
-                        "message": "Selected task is invalid for the chosen project",
+                        "message": _("Selected task is invalid for the chosen project"),
                         "error": "invalid_task",
                     }
 
@@ -138,12 +139,12 @@ class TimeTrackingService:
 
             client = ClientRepository().get_by_id(client_id)
             if not client or client.status != "active":
-                return {"success": False, "message": "Invalid client selected", "error": "invalid_client"}
+                return {"success": False, "message": _("Invalid client selected"), "error": "invalid_client"}
 
             if task_id:
                 return {
                     "success": False,
-                    "message": "Tasks can only be selected for project-based timers",
+                    "message": _("Tasks can only be selected for project-based timers"),
                     "error": "task_not_allowed",
                 }
 
@@ -174,12 +175,12 @@ class TimeTrackingService:
             if self.time_entry_repo.get_active_timer(user_id):
                 return {
                     "success": False,
-                    "message": "You already have an active timer. Stop it before starting a new one.",
+                    "message": _("You already have an active timer. Stop it before starting a new one."),
                     "error": "timer_already_running",
                 }
             return {
                 "success": False,
-                "message": "Could not start timer due to a database error",
+                "message": _("Could not start timer due to a database error"),
                 "error": "database_error",
             }
 
@@ -190,7 +191,7 @@ class TimeTrackingService:
             event_payload["client_id"] = client_id
         emit_event(WebhookEvent.TIME_ENTRY_CREATED.value, event_payload)
 
-        return {"success": True, "message": "Timer started successfully", "timer": timer}
+        return {"success": True, "message": _("Timer started successfully"), "timer": timer}
 
     def stop_timer(
         self, user_id: int, entry_id: Optional[int] = None, end_time: Optional[datetime] = None
@@ -212,13 +213,13 @@ class TimeTrackingService:
             entry = self.time_entry_repo.get_active_timer(user_id)
 
         if not entry:
-            return {"success": False, "message": "No active timer found", "error": "no_active_timer"}
+            return {"success": False, "message": _("No active timer found"), "error": "no_active_timer"}
 
         if entry.user_id != user_id:
-            return {"success": False, "message": "You can only stop your own timer", "error": "unauthorized"}
+            return {"success": False, "message": _("You can only stop your own timer"), "error": "unauthorized"}
 
         if entry.end_time is not None:
-            return {"success": False, "message": "Timer is already stopped", "error": "timer_already_stopped"}
+            return {"success": False, "message": _("Timer is already stopped"), "error": "timer_already_stopped"}
 
         stop_at = end_time if end_time is not None else local_now()
         if end_time is not None:
@@ -240,7 +241,7 @@ class TimeTrackingService:
         if not safe_commit("stop_timer", {"user_id": user_id, "entry_id": entry.id}):
             return {
                 "success": False,
-                "message": "Could not stop timer due to a database error",
+                "message": _("Could not stop timer due to a database error"),
                 "error": "database_error",
             }
 
@@ -248,7 +249,7 @@ class TimeTrackingService:
 
         fire_time_logged_workflow(entry, user_id)
 
-        return {"success": True, "message": "Timer stopped successfully", "entry": entry}
+        return {"success": True, "message": _("Timer stopped successfully"), "entry": entry}
 
     def resolve_idle_prompt(
         self,
@@ -395,31 +396,31 @@ class TimeTrackingService:
         """Pause the active timer for a user. Clock stops; break accumulates on resume."""
         entry = self.time_entry_repo.get_active_timer(user_id)
         if not entry:
-            return {"success": False, "message": "No active timer found", "error": "no_active_timer"}
+            return {"success": False, "message": _("No active timer found"), "error": "no_active_timer"}
         if entry.user_id != user_id:
-            return {"success": False, "message": "You can only pause your own timer", "error": "unauthorized"}
+            return {"success": False, "message": _("You can only pause your own timer"), "error": "unauthorized"}
         try:
             entry.pause_timer(commit=False)
         except ValueError as e:
             return {"success": False, "message": str(e), "error": "invalid_state"}
         if not safe_commit("pause_timer", {"user_id": user_id, "entry_id": entry.id}):
-            return {"success": False, "message": "Could not pause timer", "error": "database_error"}
-        return {"success": True, "message": "Timer paused", "entry": entry}
+            return {"success": False, "message": _("Could not pause timer"), "error": "database_error"}
+        return {"success": True, "message": _("Timer paused"), "entry": entry}
 
     def resume_timer(self, user_id: int) -> Dict[str, Any]:
         """Resume a paused timer; time since pause is added to break_seconds."""
         entry = self.time_entry_repo.get_active_timer(user_id)
         if not entry:
-            return {"success": False, "message": "No active timer found", "error": "no_active_timer"}
+            return {"success": False, "message": _("No active timer found"), "error": "no_active_timer"}
         if entry.user_id != user_id:
-            return {"success": False, "message": "You can only resume your own timer", "error": "unauthorized"}
+            return {"success": False, "message": _("You can only resume your own timer"), "error": "unauthorized"}
         try:
             entry.resume_timer(commit=False)
         except ValueError as e:
             return {"success": False, "message": str(e), "error": "invalid_state"}
         if not safe_commit("resume_timer", {"user_id": user_id, "entry_id": entry.id}):
-            return {"success": False, "message": "Could not resume timer", "error": "database_error"}
-        return {"success": True, "message": "Timer resumed", "entry": entry}
+            return {"success": False, "message": _("Could not resume timer"), "error": "database_error"}
+        return {"success": True, "message": _("Timer resumed"), "entry": entry}
 
     def create_manual_entry(
         self,
@@ -448,7 +449,7 @@ class TimeTrackingService:
         if not project_id and not client_id:
             return {
                 "success": False,
-                "message": "Either project or client must be selected",
+                "message": _("Either project or client must be selected"),
                 "error": "missing_project_or_client",
             }
 
@@ -460,13 +461,13 @@ class TimeTrackingService:
         if project_id:
             project = self.project_repo.get_by_id(project_id)
             if not project:
-                return {"success": False, "message": "Invalid project", "error": "invalid_project"}
+                return {"success": False, "message": _("Invalid project"), "error": "invalid_project"}
 
             # Validate task if provided (only valid when project_id is set)
             if task_id:
                 task = Task.query.filter_by(id=task_id, project_id=project_id).first()
                 if not task:
-                    return {"success": False, "message": "Invalid task for selected project", "error": "invalid_task"}
+                    return {"success": False, "message": _("Invalid task for selected project"), "error": "invalid_task"}
 
             project.touch_last_used()
 
@@ -477,13 +478,13 @@ class TimeTrackingService:
             client_repo = ClientRepository()
             client = client_repo.get_by_id(client_id)
             if not client:
-                return {"success": False, "message": "Invalid client", "error": "invalid_client"}
+                return {"success": False, "message": _("Invalid client"), "error": "invalid_client"}
 
             # Task cannot be set when billing directly to client
             if task_id:
                 return {
                     "success": False,
-                    "message": "Tasks can only be assigned to project-based time entries",
+                    "message": _("Tasks can only be assigned to project-based time entries"),
                     "error": "task_not_allowed",
                 }
 
@@ -507,12 +508,12 @@ class TimeTrackingService:
         if self._is_locked_period(user_id, start_time, end_time):
             return {
                 "success": False,
-                "message": "Timesheet period is closed for the selected date range",
+                "message": _("Timesheet period is closed for the selected date range"),
                 "error": "timesheet_period_locked",
             }
 
         if end_time <= start_time:
-            return {"success": False, "message": "End time must be after start time", "error": "invalid_time_range"}
+            return {"success": False, "message": _("End time must be after start time"), "error": "invalid_time_range"}
 
         # Check for overlapping entries (unless skipped for imports)
         if not skip_entry_requirements:
@@ -525,7 +526,7 @@ class TimeTrackingService:
             if overlapping:
                 return {
                     "success": False,
-                    "message": "This time overlaps with an existing entry. Please choose a different time range or edit the existing entry.",
+                    "message": _("This time overlaps with an existing entry. Please choose a different time range or edit the existing entry."),
                     "error": "overlapping_entry",
                 }
 
@@ -533,9 +534,9 @@ class TimeTrackingService:
             try:
                 duration_seconds = int(duration_seconds)
             except (TypeError, ValueError):
-                return {"success": False, "message": "Invalid duration", "error": "invalid_duration"}
+                return {"success": False, "message": _("Invalid duration"), "error": "invalid_duration"}
             if duration_seconds <= 0:
-                return {"success": False, "message": "Duration must be positive", "error": "invalid_duration"}
+                return {"success": False, "message": _("Duration must be positive"), "error": "invalid_duration"}
 
             # Apply per-user rounding so all callers (UI, API, integrations) are covered.
             # Idempotent when the UI already rounded (values on an interval stay put).
@@ -588,7 +589,7 @@ class TimeTrackingService:
         if not safe_commit("create_manual_entry", commit_data):
             return {
                 "success": False,
-                "message": "Could not create time entry due to a database error",
+                "message": _("Could not create time entry due to a database error"),
                 "error": "database_error",
             }
 
@@ -607,7 +608,7 @@ class TimeTrackingService:
 
         fire_time_logged_workflow(entry, user_id)
 
-        return {"success": True, "message": "Time entry created successfully", "entry": entry}
+        return {"success": True, "message": _("Time entry created successfully"), "entry": entry}
 
     def get_user_entries(
         self,
@@ -684,18 +685,18 @@ class TimeTrackingService:
         entry = self.time_entry_repo.get_by_id(entry_id)
 
         if not entry:
-            return {"success": False, "message": "Time entry not found", "error": "not_found"}
+            return {"success": False, "message": _("Time entry not found"), "error": "not_found"}
 
         # Check permissions
         if not is_admin and entry.user_id != user_id:
-            return {"success": False, "message": "Access denied", "error": "access_denied"}
+            return {"success": False, "message": _("Access denied"), "error": "access_denied"}
 
         # Optimistic concurrency (optional): mobile / API clients send last known updated_at
         if expected_updated_at is not None and entry.updated_at is not None:
             if abs((entry.updated_at - expected_updated_at).total_seconds()) > 2:
                 return {
                     "success": False,
-                    "message": "Time entry was modified on the server. Refresh and try again.",
+                    "message": _("Time entry was modified on the server. Refresh and try again."),
                     "error": "conflict",
                     "entry": entry,
                 }
@@ -706,7 +707,7 @@ class TimeTrackingService:
         ):
             return {
                 "success": False,
-                "message": "Timesheet period is closed for this entry",
+                "message": _("Timesheet period is closed for this entry"),
                 "error": "timesheet_period_locked",
             }
 
@@ -714,7 +715,7 @@ class TimeTrackingService:
         if entry.is_active and end_time is not None:
             return {
                 "success": False,
-                "message": "Cannot set end_time on active timer. Stop the timer first.",
+                "message": _("Cannot set end_time on active timer. Stop the timer first."),
                 "error": "timer_active",
             }
 
@@ -729,7 +730,7 @@ class TimeTrackingService:
             # Validate project
             project = self.project_repo.get_by_id(project_id)
             if not project:
-                return {"success": False, "message": "Invalid project", "error": "invalid_project"}
+                return {"success": False, "message": _("Invalid project"), "error": "invalid_project"}
             entry.project_id = project_id
             # Clear client_id when setting project_id
             entry.client_id = None
@@ -741,7 +742,7 @@ class TimeTrackingService:
             client_repo = ClientRepository()
             client = client_repo.get_by_id(client_id)
             if not client:
-                return {"success": False, "message": "Invalid client", "error": "invalid_client"}
+                return {"success": False, "message": _("Invalid client"), "error": "invalid_client"}
             entry.client_id = client_id
             # Clear project_id and task_id when setting client_id
             entry.project_id = None
@@ -756,7 +757,7 @@ class TimeTrackingService:
                 if not entry.project_id:
                     return {
                         "success": False,
-                        "message": "Task can only be assigned to project-based time entries",
+                        "message": _("Task can only be assigned to project-based time entries"),
                         "error": "task_requires_project",
                     }
                 entry.task_id = task_id
@@ -810,7 +811,7 @@ class TimeTrackingService:
                 db.session.rollback()
                 return {
                     "success": False,
-                    "message": "This time overlaps with an existing entry. Please choose a different time range.",
+                    "message": _("This time overlaps with an existing entry. Please choose a different time range."),
                     "error": "overlapping_entry",
                 }
 
@@ -819,7 +820,7 @@ class TimeTrackingService:
         if not safe_commit("update_entry", {"user_id": user_id, "entry_id": entry_id}):
             return {
                 "success": False,
-                "message": "Could not update time entry due to a database error",
+                "message": _("Could not update time entry due to a database error"),
                 "error": "database_error",
             }
 
@@ -859,7 +860,7 @@ class TimeTrackingService:
 
             logging.getLogger(__name__).warning(f"Failed to create audit log for TimeEntry update: {e}")
 
-        return {"success": True, "message": "Time entry updated successfully", "entry": entry}
+        return {"success": True, "message": _("Time entry updated successfully"), "entry": entry}
 
     def delete_entry(
         self, user_id: int, entry_id: int, is_admin: bool = False, reason: Optional[str] = None
@@ -879,11 +880,11 @@ class TimeTrackingService:
         entry = self.time_entry_repo.get_by_id(entry_id)
 
         if not entry:
-            return {"success": False, "message": "Time entry not found", "error": "not_found"}
+            return {"success": False, "message": _("Time entry not found"), "error": "not_found"}
 
         # Check permissions
         if not is_admin and entry.user_id != user_id:
-            return {"success": False, "message": "Access denied", "error": "access_denied"}
+            return {"success": False, "message": _("Access denied"), "error": "access_denied"}
 
         # Block non-admin deletes in closed periods
         if (not is_admin) and self._is_locked_period(
@@ -891,7 +892,7 @@ class TimeTrackingService:
         ):
             return {
                 "success": False,
-                "message": "Timesheet period is closed for this entry",
+                "message": _("Timesheet period is closed for this entry"),
                 "error": "timesheet_period_locked",
             }
 
@@ -899,7 +900,7 @@ class TimeTrackingService:
         if entry.is_active:
             return {
                 "success": False,
-                "message": "Cannot delete active time entry. Stop the timer first.",
+                "message": _("Cannot delete active time entry. Stop the timer first."),
                 "error": "timer_active",
             }
 
@@ -963,6 +964,6 @@ class TimeTrackingService:
                     ip_address=ip_address,
                     user_agent=user_agent,
                 )
-                return {"success": True, "message": "Time entry deleted successfully"}
+                return {"success": True, "message": _("Time entry deleted successfully")}
 
-        return {"success": False, "message": "Could not delete time entry", "error": "database_error"}
+        return {"success": False, "message": _("Could not delete time entry"), "error": "database_error"}

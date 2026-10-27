@@ -19,6 +19,7 @@ from datetime import datetime, timedelta, timezone
 from typing import Any, Dict, List, Optional
 
 import requests
+from flask_babel import gettext as _
 
 from app.integrations.base import BaseConnector
 from app.utils.integration_http import integration_session, session_request
@@ -68,7 +69,7 @@ class ActivityWatchConnector(BaseConnector):
         cfg = self.integration.config or {}
         url = (cfg.get("server_url") or "").strip()
         if not url:
-            raise ValueError("ActivityWatch server_url is required in integration config.")
+            raise ValueError(_("ActivityWatch server_url is required in integration config."))
         return _normalize_server_url(url)
 
     def _get(self, path: str, params: Optional[Dict[str, Any]] = None) -> Any:
@@ -80,23 +81,23 @@ class ActivityWatchConnector(BaseConnector):
             resp.raise_for_status()
             return resp.json()
         except json.JSONDecodeError as e:
-            raise ValueError(f"Invalid JSON from ActivityWatch: {e}") from e
+            raise ValueError(_("Invalid JSON from ActivityWatch: %(error)s", error=str(e))) from e
         except requests.exceptions.ConnectionError as e:
-            raise ValueError(f"Cannot reach ActivityWatch at {base}: {e}") from e
+            raise ValueError(_("Cannot reach ActivityWatch at %(url)s: %(error)s", url=base, error=str(e))) from e
         except requests.exceptions.Timeout as e:
-            raise ValueError(f"ActivityWatch request timed out: {e}") from e
+            raise ValueError(_("ActivityWatch request timed out: %(error)s", error=str(e))) from e
         except requests.exceptions.HTTPError as e:
-            raise ValueError(f"ActivityWatch API error: {e}") from e
+            raise ValueError(_("ActivityWatch API error: %(error)s", error=str(e))) from e
 
     def test_connection(self) -> Dict[str, Any]:
         """Test connectivity to aw-server: GET /api/0/buckets/."""
         try:
             self._get("buckets/")
-            return {"success": True, "message": "Connected to ActivityWatch."}
+            return {"success": True, "message": _("Connected to ActivityWatch.")}
         except ValueError as e:
             return {"success": False, "message": str(e)}
         except Exception as e:
-            return {"success": False, "message": f"Connection test failed: {e}"}
+            return {"success": False, "message": _("Connection test failed: %(error)s", error=str(e))}
 
     def sync_data(self, sync_type: str = "full") -> Dict[str, Any]:
         """
@@ -108,12 +109,12 @@ class ActivityWatchConnector(BaseConnector):
         from app.models.integration_external_event_link import IntegrationExternalEventLink
 
         if not self.integration or not self.integration.user_id:
-            return {"success": False, "message": "ActivityWatch integration must be per-user."}
+            return {"success": False, "message": _("ActivityWatch integration must be per-user.")}
 
         cfg = self.integration.config or {}
         server_url = _normalize_server_url((cfg.get("server_url") or "").strip())
         if not server_url:
-            return {"success": False, "message": "server_url is required."}
+            return {"success": False, "message": _("server_url is required.")}
 
         lookback_days = int(cfg.get("lookback_days", 7))
         lookback_days = max(1, min(90, lookback_days))
@@ -163,7 +164,7 @@ class ActivityWatchConnector(BaseConnector):
                     db.session.commit()
                 except Exception:
                     pass
-            return {"success": False, "message": f"Failed to list buckets: {e}"}
+            return {"success": False, "message": _("Failed to list buckets: %(error)s", error=str(e))}
 
         if isinstance(buckets_data, dict):
             # /buckets/ returns { "id": { metadata } }
@@ -178,7 +179,11 @@ class ActivityWatchConnector(BaseConnector):
             if not selected:
                 return {
                     "success": False,
-                    "message": f"None of the configured bucket_ids exist. Available: {all_bucket_ids[:5]}{'...' if len(all_bucket_ids) > 5 else ''}.",
+                    "message": _(
+                        "None of the configured bucket_ids exist. Available: %(buckets)s%(more)s.",
+                        buckets=all_bucket_ids[:5],
+                        more="..." if len(all_bucket_ids) > 5 else "",
+                    ),
                 }
         else:
             selected = [
@@ -196,7 +201,9 @@ class ActivityWatchConnector(BaseConnector):
                 "skipped": 0,
                 "synced_items": 0,
                 "errors": [],
-                "message": "No aw-watcher-window or aw-watcher-web buckets found. Install and run ActivityWatch watchers.",
+                "message": _(
+                    "No aw-watcher-window or aw-watcher-web buckets found. Install and run ActivityWatch watchers."
+                ),
             }
 
         imported = 0
@@ -393,9 +400,9 @@ class ActivityWatchConnector(BaseConnector):
         self.integration.last_error = "; ".join(errors[:3]) if errors else None
         db.session.commit()
 
-        msg = f"Imported {imported} events, skipped {skipped}."
+        msg = _("Imported %(imported)d events, skipped %(skipped)d.", imported=imported, skipped=skipped)
         if errors:
-            msg += f" Errors: {len(errors)}."
+            msg += " " + _("Errors: %(count)d.", count=len(errors))
         return {
             "success": True,
             "imported": imported,

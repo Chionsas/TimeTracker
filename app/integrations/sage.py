@@ -7,6 +7,7 @@ from typing import Any, Dict, Optional
 from urllib.parse import urlencode
 
 import requests
+from flask_babel import gettext as _
 
 from app.integrations.base import BaseConnector
 
@@ -114,7 +115,7 @@ class SageConnector(BaseConnector):
     def test_connection(self) -> Dict[str, Any]:
         token = self.get_access_token()
         if not token:
-            return {"success": False, "message": "No access token"}
+            return {"success": False, "message": _("No access token")}
         try:
             r = requests.get(
                 f"{self.API_BASE}/businesses",
@@ -122,7 +123,7 @@ class SageConnector(BaseConnector):
                 timeout=20,
             )
             if r.status_code == 200:
-                return {"success": True, "message": "Connected to Sage Business Cloud"}
+                return {"success": True, "message": _("Connected to Sage Business Cloud")}
             return {"success": False, "message": f"HTTP {r.status_code}: {r.text[:200]}"}
         except Exception as exc:
             return {"success": False, "message": str(exc)}
@@ -131,7 +132,7 @@ class SageConnector(BaseConnector):
         """Push open invoices to Sage as sales invoices."""
         token = self.get_access_token()
         if not token:
-            return {"success": False, "message": "Not authenticated", "synced": 0}
+            return {"success": False, "message": _("Not authenticated"), "synced": 0}
 
         from app.models import Invoice
 
@@ -169,4 +170,9 @@ class SageConnector(BaseConnector):
                 errors.append(f"{inv.invoice_number}: {exc}")
                 logger.exception("Sage sync failed for invoice %s", inv.id)
 
-        return {"success": len(errors) == 0, "synced": synced, "errors": errors, "message": f"Synced {synced} invoices"}
+        return {
+            "success": len(errors) == 0,
+            "synced": synced,
+            "errors": errors,
+            "message": _("Synced %(count)d invoices", count=synced),
+        }

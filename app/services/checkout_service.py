@@ -5,6 +5,7 @@ from decimal import Decimal
 from typing import Optional
 
 from flask import url_for
+from flask_babel import gettext as _
 
 from app import db
 from app.models import Invoice, Payment
@@ -31,12 +32,12 @@ class CheckoutService:
     ):
         gateway = self.get_checkout_gateway(provider=provider)
         if not gateway:
-            return {"success": False, "message": "No payment gateway configured"}
+            return {"success": False, "message": _("No payment gateway configured")}
 
         outstanding = getattr(invoice, "outstanding_amount", None)
         amount = Decimal(str(outstanding if outstanding is not None else invoice.total_amount or 0))
         if amount <= 0:
-            return {"success": False, "message": "Invoice has no outstanding balance"}
+            return {"success": False, "message": _("Invoice has no outstanding balance")}
 
         provider_impl = get_provider(gateway)
         success_url = url_for(success_endpoint, _external=True, **(success_values or {"invoice_id": invoice.id}))
@@ -52,7 +53,7 @@ class CheckoutService:
         )
         if result.success:
             return {"success": True, "url": result.url, "gateway": gateway, "session_id": result.session_id}
-        return {"success": False, "message": result.message or "Checkout failed"}
+        return {"success": False, "message": result.message or _("Checkout failed")}
 
     def complete_webhook(self, gateway, payload: bytes, headers: dict):
         from app.payments.paypal_provider import PayPalProvider

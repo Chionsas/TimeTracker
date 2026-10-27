@@ -6,6 +6,7 @@ from functools import wraps
 from typing import Any, Callable, Optional
 
 from flask import flash, jsonify, redirect, request, url_for
+from flask_babel import gettext as _
 from flask_login import current_user
 
 from app.utils.api_responses import (
@@ -39,7 +40,7 @@ def handle_service_result(
         Flask response (redirect or JSON)
     """
     if result.get("success"):
-        message = success_message or result.get("message", "Operation successful")
+        message = success_message or result.get("message", _("Operation successful"))
 
         if json_response:
             return success_response(
@@ -52,7 +53,7 @@ def handle_service_result(
                 return redirect(success_redirect)
             return redirect(url_for("main.dashboard"))
     else:
-        message = result.get("message", "An error occurred")
+        message = result.get("message", _("An error occurred"))
         error_code = result.get("error", "error")
 
         if json_response:
@@ -112,7 +113,7 @@ def require_admin_or_owner(owner_id_getter: Callable[[Any], int]):
             if not current_user.is_authenticated:
                 if request.is_json or request.path.startswith("/api/"):
                     return unauthorized_response()
-                flash("Please log in to access this page", "error")
+                flash(_("Please log in to access this page"), "error")
                 return redirect(url_for("auth.login"))
 
             owner_id = owner_id_getter(*args, **kwargs)
@@ -120,7 +121,7 @@ def require_admin_or_owner(owner_id_getter: Callable[[Any], int]):
             if not current_user.is_admin and current_user.id != owner_id:
                 if request.is_json or request.path.startswith("/api/"):
                     return forbidden_response("You do not have permission to access this resource")
-                flash("You do not have permission to access this resource", "error")
+                flash(_("You do not have permission to access this resource"), "error")
                 return redirect(url_for("main.dashboard"))
 
             return f(*args, **kwargs)

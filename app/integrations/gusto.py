@@ -7,6 +7,7 @@ from typing import Any, Dict
 from urllib.parse import urlencode
 
 import requests
+from flask_babel import gettext as _
 
 from app.integrations.base import BaseConnector
 
@@ -112,17 +113,17 @@ class GustoConnector(BaseConnector):
     def test_connection(self) -> Dict[str, Any]:
         token = self.get_access_token()
         if not token:
-            return {"success": False, "message": "Not authenticated"}
+            return {"success": False, "message": _("Not authenticated")}
         company = (self.integration.config or {}).get("company_uuid")
         if not company:
-            return {"success": False, "message": "Set company_uuid in integration config"}
+            return {"success": False, "message": _("Set company_uuid in integration config")}
         r = requests.get(
             f"{self.API_BASE}/companies/{company}",
             headers=self._headers(token, Accept="application/json"),
             timeout=20,
         )
         if r.status_code == 200:
-            return {"success": True, "message": f"Gusto company: {r.json().get('name', company)}"}
+            return {"success": True, "message": _("Gusto company: %(name)s", name=r.json().get("name", company))}
         return {"success": False, "message": f"HTTP {r.status_code}: {r.text[:200]}"}
 
     def sync_data(self, sync_type: str = "full") -> Dict[str, Any]:
@@ -138,7 +139,7 @@ class GustoConnector(BaseConnector):
         token = self.get_access_token()
         company = (self.integration.config or {}).get("company_uuid")
         if not token or not company:
-            return {"success": False, "message": "Missing token or company_uuid"}
+            return {"success": False, "message": _("Missing token or company_uuid")}
         # Gusto payrolls API varies by partnership; post a summary payload for partner sandbox
         r = requests.post(
             f"{self.API_BASE}/companies/{company}/payrolls",

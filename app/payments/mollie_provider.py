@@ -4,6 +4,7 @@ from decimal import Decimal
 from typing import Dict, Optional
 
 import requests
+from flask_babel import gettext as _
 
 from app.payments.base import CheckoutResult, PaymentProvider, WebhookResult
 
@@ -31,7 +32,7 @@ class MollieProvider(PaymentProvider):
     ) -> CheckoutResult:
         headers = self._headers()
         if not headers:
-            return CheckoutResult(success=False, message="Mollie API key not configured")
+            return CheckoutResult(success=False, message=_("Mollie API key not configured"))
 
         payload = {
             "amount": {"currency": currency.upper(), "value": f"{amount:.2f}"},
@@ -43,19 +44,19 @@ class MollieProvider(PaymentProvider):
         try:
             resp = requests.post(f"{self._api_base()}/payments", headers=headers, json=payload, timeout=30)
         except requests.RequestException as exc:
-            return CheckoutResult(success=False, message=f"Mollie request failed: {exc}")
+            return CheckoutResult(success=False, message=_("Mollie request failed: %(error)s", error=str(exc)))
 
         if resp.status_code not in (200, 201):
             return CheckoutResult(
                 success=False,
-                message=f"Mollie error ({resp.status_code}): {resp.text[:200]}",
+                message=_("Mollie error (%(status)s): %(error)s", status=resp.status_code, error=resp.text[:200]),
                 raw={"status_code": resp.status_code, "body": resp.text},
             )
 
         data = resp.json()
         checkout_url = (data.get("_links") or {}).get("checkout", {}).get("href")
         if not checkout_url:
-            return CheckoutResult(success=False, message="Mollie did not return a checkout URL", raw=data)
+            return CheckoutResult(success=False, message=_("Mollie did not return a checkout URL"), raw=data)
 
         return CheckoutResult(success=True, url=checkout_url, session_id=data.get("id"), raw=data)
 

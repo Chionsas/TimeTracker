@@ -191,7 +191,7 @@ def barcode_lookup():
     barcode = data.get("barcode", "").strip()
 
     if not barcode:
-        return jsonify({"error": "Barcode required"}), 400
+        return jsonify({"error": _("Barcode required")}), 400
 
     # Search by barcode first
     item = StockItem.query.filter_by(barcode=barcode, is_active=True).first()
@@ -201,7 +201,7 @@ def barcode_lookup():
         item = StockItem.query.filter(func.upper(StockItem.sku) == barcode.upper(), StockItem.is_active == True).first()
 
     if not item:
-        return jsonify({"error": "Item not found"}), 404
+        return jsonify({"error": _("Item not found")}), 404
 
     # Get stock levels across warehouses
     stock_levels = (
@@ -269,31 +269,31 @@ def adjust_stock():
         return client_error_response(status=400)
 
     if not stock_item_id or not warehouse_id:
-        return jsonify({"error": "Item and warehouse required"}), 400
+        return jsonify({"error": _("Item and warehouse required")}), 400
 
     # Validate quantity is not zero
     if quantity == 0:
-        return jsonify({"error": "Quantity cannot be zero"}), 400
+        return jsonify({"error": _("Quantity cannot be zero")}), 400
 
     # Validate quantity is reasonable (prevent accidental huge adjustments)
     if abs(quantity) > 1000000:
-        return jsonify({"error": "Quantity is too large. Please contact an administrator."}), 400
+        return jsonify({"error": _("Quantity is too large. Please contact an administrator.")}), 400
 
     # Verify item exists and is active
     item = StockItem.query.get(stock_item_id)
     if not item or not item.is_active:
-        return jsonify({"error": "Item not found or inactive"}), 404
+        return jsonify({"error": _("Item not found or inactive")}), 404
 
     # Verify warehouse exists and is active
     warehouse = Warehouse.query.get(warehouse_id)
     if not warehouse or not warehouse.is_active:
-        return jsonify({"error": "Warehouse not found or inactive"}), 404
+        return jsonify({"error": _("Warehouse not found or inactive")}), 404
 
     # Check permissions
     from app.utils.permissions import has_permission
 
     if not has_permission(current_user, "manage_stock_movements"):
-        return jsonify({"error": "Permission denied"}), 403
+        return jsonify({"error": _("Permission denied")}), 403
 
     # Record movement
     try:
@@ -351,42 +351,42 @@ def transfer_stock():
         return client_error_response(status=400)
 
     if not all([stock_item_id, from_warehouse_id, to_warehouse_id]):
-        return jsonify({"error": "Item, source warehouse, and destination warehouse required"}), 400
+        return jsonify({"error": _("Item, source warehouse, and destination warehouse required")}), 400
 
     if from_warehouse_id == to_warehouse_id:
-        return jsonify({"error": "Source and destination warehouses must be different"}), 400
+        return jsonify({"error": _("Source and destination warehouses must be different")}), 400
 
     if quantity <= 0:
-        return jsonify({"error": "Quantity must be positive"}), 400
+        return jsonify({"error": _("Quantity must be positive")}), 400
 
     # Validate quantity is reasonable
     if quantity > 1000000:
-        return jsonify({"error": "Quantity is too large. Please contact an administrator."}), 400
+        return jsonify({"error": _("Quantity is too large. Please contact an administrator.")}), 400
 
     # Verify item exists
     item = StockItem.query.get(stock_item_id)
     if not item or not item.is_active:
-        return jsonify({"error": "Item not found or inactive"}), 404
+        return jsonify({"error": _("Item not found or inactive")}), 404
 
     # Verify warehouses exist
     from_warehouse = Warehouse.query.get(from_warehouse_id)
     to_warehouse = Warehouse.query.get(to_warehouse_id)
     if not from_warehouse or not from_warehouse.is_active:
-        return jsonify({"error": "Source warehouse not found or inactive"}), 404
+        return jsonify({"error": _("Source warehouse not found or inactive")}), 404
     if not to_warehouse or not to_warehouse.is_active:
-        return jsonify({"error": "Destination warehouse not found or inactive"}), 404
+        return jsonify({"error": _("Destination warehouse not found or inactive")}), 404
 
     # Check permissions
     from app.utils.permissions import has_permission
 
     if not has_permission(current_user, "transfer_stock"):
-        return jsonify({"error": "Permission denied"}), 403
+        return jsonify({"error": _("Permission denied")}), 403
 
     # Check available stock
     from_stock = WarehouseStock.query.filter_by(warehouse_id=from_warehouse_id, stock_item_id=stock_item_id).first()
 
     if not from_stock or from_stock.quantity_available < quantity:
-        return jsonify({"error": "Insufficient stock available"}), 400
+        return jsonify({"error": _("Insufficient stock available")}), 400
 
     # Create outbound movement
     try:
@@ -460,27 +460,27 @@ def kiosk_start_timer():
         return client_error_response(status=400)
 
     if not project_id:
-        return jsonify({"error": "Project is required"}), 400
+        return jsonify({"error": gettext("Project is required")}), 400
 
     # Check if project exists and is active
     project = Project.query.get(project_id)
     if not project or project.status != "active":
-        return jsonify({"error": "Invalid or inactive project"}), 400
+        return jsonify({"error": gettext("Invalid or inactive project")}), 400
 
     from app.utils.scope_filter import user_can_access_project
 
     if not user_can_access_project(current_user, project_id):
-        return jsonify({"error": "You do not have access to this project"}), 403
+        return jsonify({"error": gettext("You do not have access to this project")}), 403
 
     can_start, _ = TimeTrackingService().can_start_timer(current_user.id)
     if not can_start:
-        return jsonify({"error": "You already have an active timer"}), 400
+        return jsonify({"error": gettext("You already have an active timer")}), 400
 
     # Validate task if provided
     if task_id:
         task = Task.query.filter_by(id=task_id, project_id=project_id).first()
         if not task:
-            return jsonify({"error": "Invalid task for selected project"}), 400
+            return jsonify({"error": gettext("Invalid task for selected project")}), 400
     else:
         task = None
 
@@ -517,7 +517,7 @@ def kiosk_stop_timer():
     active_timer = current_user.active_timer
 
     if not active_timer:
-        return jsonify({"error": "No active timer"}), 400
+        return jsonify({"error": _("No active timer")}), 400
 
     try:
         # Use the shared stop path so duration_seconds is computed (and rounded)
@@ -660,7 +660,7 @@ def kiosk_projects():
         import traceback
 
         current_app.logger.error(f"Error fetching kiosk projects: {str(e)}\n{traceback.format_exc()}")
-        return jsonify({"error": "Failed to fetch projects", "projects": []}), 500
+        return jsonify({"error": _("Failed to fetch projects"), "projects": []}), 500
 
 
 @kiosk_bp.route("/api/kiosk/settings", methods=["GET"])

@@ -7,6 +7,8 @@ import logging
 from datetime import datetime, timedelta
 from typing import Any, Dict, List, Optional
 
+from flask_babel import gettext as _
+
 from app import db
 from app.models import Client, TimeEntry
 from app.models.client_time_approval import ClientApprovalPolicy, ClientApprovalStatus, ClientTimeApproval
@@ -21,15 +23,15 @@ class ClientApprovalService:
         """Request client approval for a time entry"""
         time_entry = TimeEntry.query.get(time_entry_id)
         if not time_entry:
-            return {"success": False, "message": "Time entry not found", "error": "not_found"}
+            return {"success": False, "message": _("Time entry not found"), "error": "not_found"}
 
         project = time_entry.project
         if not project or not project.client_id:
-            return {"success": False, "message": "Project has no associated client", "error": "no_client"}
+            return {"success": False, "message": _("Project has no associated client"), "error": "no_client"}
 
         client = Client.query.get(project.client_id)
         if not client:
-            return {"success": False, "message": "Client not found", "error": "client_not_found"}
+            return {"success": False, "message": _("Client not found"), "error": "client_not_found"}
 
         # Check if already pending
         existing = ClientTimeApproval.query.filter_by(
@@ -37,7 +39,7 @@ class ClientApprovalService:
         ).first()
 
         if existing:
-            return {"success": False, "message": "Approval already pending", "error": "already_pending"}
+            return {"success": False, "message": _("Approval already pending"), "error": "already_pending"}
 
         # Create approval request
         approval = ClientTimeApproval(
@@ -75,37 +77,37 @@ class ClientApprovalService:
         except Exception as e:
             logger.error(f"Failed to create client notification for approval {approval.id}: {e}", exc_info=True)
 
-        return {"success": True, "message": "Approval requested", "approval": approval.to_dict()}
+        return {"success": True, "message": _("Approval requested"), "approval": approval.to_dict()}
 
     def approve(self, approval_id: int, contact_id: int, comment: str = None) -> Dict[str, Any]:
         """Approve a time entry (client-side)"""
         approval = ClientTimeApproval.query.get(approval_id)
         if not approval:
-            return {"success": False, "message": "Approval not found", "error": "not_found"}
+            return {"success": False, "message": _("Approval not found"), "error": "not_found"}
 
         if approval.status != ClientApprovalStatus.PENDING:
-            return {"success": False, "message": "Approval is not pending", "error": "invalid_status"}
+            return {"success": False, "message": _("Approval is not pending"), "error": "invalid_status"}
 
         approval.approve(contact_id, comment)
         self._emit_approval_update(approval, "approved")
         self._notify_requester(approval, "approved", comment)
 
-        return {"success": True, "message": "Time entry approved", "approval": approval.to_dict()}
+        return {"success": True, "message": _("Time entry approved"), "approval": approval.to_dict()}
 
     def reject(self, approval_id: int, contact_id: int, reason: str) -> Dict[str, Any]:
         """Reject a time entry (client-side)"""
         approval = ClientTimeApproval.query.get(approval_id)
         if not approval:
-            return {"success": False, "message": "Approval not found", "error": "not_found"}
+            return {"success": False, "message": _("Approval not found"), "error": "not_found"}
 
         if approval.status != ClientApprovalStatus.PENDING:
-            return {"success": False, "message": "Approval is not pending", "error": "invalid_status"}
+            return {"success": False, "message": _("Approval is not pending"), "error": "invalid_status"}
 
         approval.reject(contact_id, reason)
         self._emit_approval_update(approval, "rejected")
         self._notify_requester(approval, "rejected", reason)
 
-        return {"success": True, "message": "Time entry rejected", "approval": approval.to_dict()}
+        return {"success": True, "message": _("Time entry rejected"), "approval": approval.to_dict()}
 
     def get_pending_approvals_for_client(self, client_id: int) -> List[ClientTimeApproval]:
         """Get pending approvals for a client with error handling"""
@@ -158,7 +160,7 @@ class ClientApprovalService:
                 try:
                     send_template_email(
                         to=contact.email,
-                        subject=f"Time Entry Approval Requested - {approval.time_entry.project.name}",
+                        subject=_("Time Entry Approval Requested - %(project)s", project=approval.time_entry.project.name),
                         template="email/client_approval_request.html",
                         approval=approval,
                         contact=contact,
@@ -171,13 +173,18 @@ class ClientApprovalService:
         from app.utils.notification_service import NotificationService
 
         service = NotificationService()
-        message = f"Client has {status} time entry {approval.time_entry_id}."
+        if status == "approved":
+            message = _("Client has approved time entry %(id)s.", id=approval.time_entry_id)
+            title = _("Time Entry Approved")
+        else:
+            message = _("Client has rejected time entry %(id)s.", id=approval.time_entry_id)
+            title = _("Time Entry Rejected")
         if reason:
-            message += f" Reason: {reason}"
+            message += " " + _("Reason: %(reason)s", reason=reason)
 
         service.send_notification(
             user_id=approval.requested_by,
-            title=f"Time Entry {status.title()}",
+            title=title,
             message=message,
             type="success" if status == "approved" else "error",
             priority="normal",

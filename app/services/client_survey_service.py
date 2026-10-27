@@ -3,6 +3,8 @@
 import logging
 from typing import Optional
 
+from flask_babel import gettext as _
+
 from app import db
 from app.models.client_survey import ClientSurvey
 from app.utils.db import safe_commit
@@ -69,7 +71,7 @@ class ClientSurveyService:
             try:
                 send_template_email(
                     to=email,
-                    subject="How did we do? Quick feedback",
+                    subject=_("How did we do? Quick feedback"),
                     template="email/client_survey.html",
                     client=client,
                     survey=survey,

@@ -17,7 +17,7 @@ from flask import (
     request,
     url_for,
 )
-from flask_babel import gettext as _
+from flask_babel import gettext as _, ngettext
 from flask_login import current_user, login_required
 from sqlalchemy import or_
 from sqlalchemy.orm import joinedload
@@ -286,7 +286,7 @@ def create_client():
         # Validate required fields
         if not name:
             if wants_json:
-                return jsonify({"error": "validation_error", "messages": ["Client name is required"]}), 400
+                return jsonify({"error": "validation_error", "messages": [_("Client name is required")]}), 400
             flash(_("Client name is required"), "error")
             safe_log(current_app.logger, "warning", "Validation failed: missing client name")
             return render_template("clients/create.html")
@@ -295,7 +295,7 @@ def create_client():
         if _client_service.get_by_name(name):
             if wants_json:
                 return (
-                    jsonify({"error": "validation_error", "messages": ["A client with this name already exists"]}),
+                    jsonify({"error": "validation_error", "messages": [_("A client with this name already exists")]}),
                     400,
                 )
             flash(_("A client with this name already exists"), "error")
@@ -308,7 +308,7 @@ def create_client():
                 email = validate_email_format(email)
             except Exception:
                 if wants_json:
-                    return jsonify({"error": "validation_error", "messages": ["Invalid email address"]}), 400
+                    return jsonify({"error": "validation_error", "messages": [_("Invalid email address")]}), 400
                 flash(_("Invalid email address"), "error")
                 return render_template("clients/create.html")
 
@@ -317,7 +317,7 @@ def create_client():
             default_hourly_rate = Decimal(default_hourly_rate) if default_hourly_rate else None
         except (InvalidOperation, ValueError):
             if wants_json:
-                return jsonify({"error": "validation_error", "messages": ["Invalid hourly rate format"]}), 400
+                return jsonify({"error": "validation_error", "messages": [_("Invalid hourly rate format")]}), 400
             flash(_("Invalid hourly rate format"), "error")
             safe_log(current_app.logger, "warning", "Validation failed: invalid hourly rate '%s'", default_hourly_rate)
             return render_template("clients/create.html")
@@ -394,7 +394,7 @@ def create_client():
         if not safe_commit("create_client", {"name": name}):
             if wants_json:
                 return (
-                    jsonify({"error": "db_error", "message": "Could not create client due to a database error."}),
+                    jsonify({"error": "db_error", "message": _("Could not create client due to a database error.")}),
                     500,
                 )
             flash(_("Could not create client due to a database error. Please check server logs."), "error")
@@ -430,7 +430,7 @@ def create_client():
                 201,
             )
 
-        flash(f'Client "{name}" created successfully', "success")
+        flash(_('Client "%(name)s" created successfully', name=name), "success")
         return redirect(url_for("clients.view_client", client_id=client.id))
 
     # Load active custom field definitions for the form
@@ -774,7 +774,7 @@ def edit_client(client_id):
         app_module.log_event("client.updated", user_id=current_user.id, client_id=client.id)
         app_module.track_event(current_user.id, "client.updated", {"client_id": client.id})
 
-        flash(f'Client "{name}" updated successfully', "success")
+        flash(_('Client "%(name)s" updated successfully', name=name), "success")
         return redirect(url_for("clients.view_client", client_id=client.id))
 
     # Load active custom field definitions for the form
@@ -877,7 +877,7 @@ def archive_client(client_id):
         db.session.commit()
         app_module.log_event("client.archived", user_id=current_user.id, client_id=client.id)
         app_module.track_event(current_user.id, "client.archived", {"client_id": client.id})
-        flash(f'Client "{client.name}" archived successfully', "success")
+        flash(_('Client "%(name)s" archived successfully', name=client.name), "success")
         try:
             from app.utils.cache import invalidate_dashboard_for_user
 
@@ -906,7 +906,7 @@ def activate_client(client_id):
     else:
         client.activate()
         db.session.commit()
-        flash(f'Client "{client.name}" activated successfully', "success")
+        flash(_('Client "%(name)s" activated successfully', name=client.name), "success")
         try:
             from app.utils.cache import invalidate_dashboard_for_user
 
@@ -974,7 +974,7 @@ def delete_client(client_id):
     except Exception as e:
         safe_log(current_app.logger, "debug", "Dashboard cache invalidation failed: %s", e)
 
-    flash(f'Client "{client_name}" deleted successfully', "success")
+    flash(_('Client "%(name)s" deleted successfully', name=client_name), "success")
     return redirect(url_for("clients.list_clients"))
 
 
@@ -1010,20 +1010,26 @@ def bulk_delete_clients():
 
             if not user_can_delete_client(current_user, client):
                 skipped_count += 1
-                errors.append(f"'{client.name}': Permission denied")
+                errors.append(_("'%(name)s': Permission denied", name=client.name))
                 continue
 
             # Check for projects
             if client.projects.count() > 0:
                 skipped_count += 1
-                errors.append(f"'{client.name}': Has projects")
+                errors.append(_("'%(name)s': Has projects", name=client.name))
                 continue
 
             # Check for invoices
             invoice_count = Invoice.query.filter_by(client_id=client_id).count()
             if invoice_count > 0:
                 skipped_count += 1
-                errors.append(f"'{client.name}': Has {invoice_count} invoice(s). Please delete all invoices first.")
+                errors.append(
+                    _(
+                        "'%(name)s': Has %(count)s invoice(s). Please delete all invoices first.",
+                        name=client.name,
+                        count=invoice_count,
+                    )
+                )
                 continue
 
             # Manually delete notifications and preferences to avoid SQLAlchemy update issues
@@ -1053,7 +1059,10 @@ def bulk_delete_clients():
 
     # Show appropriate messages
     if deleted_count > 0:
-        flash(f'Successfully deleted {deleted_count} client{"s" if deleted_count != 1 else ""}', "success")
+        flash(
+            ngettext("Successfully deleted %(num)d client", "Successfully deleted %(num)d clients", deleted_count),
+            "success",
+        )
         try:
             from app.utils.cache import invalidate_dashboard_for_user
 
@@ -1063,7 +1072,12 @@ def bulk_delete_clients():
 
     if skipped_count > 0:
         flash(
-            f'Skipped {skipped_count} client{"s" if skipped_count != 1 else ""}: {", ".join(errors[:3])}{"..." if len(errors) > 3 else ""}',
+            ngettext(
+                "Skipped %(num)d client: %(errors)s",
+                "Skipped %(num)d clients: %(errors)s",
+                skipped_count,
+                errors=", ".join(errors[:3]) + ("..." if len(errors) > 3 else ""),
+            ),
             "warning",
         )
 
@@ -1106,7 +1120,7 @@ def bulk_status_change():
                 continue
 
             if not user_can_edit_client(current_user, client):
-                errors.append(f"'{client.name}': Permission denied")
+                errors.append(_("'%(name)s': Permission denied", name=client.name))
                 continue
 
             # Update status
@@ -1130,16 +1144,25 @@ def bulk_status_change():
             return redirect(url_for("clients.list_clients"))
 
     # Show appropriate messages
-    status_labels = {"active": "active", "inactive": "inactive"}
+    status_labels = {"active": _("active"), "inactive": _("inactive")}
     if updated_count > 0:
         flash(
-            f'Successfully marked {updated_count} client{"s" if updated_count != 1 else ""} as {status_labels.get(new_status, new_status)}',
+            ngettext(
+                "Successfully marked %(num)d client as %(status)s",
+                "Successfully marked %(num)d clients as %(status)s",
+                updated_count,
+                status=status_labels.get(new_status, new_status),
+            ),
             "success",
         )
 
     if errors:
         flash(
-            f'Some clients could not be updated: {", ".join(errors[:3])}{"..." if len(errors) > 3 else ""}', "warning"
+            _(
+                "Some clients could not be updated: %(errors)s",
+                errors=", ".join(errors[:3]) + ("..." if len(errors) > 3 else ""),
+            ),
+            "warning",
         )
 
     if updated_count == 0:

@@ -159,8 +159,12 @@ def create_column():
         # Check if key already exists for this project (or globally)
         existing = KanbanColumn.get_column_by_key(key, project_id=project_id)
         if existing:
-            project_text = f" for this project" if project_id else " globally"
-            flash(f'A column with key "{key}" already exists{project_text}', "error")
+            flash(
+                _('A column with key "%(key)s" already exists for this project', key=key)
+                if project_id
+                else _('A column with key "%(key)s" already exists globally', key=key),
+                "error",
+            )
             from app.models import Project
 
             projects = Project.query.filter_by(status="active").order_by(Project.name).all()
@@ -212,7 +216,7 @@ def create_column():
 
         print(f"[KANBAN] Column '{key}' committed to database successfully")
 
-        flash(f'Column "{label}" created successfully', "success")
+        flash(_('Column "%(label)s" created successfully', label=label), "success")
         # Clear any SQLAlchemy cache to ensure fresh data on next load
         db.session.expire_all()
         # Notify all connected clients to refresh kanban boards
@@ -285,7 +289,7 @@ def edit_column(column_id):
 
         print(f"[KANBAN] Column {column_id} updated and committed to database successfully")
 
-        flash(f'Column "{label}" updated successfully', "success")
+        flash(_('Column "%(label)s" updated successfully', label=label), "success")
         # Clear any SQLAlchemy cache to ensure fresh data on next load
         db.session.expire_all()
         # Notify all connected clients to refresh kanban boards
@@ -330,7 +334,7 @@ def delete_column(column_id):
         task_query = task_query.filter_by(project_id=column.project_id)
     task_count = task_query.count()
     if task_count > 0:
-        flash(f"Cannot delete column with {task_count} task(s). Move or delete tasks first.", "error")
+        flash(_("Cannot delete column with %(count)s task(s). Move or delete tasks first.", count=task_count), "error")
         redirect_url = url_for("kanban.list_columns")
         if column.project_id:
             redirect_url = url_for("kanban.list_columns", project_id=column.project_id)
@@ -362,7 +366,7 @@ def delete_column(column_id):
 
     print(f"[KANBAN] Column {column_id} deleted and committed to database successfully")
 
-    flash(f'Column "{column_name}" deleted successfully', "success")
+    flash(_('Column "%(name)s" deleted successfully', name=column_name), "success")
     # Clear any SQLAlchemy cache to ensure fresh data on next load
     db.session.expire_all()
     # Notify all connected clients to refresh kanban boards
@@ -409,8 +413,12 @@ def toggle_column(column_id):
 
     print(f"[KANBAN] Column {column_id} toggled and committed to database successfully")
 
-    status = "activated" if column.is_active else "deactivated"
-    flash(f'Column "{column.label}" {status} successfully', "success")
+    flash(
+        _('Column "%(label)s" activated successfully', label=column.label)
+        if column.is_active
+        else _('Column "%(label)s" deactivated successfully', label=column.label),
+        "success",
+    )
     # Clear any SQLAlchemy cache to ensure fresh data on next load
     db.session.expire_all()
     # Notify all connected clients to refresh kanban boards
@@ -442,7 +450,7 @@ def reorder_columns():
     project_id = data.get("project_id", None)
 
     if not column_ids:
-        return jsonify({"error": "No column IDs provided"}), 400
+        return jsonify({"error": _("No column IDs provided")}), 400
 
     try:
         # Reorder columns for the specified project (or globally if project_id is None)
@@ -467,7 +475,7 @@ def reorder_columns():
         except Exception as e:
             print(f"[KANBAN] Failed to emit event: {e}")
 
-        return jsonify({"success": True, "message": "Columns reordered successfully"})
+        return jsonify({"success": True, "message": _("Columns reordered successfully")})
     except Exception as e:
         db.session.rollback()
         return client_error_response(status=500)

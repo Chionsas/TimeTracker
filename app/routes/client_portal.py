@@ -1134,7 +1134,7 @@ def accept_quote(quote_id):
             try:
                 send_template_email(
                     to=admin.email,
-                    subject=f"Quote {quote.quote_number} Accepted by Client",
+                    subject=_("Quote %(quote_number)s Accepted by Client", quote_number=quote.quote_number),
                     template="email/quote_accepted.html",
                     quote=quote,
                     client=client,
@@ -1192,7 +1192,7 @@ def sign_quote(quote_id):
                 if admin.email:
                     send_template_email(
                         to=admin.email,
-                        subject=f"Quote {quote.quote_number} Signed by Client",
+                        subject=_("Quote %(quote_number)s Signed by Client", quote_number=quote.quote_number),
                         template="email/quote_accepted.html",
                         quote=quote,
                     )
@@ -1237,7 +1237,7 @@ def reject_quote(quote_id):
             try:
                 send_template_email(
                     to=admin.email,
-                    subject=f"Quote {quote.quote_number} Rejected by Client",
+                    subject=_("Quote %(quote_number)s Rejected by Client", quote_number=quote.quote_number),
                     template="email/quote_rejected.html",
                     quote=quote,
                     client=client,

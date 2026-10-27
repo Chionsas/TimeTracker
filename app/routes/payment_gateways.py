@@ -96,7 +96,7 @@ def stripe_webhook():
     """Handle Stripe webhook"""
     gateway = PaymentGatewayService().get_active_gateway(provider="stripe")
     if not gateway:
-        return jsonify({"error": "Gateway not found"}), 404
+        return jsonify({"error": _("Gateway not found")}), 404
 
     result = CheckoutService().complete_webhook(gateway, request.data, dict(request.headers))
     status = result.get("status", 500 if not result.get("success") else 200)
@@ -110,7 +110,7 @@ def paypal_webhook():
     """Handle PayPal webhook"""
     gateway = PaymentGatewayService().get_active_gateway(provider="paypal")
     if not gateway:
-        return jsonify({"error": "Gateway not found"}), 404
+        return jsonify({"error": _("Gateway not found")}), 404
 
     result = CheckoutService().complete_webhook(gateway, request.data, dict(request.headers))
     status = result.get("status", 500 if not result.get("success") else 200)

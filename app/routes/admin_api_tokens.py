@@ -3,6 +3,7 @@
 from datetime import datetime
 
 from flask import current_app, jsonify, render_template, request
+from flask_babel import gettext as _
 from flask_login import current_user, login_required
 
 from app import db
@@ -35,18 +36,18 @@ def create_api_token():
 
     # Validate input
     if not data.get("name"):
-        return jsonify({"error": "Token name is required"}), 400
+        return jsonify({"error": _("Token name is required")}), 400
     if not data.get("user_id"):
-        return jsonify({"error": "User ID is required"}), 400
+        return jsonify({"error": _("User ID is required")}), 400
     if not data.get("scopes"):
-        return jsonify({"error": "At least one scope is required"}), 400
+        return jsonify({"error": _("At least one scope is required")}), 400
 
     # Verify user exists
     user = User.query.get(data["user_id"])
     if not user:
-        return jsonify({"error": "User not found"}), 404
+        return jsonify({"error": _("User not found")}), 404
     if not user:
-        return jsonify({"error": "Invalid user"}), 400
+        return jsonify({"error": _("Invalid user")}), 400
 
     # Create token
     try:
@@ -66,14 +67,14 @@ def create_api_token():
         )
 
         return (
-            jsonify({"message": "API token created successfully", "token": plain_token, "token_id": api_token.id}),
+            jsonify({"message": _("API token created successfully"), "token": plain_token, "token_id": api_token.id}),
             201,
         )
 
     except Exception as e:
         db.session.rollback()
         current_app.logger.error(f"Failed to create API token: {e}")
-        return jsonify({"error": "Failed to create token"}), 500
+        return jsonify({"error": _("Failed to create token")}), 500
 
 
 @admin_bp.route("/admin/api-tokens/<int:token_id>/toggle", methods=["POST"])
@@ -90,11 +91,12 @@ def toggle_api_token(token_id):
         db.session.commit()
         status = "activated" if token.is_active else "deactivated"
         current_app.logger.info(f"API token '{token.name}' {status} by {current_user.username}")
-        return jsonify({"message": f"Token {status} successfully"})
+        message = _("Token activated successfully") if token.is_active else _("Token deactivated successfully")
+        return jsonify({"message": message})
     except Exception as e:
         db.session.rollback()
         current_app.logger.error(f"Failed to toggle API token: {e}")
-        return jsonify({"error": "Failed to update token"}), 500
+        return jsonify({"error": _("Failed to update token")}), 500
 
 
 @admin_bp.route("/admin/api-tokens/<int:token_id>", methods=["DELETE"])
@@ -111,8 +113,8 @@ def delete_api_token(token_id):
         db.session.delete(token)
         db.session.commit()
         current_app.logger.info(f"API token '{token_name}' deleted by {current_user.username}")
-        return jsonify({"message": "Token deleted successfully"})
+        return jsonify({"message": _("Token deleted successfully")})
     except Exception as e:
         db.session.rollback()
         current_app.logger.error(f"Failed to delete API token: {e}")
-        return jsonify({"error": "Failed to delete token"}), 500
+        return jsonify({"error": _("Failed to delete token")}), 500

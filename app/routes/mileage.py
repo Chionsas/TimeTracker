@@ -569,7 +569,7 @@ def bulk_delete_mileage():
             # Check permissions
             if not current_user.is_admin and mileage.user_id != current_user.id:
                 skipped_count += 1
-                errors.append(f"Mileage #{mileage_id_str}: No permission")
+                errors.append(_("Mileage #%(id)s: No permission", id=mileage_id_str))
                 continue
 
             db.session.delete(mileage)
@@ -818,7 +818,7 @@ def web_gps_add_point(track_id):
 
     data = request.get_json() or {}
     if data.get("latitude") is None or data.get("longitude") is None:
-        return jsonify({"success": False, "message": "latitude and longitude are required"}), 400
+        return jsonify({"success": False, "message": _("latitude and longitude are required")}), 400
 
     result = GPSTrackingService().add_track_point(
         track_id=track_id,

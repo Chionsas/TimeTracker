@@ -5,6 +5,7 @@ Service for email operations.
 from typing import Any, Dict, List, Optional
 
 from flask import current_app, render_template
+from flask_babel import gettext as _
 
 from app.models import Invoice
 from app.repositories import InvoiceRepository
@@ -34,11 +35,15 @@ class EmailService:
         invoice = self.invoice_repo.get_with_relations(invoice_id)
 
         if not invoice:
-            return {"success": False, "message": "Invoice not found", "error": "not_found"}
+            return {"success": False, "message": _("Invoice not found"), "error": "not_found"}
 
         # Generate subject if not provided
         if not subject:
-            subject = f"Invoice {invoice.invoice_number} from {current_app.config.get('COMPANY_NAME', 'TimeTracker')}"
+            subject = _(
+                "Invoice %(invoice_number)s from %(company)s",
+                invoice_number=invoice.invoice_number,
+                company=current_app.config.get("COMPANY_NAME", "TimeTracker"),
+            )
 
         # Render email template
         try:
@@ -59,7 +64,7 @@ class EmailService:
             send_email(
                 subject=subject,
                 recipients=[recipient_email],
-                text_body=message or f"Invoice {invoice.invoice_number}",
+                text_body=message or _("Invoice %(invoice_number)s", invoice_number=invoice.invoice_number),
                 html_body=html_body,
                 attachments=[],  # PDF attachment would be added here
             )
@@ -67,11 +72,11 @@ class EmailService:
             # Mark invoice as sent
             self.invoice_repo.mark_as_sent(invoice_id)
 
-            return {"success": True, "message": "Invoice email sent successfully"}
+            return {"success": True, "message": _("Invoice email sent successfully")}
 
         except Exception as e:
             current_app.logger.error(f"Failed to send invoice email: {e}")
-            return {"success": False, "message": f"Failed to send email: {str(e)}", "error": "email_error"}
+            return {"success": False, "message": _("Failed to send email: %(error)s", error=str(e)), "error": "email_error"}
 
     def send_notification_email(
         self,
@@ -95,8 +100,8 @@ class EmailService:
 
             send_email(subject=subject, recipients=[recipient_email], text_body=message, html_body=html_body)
 
-            return {"success": True, "message": "Notification email sent successfully"}
+            return {"success": True, "message": _("Notification email sent successfully")}
 
         except Exception as e:
             current_app.logger.error(f"Failed to send notification email: {e}")
-            return {"success": False, "message": f"Failed to send email: {str(e)}", "error": "email_error"}
+            return {"success": False, "message": _("Failed to send email: %(error)s", error=str(e)), "error": "email_error"}

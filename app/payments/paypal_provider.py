@@ -8,6 +8,7 @@ from typing import Dict, Optional
 from urllib.parse import urlencode
 
 import requests
+from flask_babel import gettext as _
 
 from app.payments.base import CheckoutResult, PaymentProvider, WebhookResult
 
@@ -54,7 +55,7 @@ class PayPalProvider(PaymentProvider):
     ) -> CheckoutResult:
         token = self._get_access_token()
         if not token:
-            return CheckoutResult(success=False, message="PayPal credentials not configured")
+            return CheckoutResult(success=False, message=_("PayPal credentials not configured"))
 
         order_payload = {
             "intent": "CAPTURE",
@@ -88,7 +89,7 @@ class PayPalProvider(PaymentProvider):
         )
         if not resp.ok:
             logger.error("PayPal order error: %s", resp.text)
-            return CheckoutResult(success=False, message="Failed to create PayPal order", raw=resp.json())
+            return CheckoutResult(success=False, message=_("Failed to create PayPal order"), raw=resp.json())
 
         data = resp.json()
         approve_url = next(
@@ -96,7 +97,7 @@ class PayPalProvider(PaymentProvider):
             None,
         )
         if not approve_url:
-            return CheckoutResult(success=False, message="PayPal approval URL missing", raw=data)
+            return CheckoutResult(success=False, message=_("PayPal approval URL missing"), raw=data)
 
         return CheckoutResult(success=True, url=approve_url, session_id=data.get("id"), raw=data)
 

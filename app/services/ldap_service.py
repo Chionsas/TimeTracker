@@ -10,6 +10,7 @@ import secrets
 from typing import Any, Mapping, MutableMapping, Optional
 
 from flask import current_app
+from flask_babel import gettext as _
 
 from app import db
 from app.models import User
@@ -402,25 +403,25 @@ class LDAPService:
         Never raises.
         """
         if Connection is None:
-            return {"success": False, "message": "ldap3 is not installed", "user_count": None}
+            return {"success": False, "message": _("ldap3 is not installed"), "user_count": None}
         conn = None
         effective_cfg: Mapping[str, Any] = cfg if cfg is not None else _config()
         try:
             conn = _service_connection(effective_cfg)
             if not conn:
-                return {"success": False, "message": "Could not create LDAP connection", "user_count": None}
+                return {"success": False, "message": _("Could not create LDAP connection"), "user_count": None}
         except LDAPException as e:
-            return {"success": False, "message": f"LDAP error: {type(e).__name__}", "user_count": None}
+            return {"success": False, "message": _("LDAP error: %(error)s", error=type(e).__name__), "user_count": None}
         except Exception as e:
-            return {"success": False, "message": f"Error: {type(e).__name__}", "user_count": None}
+            return {"success": False, "message": _("Error: %(error)s", error=type(e).__name__), "user_count": None}
 
         try:
             try:
                 user_base = _user_search_base(effective_cfg)
             except ValueError:
-                return {"success": False, "message": "Invalid LDAP base DN", "user_count": None}
+                return {"success": False, "message": _("Invalid LDAP base DN"), "user_count": None}
             if not user_base:
-                return {"success": False, "message": "LDAP base DN is required", "user_count": None}
+                return {"success": False, "message": _("LDAP base DN is required"), "user_count": None}
             user_oc_raw = _safe_ldap_attr(
                 effective_cfg.get("LDAP_USER_OBJECT_CLASS") or "inetOrgPerson",
                 "inetOrgPerson",
@@ -440,14 +441,14 @@ class LDAPService:
             if n > 2000:
                 return {
                     "success": True,
-                    "message": "Connected; user count exceeds 2000 (showing as 2000+)",
+                    "message": _("Connected; user count exceeds 2000 (showing as 2000+)"),
                     "user_count": n,
                 }
-            return {"success": True, "message": "Connected successfully", "user_count": n}
+            return {"success": True, "message": _("Connected successfully"), "user_count": n}
         except LDAPException as e:
-            return {"success": False, "message": f"LDAP search failed: {type(e).__name__}", "user_count": None}
+            return {"success": False, "message": _("LDAP search failed: %(error)s", error=type(e).__name__), "user_count": None}
         except Exception as e:
-            return {"success": False, "message": f"Search error: {type(e).__name__}", "user_count": None}
+            return {"success": False, "message": _("Search error: %(error)s", error=type(e).__name__), "user_count": None}
         finally:
             try:
                 conn.unbind()

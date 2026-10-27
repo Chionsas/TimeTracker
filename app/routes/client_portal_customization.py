@@ -66,7 +66,7 @@ def edit_customization(client_id):
 def update_customization(client_id):
     """Update client portal customization"""
     if not current_user.is_admin:
-        return jsonify({"error": "Access denied"}), 403
+        return jsonify({"error": _("Access denied")}), 403
 
     client = Client.query.get_or_404(client_id)
     customization = ClientPortalCustomization.query.filter_by(client_id=client_id).first()
@@ -107,7 +107,7 @@ def update_customization(client_id):
 
                 if file_size > MAX_FILE_SIZE:
                     if request.is_json:
-                        return jsonify({"error": "File too large. Maximum 5MB."}), 400
+                        return jsonify({"error": _("File too large. Maximum 5MB.")}), 400
                     flash(_("File too large. Maximum 5MB."), "error")
                     return redirect(url_for("client_portal_customization.edit_customization", client_id=client_id))
 
@@ -129,7 +129,7 @@ def update_customization(client_id):
             except Exception as e:
                 current_app.logger.error(f"Error processing logo upload: {e}")
                 if request.is_json:
-                    return jsonify({"error": "Error processing image"}), 400
+                    return jsonify({"error": _("Error processing image")}), 400
 
     db.session.commit()
 

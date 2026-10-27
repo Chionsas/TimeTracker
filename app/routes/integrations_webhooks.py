@@ -44,6 +44,7 @@ import secrets
 from typing import Any, Dict, Optional
 
 from flask import Blueprint, current_app, flash, jsonify, redirect, request, session, url_for
+from flask_babel import gettext as _
 from flask_login import current_user, login_required
 
 from app import csrf, db
@@ -148,10 +149,10 @@ def github_webhook():
 @login_required
 def github_sync():
     if not _admin_required():
-        return jsonify({"ok": False, "error": "Admin only"}), 403
+        return jsonify({"ok": False, "error": _("Admin only")}), 403
     connector = GitHubConnector.for_user(current_user)
     if not connector:
-        return jsonify({"ok": False, "error": "Integration not configured"}), 404
+        return jsonify({"ok": False, "error": _("Integration not configured")}), 404
     return jsonify(connector.sync())
 
 
@@ -176,7 +177,7 @@ def github_save_config():
 def github_test():
     connector = GitHubConnector.for_user(current_user)
     if not connector:
-        return jsonify({"ok": False, "error": "Integration not configured"}), 404
+        return jsonify({"ok": False, "error": _("Integration not configured")}), 404
     return jsonify(connector.test_connection())
 
 
@@ -235,15 +236,15 @@ def google_callback():
     state = request.args.get("state")
     expected = session.pop(_GOOGLE_STATE_KEY, None)
     if not state or state != expected:
-        flash("OAuth state mismatch — please retry connecting Google Calendar.", "error")
+        flash(_("OAuth state mismatch — please retry connecting Google Calendar."), "error")
         return redirect(url_for("integrations.list_integrations"))
     error = request.args.get("error")
     if error:
-        flash("Google Calendar authorization failed", "error")
+        flash(_("Google Calendar authorization failed"), "error")
         return redirect(url_for("integrations.list_integrations"))
     code = request.args.get("code")
     if not code:
-        flash("Google Calendar authorization missing code.", "error")
+        flash(_("Google Calendar authorization missing code."), "error")
         return redirect(url_for("integrations.list_integrations"))
 
     integration = GoogleCalendarConnector.get_or_create_for_user(current_user)
@@ -252,14 +253,14 @@ def google_callback():
         tokens = connector.exchange_code_for_tokens(code, _google_redirect_uri())
     except Exception as exc:
         logger.warning("Google OAuth callback failed: %s", exc)
-        flash("Google Calendar connection failed", "error")
+        flash(_("Google Calendar connection failed"), "error")
         return redirect(url_for("integrations.list_integrations"))
 
     save_result = GoogleCalendarConnector.save_tokens(integration, tokens)
     if not save_result.get("ok"):
-        flash(save_result.get("error") or "Could not save Google credentials.", "error")
+        flash(save_result.get("error") or _("Could not save Google credentials."), "error")
     else:
-        flash("Google Calendar connected.", "success")
+        flash(_("Google Calendar connected."), "success")
     return redirect(url_for("integrations.list_integrations"))
 
 
@@ -269,7 +270,7 @@ def google_disconnect():
     connector = GoogleCalendarConnector.for_user(current_user)
     if connector:
         connector.revoke()
-        flash("Google Calendar disconnected.", "success")
+        flash(_("Google Calendar disconnected."), "success")
     return redirect(url_for("integrations.list_integrations"))
 
 
@@ -278,7 +279,7 @@ def google_disconnect():
 def google_sync():
     connector = GoogleCalendarConnector.for_user(current_user)
     if not connector:
-        return jsonify({"ok": False, "error": "Integration not configured"}), 404
+        return jsonify({"ok": False, "error": _("Integration not configured")}), 404
     return jsonify(connector.sync())
 
 
@@ -350,7 +351,7 @@ def slack_save_config():
 def slack_test():
     connector = SlackConnector.for_user(current_user)
     if not connector:
-        return jsonify({"ok": False, "error": "Integration not configured"}), 404
+        return jsonify({"ok": False, "error": _("Integration not configured")}), 404
     return jsonify(connector.send_test_message())
 
 
@@ -420,7 +421,7 @@ def slack_attendance():
 @login_required
 def slack_attendance_save_config():
     if not _admin_required():
-        return jsonify({"ok": False, "error": "Admin only"}), 403
+        return jsonify({"ok": False, "error": _("Admin only")}), 403
     payload = request.get_json(silent=True) or request.form.to_dict() or {}
     integration = _ensure_global_integration(SLACK_ATTENDANCE_PROVIDER, "Slack Attendance")
     result = SlackAttendanceConnector.save_config(integration, payload)
@@ -432,10 +433,10 @@ def slack_attendance_save_config():
 @login_required
 def slack_attendance_test():
     if not _admin_required():
-        return jsonify({"ok": False, "error": "Admin only"}), 403
+        return jsonify({"ok": False, "error": _("Admin only")}), 403
     connector = SlackAttendanceConnector.for_global()
     if not connector:
-        return jsonify({"ok": False, "error": "Integration not configured"}), 404
+        return jsonify({"ok": False, "error": _("Integration not configured")}), 404
     return jsonify(connector.send_test_message())
 
 
@@ -443,7 +444,7 @@ def slack_attendance_test():
 @login_required
 def slack_attendance_status():
     if not _admin_required():
-        return jsonify({"ok": False, "error": "Admin only"}), 403
+        return jsonify({"ok": False, "error": _("Admin only")}), 403
     integration = Integration.query.filter_by(provider=SLACK_ATTENDANCE_PROVIDER, is_global=True).first()
     if not integration:
         return jsonify({"ok": True, "connected": False})

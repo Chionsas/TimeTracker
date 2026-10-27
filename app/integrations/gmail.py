@@ -8,6 +8,7 @@ from typing import Any, Dict, List, Optional
 from urllib.parse import urlencode
 
 import requests
+from flask_babel import gettext as _
 
 from app.integrations.base import BaseConnector
 
@@ -112,14 +113,14 @@ class GmailConnector(BaseConnector):
     def test_connection(self) -> Dict[str, Any]:
         token = self.get_access_token()
         if not token:
-            return {"success": False, "message": "Not authenticated"}
+            return {"success": False, "message": _("Not authenticated")}
         r = requests.get(
             f"{self.API_BASE}/users/me/profile",
             headers={"Authorization": f"Bearer {token}"},
             timeout=20,
         )
         if r.status_code == 200:
-            return {"success": True, "message": f"Gmail OK ({r.json().get('emailAddress', '')})"}
+            return {"success": True, "message": _("Gmail OK (%(email)s)", email=r.json().get("emailAddress", ""))}
         return {"success": False, "message": f"HTTP {r.status_code}"}
 
     def list_recent_threads(self, max_results: int = 25) -> List[Dict[str, Any]]:

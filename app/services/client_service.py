@@ -5,6 +5,8 @@ Service for client business logic.
 from decimal import Decimal
 from typing import Any, Dict, List, Optional
 
+from flask_babel import gettext as _
+
 from app import db
 from app.models import Client
 from app.repositories import ClientRepository
@@ -55,7 +57,7 @@ class ClientService:
         # Check for duplicate name
         existing = self.client_repo.get_by_name(name)
         if existing:
-            return {"success": False, "message": "A client with this name already exists", "error": "duplicate_client"}
+            return {"success": False, "message": _("A client with this name already exists"), "error": "duplicate_client"}
 
         # Create client
         client = self.client_repo.create(
@@ -72,11 +74,11 @@ class ClientService:
         if not safe_commit("create_client", {"name": name, "created_by": created_by}):
             return {
                 "success": False,
-                "message": "Could not create client due to a database error",
+                "message": _("Could not create client due to a database error"),
                 "error": "database_error",
             }
 
-        return {"success": True, "message": "Client created successfully", "client": client}
+        return {"success": True, "message": _("Client created successfully"), "client": client}
 
     def update_client(self, client_id: int, user_id: int, **kwargs) -> Dict[str, Any]:
         """
@@ -88,7 +90,7 @@ class ClientService:
         client = self.client_repo.get_by_id(client_id)
 
         if not client:
-            return {"success": False, "message": "Client not found", "error": "not_found"}
+            return {"success": False, "message": _("Client not found"), "error": "not_found"}
 
         # Update fields
         self.client_repo.update(client, **kwargs)
@@ -96,11 +98,11 @@ class ClientService:
         if not safe_commit("update_client", {"client_id": client_id, "user_id": user_id}):
             return {
                 "success": False,
-                "message": "Could not update client due to a database error",
+                "message": _("Could not update client due to a database error"),
                 "error": "database_error",
             }
 
-        return {"success": True, "message": "Client updated successfully", "client": client}
+        return {"success": True, "message": _("Client updated successfully"), "client": client}
 
     def get_active_clients(self) -> List[Client]:
         """Get all active clients"""

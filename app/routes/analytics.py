@@ -2,6 +2,7 @@ import calendar
 from datetime import datetime, timedelta
 
 from flask import Blueprint, jsonify, render_template, request
+from flask_babel import gettext
 from flask_login import current_user, login_required
 from sqlalchemy import case, extract, func
 
@@ -1029,8 +1030,11 @@ def insights():
                 {
                     "type": "warning",
                     "icon": "fas fa-exclamation-triangle",
-                    "title": "Low Billable Ratio",
-                    "message": f"Only {billable_ratio:.1f}% of your time is billable. Consider focusing on billable projects.",
+                    "title": gettext("Low Billable Ratio"),
+                    "message": gettext(
+                        "Only %(ratio).1f%% of your time is billable. Consider focusing on billable projects.",
+                        ratio=billable_ratio,
+                    ),
                 }
             )
         elif billable_ratio > 85:
@@ -1038,8 +1042,8 @@ def insights():
                 {
                     "type": "success",
                     "icon": "fas fa-trophy",
-                    "title": "Excellent Billable Ratio",
-                    "message": f"You have {billable_ratio:.1f}% billable time. Great work!",
+                    "title": gettext("Excellent Billable Ratio"),
+                    "message": gettext("You have %(ratio).1f%% billable time. Great work!", ratio=billable_ratio),
                 }
             )
 
@@ -1050,8 +1054,10 @@ def insights():
             {
                 "type": "info",
                 "icon": "fas fa-chart-line",
-                "title": "Low Activity",
-                "message": f"Average of {avg_daily:.1f}h per day. Consider tracking more consistently.",
+                "title": gettext("Low Activity"),
+                "message": gettext(
+                    "Average of %(hours).1fh per day. Consider tracking more consistently.", hours=avg_daily
+                ),
             }
         )
     elif avg_daily > 10:
@@ -1059,8 +1065,8 @@ def insights():
             {
                 "type": "warning",
                 "icon": "fas fa-battery-empty",
-                "title": "High Workload",
-                "message": f"Averaging {avg_daily:.1f}h per day. Remember to take breaks!",
+                "title": gettext("High Workload"),
+                "message": gettext("Averaging %(hours).1fh per day. Remember to take breaks!", hours=avg_daily),
             }
         )
 
@@ -1079,8 +1085,8 @@ def insights():
             {
                 "type": "info",
                 "icon": "fas fa-tasks",
-                "title": "Multiple Projects",
-                "message": f"Working on {num_projects} projects. Consider consolidating focus.",
+                "title": gettext("Multiple Projects"),
+                "message": gettext("Working on %(count)s projects. Consider consolidating focus.", count=num_projects),
             }
         )
 
@@ -1104,8 +1110,12 @@ def insights():
             {
                 "type": "warning",
                 "icon": "fas fa-calendar-times",
-                "title": "Weekend Work",
-                "message": f"{weekend_percent:.0f}% of work done on weekends ({weekend_hours:.1f}h). Consider work-life balance.",
+                "title": gettext("Weekend Work"),
+                "message": gettext(
+                    "%(percent).0f%% of work done on weekends (%(hours).1fh). Consider work-life balance.",
+                    percent=weekend_percent,
+                    hours=weekend_hours,
+                ),
             }
         )
 

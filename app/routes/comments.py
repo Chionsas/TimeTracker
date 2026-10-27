@@ -201,10 +201,10 @@ def list_comments():
 
     targets = [x for x in [project_id, task_id, quote_id] if x is not None]
     if len(targets) == 0:
-        return jsonify({"error": "project_id, task_id, or quote_id is required"}), 400
+        return jsonify({"error": _("project_id, task_id, or quote_id is required")}), 400
 
     if len(targets) > 1:
-        return jsonify({"error": "Cannot specify multiple targets"}), 400
+        return jsonify({"error": _("Cannot specify multiple targets")}), 400
 
     try:
         if project_id:
@@ -224,7 +224,7 @@ def list_comments():
 
     except Exception:
         current_app.logger.exception("Failed to list comments")
-        return jsonify({"error": "Failed to load comments"}), 500
+        return jsonify({"error": _("Failed to load comments")}), 500
 
 
 @comments_bp.route("/api/comments/<int:comment_id>")
@@ -237,7 +237,7 @@ def get_comment(comment_id):
 
     except Exception:
         current_app.logger.exception("Failed to get comment %s", comment_id)
-        return jsonify({"error": "Failed to load comment"}), 500
+        return jsonify({"error": _("Failed to load comment")}), 500
 
 
 @comments_bp.route("/api/comments/recent")
@@ -252,7 +252,7 @@ def get_recent_comments():
 
     except Exception:
         current_app.logger.exception("Failed to load recent comments")
-        return jsonify({"error": "Failed to load comments"}), 500
+        return jsonify({"error": _("Failed to load comments")}), 500
 
 
 @comments_bp.route("/api/comments/user/<int:user_id>")
@@ -263,7 +263,7 @@ def get_user_comments(user_id):
 
     # Only allow users to see their own comments unless they're admin
     if not current_user.is_admin and current_user.id != user_id:
-        return jsonify({"error": "Permission denied"}), 403
+        return jsonify({"error": _("Permission denied")}), 403
 
     try:
         comments = Comment.get_user_comments(user_id, limit)
@@ -271,7 +271,7 @@ def get_user_comments(user_id):
 
     except Exception:
         current_app.logger.exception("Failed to load comments for user %s", user_id)
-        return jsonify({"error": "Failed to load comments"}), 500
+        return jsonify({"error": _("Failed to load comments")}), 500
 
 
 # Comment attachment routes

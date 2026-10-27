@@ -8,6 +8,7 @@ from datetime import datetime, timedelta
 from typing import Any, Dict, List, Optional
 
 import requests
+from flask_babel import gettext as _
 
 from app.integrations.base import BaseConnector
 
@@ -176,7 +177,7 @@ class GitLabConnector(BaseConnector):
         """Test connection to GitLab."""
         token = self.get_access_token()
         if not token:
-            return {"success": False, "message": "No access token available"}
+            return {"success": False, "message": _("No access token available")}
 
         base_url = self._get_base_url()
         api_url = f"{base_url}/api/v4/user"
@@ -186,11 +187,14 @@ class GitLabConnector(BaseConnector):
 
             if response.status_code == 200:
                 user_data = response.json()
-                return {"success": True, "message": f"Connected as {user_data.get('username', 'Unknown')}"}
+                return {
+                    "success": True,
+                    "message": _("Connected as %(username)s", username=user_data.get("username", "Unknown")),
+                }
             else:
-                return {"success": False, "message": f"API returned status {response.status_code}"}
+                return {"success": False, "message": _("API returned status %(status)s", status=response.status_code)}
         except Exception as e:
-            return {"success": False, "message": f"Connection error: {str(e)}"}
+            return {"success": False, "message": _("Connection error: %(error)s", error=str(e))}
 
     def sync_data(self, sync_type: str = "full") -> Dict[str, Any]:
         """Sync issues from GitLab repositories into TimeTracker projects and tasks."""
@@ -206,7 +210,7 @@ class GitLabConnector(BaseConnector):
 
         token = self.get_access_token()
         if not token:
-            return {"success": False, "message": "No access token available"}
+            return {"success": False, "message": _("No access token available")}
 
         try:
             actor_id, client_id = require_sync_context(self.integration)
@@ -243,7 +247,9 @@ class GitLabConnector(BaseConnector):
                 if projects_response.status_code != 200:
                     return {
                         "success": False,
-                        "message": f"Could not list GitLab projects: HTTP {projects_response.status_code}",
+                        "message": _(
+                            "Could not list GitLab projects: HTTP %(status)s", status=projects_response.status_code
+                        ),
                     }
                 repo_ids = [p["id"] for p in projects_response.json()[:20]]
 
@@ -334,16 +340,16 @@ class GitLabConnector(BaseConnector):
                     errors.append(f"Error syncing repository {repo_id}: {str(e)}")
 
             db.session.commit()
-            msg = f"Sync completed. Upserted {synced_count} issue(s)."
+            msg = _("Sync completed. Upserted %(count)s issue(s).", count=synced_count)
             if errors:
-                msg += f" {len(errors)} error(s)."
+                msg += " " + _("%(count)s error(s).", count=len(errors))
             return {"success": True, "message": msg, "synced_items": synced_count, "errors": errors}
         except Exception as e:
             try:
                 db.session.rollback()
             except Exception:
                 pass
-            return {"success": False, "message": f"Sync failed: {str(e)}", "errors": errors}
+            return {"success": False, "message": _("Sync failed: %(error)s", error=str(e)), "errors": errors}
 
     def get_config_schema(self) -> Dict[str, Any]:
         """Get configuration schema."""

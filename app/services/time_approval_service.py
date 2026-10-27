@@ -7,6 +7,8 @@ import logging
 from datetime import datetime
 from typing import Any, Dict, List, Optional
 
+from flask_babel import gettext as _
+
 from app import db
 from app.models import TimeEntry, User
 from app.models.time_entry_approval import ApprovalPolicy, ApprovalStatus, TimeEntryApproval
@@ -23,13 +25,13 @@ class TimeApprovalService:
         """Request approval for a time entry"""
         time_entry = TimeEntry.query.get(time_entry_id)
         if not time_entry:
-            return {"success": False, "message": "Time entry not found", "error": "not_found"}
+            return {"success": False, "message": _("Time entry not found"), "error": "not_found"}
 
         # Check if already pending
         existing = TimeEntryApproval.query.filter_by(time_entry_id=time_entry_id, status=ApprovalStatus.PENDING).first()
 
         if existing:
-            return {"success": False, "message": "Approval already pending", "error": "already_pending"}
+            return {"success": False, "message": _("Approval already pending"), "error": "already_pending"}
 
         # Get approvers from policy or provided list
         if not approver_ids:
@@ -45,7 +47,7 @@ class TimeApprovalService:
             approver_ids = self._get_approvers_for_entry(time_entry)
 
         if not approver_ids:
-            return {"success": False, "message": "No approvers found for this time entry", "error": "no_approvers"}
+            return {"success": False, "message": _("No approvers found for this time entry"), "error": "no_approvers"}
 
         # Create approval request(s) - multi-level support
         approvals = []
@@ -69,21 +71,21 @@ class TimeApprovalService:
         # Send notifications to approvers
         self._notify_approvers(approvals[0], approver_ids)
 
-        return {"success": True, "message": "Approval requested", "approval": approvals[0].to_dict()}
+        return {"success": True, "message": _("Approval requested"), "approval": approvals[0].to_dict()}
 
     def approve(self, approval_id: int, approver_id: int, comment: str = None) -> Dict[str, Any]:
         """Approve a time entry"""
         approval = TimeEntryApproval.query.get(approval_id)
         if not approval:
-            return {"success": False, "message": "Approval not found", "error": "not_found"}
+            return {"success": False, "message": _("Approval not found"), "error": "not_found"}
 
         if approval.status != ApprovalStatus.PENDING:
-            return {"success": False, "message": "Approval is not pending", "error": "invalid_status"}
+            return {"success": False, "message": _("Approval is not pending"), "error": "invalid_status"}
 
         # Check if user is authorized to approve
         approver_ids = self._get_approvers_for_entry(approval.time_entry)
         if approver_id not in approver_ids:
-            return {"success": False, "message": "Not authorized to approve", "error": "unauthorized"}
+            return {"success": False, "message": _("Not authorized to approve"), "error": "unauthorized"}
 
         # Approve current level
         approval.approve(approver_id, comment)
@@ -98,23 +100,23 @@ class TimeApprovalService:
             self._notify_approvers(child_approval, [child_approval.requested_by])
             return {
                 "success": True,
-                "message": "Approved, awaiting next level approval",
+                "message": _("Approved, awaiting next level approval"),
                 "approval": approval.to_dict(),
             }
 
         # All levels approved
         self._mark_entry_approved(approval.time_entry)
 
-        return {"success": True, "message": "Time entry approved", "approval": approval.to_dict()}
+        return {"success": True, "message": _("Time entry approved"), "approval": approval.to_dict()}
 
     def reject(self, approval_id: int, approver_id: int, reason: str) -> Dict[str, Any]:
         """Reject a time entry approval"""
         approval = TimeEntryApproval.query.get(approval_id)
         if not approval:
-            return {"success": False, "message": "Approval not found", "error": "not_found"}
+            return {"success": False, "message": _("Approval not found"), "error": "not_found"}
 
         if approval.status != ApprovalStatus.PENDING:
-            return {"success": False, "message": "Approval is not pending", "error": "invalid_status"}
+            return {"success": False, "message": _("Approval is not pending"), "error": "invalid_status"}
 
         approval.reject(approver_id, reason)
 
@@ -129,19 +131,19 @@ class TimeApprovalService:
         # Notify requester
         self._notify_requester(approval, "rejected", reason)
 
-        return {"success": True, "message": "Time entry rejected", "approval": approval.to_dict()}
+        return {"success": True, "message": _("Time entry rejected"), "approval": approval.to_dict()}
 
     def cancel_approval(self, approval_id: int, user_id: int) -> Dict[str, Any]:
         """Cancel an approval request"""
         approval = TimeEntryApproval.query.get(approval_id)
         if not approval:
-            return {"success": False, "message": "Approval not found", "error": "not_found"}
+            return {"success": False, "message": _("Approval not found"), "error": "not_found"}
 
         if approval.requested_by != user_id:
-            return {"success": False, "message": "Not authorized to cancel", "error": "unauthorized"}
+            return {"success": False, "message": _("Not authorized to cancel"), "error": "unauthorized"}
 
         if approval.status != ApprovalStatus.PENDING:
-            return {"success": False, "message": "Cannot cancel non-pending approval", "error": "invalid_status"}
+            return {"success": False, "message": _("Cannot cancel non-pending approval"), "error": "invalid_status"}
 
         approval.cancel()
 
@@ -153,7 +155,7 @@ class TimeApprovalService:
         for child in child_approvals:
             child.cancel()
 
-        return {"success": True, "message": "Approval cancelled", "approval": approval.to_dict()}
+        return {"success": True, "message": _("Approval cancelled"), "approval": approval.to_dict()}
 
     def get_pending_approvals(self, approver_id: int = None) -> List[TimeEntryApproval]:
         """Get pending approvals for an approver. When approver_id is set, only return approvals this user may approve."""
@@ -182,7 +184,7 @@ class TimeApprovalService:
         success_count = sum(1 for r in results if r.get("success"))
         return {
             "success": True,
-            "message": f"Approved {success_count} of {len(approval_ids)} entries",
+            "message": _("Approved %(count)s of %(total)s entries", count=success_count, total=len(approval_ids)),
             "results": results,
         }
 
@@ -239,8 +241,8 @@ class TimeApprovalService:
         for approver_id in approver_ids:
             service.send_notification(
                 user_id=approver_id,
-                title="Time Entry Approval Requested",
-                message=f"Time entry {approval.time_entry_id} requires your approval",
+                title=_("Time Entry Approval Requested"),
+                message=_("Time entry %(id)s requires your approval", id=approval.time_entry_id),
                 type="info",
                 priority="normal",
             )
@@ -250,13 +252,18 @@ class TimeApprovalService:
         from app.utils.notification_service import NotificationService
 
         service = NotificationService()
-        message = f"Your time entry {approval.time_entry_id} has been {status}."
+        if status == "approved":
+            message = _("Your time entry %(id)s has been approved.", id=approval.time_entry_id)
+            title = _("Time Entry Approved")
+        else:
+            message = _("Your time entry %(id)s has been rejected.", id=approval.time_entry_id)
+            title = _("Time Entry Rejected")
         if reason:
-            message += f" Reason: {reason}"
+            message += " " + _("Reason: %(reason)s", reason=reason)
 
         service.send_notification(
             user_id=approval.requested_by,
-            title=f"Time Entry {status.title()}",
+            title=title,
             message=message,
             type="success" if status == "approved" else "error",
             priority="normal",

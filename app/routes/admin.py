@@ -2092,12 +2092,12 @@ def admin_peppol_setup_wizard_check_bridge():
     bridge_base_url = (data.get("bridge_base_url") or "").strip().rstrip("/")
     bridge_token = (data.get("bridge_token") or "").strip()
     if not bridge_base_url:
-        return jsonify({"ok": False, "error": "Missing bridge_base_url"}), 400
+        return jsonify({"ok": False, "error": _("Missing bridge_base_url")}), 400
 
     try:
         bridge_base_url = validate_outbound_url(bridge_base_url).rstrip("/")
     except UnsafeOutboundURL as exc:
-        return client_error_response("Invalid bridge URL", 400)
+        return client_error_response(_("Invalid bridge URL"), 400)
 
     headers = {"Accept": "application/json"}
     if bridge_token:
@@ -2112,12 +2112,12 @@ def admin_peppol_setup_wizard_check_bridge():
         health = requests.get(health_url, headers=headers, timeout=timeout_s)
         if health.status_code >= 400:
             return (
-                jsonify({"ok": False, "error": f"Bridge /health returned HTTP {health.status_code}"}),
+                jsonify({"ok": False, "error": _("Bridge /health returned HTTP %(status)s", status=health.status_code)}),
                 400,
             )
         health_json = health.json()
     except Exception:
-        return client_error_response("Failed to reach bridge /health", 400)
+        return client_error_response(_("Failed to reach bridge /health"), 400)
 
     try:
         test = requests.post(test_url, headers=headers, timeout=timeout_s)
@@ -2126,7 +2126,7 @@ def admin_peppol_setup_wizard_check_bridge():
                 jsonify(
                     {
                         "ok": False,
-                        "error": f"Bridge /test returned HTTP {test.status_code}",
+                        "error": _("Bridge /test returned HTTP %(status)s", status=test.status_code),
                         "health": health_json,
                     }
                 ),
@@ -2134,7 +2134,7 @@ def admin_peppol_setup_wizard_check_bridge():
             )
         test_json = test.json()
     except Exception:
-        return jsonify({"ok": False, **client_error_payload("Failed to call bridge /test"), "health": health_json}), 400
+        return jsonify({"ok": False, **client_error_payload(_("Failed to call bridge /test")), "health": health_json}), 400
 
     return jsonify({"ok": True, "health": health_json, "test": test_json})
 
@@ -2155,9 +2155,9 @@ def admin_peppol_setup_wizard_apply():
     sender_country = (data.get("sender_country") or "").strip()
 
     if not bridge_base_url:
-        return jsonify({"ok": False, "error": "Missing bridge_base_url"}), 400
+        return jsonify({"ok": False, "error": _("Missing bridge_base_url")}), 400
     if not sender_endpoint_id or not sender_scheme_id:
-        return jsonify({"ok": False, "error": "Missing sender endpoint_id/scheme_id"}), 400
+        return jsonify({"ok": False, "error": _("Missing sender endpoint_id/scheme_id")}), 400
 
     settings_obj = Settings.get_settings()
     settings_obj.peppol_enabled = True
@@ -2172,12 +2172,12 @@ def admin_peppol_setup_wizard_apply():
         settings_obj.set_secret("peppol_access_point_token", bridge_token)
 
     if not safe_commit("admin_peppol_setup_wizard_apply"):
-        return jsonify({"ok": False, "error": "Database error while saving settings"}), 500
+        return jsonify({"ok": False, "error": _("Database error while saving settings")}), 500
 
     return jsonify(
         {
             "ok": True,
-            "message": "Peppol settings saved",
+            "message": _("Peppol settings saved"),
             "peppol_access_point_url": settings_obj.peppol_access_point_url,
         }
     )
@@ -2194,11 +2194,11 @@ def admin_peppol_setup_wizard_send_test():
     try:
         invoice_id_int = int(invoice_id)
     except Exception:
-        return jsonify({"ok": False, "error": "Invalid invoice_id"}), 400
+        return jsonify({"ok": False, "error": _("Invalid invoice_id")}), 400
 
     invoice = Invoice.query.get(invoice_id_int)
     if not invoice:
-        return jsonify({"ok": False, "error": "Invoice not found"}), 404
+        return jsonify({"ok": False, "error": _("Invoice not found")}), 404
 
     try:
         from app.services.peppol_service import PeppolService
@@ -2207,15 +2207,15 @@ def admin_peppol_setup_wizard_send_test():
         success, tx, message = svc.send_invoice(invoice=invoice, triggered_by_user_id=current_user.id)
         if success:
             return jsonify(
-                {"ok": True, "message": "Invoice sent via Peppol", "peppol_tx_id": tx.id if tx else None}
+                {"ok": True, "message": _("Invoice sent via Peppol"), "peppol_tx_id": tx.id if tx else None}
             )
         current_app.logger.warning("Peppol wizard test send failed: %s", message)
         return jsonify(
-            {"ok": False, "error": "Failed to send invoice via Peppol", "peppol_tx_id": tx.id if tx else None}
+            {"ok": False, "error": _("Failed to send invoice via Peppol"), "peppol_tx_id": tx.id if tx else None}
         ), 400
     except Exception:
         current_app.logger.exception("Peppol wizard test send failed")
-        return client_error_response("Failed to send invoice via Peppol", 500)
+        return client_error_response(_("Failed to send invoice via Peppol"), 500)
 
 
 @admin_bp.route("/admin/settings/verify-donate-hide-code", methods=["POST"])
@@ -4663,14 +4663,14 @@ def upload_template_image():
         return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
 
     if "file" not in request.files:
-        return jsonify({"error": "No file provided"}), 400
+        return jsonify({"error": _("No file provided")}), 400
 
     file = request.files["file"]
     if file.filename == "":
-        return jsonify({"error": "No file selected"}), 400
+        return jsonify({"error": _("No file selected")}), 400
 
     if not allowed_file(file.filename):
-        return jsonify({"error": "File type not allowed. Only images (PNG, JPG, JPEG, GIF, WEBP) are allowed"}), 400
+        return jsonify({"error": _("File type not allowed. Only images (PNG, JPG, JPEG, GIF, WEBP) are allowed")}), 400
 
     # Check file size
     file.seek(0, os.SEEK_END)
@@ -4678,21 +4678,21 @@ def upload_template_image():
     file.seek(0)
 
     if file_size > MAX_FILE_SIZE:
-        return jsonify({"error": f"File size exceeds maximum allowed size ({MAX_FILE_SIZE / (1024*1024):.0f} MB)"}), 400
+        return jsonify({"error": _("File size exceeds maximum allowed size (%(size).0f MB)", size=MAX_FILE_SIZE / (1024*1024))}), 400
 
     # Save file (basename-only; directory jail)
     original_filename = secure_filename(file.filename)
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     filename = f"template_{timestamp}_{original_filename}"
     if not filename or ".." in filename or "/" in filename or "\\" in filename:
-        return jsonify({"error": "Invalid filename"}), 400
+        return jsonify({"error": _("Invalid filename")}), 400
 
     upload_dir = os.path.realpath(os.path.join(current_app.root_path, "..", UPLOAD_FOLDER))
     os.makedirs(upload_dir, exist_ok=True)
 
     file_path = os.path.realpath(os.path.join(upload_dir, filename))
     if not file_path.startswith(upload_dir + os.sep):
-        return jsonify({"error": "Invalid filename"}), 400
+        return jsonify({"error": _("Invalid filename")}), 400
     file.save(file_path)
 
     # Return URL for the image
@@ -5124,16 +5124,16 @@ def oidc_wizard_test_connection():
     issuer = data.get("issuer", "").strip()
 
     if not issuer:
-        return jsonify({"success": False, "error": "Issuer URL is required"}), 400
+        return jsonify({"success": False, "error": _("Issuer URL is required")}), 400
 
     # Validate URL format
     try:
         parsed = urlparse(issuer)
         if not parsed.scheme or not parsed.netloc:
-            return jsonify({"success": False, "error": "Invalid URL format"}), 400
+            return jsonify({"success": False, "error": _("Invalid URL format")}), 400
         hostname = parsed.netloc.split(":")[0]
     except Exception as e:
-        return client_error_response("Invalid URL", 400)
+        return client_error_response(_("Invalid URL"), 400)
 
     result = {
         "success": False,
@@ -5203,29 +5203,29 @@ def oidc_wizard_validate_config():
     # Validate issuer
     issuer = data.get("issuer", "").strip()
     if not issuer:
-        errors.append({"field": "issuer", "message": "Issuer URL is required"})
+        errors.append({"field": "issuer", "message": _("Issuer URL is required")})
     else:
         try:
             parsed = urlparse(issuer)
             if not parsed.scheme or not parsed.netloc:
-                errors.append({"field": "issuer", "message": "Invalid URL format"})
+                errors.append({"field": "issuer", "message": _("Invalid URL format")})
             elif parsed.scheme not in ("http", "https"):
-                errors.append({"field": "issuer", "message": "URL must use http or https"})
+                errors.append({"field": "issuer", "message": _("URL must use http or https")})
         except Exception as e:
-            errors.append({"field": "issuer", "message": "Invalid URL"})
+            errors.append({"field": "issuer", "message": _("Invalid URL")})
 
     # Validate client ID
     if not data.get("client_id", "").strip():
-        errors.append({"field": "client_id", "message": "Client ID is required"})
+        errors.append({"field": "client_id", "message": _("Client ID is required")})
 
     # Validate client secret
     if not data.get("client_secret", "").strip():
-        errors.append({"field": "client_secret", "message": "Client Secret is required"})
+        errors.append({"field": "client_secret", "message": _("Client Secret is required")})
 
     # Validate auth method
     auth_method = normalize_auth_method(data.get("auth_method", ""))
     if not auth_includes_oidc(auth_method):
-        errors.append({"field": "auth_method", "message": "Auth method must be 'oidc', 'both', or 'all'"})
+        errors.append({"field": "auth_method", "message": _("Auth method must be 'oidc', 'both', or 'all'")})
 
     # Validate redirect URI if provided
     redirect_uri = data.get("redirect_uri", "").strip()
@@ -5233,9 +5233,9 @@ def oidc_wizard_validate_config():
         try:
             parsed = urlparse(redirect_uri)
             if not parsed.scheme or not parsed.netloc:
-                errors.append({"field": "redirect_uri", "message": "Invalid redirect URI format"})
+                errors.append({"field": "redirect_uri", "message": _("Invalid redirect URI format")})
         except Exception as e:
-            errors.append({"field": "redirect_uri", "message": "Invalid redirect URI"})
+            errors.append({"field": "redirect_uri", "message": _("Invalid redirect URI")})
 
     if errors:
         return jsonify({"valid": False, "errors": errors}), 200
@@ -5450,30 +5450,30 @@ def ldap_wizard_validate_config():
 
     host = (data.get("LDAP_HOST") or "").strip()
     if not host:
-        errors.append({"field": "LDAP_HOST", "message": "LDAP host is required"})
+        errors.append({"field": "LDAP_HOST", "message": _("LDAP host is required")})
 
     bind_dn = (data.get("LDAP_BIND_DN") or "").strip()
     if not bind_dn:
-        errors.append({"field": "LDAP_BIND_DN", "message": "Bind DN is required"})
+        errors.append({"field": "LDAP_BIND_DN", "message": _("Bind DN is required")})
 
     bind_pw = data.get("LDAP_BIND_PASSWORD")
     if bind_pw is None or str(bind_pw).strip() == "":
-        errors.append({"field": "LDAP_BIND_PASSWORD", "message": "Bind password is required"})
+        errors.append({"field": "LDAP_BIND_PASSWORD", "message": _("Bind password is required")})
 
     base_dn = (data.get("LDAP_BASE_DN") or "").strip()
     if not base_dn:
-        errors.append({"field": "LDAP_BASE_DN", "message": "Base DN is required"})
+        errors.append({"field": "LDAP_BASE_DN", "message": _("Base DN is required")})
 
     login_attr = (data.get("LDAP_USER_LOGIN_ATTR") or "").strip()
     if not login_attr:
-        errors.append({"field": "LDAP_USER_LOGIN_ATTR", "message": "Login attribute is required"})
+        errors.append({"field": "LDAP_USER_LOGIN_ATTR", "message": _("Login attribute is required")})
 
     auth_method = normalize_auth_method(data.get("AUTH_METHOD", ""))
     if not auth_includes_ldap(auth_method):
         errors.append(
             {
                 "field": "AUTH_METHOD",
-                "message": "Authentication method must be 'ldap' or 'all'",
+                "message": _("Authentication method must be 'ldap' or 'all'"),
             }
         )
 
@@ -5482,18 +5482,18 @@ def ldap_wizard_validate_config():
         try:
             p = int(port_raw)
             if p < 1 or p > 65535:
-                errors.append({"field": "LDAP_PORT", "message": "Port must be between 1 and 65535"})
+                errors.append({"field": "LDAP_PORT", "message": _("Port must be between 1 and 65535")})
         except (TypeError, ValueError):
-            errors.append({"field": "LDAP_PORT", "message": "Port must be a number"})
+            errors.append({"field": "LDAP_PORT", "message": _("Port must be a number")})
 
     timeout_raw = data.get("LDAP_TIMEOUT")
     if timeout_raw not in (None, ""):
         try:
             t = int(timeout_raw)
             if t < 1 or t > 120:
-                errors.append({"field": "LDAP_TIMEOUT", "message": "Timeout must be between 1 and 120 seconds"})
+                errors.append({"field": "LDAP_TIMEOUT", "message": _("Timeout must be between 1 and 120 seconds")})
         except (TypeError, ValueError):
-            errors.append({"field": "LDAP_TIMEOUT", "message": "Timeout must be a number"})
+            errors.append({"field": "LDAP_TIMEOUT", "message": _("Timeout must be a number")})
 
     if errors:
         return jsonify({"valid": False, "errors": errors}), 200
@@ -5511,7 +5511,7 @@ def ldap_wizard_generate_config():
 
     auth_method = normalize_auth_method(data.get("AUTH_METHOD", "ldap"))
     if not auth_includes_ldap(auth_method):
-        return jsonify({"success": False, "error": "AUTH_METHOD must be 'ldap' or 'all'"}), 400
+        return jsonify({"success": False, "error": _("AUTH_METHOD must be 'ldap' or 'all'")}), 400
 
     env_vars: dict[str, str] = {
         "AUTH_METHOD": auth_method,
@@ -5538,7 +5538,7 @@ def ldap_wizard_generate_config():
 
     for req_key in ("LDAP_HOST", "LDAP_BIND_DN", "LDAP_BIND_PASSWORD", "LDAP_BASE_DN"):
         if not env_vars.get(req_key, "").strip():
-            return jsonify({"success": False, "error": f"{req_key} is required"}), 400
+            return jsonify({"success": False, "error": _("%(field)s is required", field=req_key)}), 400
 
     optional_skip_if_empty = frozenset(
         {"LDAP_ADMIN_GROUP", "LDAP_REQUIRED_GROUP", "LDAP_TLS_CA_CERT_FILE", "LDAP_USER_DN"}
@@ -5609,7 +5609,7 @@ def test_email():
 
     if not recipient:
         current_app.logger.warning(f"[EMAIL TEST API] No recipient provided by user {current_user.username}")
-        return jsonify({"success": False, "message": "Recipient email is required"}), 400
+        return jsonify({"success": False, "message": _("Recipient email is required")}), 400
 
     current_app.logger.info(f"[EMAIL TEST API] Test email request from user {current_user.username} to {recipient}")
 
@@ -5623,9 +5623,9 @@ def test_email():
     app_module.track_event(current_user.id, "admin.email_test_sent", {"success": success, "configured": success})
 
     if success:
-        return jsonify({"success": True, "message": "Test email sent successfully"}), 200
+        return jsonify({"success": True, "message": _("Test email sent successfully")}), 200
     current_app.logger.warning("Email test failed: %s", message)
-    return jsonify({"success": False, "message": "Failed to send test email"}), 500
+    return jsonify({"success": False, "message": _("Failed to send test email")}), 500
 
 
 @admin_bp.route("/admin/email/config-status", methods=["GET"])
@@ -5671,7 +5671,7 @@ def save_email_config():
     settings.mail_default_sender = data.get("default_sender", "").strip()
     test_recipient = data.get("test_recipient", "").strip()
     if test_recipient and "@" not in test_recipient:
-        return jsonify({"success": False, "message": "Invalid test recipient email address"}), 400
+        return jsonify({"success": False, "message": _("Invalid test recipient email address")}), 400
     settings.mail_test_recipient = test_recipient
 
     current_app.logger.info(
@@ -5683,16 +5683,16 @@ def save_email_config():
     # Validate
     if settings.mail_enabled and not settings.mail_server:
         current_app.logger.warning("[EMAIL CONFIG] Validation failed: mail server required")
-        return jsonify({"success": False, "message": "Mail server is required when email is enabled"}), 400
+        return jsonify({"success": False, "message": _("Mail server is required when email is enabled")}), 400
 
     if settings.mail_use_tls and settings.mail_use_ssl:
         current_app.logger.warning("[EMAIL CONFIG] Validation failed: both TLS and SSL enabled")
-        return jsonify({"success": False, "message": "Cannot use both TLS and SSL. Please choose one."}), 400
+        return jsonify({"success": False, "message": _("Cannot use both TLS and SSL. Please choose one.")}), 400
 
     # Save to database
     if not safe_commit("admin_save_email_config"):
         current_app.logger.error("[EMAIL CONFIG] Failed to save to database")
-        return jsonify({"success": False, "message": "Failed to save email configuration to database"}), 500
+        return jsonify({"success": False, "message": _("Failed to save email configuration to database")}), 500
 
     current_app.logger.info("[EMAIL CONFIG] ✓ Configuration saved to database")
 
@@ -5710,7 +5710,7 @@ def save_email_config():
 
     current_app.logger.info("[EMAIL CONFIG] ✓ Email configuration update complete")
 
-    return jsonify({"success": True, "message": "Email configuration saved successfully"}), 200
+    return jsonify({"success": True, "message": _("Email configuration saved successfully")}), 200
 
 
 @admin_bp.route("/admin/email/get-config", methods=["GET"])
@@ -5829,14 +5829,14 @@ def send_email_template_test(template_id):
         settings = Settings.get_settings()
         recipient = (getattr(settings, "mail_test_recipient", None) or "").strip()
     if not recipient:
-        return jsonify({"success": False, "message": "Recipient email is required"}), 400
+        return jsonify({"success": False, "message": _("Recipient email is required")}), 400
 
     invoice_id = data.get("invoice_id")
     if invoice_id is not None and invoice_id != "":
         try:
             invoice_id = int(invoice_id)
         except (TypeError, ValueError):
-            return jsonify({"success": False, "message": "Invalid invoice_id"}), 400
+            return jsonify({"success": False, "message": _("Invalid invoice_id")}), 400
     else:
         invoice_id = None
 
@@ -5849,9 +5849,9 @@ def send_email_template_test(template_id):
     )
 
     if success:
-        return jsonify({"success": True, "message": "Test email sent successfully"}), 200
+        return jsonify({"success": True, "message": _("Test email sent successfully")}), 200
     current_app.logger.warning("Invoice template test email failed: %s", message)
-    return jsonify({"success": False, "message": "Failed to send test email"}), 500
+    return jsonify({"success": False, "message": _("Failed to send test email")}), 500
 
 
 @admin_bp.route("/admin/email-templates/<int:template_id>")

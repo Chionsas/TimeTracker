@@ -4,6 +4,8 @@ Service for task business logic.
 
 from typing import Any, Dict, List, Optional
 
+from flask_babel import gettext as _
+
 from app import db
 from app.constants import TaskStatus, WebhookEvent
 from app.models import Task
@@ -83,7 +85,7 @@ class TaskService:
         # Validate project
         project = self.project_repo.get_by_id(project_id)
         if not project:
-            return {"success": False, "message": "Invalid project", "error": "invalid_project"}
+            return {"success": False, "message": _("Invalid project"), "error": "invalid_project"}
 
         # Validate status against the configured kanban columns for this project.
         # Falls back to the hardcoded VALID_STATUSES tuple if KanbanColumn is unavailable
@@ -115,7 +117,7 @@ class TaskService:
         if not safe_commit("create_task", {"project_id": project_id, "created_by": created_by}):
             return {
                 "success": False,
-                "message": "Could not create task due to a database error",
+                "message": _("Could not create task due to a database error"),
                 "error": "database_error",
             }
 
@@ -124,7 +126,7 @@ class TaskService:
             WebhookEvent.TASK_CREATED.value, {"task_id": task.id, "project_id": project_id, "created_by": created_by}
         )
 
-        return {"success": True, "message": "Task created successfully", "task": task}
+        return {"success": True, "message": _("Task created successfully"), "task": task}
 
     def get_task_with_details(
         self,
@@ -176,7 +178,7 @@ class TaskService:
         task = self.task_repo.get_by_id(task_id)
 
         if not task:
-            return {"success": False, "message": "Task not found", "error": "not_found"}
+            return {"success": False, "message": _("Task not found"), "error": "not_found"}
 
         # Update fields
         self.task_repo.update(task, **kwargs)
@@ -184,11 +186,11 @@ class TaskService:
         if not safe_commit("update_task", {"task_id": task_id, "user_id": user_id}):
             return {
                 "success": False,
-                "message": "Could not update task due to a database error",
+                "message": _("Could not update task due to a database error"),
                 "error": "database_error",
             }
 
-        return {"success": True, "message": "Task updated successfully", "task": task}
+        return {"success": True, "message": _("Task updated successfully"), "task": task}
 
     def get_project_tasks(self, project_id: int, status: Optional[str] = None) -> List[Task]:
         """Get tasks for a project"""

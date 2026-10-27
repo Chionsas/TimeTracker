@@ -16,7 +16,7 @@ from flask import (
     request,
     url_for,
 )
-from flask_babel import gettext as _
+from flask_babel import gettext as _, ngettext
 from flask_login import current_user, login_required
 
 from app import db, log_event, track_event
@@ -562,7 +562,7 @@ def create_project():
                 201,
             )
 
-        flash(f'Project "{name}" created successfully', "success")
+        flash(_('Project "%(name)s" created successfully', name=name), "success")
         return redirect(url_for("projects.view_project", project_id=project.id))
 
     from app.models import CustomFieldDefinition
@@ -1123,7 +1123,7 @@ def edit_project(project_id):
             user_agent=request.headers.get("User-Agent"),
         )
 
-        flash(f'Project "{name}" updated successfully', "success")
+        flash(_('Project "%(name)s" updated successfully', name=name), "success")
         return redirect(url_for("projects.view_project", project_id=project.id))
 
     from app.models import CustomFieldDefinition
@@ -1176,7 +1176,7 @@ def archive_project(project_id):
             user_agent=request.headers.get("User-Agent"),
         )
 
-        flash(f'Project "{project.name}" archived successfully', "success")
+        flash(_('Project "%(name)s" archived successfully', name=project.name), "success")
 
     return redirect(url_for("projects.list_projects", status="archived"))
 
@@ -1213,7 +1213,7 @@ def unarchive_project(project_id):
             user_agent=request.headers.get("User-Agent"),
         )
 
-        flash(f'Project "{project.name}" unarchived successfully', "success")
+        flash(_('Project "%(name)s" unarchived successfully', name=project.name), "success")
 
     return redirect(url_for("projects.list_projects"))
 
@@ -1243,7 +1243,7 @@ def deactivate_project(project_id):
         # Log project deactivation
         log_event("project.deactivated", user_id=current_user.id, project_id=project.id)
         track_event(current_user.id, "project.deactivated", {"project_id": project.id})
-        flash(f'Project "{project.name}" marked as inactive', "success")
+        flash(_('Project "%(name)s" marked as inactive', name=project.name), "success")
 
     return redirect(url_for("projects.list_projects"))
 
@@ -1273,7 +1273,7 @@ def activate_project(project_id):
         # Log project activation
         log_event("project.activated", user_id=current_user.id, project_id=project.id)
         track_event(current_user.id, "project.activated", {"project_id": project.id})
-        flash(f'Project "{project.name}" activated successfully', "success")
+        flash(_('Project "%(name)s" activated successfully', name=project.name), "success")
 
     return redirect(url_for("projects.list_projects"))
 
@@ -1319,7 +1319,7 @@ def delete_project(project_id):
         flash(_("Could not delete project due to a database error. Please check server logs."), "error")
         return redirect(url_for("projects.view_project", project_id=project_id_copy))
 
-    flash(f'Project "{project_name}" deleted successfully', "success")
+    flash(_('Project "%(name)s" deleted successfully', name=project_name), "success")
     return redirect(url_for("projects.list_projects"))
 
 
@@ -1354,13 +1354,13 @@ def bulk_delete_projects():
 
             if not user_can_delete_project(current_user, project):
                 skipped_count += 1
-                errors.append(f"'{project.name}': Permission denied")
+                errors.append(_("'%(name)s': Permission denied", name=project.name))
                 continue
 
             # Check for time entries
             if project.time_entries.count() > 0:
                 skipped_count += 1
-                errors.append(f"'{project.name}': Has time entries")
+                errors.append(_("'%(name)s': Has time entries", name=project.name))
                 continue
 
             # Delete the project
@@ -1386,11 +1386,19 @@ def bulk_delete_projects():
 
     # Show appropriate messages
     if deleted_count > 0:
-        flash(f'Successfully deleted {deleted_count} project{"s" if deleted_count != 1 else ""}', "success")
+        flash(
+            ngettext("Successfully deleted %(num)d project", "Successfully deleted %(num)d projects", deleted_count),
+            "success",
+        )
 
     if skipped_count > 0:
         flash(
-            f'Skipped {skipped_count} project{"s" if skipped_count != 1 else ""}: {", ".join(errors[:3])}{"..." if len(errors) > 3 else ""}',
+            ngettext(
+                "Skipped %(num)d project: %(errors)s",
+                "Skipped %(num)d projects: %(errors)s",
+                skipped_count,
+                errors=", ".join(errors[:3]) + ("..." if len(errors) > 3 else ""),
+            ),
             "warning",
         )
 
@@ -1435,7 +1443,7 @@ def bulk_status_change():
                 continue
 
             if not user_can_edit_project(current_user, project):
-                errors.append(f"'{project.name}': Permission denied")
+                errors.append(_("'%(name)s': Permission denied", name=project.name))
                 continue
 
             # Update status based on type
@@ -1499,16 +1507,25 @@ def bulk_status_change():
             return redirect(url_for("projects.list_projects"))
 
     # Show appropriate messages
-    status_labels = {"active": "active", "inactive": "inactive", "archived": "archived"}
+    status_labels = {"active": _("active"), "inactive": _("inactive"), "archived": _("archived")}
     if updated_count > 0:
         flash(
-            f'Successfully marked {updated_count} project{"s" if updated_count != 1 else ""} as {status_labels.get(new_status, new_status)}',
+            ngettext(
+                "Successfully marked %(num)d project as %(status)s",
+                "Successfully marked %(num)d projects as %(status)s",
+                updated_count,
+                status=status_labels.get(new_status, new_status),
+            ),
             "success",
         )
 
     if errors:
         flash(
-            f'Some projects could not be updated: {", ".join(errors[:3])}{"..." if len(errors) > 3 else ""}', "warning"
+            _(
+                "Some projects could not be updated: %(errors)s",
+                errors=", ".join(errors[:3]) + ("..." if len(errors) > 3 else ""),
+            ),
+            "warning",
         )
 
     if updated_count == 0:
@@ -1822,7 +1839,7 @@ def delete_cost(project_id, cost_id):
         flash(_("Could not delete cost due to a database error. Please check server logs."), "error")
         return redirect(url_for("projects.view_project", project_id=project_id))
 
-    flash(_(f'Cost "{cost_description}" deleted successfully'), "success")
+    flash(_('Cost "%(description)s" deleted successfully', description=cost_description), "success")
     return redirect(url_for("projects.view_project", project_id=project.id))
 
 
@@ -2044,10 +2061,10 @@ def generate_recurring_cost_now(project_id, rid):
     recurring = RecurringProjectCost.query.get_or_404(rid)
 
     if recurring.project_id != project_id:
-        return jsonify({"error": "Recurring cost not found"}), 404
+        return jsonify({"error": _("Recurring cost not found")}), 404
 
     if not current_user.is_admin and recurring.user_id != current_user.id:
-        return jsonify({"error": "Permission denied"}), 403
+        return jsonify({"error": _("Permission denied")}), 403
 
     try:
         original_next_run_date = recurring.next_run_date
@@ -2057,7 +2074,7 @@ def generate_recurring_cost_now(project_id, rid):
             db.session.commit()
             return jsonify({"success": True, "cost_id": cost.id})
         recurring.next_run_date = original_next_run_date
-        return jsonify({"error": "Failed to generate cost"}), 400
+        return jsonify({"error": _("Failed to generate cost")}), 400
     except Exception as e:
         current_app.logger.error(f"Error generating cost from recurring template: {e}")
         return client_error_response(status=500)
@@ -2270,7 +2287,7 @@ def delete_good(project_id, good_id):
         flash(_("Could not delete extra good due to a database error. Please check server logs."), "error")
         return redirect(url_for("projects.view_project", project_id=project_id))
 
-    flash(_(f'Extra good "{good_name}" deleted successfully'), "success")
+    flash(_('Extra good "%(name)s" deleted successfully', name=good_name), "success")
     return redirect(url_for("projects.view_project", project_id=project.id))
 
 

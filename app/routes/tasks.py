@@ -16,7 +16,7 @@ from flask import (
     request,
     url_for,
 )
-from flask_babel import gettext as _
+from flask_babel import gettext as _, ngettext
 from flask_login import current_user, login_required
 
 import app as app_module
@@ -326,7 +326,7 @@ def create_task():
             user_agent=request.headers.get("User-Agent"),
         )
 
-        flash(f'Task "{name}" created successfully', "success")
+        flash(_('Task "%(name)s" created successfully', name=name), "success")
         next_url = request.form.get("next") or request.args.get("next")
         return safe_redirect(
                 next_url,
@@ -675,7 +675,7 @@ def edit_task(task_id):
                         )
                     )
                     if not safe_commit("edit_task_status_change", {"task_id": task.id, "status": selected_status}):
-                        flash("Could not update status due to a database error. Please check server logs.", "error")
+                        flash(_("Could not update status due to a database error. Please check server logs."), "error")
                         return render_template(
                             "tasks/edit.html",
                             task=task,
@@ -722,7 +722,7 @@ def edit_task(task_id):
             user_agent=request.headers.get("User-Agent"),
         )
 
-        flash(f'Task "{name}" updated successfully', "success")
+        flash(_('Task "%(name)s" updated successfully', name=name), "success")
         return redirect(url_for("tasks.view_task", task_id=task.id))
 
     # Get available projects and users for form
@@ -775,7 +775,7 @@ def update_task_status(task_id):
                     )
                 )
                 if not safe_commit("update_task_status_reopen_in_progress", {"task_id": task.id, "status": new_status}):
-                    flash("Could not update status due to a database error. Please check server logs.", "error")
+                    flash(_("Could not update status due to a database error. Please check server logs."), "error")
                     return redirect(url_for("tasks.view_task", task_id=task.id))
             else:
                 previous_status = task.status
@@ -838,7 +838,7 @@ def update_task_status(task_id):
                 )
             )
             if not safe_commit("update_task_status", {"task_id": task.id, "status": new_status}):
-                flash("Could not update status due to a database error. Please check server logs.", "error")
+                flash(_("Could not update status due to a database error. Please check server logs."), "error")
                 return redirect(url_for("tasks.view_task", task_id=task.id))
 
             # Log task status change
@@ -855,7 +855,7 @@ def update_task_status(task_id):
                 {"task_id": task.id, "old_status": previous_status, "new_status": new_status},
             )
 
-        flash(f"Task status updated to {task.status_display}", "success")
+        flash(_("Task status updated to %(status)s", status=task.status_display), "success")
 
         from app.utils.workflow_bridge import fire_task_status_workflows
 
@@ -880,7 +880,7 @@ def update_task_priority(task_id):
 
     try:
         task.update_priority(new_priority)
-        flash(f"Task priority updated to {task.priority_display}", "success")
+        flash(_("Task priority updated to %(priority)s", priority=task.priority_display), "success")
     except ValueError as e:
         flash(sanitize_log_value(e, max_len=200), "error")
 
@@ -907,7 +907,7 @@ def assign_task(task_id):
 
     task.reassign(user_id)
     if user_id:
-        flash(f"Task assigned to {user.username}", "success")
+        flash(_("Task assigned to %(user)s", user=user.username), "success")
     else:
         flash(_("Task unassigned"), "success")
 
@@ -959,7 +959,7 @@ def delete_task(task_id):
         current_user.id, "task.deleted", {"task_id": task_id_for_log, "project_id": project_id_for_log}
     )
 
-    flash(f'Task "{task_name}" deleted successfully', "success")
+    flash(_('Task "%(name)s" deleted successfully', name=task_name), "success")
     return redirect(url_for("tasks.list_tasks"))
 
 
@@ -1043,10 +1043,20 @@ def bulk_delete_tasks():
 
     # Show appropriate messages
     if deleted_count > 0:
-        flash(f'Successfully deleted {deleted_count} task{"s" if deleted_count != 1 else ""}', "success")
+        flash(
+            ngettext("Successfully deleted %(num)d task", "Successfully deleted %(num)d tasks", deleted_count), "success"
+        )
 
     if skipped_count > 0:
-        flash(f'Skipped {skipped_count} task{"s" if skipped_count != 1 else ""}: {"; ".join(errors[:3])}', "warning")
+        flash(
+            ngettext(
+                "Skipped %(num)d task: %(errors)s",
+                "Skipped %(num)d tasks: %(errors)s",
+                skipped_count,
+                errors="; ".join(errors[:3]),
+            ),
+            "warning",
+        )
 
     return redirect(url_for("tasks.list_tasks"))
 
@@ -1111,11 +1121,20 @@ def bulk_update_status():
             return redirect(url_for("tasks.list_tasks"))
 
         flash(
-            f'Successfully updated {updated_count} task{"s" if updated_count != 1 else ""} to {new_status}', "success"
+            ngettext(
+                "Successfully updated %(num)d task to %(status)s",
+                "Successfully updated %(num)d tasks to %(status)s",
+                updated_count,
+                status=new_status,
+            ),
+            "success",
         )
 
     if skipped_count > 0:
-        flash(f'Skipped {skipped_count} task{"s" if skipped_count != 1 else ""} (no permission)', "warning")
+        flash(
+            ngettext("Skipped %(num)d task (no permission)", "Skipped %(num)d tasks (no permission)", skipped_count),
+            "warning",
+        )
 
     return redirect(url_for("tasks.list_tasks"))
 
@@ -1266,11 +1285,19 @@ def bulk_update_priority():
         )
     if updated_count > 0:
         flash(
-            f'Successfully updated {updated_count} task{"s" if updated_count != 1 else ""} to {new_priority} priority',
+            ngettext(
+                "Successfully updated %(num)d task to %(priority)s priority",
+                "Successfully updated %(num)d tasks to %(priority)s priority",
+                updated_count,
+                priority=new_priority,
+            ),
             "success",
         )
     if skipped_count > 0:
-        flash(f'Skipped {skipped_count} task{"s" if skipped_count != 1 else ""} (no permission)', "warning")
+        flash(
+            ngettext("Skipped %(num)d task (no permission)", "Skipped %(num)d tasks (no permission)", skipped_count),
+            "warning",
+        )
     return redirect(url_for("tasks.list_tasks"))
 
 
@@ -1323,12 +1350,20 @@ def bulk_assign_tasks():
             return redirect(url_for("tasks.list_tasks"))
 
         flash(
-            f'Successfully assigned {updated_count} task{"s" if updated_count != 1 else ""} to {user.display_name}',
+            ngettext(
+                "Successfully assigned %(num)d task to %(user)s",
+                "Successfully assigned %(num)d tasks to %(user)s",
+                updated_count,
+                user=user.display_name,
+            ),
             "success",
         )
 
     if skipped_count > 0:
-        flash(f'Skipped {skipped_count} task{"s" if skipped_count != 1 else ""} (no permission)', "warning")
+        flash(
+            ngettext("Skipped %(num)d task (no permission)", "Skipped %(num)d tasks (no permission)", skipped_count),
+            "warning",
+        )
 
     return redirect(url_for("tasks.list_tasks"))
 
@@ -1400,12 +1435,20 @@ def bulk_move_project():
             return redirect(url_for("tasks.list_tasks"))
 
         flash(
-            f'Successfully moved {updated_count} task{"s" if updated_count != 1 else ""} to {new_project.name}',
+            ngettext(
+                "Successfully moved %(num)d task to %(project)s",
+                "Successfully moved %(num)d tasks to %(project)s",
+                updated_count,
+                project=new_project.name,
+            ),
             "success",
         )
 
     if skipped_count > 0:
-        flash(f'Skipped {skipped_count} task{"s" if skipped_count != 1 else ""} (no permission)', "warning")
+        flash(
+            ngettext("Skipped %(num)d task (no permission)", "Skipped %(num)d tasks (no permission)", skipped_count),
+            "warning",
+        )
 
     return redirect(url_for("tasks.list_tasks"))
 
@@ -1662,7 +1705,7 @@ def api_task(task_id):
 
     # Check if user has access to this task
     if not current_user.is_admin and task.assigned_to != current_user.id and task.created_by != current_user.id:
-        return jsonify({"error": "Access denied"}), 403
+        return jsonify({"error": _("Access denied")}), 403
 
     return jsonify(task.to_dict())
 
@@ -1677,12 +1720,12 @@ def api_update_status(task_id):
 
     # Check if user can update this task
     if not current_user.is_admin and task.assigned_to != current_user.id and task.created_by != current_user.id:
-        return jsonify({"error": "Access denied"}), 403
+        return jsonify({"error": _("Access denied")}), 403
 
     # Validate status against configured kanban columns for this task's project
     valid_statuses = KanbanColumn.get_valid_status_keys(project_id=task.project_id)
     if new_status not in valid_statuses:
-        return jsonify({"error": "Invalid status"}), 400
+        return jsonify({"error": _("Invalid status")}), 400
 
     previous_status = task.status
     # Update status
@@ -1697,13 +1740,13 @@ def api_update_status(task_id):
                 if not safe_commit(
                     "api_update_task_status_reopen_in_progress", {"task_id": task.id, "status": new_status}
                 ):
-                    return jsonify({"error": "Database error while updating status"}), 500
+                    return jsonify({"error": _("Database error while updating status")}), 500
             else:
                 try:
                     task.start_task()
                 except ValueError:
                     current_app.logger.info("Invalid start_task transition for task %s", task.id, exc_info=True)
-                    return jsonify({"error": "Invalid task status transition"}), 400
+                    return jsonify({"error": _("Invalid task status transition")}), 400
         elif new_status == "done":
             task.complete_task()
         elif new_status == "cancelled":
@@ -1714,7 +1757,7 @@ def api_update_status(task_id):
             task.status = new_status
             task.updated_at = now_in_app_timezone()
             if not safe_commit("api_update_task_status", {"task_id": task.id, "status": new_status}):
-                return jsonify({"error": "Database error while updating status"}), 500
+                return jsonify({"error": _("Database error while updating status")}), 500
 
         from app.utils.workflow_bridge import fire_task_status_workflows
 
@@ -1723,7 +1766,7 @@ def api_update_status(task_id):
         return jsonify({"success": True, "task": task.to_dict()})
     except ValueError:
         current_app.logger.info("Invalid task status update for task %s", task.id, exc_info=True)
-        return jsonify({"error": "Invalid task status transition"}), 400
+        return jsonify({"error": _("Invalid task status transition")}), 400
 
 
 # ---------------------------------------------------------------------------
@@ -1752,11 +1795,11 @@ def add_checklist_item(task_id):
     """Add a checklist item to a task."""
     task = Task.query.get_or_404(task_id)
     if not _can_edit_task(task):
-        return jsonify({"error": "You do not have permission to modify this task"}), 403
+        return jsonify({"error": _("You do not have permission to modify this task")}), 403
 
     text = (request.form.get("text") or "").strip()
     if not text:
-        return jsonify({"error": "Checklist item text is required"}), 400
+        return jsonify({"error": _("Checklist item text is required")}), 400
     if len(text) > 500:
         text = text[:500]
 
@@ -1764,7 +1807,7 @@ def add_checklist_item(task_id):
     item = TaskChecklistItem(task_id=task.id, text=text, position=(max_position or -1) + 1)
     db.session.add(item)
     if not safe_commit("add_checklist_item", {"task_id": task.id}):
-        return jsonify({"error": "Could not add checklist item due to a database error"}), 500
+        return jsonify({"error": _("Could not add checklist item due to a database error")}), 500
 
     return jsonify({"success": True, "item": item.to_dict(), "checklist": _checklist_state(task)})
 
@@ -1775,12 +1818,12 @@ def toggle_checklist_item(item_id):
     """Toggle the done state of a checklist item."""
     item = TaskChecklistItem.query.get_or_404(item_id)
     if not _can_edit_task(item.task):
-        return jsonify({"error": "You do not have permission to modify this task"}), 403
+        return jsonify({"error": _("You do not have permission to modify this task")}), 403
 
     item.is_done = not item.is_done
     item.updated_at = now_in_app_timezone()
     if not safe_commit("toggle_checklist_item", {"item_id": item.id}):
-        return jsonify({"error": "Could not update checklist item due to a database error"}), 500
+        return jsonify({"error": _("Could not update checklist item due to a database error")}), 500
 
     return jsonify({"success": True, "item": item.to_dict(), "checklist": _checklist_state(item.task)})
 
@@ -1791,15 +1834,15 @@ def edit_checklist_item(item_id):
     """Edit the text of a checklist item."""
     item = TaskChecklistItem.query.get_or_404(item_id)
     if not _can_edit_task(item.task):
-        return jsonify({"error": "You do not have permission to modify this task"}), 403
+        return jsonify({"error": _("You do not have permission to modify this task")}), 403
 
     text = (request.form.get("text") or "").strip()
     if not text:
-        return jsonify({"error": "Checklist item text is required"}), 400
+        return jsonify({"error": _("Checklist item text is required")}), 400
     item.text = text[:500]
     item.updated_at = now_in_app_timezone()
     if not safe_commit("edit_checklist_item", {"item_id": item.id}):
-        return jsonify({"error": "Could not update checklist item due to a database error"}), 500
+        return jsonify({"error": _("Could not update checklist item due to a database error")}), 500
 
     return jsonify({"success": True, "item": item.to_dict(), "checklist": _checklist_state(item.task)})
 
@@ -1811,11 +1854,11 @@ def delete_checklist_item(item_id):
     item = TaskChecklistItem.query.get_or_404(item_id)
     task = item.task
     if not _can_edit_task(task):
-        return jsonify({"error": "You do not have permission to modify this task"}), 403
+        return jsonify({"error": _("You do not have permission to modify this task")}), 403
 
     db.session.delete(item)
     if not safe_commit("delete_checklist_item", {"item_id": item_id}):
-        return jsonify({"error": "Could not delete checklist item due to a database error"}), 500
+        return jsonify({"error": _("Could not delete checklist item due to a database error")}), 500
 
     return jsonify({"success": True, "checklist": _checklist_state(task)})
 
@@ -1826,7 +1869,7 @@ def reorder_checklist_items(task_id):
     """Reorder a task's checklist items to match the given list of item IDs."""
     task = Task.query.get_or_404(task_id)
     if not _can_edit_task(task):
-        return jsonify({"error": "You do not have permission to modify this task"}), 403
+        return jsonify({"error": _("You do not have permission to modify this task")}), 403
 
     ordered_ids = request.form.getlist("item_ids[]", type=int) or request.form.getlist("item_ids", type=int)
     if not ordered_ids:
@@ -1841,7 +1884,7 @@ def reorder_checklist_items(task_id):
             item.position = position
             position += 1
     if not safe_commit("reorder_checklist_items", {"task_id": task.id}):
-        return jsonify({"error": "Could not reorder checklist due to a database error"}), 500
+        return jsonify({"error": _("Could not reorder checklist due to a database error")}), 500
 
     return jsonify({"success": True, "checklist": _checklist_state(task)})
 

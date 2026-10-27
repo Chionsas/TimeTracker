@@ -27,6 +27,7 @@ from typing import Any, Dict, List, Optional, Tuple
 from urllib.parse import urljoin, urlparse
 
 import requests
+from flask_babel import gettext
 from icalendar import Calendar
 
 from app.integrations.base import BaseConnector
@@ -115,15 +116,24 @@ class CalDAVClient:
             return resp
         except requests.exceptions.SSLError as e:
             raise ValueError(
-                f"SSL certificate verification failed. If using a self-signed certificate, disable SSL verification in settings. Error: {str(e)}"
+                gettext(
+                    "SSL certificate verification failed. If using a self-signed certificate, disable SSL verification in settings. Error: %(error)s",
+                    error=str(e),
+                )
             ) from e
         except requests.exceptions.Timeout as e:
             raise ValueError(
-                f"Request timeout after {self.timeout} seconds. The server may be slow or unreachable."
+                gettext(
+                    "Request timeout after %(timeout)s seconds. The server may be slow or unreachable.",
+                    timeout=self.timeout,
+                )
             ) from e
         except requests.exceptions.ConnectionError as e:
             raise ValueError(
-                f"Connection error: {str(e)}. Please check the server URL and network connectivity."
+                gettext(
+                    "Connection error: %(error)s. Please check the server URL and network connectivity.",
+                    error=str(e),
+                )
             ) from e
 
     def _propfind(self, url: str, xml_body: str, depth: str = "0") -> ET.Element:
@@ -135,11 +145,11 @@ class CalDAVClient:
         )
         resp.raise_for_status()
         if not resp.text or not resp.text.strip():
-            raise ValueError(f"Empty response from PROPFIND request to {url}")
+            raise ValueError(gettext("Empty response from PROPFIND request to %(url)s", url=url))
         try:
             return ET.fromstring(resp.text)
         except ET.ParseError as e:
-            raise ValueError(f"Invalid XML response from server: {str(e)}") from e
+            raise ValueError(gettext("Invalid XML response from server: %(error)s", error=str(e))) from e
 
     def _report(self, url: str, xml_body: str, depth: str = "1") -> ET.Element:
         resp = self._request(
@@ -155,7 +165,7 @@ class CalDAVClient:
         try:
             return ET.fromstring(resp.text)
         except ET.ParseError as e:
-            raise ValueError(f"Invalid XML response from server: {str(e)}") from e
+            raise ValueError(gettext("Invalid XML response from server: %(error)s", error=str(e))) from e
 
     def discover_calendars(self, server_url: str) -> List[CalDAVCalendar]:
         """
@@ -180,7 +190,9 @@ class CalDAVClient:
                 # Some servers support well-known principal path fallback
                 principal_href = "/.well-known/caldav"
         except Exception as e:
-            raise ValueError(f"Failed to discover current-user-principal from {server_url}: {str(e)}") from e
+            raise ValueError(
+                gettext("Failed to discover current-user-principal from %(url)s: %(error)s", url=server_url, error=str(e))
+            ) from e
 
         principal_url = urljoin(server_url, principal_href)
 
@@ -196,12 +208,14 @@ class CalDAVClient:
             home_href = self._find_href(root, [(_ns("calendar-home-set", CALDAV_NS),)])
             if not home_href:
                 raise ValueError(
-                    "Could not discover calendar-home-set from CalDAV server. The server may not support CalDAV or the credentials may be incorrect."
+                    gettext("Could not discover calendar-home-set from CalDAV server. The server may not support CalDAV or the credentials may be incorrect.")
                 )
         except ValueError:
             raise
         except Exception as e:
-            raise ValueError(f"Failed to discover calendar-home-set from {principal_url}: {str(e)}") from e
+            raise ValueError(
+                gettext("Failed to discover calendar-home-set from %(url)s: %(error)s", url=principal_url, error=str(e))
+            ) from e
 
         home_url = urljoin(server_url, home_href)
 
@@ -625,11 +639,11 @@ class CalDAVCalendarConnector(BaseConnector):
     # --- Helpers ---
     def _get_basic_creds(self) -> Tuple[str, str]:
         if not self.credentials:
-            raise ValueError("Missing CalDAV credentials.")
+            raise ValueError(gettext("Missing CalDAV credentials."))
         username = (self.credentials.extra_data or {}).get("username")
         password = self.credentials.access_token
         if not username or not password:
-            raise ValueError("Missing CalDAV username/password.")
+            raise ValueError(gettext("Missing CalDAV username/password."))
         return username, password
 
     def _client(self) -> CalDAVClient:
@@ -645,7 +659,7 @@ class CalDAVCalendarConnector(BaseConnector):
         try:
             # Check if credentials exist
             if not self.credentials:
-                return {"success": False, "message": "No credentials configured. Please set up username and password."}
+                return {"success": False, "message": gettext("No credentials configured. Please set up username and password.")}
 
             # Check if we have username and password
             try:
@@ -653,7 +667,7 @@ class CalDAVCalendarConnector(BaseConnector):
             except ValueError as e:
                 return {
                     "success": False,
-                    "message": f"Missing credentials: {str(e)}. Please configure username and password.",
+                    "message": gettext("Missing credentials: %(error)s. Please configure username and password.", error=str(e)),
                 }
 
             cfg = self.integration.config or {}
@@ -662,7 +676,7 @@ class CalDAVCalendarConnector(BaseConnector):
 
             # Need at least one URL
             if not server_url and not calendar_url:
-                return {"success": False, "message": "Either server URL or calendar URL must be configured."}
+                return {"success": False, "message": gettext("Either server URL or calendar URL must be configured.")}
 
             client = self._client()
 
@@ -673,7 +687,7 @@ class CalDAVCalendarConnector(BaseConnector):
                 except Exception as e:
                     # If discovery fails but we have calendar_url, continue with calendar_url test
                     if not calendar_url:
-                        return {"success": False, "message": f"Failed to discover calendars from server: {str(e)}"}
+                        return {"success": False, "message": gettext("Failed to discover calendars from server: %(error)s", error=str(e))}
 
             # If a calendar URL is provided, validate we can run a REPORT against it (lightweight window)
             if calendar_url:
@@ -681,19 +695,19 @@ class CalDAVCalendarConnector(BaseConnector):
                     now_utc = datetime.now(timezone.utc)
                     _ = client.fetch_events(calendar_url, now_utc - timedelta(days=1), now_utc + timedelta(days=1))
                 except Exception as e:
-                    return {"success": False, "message": f"Failed to access calendar at {calendar_url}: {str(e)}"}
+                    return {"success": False, "message": gettext("Failed to access calendar at %(url)s: %(error)s", url=calendar_url, error=str(e))}
 
             return {
                 "success": True,
                 "message": (
-                    f"Connected to CalDAV. Found {len(calendars)} calendars."
+                    gettext("Connected to CalDAV. Found %(count)s calendars.", count=len(calendars))
                     if server_url
-                    else "Connected to CalDAV calendar."
+                    else gettext("Connected to CalDAV calendar.")
                 ),
                 "calendars": [{"url": c.href, "name": c.name} for c in calendars],
             }
         except Exception as e:
-            return {"success": False, "message": f"Connection test failed: {str(e)}"}
+            return {"success": False, "message": gettext("Connection test failed: %(error)s", error=str(e))}
 
     def sync_data(self, sync_type: str = "full") -> Dict[str, Any]:
         """
@@ -709,18 +723,18 @@ class CalDAVCalendarConnector(BaseConnector):
 
         try:
             if not self.integration or not self.integration.user_id:
-                return {"success": False, "message": "CalDAV integration must be a per-user integration."}
+                return {"success": False, "message": gettext("CalDAV integration must be a per-user integration.")}
 
             # Check credentials
             if not self.credentials:
-                return {"success": False, "message": "No credentials configured. Please set up username and password."}
+                return {"success": False, "message": gettext("No credentials configured. Please set up username and password.")}
 
             try:
                 username, password = self._get_basic_creds()
             except ValueError as e:
                 return {
                     "success": False,
-                    "message": f"Missing credentials: {str(e)}. Please configure username and password.",
+                    "message": gettext("Missing credentials: %(error)s. Please configure username and password.", error=str(e)),
                 }
 
             cfg = self.integration.config or {}
@@ -748,18 +762,20 @@ class CalDAVCalendarConnector(BaseConnector):
                         else:
                             return {
                                 "success": False,
-                                "message": "No calendars found on server. Please configure calendar URL manually.",
+                                "message": gettext("No calendars found on server. Please configure calendar URL manually."),
                             }
                     except Exception as e:
                         logger.error(f"Could not discover calendars: {e}", exc_info=True)
                         return {
                             "success": False,
-                            "message": f"Could not discover calendars: {str(e)}. Please configure calendar URL manually.",
+                            "message": gettext(
+                                "Could not discover calendars: %(error)s. Please configure calendar URL manually.", error=str(e)
+                            ),
                         }
                 else:
                     return {
                         "success": False,
-                        "message": "No calendar selected. Please configure calendar URL or server URL first.",
+                        "message": gettext("No calendar selected. Please configure calendar URL or server URL first."),
                     }
 
             sync_direction = cfg.get("sync_direction", "calendar_to_time_tracker")
@@ -788,7 +804,11 @@ class CalDAVCalendarConnector(BaseConnector):
                             "imported": calendar_result.get("imported", 0),
                             "skipped": calendar_result.get("skipped", 0),
                             "errors": calendar_result.get("errors", []) + tracker_result.get("errors", []),
-                            "message": f"Bidirectional sync: Calendar→TimeTracker: {calendar_result.get('message', '')} | TimeTracker→Calendar: {tracker_result.get('message', '')}",
+                            "message": gettext(
+                                "Bidirectional sync: Calendar→TimeTracker: %(calendar)s | TimeTracker→Calendar: %(tracker)s",
+                                calendar=calendar_result.get("message", ""),
+                                tracker=tracker_result.get("message", ""),
+                            ),
                         }
                     elif calendar_result.get("success"):
                         return calendar_result
@@ -797,7 +817,11 @@ class CalDAVCalendarConnector(BaseConnector):
                     else:
                         return {
                             "success": False,
-                            "message": f"Both sync directions failed. Calendar→TimeTracker: {calendar_result.get('message')}, TimeTracker→Calendar: {tracker_result.get('message')}",
+                            "message": gettext(
+                                "Both sync directions failed. Calendar→TimeTracker: %(calendar)s, TimeTracker→Calendar: %(tracker)s",
+                                calendar=calendar_result.get("message"),
+                                tracker=tracker_result.get("message"),
+                            ),
                         }
                 logger.info(f"Calendar→TimeTracker sync completed, returning result")
                 return calendar_result
@@ -808,7 +832,7 @@ class CalDAVCalendarConnector(BaseConnector):
                 return self._sync_time_tracker_to_calendar(cfg, calendar_url, sync_type)
 
             logger.warning(f"Unknown sync direction: {sync_direction}")
-            return {"success": False, "message": f"Unknown sync direction: {sync_direction}"}
+            return {"success": False, "message": gettext("Unknown sync direction: %(direction)s", direction=sync_direction)}
         except Exception as e:
             try:
                 from app import db
@@ -825,7 +849,7 @@ class CalDAVCalendarConnector(BaseConnector):
                     db.session.commit()
                 except Exception:
                     pass
-            return {"success": False, "message": f"Sync failed: {str(e)}"}
+            return {"success": False, "message": gettext("Sync failed: %(error)s", error=str(e))}
 
     def _sync_calendar_to_time_tracker(
         self,
@@ -898,7 +922,7 @@ class CalDAVCalendarConnector(BaseConnector):
                 )
         except Exception as e:
             logger.error(f"Failed to fetch events from calendar: {e}", exc_info=True)
-            return {"success": False, "message": f"Failed to fetch events from calendar: {str(e)}"}
+            return {"success": False, "message": gettext("Failed to fetch events from calendar: %(error)s", error=str(e))}
 
         # Preload projects for title matching
         projects = Project.query.filter_by(status="active").order_by(Project.name).all()
@@ -919,7 +943,11 @@ class CalDAVCalendarConnector(BaseConnector):
                 "skipped": 0,
                 "synced_items": 0,
                 "errors": [],
-                "message": f"No events found in calendar for the specified time range ({time_min_utc.date()} to {time_max_utc.date()}).",
+                "message": gettext(
+                    "No events found in calendar for the specified time range (%(start)s to %(end)s).",
+                    start=time_min_utc.date(),
+                    end=time_max_utc.date(),
+                ),
             }
 
         for ev in events:
@@ -1069,11 +1097,30 @@ class CalDAVCalendarConnector(BaseConnector):
         db.session.commit()
 
         if imported == 0 and skipped > 0:
-            message = f"No new events imported ({skipped} already imported: {skipped_reasons['already_imported']} duplicates, {skipped_reasons['invalid_time']} invalid time, {skipped_reasons['other']} other, {len(events)} total found)."
+            message = gettext(
+                "No new events imported (%(skipped)s already imported: %(duplicates)s duplicates, %(invalid)s invalid time, %(other)s other, %(total)s total found).",
+                skipped=skipped,
+                duplicates=skipped_reasons["already_imported"],
+                invalid=skipped_reasons["invalid_time"],
+                other=skipped_reasons["other"],
+                total=len(events),
+            )
         elif imported == 0:
-            message = f"No events found in calendar for the specified time range ({time_min_utc.date()} to {time_max_utc.date()})."
+            message = gettext(
+                "No events found in calendar for the specified time range (%(start)s to %(end)s).",
+                start=time_min_utc.date(),
+                end=time_max_utc.date(),
+            )
         else:
-            message = f"Imported {imported} events ({skipped} skipped: {skipped_reasons['already_imported']} duplicates, {skipped_reasons['invalid_time']} invalid time, {skipped_reasons['other']} other, {len(events)} total found)."
+            message = gettext(
+                "Imported %(imported)s events (%(skipped)s skipped: %(duplicates)s duplicates, %(invalid)s invalid time, %(other)s other, %(total)s total found).",
+                imported=imported,
+                skipped=skipped,
+                duplicates=skipped_reasons["already_imported"],
+                invalid=skipped_reasons["invalid_time"],
+                other=skipped_reasons["other"],
+                total=len(events),
+            )
 
         logger.info(f"CalDAV sync completed: {message}")
         logger.debug(
@@ -1189,7 +1236,11 @@ class CalDAVCalendarConnector(BaseConnector):
                 "success": True,
                 "synced_items": 0,
                 "errors": [],
-                "message": f"No time entries found in the specified time range ({time_min_local.date()} to {time_max_local.date()}).",
+                "message": gettext(
+                    "No time entries found in the specified time range (%(start)s to %(end)s).",
+                    start=time_min_local.date(),
+                    end=time_max_local.date(),
+                ),
             }
 
         client = self._client()
@@ -1508,7 +1559,9 @@ class CalDAVCalendarConnector(BaseConnector):
         db.session.commit()
 
         total_processed = len(time_entries) + len(calendar_events)
-        message = f"Synced {synced} new events, updated {updated} events to CalDAV calendar."
+        message = gettext(
+            "Synced %(synced)s new events, updated %(updated)s events to CalDAV calendar.", synced=synced, updated=updated
+        )
         logger.info(f"CalDAV TimeTracker→Calendar sync completed: {message}")
         logger.info(
             f"  Summary: {total_processed} items processed ({len(time_entries)} time entries, {len(calendar_events)} calendar events), {synced} created, {updated} updated, {skipped_count} skipped, {len(errors)} errors"

@@ -153,7 +153,7 @@ def delete_workflow(workflow_id):
     workflow = WorkflowRule.query.get_or_404(workflow_id)
 
     if workflow.user_id != current_user.id and not current_user.is_admin:
-        return jsonify({"error": "Access denied"}), 403
+        return jsonify({"error": _("Access denied")}), 403
 
     db.session.delete(workflow)
     db.session.commit()
@@ -173,7 +173,7 @@ def toggle_workflow(workflow_id):
     workflow = WorkflowRule.query.get_or_404(workflow_id)
 
     if workflow.user_id != current_user.id and not current_user.is_admin:
-        return jsonify({"error": "Access denied"}), 403
+        return jsonify({"error": _("Access denied")}), 403
 
     workflow.enabled = not workflow.enabled
     db.session.commit()
@@ -359,7 +359,7 @@ def api_get_workflow(workflow_id):
     workflow = WorkflowRule.query.get_or_404(workflow_id)
 
     if workflow.user_id != current_user.id and not current_user.is_admin:
-        return jsonify({"error": "Access denied"}), 403
+        return jsonify({"error": _("Access denied")}), 403
 
     return jsonify({"workflow": workflow.to_dict()})
 
@@ -372,7 +372,7 @@ def api_update_workflow(workflow_id):
     workflow = WorkflowRule.query.get_or_404(workflow_id)
 
     if workflow.user_id != current_user.id and not current_user.is_admin:
-        return jsonify({"error": "Access denied"}), 403
+        return jsonify({"error": _("Access denied")}), 403
 
     data = request.get_json()
 
@@ -397,7 +397,7 @@ def api_delete_workflow(workflow_id):
     workflow = WorkflowRule.query.get_or_404(workflow_id)
 
     if workflow.user_id != current_user.id and not current_user.is_admin:
-        return jsonify({"error": "Access denied"}), 403
+        return jsonify({"error": _("Access denied")}), 403
 
     db.session.delete(workflow)
     db.session.commit()
@@ -413,7 +413,7 @@ def test_workflow(workflow_id):
     workflow = WorkflowRule.query.get_or_404(workflow_id)
 
     if workflow.user_id != current_user.id and not current_user.is_admin:
-        return jsonify({"error": "Access denied"}), 403
+        return jsonify({"error": _("Access denied")}), 403
 
     data = request.get_json()
     test_event = data.get("event", {"type": workflow.trigger_type, "data": {"user_id": current_user.id}})

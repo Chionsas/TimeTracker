@@ -4,6 +4,8 @@ import logging
 from datetime import datetime
 from typing import Any, Dict, List
 
+from flask_babel import gettext as _
+
 from app.integrations.base import BaseConnector
 from app.utils.datev_export import build_datev_buchungsstapel
 
@@ -43,9 +45,12 @@ class DatevConnector(BaseConnector):
         if not consultant or not client_nr:
             return {
                 "success": False,
-                "message": "Configure consultant number (Berater-Nr) and client number (Mandanten-Nr)",
+                "message": _("Configure consultant number (Berater-Nr) and client number (Mandanten-Nr)"),
             }
-        return {"success": True, "message": f"DATEV ready (Berater {consultant}, Mandant {client_nr})"}
+        return {
+            "success": True,
+            "message": _("DATEV ready (Berater %(consultant)s, Mandant %(client)s)", consultant=consultant, client=client_nr),
+        }
 
     def sync_data(self, sync_type: str = "full") -> Dict[str, Any]:
         """Generate DATEV export content and store path/summary on the integration."""
@@ -77,6 +82,6 @@ class DatevConnector(BaseConnector):
             "success": True,
             "synced": len(invoices),
             "filename": filename,
-            "message": f"Generated DATEV export with {len(invoices)} invoices",
+            "message": _("Generated DATEV export with %(count)d invoices", count=len(invoices)),
             "content": csv_content,
         }

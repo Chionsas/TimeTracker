@@ -369,7 +369,7 @@ def get_user_permissions(user_id):
     """API endpoint to get user's effective permissions"""
     # Users can view their own permissions, admins can view any user's permissions
     if current_user.id != user_id and not current_user.is_admin:
-        return jsonify({"error": "Unauthorized"}), 403
+        return jsonify({"error": _("Unauthorized")}), 403
 
     user = User.query.get_or_404(user_id)
     permissions = user.get_all_permissions()

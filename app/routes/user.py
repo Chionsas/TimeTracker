@@ -416,7 +416,7 @@ def update_preferences():
                     ZoneInfo(tz_value)
                     current_user.timezone = tz_value
                 except (ZoneInfoNotFoundError, KeyError):
-                    return jsonify({"error": "Invalid timezone"}), 400
+                    return jsonify({"error": _("Invalid timezone")}), 400
 
         for key, attr in (
             ("calendar_color_events", "calendar_color_events"),
@@ -430,7 +430,7 @@ def update_preferences():
                 elif isinstance(val, str) and HEX_COLOR_RE.match(val):
                     setattr(current_user, attr, val)
                 else:
-                    return jsonify({"error": f"Invalid {key}: must be null or hex color (#RRGGBB)"}), 400
+                    return jsonify({"error": _("Invalid %(key)s: must be null or hex color (#RRGGBB)", key=key)}), 400
 
         if "calendar_default_view" in data:
             val = data["calendar_default_view"]
@@ -439,7 +439,7 @@ def update_preferences():
             elif val in ("day", "week", "month"):
                 current_user.calendar_default_view = val
             else:
-                return jsonify({"error": "Invalid calendar_default_view: must be day, week, month, or null"}), 400
+                return jsonify({"error": _("Invalid calendar_default_view: must be day, week, month, or null")}), 400
 
         db.session.commit()
 
@@ -464,7 +464,7 @@ def set_theme():
 
             return jsonify({"success": True, "theme": current_user.theme_preference or "system"})
 
-        return jsonify({"error": "Invalid theme"}), 400
+        return jsonify({"error": _("Invalid theme")}), 400
 
     except Exception as e:
         db.session.rollback()

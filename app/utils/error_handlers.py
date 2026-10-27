@@ -7,6 +7,7 @@ import sys
 from typing import Any, Dict, Optional
 
 from flask import current_app, flash, make_response, redirect, render_template, request, url_for
+from flask_babel import gettext as _
 from marshmallow import ValidationError
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from werkzeug.exceptions import HTTPException
@@ -119,7 +120,7 @@ def register_error_handlers(app):
             render_template(
                 "errors/generic.html",
                 error=error,
-                error_info={"title": "Too Many Requests", "message": message},
+                error_info={"title": _("Too Many Requests"), "message": message},
             ),
             429,
         )
@@ -135,7 +136,7 @@ def register_error_handlers(app):
         # For HTML forms, flash the error
         from flask import flash
 
-        flash("Validation error: " + str(error.messages), "error")
+        flash(_("Validation error: %(error)s", error=str(error.messages)), "error")
         return error, 400
 
     @app.errorhandler(IntegrityError)
@@ -169,7 +170,7 @@ def register_error_handlers(app):
                 render_template(
                     "errors/generic.html",
                     error=error,
-                    error_info={"title": "Conflict", "message": error_msg},
+                    error_info={"title": _("Conflict"), "message": error_msg},
                 ),
                 409,
             )
@@ -188,13 +189,13 @@ def register_error_handlers(app):
         if request.is_json or request.path.startswith("/api/"):
             return error_response(message="Database error occurred", error_code="database_error", status_code=500)
 
-        flash("Database error occurred", "error")
+        flash(_("Database error occurred"), "error")
         return (
             render_template(
                 "errors/500.html",
                 error_info={
-                    "title": "Database Error",
-                    "message": "A database error occurred. Please contact support if this persists.",
+                    "title": _("Database Error"),
+                    "message": _("A database error occurred. Please contact support if this persists."),
                 },
             ),
             500,
@@ -212,7 +213,7 @@ def register_error_handlers(app):
             render_template(
                 "errors/generic.html",
                 error=error,
-                error_info={"title": error.name, "message": error.description or "An error occurred"},
+                error_info={"title": error.name, "message": error.description or _("An error occurred")},
             ),
             error.code,
         )
@@ -243,13 +244,13 @@ def register_error_handlers(app):
                     message="An internal error occurred", error_code="internal_error", status_code=500
                 )
 
-        flash("An error occurred. Please try again.", "error")
+        flash(_("An error occurred. Please try again."), "error")
         return (
             render_template(
                 "errors/500.html",
                 error_info={
-                    "title": "Server Error",
-                    "message": "Something went wrong on our end. Please try again later.",
+                    "title": _("Server Error"),
+                    "message": _("Something went wrong on our end. Please try again later."),
                 },
             ),
             500,

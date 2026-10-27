@@ -206,10 +206,10 @@ def test_webhook(webhook_id):
 
     # Check permissions
     if not current_user.is_admin and webhook.user_id != current_user.id:
-        return jsonify({"error": "Access denied"}), 403
+        return jsonify({"error": _("Access denied")}), 403
 
     if not webhook.is_active:
-        return jsonify({"error": "Webhook is not active"}), 400
+        return jsonify({"error": _("Webhook is not active")}), 400
 
     # Send test event
     try:
@@ -230,6 +230,8 @@ def test_webhook(webhook_id):
             event_id=f'test_{webhook_id}_{int(db.session.execute(db.text("SELECT EXTRACT(EPOCH FROM NOW())")).scalar())}',
         )
 
-        return jsonify({"success": True, "delivery": delivery.to_dict(), "message": "Test webhook sent successfully"})
+        return jsonify(
+            {"success": True, "delivery": delivery.to_dict(), "message": _("Test webhook sent successfully")}
+        )
     except Exception as e:
         return client_error_response(status=500)

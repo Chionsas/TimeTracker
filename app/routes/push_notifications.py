@@ -3,6 +3,7 @@ Routes for push notification management.
 """
 
 from flask import Blueprint, current_app, g, jsonify, request
+from flask_babel import gettext as _
 from flask_login import current_user, login_required
 
 from app import db
@@ -23,7 +24,7 @@ def subscribe_push():
         subscription_data = request.json
 
         if not subscription_data:
-            return jsonify({"success": False, "message": "Invalid subscription data"}), 400
+            return jsonify({"success": False, "message": _("Invalid subscription data")}), 400
 
         # Extract subscription details
         endpoint = subscription_data.get("endpoint")
@@ -31,7 +32,7 @@ def subscribe_push():
         user_agent = request.headers.get("User-Agent", "")
 
         if not endpoint:
-            return jsonify({"success": False, "message": "Endpoint is required"}), 400
+            return jsonify({"success": False, "message": _("Endpoint is required")}), 400
 
         # Check if subscription already exists for this user and endpoint
         existing = PushSubscription.find_by_endpoint(current_user.id, endpoint)
@@ -55,9 +56,9 @@ def subscribe_push():
             db.session.add(subscription)
 
         if safe_commit("subscribe_push", {"user_id": current_user.id}):
-            return jsonify({"success": True, "message": "Subscribed to push notifications"})
+            return jsonify({"success": True, "message": _("Subscribed to push notifications")})
         else:
-            return jsonify({"success": False, "message": "Failed to save subscription"}), 500
+            return jsonify({"success": False, "message": _("Failed to save subscription")}), 500
 
     except Exception as e:
         db.session.rollback()
@@ -78,7 +79,7 @@ def unsubscribe_push():
             if subscription:
                 db.session.delete(subscription)
                 if safe_commit("unsubscribe_push", {"user_id": current_user.id}):
-                    return jsonify({"success": True, "message": "Unsubscribed from push notifications"})
+                    return jsonify({"success": True, "message": _("Unsubscribed from push notifications")})
         else:
             # Remove all subscriptions for user
             subscriptions = PushSubscription.get_user_subscriptions(current_user.id)
@@ -86,9 +87,9 @@ def unsubscribe_push():
                 db.session.delete(subscription)
 
             if safe_commit("unsubscribe_push_all", {"user_id": current_user.id}):
-                return jsonify({"success": True, "message": "Unsubscribed from all push notifications"})
+                return jsonify({"success": True, "message": _("Unsubscribed from all push notifications")})
 
-        return jsonify({"success": False, "message": "No subscription found"}), 404
+        return jsonify({"success": False, "message": _("No subscription found")}), 404
 
     except Exception as e:
         db.session.rollback()

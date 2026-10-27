@@ -20,6 +20,7 @@ from datetime import date, datetime, timedelta
 from decimal import Decimal
 from typing import Any, Dict, List, Optional
 
+from flask_babel import gettext as _
 from sqlalchemy import func
 from sqlalchemy.orm import joinedload
 
@@ -209,7 +210,7 @@ class ReportingService:
         """
         project = self.project_repo.get_by_id(project_id)
         if not project:
-            return {"error": "Project not found"}
+            return {"error": _("Project not found")}
 
         # Get time summary
         time_summary = self.get_time_summary(project_id=project_id, start_date=start_date, end_date=end_date)
@@ -310,7 +311,7 @@ class ReportingService:
 
         user = User.query.get(user_id) if user_id else None
         if not user and user_id:
-            return {"error": "User not found"}
+            return {"error": _("User not found")}
         today = date.today() if hasattr(date, "today") else datetime.utcnow().date()
         week_start = get_week_start_for_date(today, user or object())
         week_end = week_start + timedelta(days=6)

@@ -8,6 +8,7 @@ from datetime import datetime, timedelta
 from typing import Any, Dict, List, Optional
 
 from flask import current_app
+from flask_babel import gettext as _
 
 from app import db
 from app.models import ReportEmailSchedule, SalesmanEmailMapping, SavedReportView, User
@@ -61,7 +62,7 @@ class ScheduledReportService:
             # Validate saved view exists
             saved_view = SavedReportView.query.get(saved_view_id)
             if not saved_view:
-                return {"success": False, "message": "Saved report view not found."}
+                return {"success": False, "message": _("Saved report view not found.")}
 
             # Calculate next run time
             next_run_at = self._calculate_next_run(cadence, cron, timezone)
@@ -85,11 +86,11 @@ class ScheduledReportService:
             db.session.add(schedule)
             db.session.commit()
 
-            return {"success": True, "message": "Scheduled report created successfully.", "schedule": schedule}
+            return {"success": True, "message": _("Scheduled report created successfully."), "schedule": schedule}
         except Exception as e:
             db.session.rollback()
             logger.exception("Error creating scheduled report")
-            return {"success": False, "message": "Error creating schedule"}
+            return {"success": False, "message": _("Error creating schedule")}
 
     def generate_and_send_report(self, schedule_id: int) -> Dict[str, Any]:
         """
@@ -103,11 +104,11 @@ class ScheduledReportService:
         try:
             schedule = ReportEmailSchedule.query.get(schedule_id)
             if not schedule or not schedule.active:
-                return {"success": False, "message": "Schedule not found or inactive."}
+                return {"success": False, "message": _("Schedule not found or inactive.")}
 
             saved_view = SavedReportView.query.get(schedule.saved_view_id)
             if not saved_view:
-                return {"success": False, "message": "Saved report view not found."}
+                return {"success": False, "message": _("Saved report view not found.")}
 
             # Parse report configuration
             try:
@@ -138,7 +139,7 @@ class ScheduledReportService:
                 logger.error("Invalid config for schedule %s: config is not a dict", sanitize_log_value(schedule_id))
                 return {
                     "success": False,
-                    "message": "Invalid report configuration. Please check the saved report view.",
+                    "message": _("Invalid report configuration. Please check the saved report view."),
                 }
 
             # Generate report data based on config
@@ -158,16 +159,24 @@ class ScheduledReportService:
                     report_data=report_data,
                     generated_at=now_in_app_timezone(),
                 )
-                text_body = f"Scheduled Report: {saved_view.name}\n\nGenerated at: {now_in_app_timezone()}"
+                text_body = _(
+                    "Scheduled Report: %(name)s\n\nGenerated at: %(generated_at)s",
+                    name=saved_view.name,
+                    generated_at=now_in_app_timezone(),
+                )
             except Exception as e:
                 logger.warning(f"Could not render email template, using plain text: {e}")
                 html_body = None
-                text_body = f"Scheduled Report: {saved_view.name}\n\nGenerated at: {now_in_app_timezone()}\n\nReport data available in HTML version."
+                text_body = _(
+                    "Scheduled Report: %(name)s\n\nGenerated at: %(generated_at)s\n\nReport data available in HTML version.",
+                    name=saved_view.name,
+                    generated_at=now_in_app_timezone(),
+                )
 
             for recipient in recipients:
                 try:
                     send_email(
-                        subject=f"Scheduled Report: {saved_view.name}",
+                        subject=_("Scheduled Report: %(name)s", name=saved_view.name),
                         recipients=[recipient],
                         text_body=text_body,
                         html_body=html_body,
@@ -182,11 +191,11 @@ class ScheduledReportService:
 
             db.session.commit()
 
-            return {"success": True, "message": f"Report sent to {sent_count} recipients.", "sent_count": sent_count}
+            return {"success": True, "message": _("Report sent to %(count)s recipients.", count=sent_count), "sent_count": sent_count}
         except Exception as e:
             db.session.rollback()
             logger.exception("Error generating and sending report")
-            return {"success": False, "message": "Error generating report"}
+            return {"success": False, "message": _("Error generating report")}
 
     def _generate_report_data(
         self, saved_view: SavedReportView, config: Dict[str, Any], user_id: Optional[int] = None
@@ -265,10 +274,10 @@ class ScheduledReportService:
         try:
             schedule = ReportEmailSchedule.query.get(schedule_id)
             if not schedule:
-                return {"success": False, "message": "Schedule not found."}
+                return {"success": False, "message": _("Schedule not found.")}
 
             if schedule.created_by != user_id:
-                return {"success": False, "message": "You do not have permission to edit this schedule."}
+                return {"success": False, "message": _("You do not have permission to edit this schedule.")}
 
             if "recipients" in kwargs:
                 schedule.recipients = kwargs["recipients"]
@@ -286,30 +295,30 @@ class ScheduledReportService:
 
             db.session.commit()
 
-            return {"success": True, "message": "Schedule updated successfully.", "schedule": schedule}
+            return {"success": True, "message": _("Schedule updated successfully."), "schedule": schedule}
         except Exception as e:
             db.session.rollback()
             logger.exception("Error updating schedule")
-            return {"success": False, "message": "Error updating schedule"}
+            return {"success": False, "message": _("Error updating schedule")}
 
     def delete_schedule(self, schedule_id: int, user_id: int) -> Dict[str, Any]:
         """Delete a scheduled report"""
         try:
             schedule = ReportEmailSchedule.query.get(schedule_id)
             if not schedule:
-                return {"success": False, "message": "Schedule not found."}
+                return {"success": False, "message": _("Schedule not found.")}
 
             if schedule.created_by != user_id:
-                return {"success": False, "message": "You do not have permission to delete this schedule."}
+                return {"success": False, "message": _("You do not have permission to delete this schedule.")}
 
             db.session.delete(schedule)
             db.session.commit()
 
-            return {"success": True, "message": "Schedule deleted successfully."}
+            return {"success": True, "message": _("Schedule deleted successfully.")}
         except Exception as e:
             db.session.rollback()
             logger.exception("Error deleting schedule")
-            return {"success": False, "message": "Error deleting schedule"}
+            return {"success": False, "message": _("Error deleting schedule")}
 
     def _generate_and_send_custom_field_reports(
         self,
@@ -429,7 +438,7 @@ class ScheduledReportService:
                 logger.warning(f"No unique values found for custom field '{custom_field_name}'")
                 return {
                     "success": False,
-                    "message": f"No unique values found for custom field '{custom_field_name}'",
+                    "message": _("No unique values found for custom field '%(field)s'", field=custom_field_name),
                     "sent_count": 0,
                 }
 
@@ -463,11 +472,23 @@ class ScheduledReportService:
                         custom_field_name=custom_field_name,
                         custom_field_value=field_value,
                     )
-                    text_body = f"Scheduled Report: {saved_view.name} - {custom_field_name}={field_value}\n\nGenerated at: {now_in_app_timezone()}"
+                    text_body = _(
+                        "Scheduled Report: %(name)s - %(field)s=%(value)s\n\nGenerated at: %(generated_at)s",
+                        name=saved_view.name,
+                        field=custom_field_name,
+                        value=field_value,
+                        generated_at=now_in_app_timezone(),
+                    )
                 except Exception as e:
                     logger.warning(f"Could not render email template, using plain text: {e}")
                     html_body = None
-                    text_body = f"Scheduled Report: {saved_view.name} - {custom_field_name}={field_value}\n\nGenerated at: {now_in_app_timezone()}\n\nReport data available in HTML version."
+                    text_body = _(
+                        "Scheduled Report: %(name)s - %(field)s=%(value)s\n\nGenerated at: %(generated_at)s\n\nReport data available in HTML version.",
+                        name=saved_view.name,
+                        field=custom_field_name,
+                        value=field_value,
+                        generated_at=now_in_app_timezone(),
+                    )
 
                 # Determine recipient(s) based on distribution mode
                 report_recipients = self._get_recipients_for_field_value(schedule, field_value, recipients)
@@ -476,7 +497,12 @@ class ScheduledReportService:
                 for recipient in report_recipients:
                     try:
                         send_email(
-                            subject=f"Scheduled Report: {saved_view.name} - {custom_field_name}={field_value}",
+                            subject=_(
+                                "Scheduled Report: %(name)s - %(field)s=%(value)s",
+                                name=saved_view.name,
+                                field=custom_field_name,
+                                value=field_value,
+                            ),
                             recipients=[recipient],
                             text_body=text_body,
                             html_body=html_body,
@@ -493,9 +519,14 @@ class ScheduledReportService:
             schedule.next_run_at = self._calculate_next_run(schedule.cadence, schedule.cron, schedule.timezone)
             db.session.commit()
 
-            message = f"Reports sent for {len(unique_values)} unique {custom_field_name} values to {len(recipients)} recipient(s)."
+            message = _(
+                "Reports sent for %(count)s unique %(field)s values to %(recipients)s recipient(s).",
+                count=len(unique_values),
+                field=custom_field_name,
+                recipients=len(recipients),
+            )
             if errors:
-                message += f" Errors: {len(errors)}"
+                message += " " + _("Errors: %(count)s", count=len(errors))
 
             return {
                 "success": True,
@@ -506,7 +537,7 @@ class ScheduledReportService:
         except Exception as e:
             db.session.rollback()
             logger.error(f"Error generating and sending custom field reports: {e}", exc_info=True)
-            return {"success": False, "message": "Error generating reports"}
+            return {"success": False, "message": _("Error generating reports")}
 
     def _get_recipients_for_field_value(
         self, schedule: ReportEmailSchedule, field_value: str, default_recipients: List[str]

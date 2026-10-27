@@ -7,6 +7,7 @@ from datetime import datetime, timedelta
 from typing import Any, Dict, Optional
 
 import requests
+from flask_babel import gettext as _
 
 from app.integrations.base import BaseConnector
 
@@ -130,7 +131,7 @@ class SlackConnector(BaseConnector):
         """Test connection to Slack."""
         token = self.get_access_token()
         if not token:
-            return {"success": False, "message": "No access token available"}
+            return {"success": False, "message": _("No access token available")}
 
         api_url = "https://slack.com/api/auth.test"
 
@@ -141,17 +142,20 @@ class SlackConnector(BaseConnector):
             data = response.json()
 
             if data.get("ok"):
-                return {"success": True, "message": f"Connected to {data.get('team', 'Unknown Team')}"}
+                return {"success": True, "message": _("Connected to %(team)s", team=data.get("team", "Unknown Team"))}
             else:
-                return {"success": False, "message": f"Slack API error: {data.get('error', 'Unknown error')}"}
+                return {
+                    "success": False,
+                    "message": _("Slack API error: %(error)s", error=data.get("error", "Unknown error")),
+                }
         except Exception as e:
-            return {"success": False, "message": f"Connection error: {str(e)}"}
+            return {"success": False, "message": _("Connection error: %(error)s", error=str(e))}
 
     def sync_data(self, sync_type: str = "full") -> Dict[str, Any]:
         """Sync data from Slack (channels, users, etc.)."""
         token = self.get_access_token()
         if not token:
-            return {"success": False, "message": "No access token available"}
+            return {"success": False, "message": _("No access token available")}
 
         synced_count = 0
         errors = []
@@ -216,12 +220,12 @@ class SlackConnector(BaseConnector):
 
             return {
                 "success": True,
-                "message": f"Sync completed. Found {synced_count} items.",
+                "message": _("Sync completed. Found %(count)s items.", count=synced_count),
                 "synced_items": synced_count,
                 "errors": errors,
             }
         except Exception as e:
-            return {"success": False, "message": f"Sync failed: {str(e)}"}
+            return {"success": False, "message": _("Sync failed: %(error)s", error=str(e))}
 
     def handle_webhook(
         self, payload: Dict[str, Any], headers: Dict[str, str], raw_body: Optional[bytes] = None

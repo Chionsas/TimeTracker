@@ -6,6 +6,8 @@ from abc import ABC, abstractmethod
 from datetime import datetime
 from typing import Any, Dict, List, Optional
 
+from flask_babel import gettext as _
+
 
 class BaseConnector(ABC):
     """
@@ -118,7 +120,7 @@ class BaseConnector(ABC):
             Dict with sync results
         """
         # Default implementation - override in subclasses
-        return {"success": False, "message": "Sync not implemented for this connector"}
+        return {"success": False, "message": _("Sync not implemented for this connector")}
 
     def handle_webhook(
         self, payload: Dict[str, Any], headers: Dict[str, str], raw_body: Optional[bytes] = None

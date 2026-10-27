@@ -6,6 +6,8 @@ import logging
 from datetime import datetime
 from typing import Any, Dict, List, Optional
 
+from flask_babel import gettext as _
+
 from app import db
 from app.models import Expense
 from app.models.expense_gps import MileageTrack
@@ -70,7 +72,7 @@ class GPSTrackingService:
         track = MileageTrack.query.get_or_404(track_id)
 
         if track.ended_at:
-            return {"success": False, "message": "Tracking already stopped"}
+            return {"success": False, "message": _("Tracking already stopped")}
 
         track.end_latitude = latitude
         track.end_longitude = longitude
@@ -104,10 +106,10 @@ class GPSTrackingService:
         track = MileageTrack.query.get_or_404(track_id)
 
         if not track.ended_at:
-            return {"success": False, "message": "Tracking must be stopped before creating expense"}
+            return {"success": False, "message": _("Tracking must be stopped before creating expense")}
 
         if not track.distance_km:
-            return {"success": False, "message": "Distance not calculated"}
+            return {"success": False, "message": _("Distance not calculated")}
 
         # Calculate amount
         rate = rate_per_km or 0.5  # Default rate

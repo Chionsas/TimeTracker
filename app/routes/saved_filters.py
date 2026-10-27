@@ -71,16 +71,16 @@ def create_filter_api():
 
         # Validation
         if not name:
-            return jsonify({"error": "Filter name is required"}), 400
+            return jsonify({"error": _("Filter name is required")}), 400
 
         if not scope:
-            return jsonify({"error": "Filter scope is required"}), 400
+            return jsonify({"error": _("Filter scope is required")}), 400
 
         # Check for duplicate
         existing = SavedFilter.query.filter_by(user_id=current_user.id, name=name, scope=scope).first()
 
         if existing:
-            return jsonify({"error": f'Filter "{name}" already exists for {scope}'}), 409
+            return jsonify({"error": _('Filter "%(name)s" already exists for %(scope)s', name=name, scope=scope)}), 409
 
         # Create filter
         saved_filter = SavedFilter(
@@ -89,7 +89,7 @@ def create_filter_api():
 
         db.session.add(saved_filter)
         if not safe_commit("create_saved_filter", {"name": name, "scope": scope}):
-            return jsonify({"error": "Could not save filter due to a database error"}), 500
+            return jsonify({"error": _("Could not save filter due to a database error")}), 500
 
         # Log activity
         Activity.log(
@@ -117,7 +117,7 @@ def create_filter_api():
 
     except Exception as e:
         logger.error(f"Error creating saved filter: {e}")
-        return jsonify({"error": "An error occurred while creating the filter"}), 500
+        return jsonify({"error": _("An error occurred while creating the filter")}), 500
 
 
 @saved_filters_bp.route("/api/filters/<int:filter_id>", methods=["GET"])
@@ -154,7 +154,7 @@ def update_filter_api(filter_id):
             ).first()
 
             if existing:
-                return jsonify({"error": f'Filter "{name}" already exists'}), 409
+                return jsonify({"error": _('Filter "%(name)s" already exists', name=name)}), 409
 
             saved_filter.name = name
 
@@ -165,7 +165,7 @@ def update_filter_api(filter_id):
             saved_filter.is_shared = is_shared
 
         if not safe_commit("update_saved_filter", {"filter_id": filter_id}):
-            return jsonify({"error": "Could not update filter due to a database error"}), 500
+            return jsonify({"error": _("Could not update filter due to a database error")}), 500
 
         # Log activity
         Activity.log(
@@ -189,7 +189,7 @@ def update_filter_api(filter_id):
 
     except Exception as e:
         logger.error(f"Error updating saved filter: {e}")
-        return jsonify({"error": "An error occurred while updating the filter"}), 500
+        return jsonify({"error": _("An error occurred while updating the filter")}), 500
 
 
 @saved_filters_bp.route("/api/filters/<int:filter_id>", methods=["DELETE"])
@@ -205,7 +205,7 @@ def delete_filter_api(filter_id):
 
         db.session.delete(saved_filter)
         if not safe_commit("delete_saved_filter", {"filter_id": filter_id}):
-            return jsonify({"error": "Could not delete filter due to a database error"}), 500
+            return jsonify({"error": _("Could not delete filter due to a database error")}), 500
 
         # Log activity
         Activity.log(
@@ -231,7 +231,7 @@ def delete_filter_api(filter_id):
 
     except Exception as e:
         logger.error(f"Error deleting saved filter: {e}")
-        return jsonify({"error": "An error occurred while deleting the filter"}), 500
+        return jsonify({"error": _("An error occurred while deleting the filter")}), 500
 
 
 @saved_filters_bp.route("/filters/<int:filter_id>/delete", methods=["POST"])
@@ -260,5 +260,5 @@ def delete_filter(filter_id):
         user_agent=request.headers.get("User-Agent"),
     )
 
-    flash(f'Filter "{filter_name}" deleted successfully', "success")
+    flash(_('Filter "%(name)s" deleted successfully', name=filter_name), "success")
     return redirect(url_for("saved_filters.list_filters"))

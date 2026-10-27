@@ -6,6 +6,8 @@ from datetime import date
 from decimal import Decimal
 from typing import Any, Dict, List, Optional
 
+from flask_babel import gettext as _
+
 from app import db
 from app.constants import WebhookEvent
 from app.models import Invoice, Payment
@@ -44,11 +46,11 @@ class PaymentService:
         # Validate invoice
         invoice = self.invoice_repo.get_by_id(invoice_id)
         if not invoice:
-            return {"success": False, "message": "Invoice not found", "error": "invalid_invoice"}
+            return {"success": False, "message": _("Invoice not found"), "error": "invalid_invoice"}
 
         # Validate amount
         if amount <= 0:
-            return {"success": False, "message": "Amount must be greater than zero", "error": "invalid_amount"}
+            return {"success": False, "message": _("Amount must be greater than zero"), "error": "invalid_amount"}
 
         # Get currency from invoice if not provided
         if not currency:
@@ -88,7 +90,7 @@ class PaymentService:
         if not safe_commit("create_payment", {"invoice_id": invoice_id, "received_by": received_by}):
             return {
                 "success": False,
-                "message": "Could not create payment due to a database error",
+                "message": _("Could not create payment due to a database error"),
                 "error": "database_error",
             }
 
@@ -124,7 +126,7 @@ class PaymentService:
                     "Failed to send client survey for payment %s: %s", payment.id, e, exc_info=True
                 )
 
-        return {"success": True, "message": "Payment created successfully", "payment": payment}
+        return {"success": True, "message": _("Payment created successfully"), "payment": payment}
 
     def get_invoice_payments(self, invoice_id: int) -> List[Payment]:
         """Get all payments for an invoice"""
@@ -143,7 +145,7 @@ class PaymentService:
         """
         payment = self.payment_repo.get_by_id(payment_id)
         if not payment:
-            return {"success": False, "message": "Payment not found", "error": "not_found"}
+            return {"success": False, "message": _("Payment not found"), "error": "not_found"}
 
         # Update fields
         for field in ("currency", "method", "reference", "notes", "status"):
@@ -173,11 +175,11 @@ class PaymentService:
         if not safe_commit("update_payment", {"payment_id": payment_id, "user_id": user_id}):
             return {
                 "success": False,
-                "message": "Could not update payment due to a database error",
+                "message": _("Could not update payment due to a database error"),
                 "error": "database_error",
             }
 
-        return {"success": True, "message": "Payment updated successfully", "payment": payment}
+        return {"success": True, "message": _("Payment updated successfully"), "payment": payment}
 
     def delete_payment(self, payment_id: int, user_id: int) -> Dict[str, Any]:
         """
@@ -188,7 +190,7 @@ class PaymentService:
         """
         payment = self.payment_repo.get_by_id(payment_id)
         if not payment:
-            return {"success": False, "message": "Payment not found", "error": "not_found"}
+            return {"success": False, "message": _("Payment not found"), "error": "not_found"}
 
         invoice = payment.invoice
         invoice_id = payment.invoice_id
@@ -217,8 +219,8 @@ class PaymentService:
         if not safe_commit("delete_payment", {"payment_id": payment_id, "user_id": user_id}):
             return {
                 "success": False,
-                "message": "Could not delete payment due to a database error",
+                "message": _("Could not delete payment due to a database error"),
                 "error": "database_error",
             }
 
-        return {"success": True, "message": "Payment deleted successfully"}
+        return {"success": True, "message": _("Payment deleted successfully")}

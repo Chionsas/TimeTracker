@@ -8,6 +8,7 @@ from datetime import datetime, timedelta, timezone
 from typing import Any, Dict, List, Optional
 
 import requests
+from flask_babel import gettext
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import Flow
@@ -169,7 +170,10 @@ class GoogleCalendarConnector(BaseConnector):
     def test_connection(self) -> Dict[str, Any]:
         """Test connection to Google Calendar."""
         if not self.credentials:
-            return {"success": False, "message": "No credentials available. Please connect the integration first."}
+            return {
+                "success": False,
+                "message": gettext("No credentials available. Please connect the integration first."),
+            }
 
         try:
             service = self._get_calendar_service()
@@ -188,19 +192,19 @@ class GoogleCalendarConnector(BaseConnector):
 
             return {
                 "success": True,
-                "message": f"Connected to Google Calendar. Found {len(calendars)} calendars.",
+                "message": gettext("Connected to Google Calendar. Found %(count)d calendars.", count=len(calendars)),
                 "calendars": calendar_options,
             }
         except Exception as e:
-            return {"success": False, "message": f"Connection test failed: {str(e)}"}
+            return {"success": False, "message": gettext("Connection test failed: %(error)s", error=str(e))}
 
     def _get_calendar_service(self):
         """Get Google Calendar API service."""
         if not self.credentials:
-            raise ValueError("No credentials available. Please connect the integration first.")
+            raise ValueError(gettext("No credentials available. Please connect the integration first."))
 
         if not self.credentials.access_token:
-            raise ValueError("No access token available. Please reconnect the integration.")
+            raise ValueError(gettext("No access token available. Please reconnect the integration."))
 
         from app.models import Settings
         from app.utils.db import safe_commit
@@ -624,23 +628,29 @@ class GoogleCalendarConnector(BaseConnector):
                 return {
                     "success": False,
                     "errors": errors,
-                    "message": f"Sync completed but failed to save results: {str(commit_error)}",
+                    "message": gettext("Sync completed but failed to save results: %(error)s", error=str(commit_error)),
                 }
 
             # Build detailed message
             message_parts = []
             if sync_direction in ["time_tracker_to_calendar", "bidirectional"]:
                 if time_tracker_to_calendar_count > 0:
-                    message_parts.append(f"TimeTracker→Calendar: synced {time_tracker_to_calendar_count} items")
+                    message_parts.append(
+                        gettext("TimeTracker→Calendar: synced %(count)d items", count=time_tracker_to_calendar_count)
+                    )
             if sync_direction in ["calendar_to_time_tracker", "bidirectional"]:
                 if imported > 0:
-                    message_parts.append(f"Calendar→TimeTracker: imported {imported} events")
+                    message_parts.append(gettext("Calendar→TimeTracker: imported %(count)d events", count=imported))
                 if skipped > 0:
                     skipped_summary = ", ".join([f"{k}={v}" for k, v in skipped_reasons.items() if v > 0])
-                    message_parts.append(f"({skipped} skipped: {skipped_summary})")
+                    message_parts.append(
+                        gettext("(%(count)d skipped: %(summary)s)", count=skipped, summary=skipped_summary)
+                    )
 
             total_synced = time_tracker_to_calendar_count + imported
-            message = " | ".join(message_parts) if message_parts else f"Synced {total_synced} items"
+            message = (
+                " | ".join(message_parts) if message_parts else gettext("Synced %(count)d items", count=total_synced)
+            )
 
             return {
                 "success": True,
@@ -655,7 +665,7 @@ class GoogleCalendarConnector(BaseConnector):
             self.integration.last_sync_status = "error"
             self.integration.last_error = str(e)
             db.session.commit()
-            return {"success": False, "message": f"Sync failed: {str(e)}"}
+            return {"success": False, "message": gettext("Sync failed: %(error)s", error=str(e))}
 
     def _create_calendar_event(self, service, calendar_id: str, time_entry) -> str:
         """Create a calendar event from a time entry."""

@@ -4,6 +4,7 @@ from datetime import date, datetime, timedelta
 from decimal import Decimal
 from typing import Any, Dict, List, Optional
 
+from flask_babel import gettext as _
 from sqlalchemy import func, or_
 
 from app import db
@@ -87,13 +88,13 @@ class WorkforceGovernanceService:
     def submit_period(self, period_id: int, actor_id: int) -> Dict[str, Any]:
         period = TimesheetPeriod.query.get(period_id)
         if not period:
-            return {"success": False, "message": "Timesheet period not found"}
+            return {"success": False, "message": _("Timesheet period not found")}
         if period.user_id != actor_id:
-            return {"success": False, "message": "You can only submit your own period"}
+            return {"success": False, "message": _("You can only submit your own period")}
         if period.status == TimesheetPeriodStatus.CLOSED:
-            return {"success": False, "message": "Closed period cannot be submitted"}
+            return {"success": False, "message": _("Closed period cannot be submitted")}
         if self._has_open_timer_in_range(period.user_id, period):
-            return {"success": False, "message": "Stop active timers in this period before submitting"}
+            return {"success": False, "message": _("Stop active timers in this period before submitting")}
 
         period.status = TimesheetPeriodStatus.SUBMITTED
         period.submitted_at = local_now()
@@ -104,9 +105,9 @@ class WorkforceGovernanceService:
     def approve_period(self, period_id: int, approver_id: int, comment: Optional[str] = None) -> Dict[str, Any]:
         period = TimesheetPeriod.query.get(period_id)
         if not period:
-            return {"success": False, "message": "Timesheet period not found"}
+            return {"success": False, "message": _("Timesheet period not found")}
         if period.status not in (TimesheetPeriodStatus.SUBMITTED, TimesheetPeriodStatus.REJECTED):
-            return {"success": False, "message": "Only submitted/rejected periods can be approved"}
+            return {"success": False, "message": _("Only submitted/rejected periods can be approved")}
 
         policy = self.get_or_create_default_policy()
         approvers = policy.get_approver_ids()
@@ -117,7 +118,7 @@ class WorkforceGovernanceService:
                 if approver_id != approvers[0]:
                     return {
                         "success": False,
-                        "message": "This period is awaiting primary approver sign-off",
+                        "message": _("This period is awaiting primary approver sign-off"),
                     }
                 period.approved_by = approver_id
                 period.approved_at = local_now()
@@ -128,7 +129,7 @@ class WorkforceGovernanceService:
                 db.session.commit()
                 return {
                     "success": True,
-                    "message": "Primary approval recorded; awaiting secondary approver",
+                    "message": _("Primary approval recorded; awaiting secondary approver"),
                     "period": period,
                     "pending_secondary": True,
                 }
@@ -136,7 +137,7 @@ class WorkforceGovernanceService:
                 if approver_id != approvers[1]:
                     return {
                         "success": False,
-                        "message": "Only the secondary approver may complete this approval",
+                        "message": _("Only the secondary approver may complete this approval"),
                     }
                 period.secondary_approved_by = approver_id
                 period.secondary_approved_at = local_now()
@@ -159,9 +160,9 @@ class WorkforceGovernanceService:
     def reject_period(self, period_id: int, approver_id: int, reason: str) -> Dict[str, Any]:
         period = TimesheetPeriod.query.get(period_id)
         if not period:
-            return {"success": False, "message": "Timesheet period not found"}
+            return {"success": False, "message": _("Timesheet period not found")}
         if period.status != TimesheetPeriodStatus.SUBMITTED:
-            return {"success": False, "message": "Only submitted periods can be rejected"}
+            return {"success": False, "message": _("Only submitted periods can be rejected")}
         period.status = TimesheetPeriodStatus.REJECTED
         period.rejected_by = approver_id
         period.rejected_at = local_now()
@@ -176,7 +177,7 @@ class WorkforceGovernanceService:
     def close_period(self, period_id: int, closer_id: int, reason: Optional[str] = None) -> Dict[str, Any]:
         period = TimesheetPeriod.query.get(period_id)
         if not period:
-            return {"success": False, "message": "Timesheet period not found"}
+            return {"success": False, "message": _("Timesheet period not found")}
         if period.status == TimesheetPeriodStatus.CLOSED:
             return {"success": True, "period": period}
 
@@ -246,9 +247,9 @@ class WorkforceGovernanceService:
     ) -> Dict[str, Any]:
         leave_type = LeaveType.query.get(leave_type_id)
         if not leave_type or not leave_type.enabled:
-            return {"success": False, "message": "Invalid leave type"}
+            return {"success": False, "message": _("Invalid leave type")}
         if end_date < start_date:
-            return {"success": False, "message": "end_date must be after start_date"}
+            return {"success": False, "message": _("end_date must be after start_date")}
 
         # When requesting overtime-as-leave, cap requested_hours at accumulated YTD overtime
         if leave_type.code == "overtime" and requested_hours is not None and requested_hours > 0:
@@ -261,10 +262,14 @@ class WorkforceGovernanceService:
                 if float(requested_hours) > ytd_overtime:
                     return {
                         "success": False,
-                        "message": f"Requested hours ({requested_hours}) exceed your accumulated overtime (YTD: {ytd_overtime:.2f}h). Please request at most {ytd_overtime:.2f} hours.",
+                        "message": _(
+                            "Requested hours (%(requested)s) exceed your accumulated overtime (YTD: %(ytd)sh). Please request at most %(ytd)s hours.",
+                            requested=requested_hours,
+                            ytd=f"{ytd_overtime:.2f}",
+                        ),
                     }
             else:
-                return {"success": False, "message": "User not found"}
+                return {"success": False, "message": _("User not found")}
 
         status = TimeOffRequestStatus.SUBMITTED if submit_now else TimeOffRequestStatus.DRAFT
         req = TimeOffRequest(
@@ -291,9 +296,9 @@ class WorkforceGovernanceService:
     ) -> Dict[str, Any]:
         req = TimeOffRequest.query.get(request_id)
         if not req:
-            return {"success": False, "message": "Request not found"}
+            return {"success": False, "message": _("Request not found")}
         if req.status not in (TimeOffRequestStatus.SUBMITTED, TimeOffRequestStatus.DRAFT):
-            return {"success": False, "message": "Request has already been processed"}
+            return {"success": False, "message": _("Request has already been processed")}
 
         req.status = TimeOffRequestStatus.APPROVED if approve else TimeOffRequestStatus.REJECTED
         req.reviewed_at = local_now()
@@ -574,15 +579,15 @@ class WorkforceGovernanceService:
         """Delete a timesheet period. Only draft or rejected periods; actor must be owner or admin."""
         period = TimesheetPeriod.query.get(period_id)
         if not period:
-            return {"success": False, "message": "Timesheet period not found"}
+            return {"success": False, "message": _("Timesheet period not found")}
         user = User.query.get(actor_id)
         if not user:
-            return {"success": False, "message": "User not found"}
+            return {"success": False, "message": _("User not found")}
         if period.user_id != actor_id and not user.is_admin:
-            return {"success": False, "message": "Only the period owner or an admin can delete it"}
+            return {"success": False, "message": _("Only the period owner or an admin can delete it")}
         status = period.status.value if hasattr(period.status, "value") else str(period.status)
         if status not in (TimesheetPeriodStatus.DRAFT.value, TimesheetPeriodStatus.REJECTED.value):
-            return {"success": False, "message": "Only draft or rejected periods can be deleted"}
+            return {"success": False, "message": _("Only draft or rejected periods can be deleted")}
         db.session.delete(period)
         db.session.commit()
         return {"success": True}
@@ -591,16 +596,16 @@ class WorkforceGovernanceService:
         """Delete a time-off request. Only draft, submitted, or cancelled; actor must be owner or approver."""
         req = TimeOffRequest.query.get(request_id)
         if not req:
-            return {"success": False, "message": "Time-off request not found"}
+            return {"success": False, "message": _("Time-off request not found")}
         if req.user_id != actor_id and not actor_can_approve:
-            return {"success": False, "message": "Only the request owner or an approver can delete it"}
+            return {"success": False, "message": _("Only the request owner or an approver can delete it")}
         status = req.status.value if hasattr(req.status, "value") else str(req.status)
         if status not in (
             TimeOffRequestStatus.DRAFT.value,
             TimeOffRequestStatus.SUBMITTED.value,
             TimeOffRequestStatus.CANCELLED.value,
         ):
-            return {"success": False, "message": "Only draft, submitted, or cancelled requests can be deleted"}
+            return {"success": False, "message": _("Only draft, submitted, or cancelled requests can be deleted")}
         db.session.delete(req)
         db.session.commit()
         return {"success": True}
@@ -609,11 +614,11 @@ class WorkforceGovernanceService:
         """Delete a leave type. Fails if any time-off request references it."""
         leave_type = LeaveType.query.get(leave_type_id)
         if not leave_type:
-            return {"success": False, "message": "Leave type not found"}
+            return {"success": False, "message": _("Leave type not found")}
         if leave_type.requests.count() > 0:
             return {
                 "success": False,
-                "message": "Cannot delete leave type that has time-off requests",
+                "message": _("Cannot delete leave type that has time-off requests"),
             }
         db.session.delete(leave_type)
         db.session.commit()
@@ -623,7 +628,7 @@ class WorkforceGovernanceService:
         """Delete a company holiday."""
         holiday = CompanyHoliday.query.get(holiday_id)
         if not holiday:
-            return {"success": False, "message": "Holiday not found"}
+            return {"success": False, "message": _("Holiday not found")}
         db.session.delete(holiday)
         db.session.commit()
         return {"success": True}

@@ -8,6 +8,7 @@ from datetime import datetime, timedelta
 from typing import Any, Dict, List, Optional
 
 import requests
+from flask_babel import gettext as _
 
 from app.integrations.base import BaseConnector
 
@@ -189,7 +190,7 @@ class OutlookCalendarConnector(BaseConnector):
         """Test connection to Outlook Calendar."""
         token = self.get_access_token()
         if not token:
-            return {"success": False, "message": "No access token available"}
+            return {"success": False, "message": _("No access token available")}
 
         try:
             # Get user info and calendars
@@ -197,11 +198,11 @@ class OutlookCalendarConnector(BaseConnector):
 
             if response.status_code == 200:
                 calendars = response.json().get("value", [])
-                return {"success": True, "message": f"Connected to Outlook Calendar. Found {len(calendars)} calendars."}
+                return {"success": True, "message": _("Connected to Outlook Calendar. Found %(count)s calendars.", count=len(calendars))}
             else:
-                return {"success": False, "message": f"API returned status {response.status_code}"}
+                return {"success": False, "message": _("API returned status %(status)s", status=response.status_code)}
         except Exception as e:
-            return {"success": False, "message": f"Connection test failed: {str(e)}"}
+            return {"success": False, "message": _("Connection test failed: %(error)s", error=str(e))}
 
     def sync_data(self, sync_type: str = "full") -> Dict[str, Any]:
         """Sync time entries with Outlook Calendar."""
@@ -213,7 +214,7 @@ class OutlookCalendarConnector(BaseConnector):
         try:
             token = self.get_access_token()
             if not token:
-                return {"success": False, "message": "No access token available"}
+                return {"success": False, "message": _("No access token available")}
 
             # Get calendar ID from integration config
             calendar_id = self.integration.config.get("calendar_id", "calendar")
@@ -263,7 +264,7 @@ class OutlookCalendarConnector(BaseConnector):
             return {"success": True, "synced_count": synced_count, "errors": errors}
 
         except Exception as e:
-            return {"success": False, "message": f"Sync failed: {str(e)}"}
+            return {"success": False, "message": _("Sync failed: %(error)s", error=str(e))}
 
     def _create_calendar_event(self, token: str, calendar_id: str, time_entry) -> str:
         """Create a calendar event from a time entry."""

@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from flask import current_app
+from flask_babel import gettext as _
 from sqlalchemy import text
 
 from app import db
@@ -69,7 +70,7 @@ class BackupService:
                 result = subprocess.run(cmd, env=env, capture_output=True, text=True)
 
                 if result.returncode != 0:
-                    return {"success": False, "message": f"Backup failed: {result.stderr}", "error": "backup_failed"}
+                    return {"success": False, "message": _("Backup failed: %(error)s", error=result.stderr), "error": "backup_failed"}
 
             # SQLite backup
             elif "sqlite" in db_url:
@@ -77,14 +78,14 @@ class BackupService:
                 shutil.copy2(db_path, backup_path)
 
             else:
-                return {"success": False, "message": "Unsupported database type", "error": "unsupported_db"}
+                return {"success": False, "message": _("Unsupported database type"), "error": "unsupported_db"}
 
             # Get backup size
             backup_size = os.path.getsize(backup_path)
 
             return {
                 "success": True,
-                "message": "Backup created successfully",
+                "message": _("Backup created successfully"),
                 "backup_path": backup_path,
                 "backup_size": backup_size,
                 "backup_name": backup_name,
@@ -92,7 +93,7 @@ class BackupService:
 
         except Exception as e:
             current_app.logger.error(f"Backup failed: {e}")
-            return {"success": False, "message": f"Backup failed: {str(e)}", "error": "backup_error"}
+            return {"success": False, "message": _("Backup failed: %(error)s", error=str(e)), "error": "backup_error"}
 
     def list_backups(self) -> List[Dict[str, Any]]:
         """
@@ -135,10 +136,10 @@ class BackupService:
         backup_path = os.path.join(self.backup_dir, backup_name)
 
         if not os.path.exists(backup_path):
-            return {"success": False, "message": "Backup not found", "error": "not_found"}
+            return {"success": False, "message": _("Backup not found"), "error": "not_found"}
 
         try:
             os.remove(backup_path)
-            return {"success": True, "message": "Backup deleted successfully"}
+            return {"success": True, "message": _("Backup deleted successfully")}
         except Exception as e:
-            return {"success": False, "message": f"Failed to delete backup: {str(e)}", "error": "delete_error"}
+            return {"success": False, "message": _("Failed to delete backup: %(error)s", error=str(e)), "error": "delete_error"}

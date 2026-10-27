@@ -11,6 +11,7 @@ from datetime import date, datetime, timedelta
 from decimal import Decimal
 from typing import Dict, List, Optional, Tuple
 
+from flask_babel import gettext
 from sqlalchemy import func
 
 from app import db
@@ -111,7 +112,7 @@ def estimate_completion_date(project_id: int, analysis_days: int = 30) -> Option
             "remaining_budget": float(project.budget_amount) - project.budget_consumed_amount,
             "daily_burn_rate": 0,
             "confidence": "low",
-            "message": "No recent activity to estimate completion date",
+            "message": gettext("No recent activity to estimate completion date"),
         }
 
     budget_amount = float(project.budget_amount)
@@ -129,7 +130,7 @@ def estimate_completion_date(project_id: int, analysis_days: int = 30) -> Option
             "remaining_budget": remaining_budget,
             "daily_burn_rate": daily_burn,
             "confidence": "high",
-            "message": "Budget already exhausted",
+            "message": gettext("Budget already exhausted"),
         }
 
     days_remaining = int(remaining_budget / daily_burn) if daily_burn > 0 else 999999
@@ -146,7 +147,7 @@ def estimate_completion_date(project_id: int, analysis_days: int = 30) -> Option
         "remaining_budget": round(remaining_budget, 2),
         "daily_burn_rate": daily_burn,
         "confidence": confidence,
-        "message": f"Based on {analysis_days} days of activity",
+        "message": gettext("Based on %(days)d days of activity", days=analysis_days),
     }
 
 

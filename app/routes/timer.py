@@ -441,11 +441,11 @@ def start_timer():
         current_app.logger.warning("Failed to invalidate dashboard cache: %s", e)
 
     if task:
-        flash(f"Timer started for {project.name} - {task.name}", "success")
+        flash(_("Timer started for %(project)s - %(task)s", project=project.name, task=task.name), "success")
     elif project:
-        flash(f"Timer started for {project.name}", "success")
+        flash(_("Timer started for %(project)s", project=project.name), "success")
     elif client:
-        flash(f"Timer started for {client.name}", "success")
+        flash(_("Timer started for %(client)s", client=client.name), "success")
     else:
         flash(_("Timer started"), "success")
     return redirect(url_for("main.dashboard"))
@@ -545,7 +545,7 @@ def start_timer_from_template(template_id):
     except Exception as e:
         current_app.logger.warning("Failed to invalidate dashboard cache: %s", e)
 
-    flash(f'Timer started from template "{template.name}"', "success")
+    flash(_('Timer started from template "%(template)s"', template=template.name), "success")
     return redirect(url_for("main.dashboard"))
 
 
@@ -647,9 +647,9 @@ def start_timer_for_project(project_id):
     if task_id:
         task = Task.query.get(task_id)
         task_name = task.name if task else "Unknown Task"
-        flash(f"Timer started for {project.name} - {task_name}", "success")
+        flash(_("Timer started for %(project)s - %(task)s", project=project.name, task=task_name), "success")
     else:
-        flash(f"Timer started for {project.name}", "success")
+        flash(_("Timer started for %(project)s", project=project.name), "success")
 
     return redirect(url_for("main.dashboard"))
 
@@ -1464,7 +1464,7 @@ def delete_timer(timer_id):
     except Exception as e:
         current_app.logger.warning("Failed to invalidate dashboard cache: %s", e)
 
-    flash(f"Timer for {target_name} deleted successfully", "success")
+    flash(_("Timer for %(target)s deleted successfully", target=target_name), "success")
 
     # Add cache-busting parameter to ensure fresh page load
     import time
@@ -1881,7 +1881,7 @@ def manual_entry_for_project(project_id):
     # Check if project exists and is active
     project = Project.query.filter_by(id=project_id, status="active").first()
     if not project:
-        flash("Invalid project selected", "error")
+        flash(_("Invalid project selected"), "error")
         return redirect(url_for("main.dashboard"))
 
     # Get active projects and clients for dropdown
@@ -2022,7 +2022,7 @@ def bulk_entry():
             end_time_obj = datetime.strptime(end_time, "%H:%M").time()
 
             if end_time_obj <= start_time_obj:
-                flash("End time must be after start time", "error")
+                flash(_("End time must be after start time"), "error")
                 return render_template("timer/bulk_entry.html", **_bulk_ctx())
         except ValueError:
             flash(_("Invalid time format"), "error")
@@ -2067,7 +2067,10 @@ def bulk_entry():
 
         if existing_entries:
             flash(
-                f'Time entries already exist for these dates: {", ".join(existing_entries[:5])}{"..." if len(existing_entries) > 5 else ""}',
+                _(
+                    "Time entries already exist for these dates: %(dates)s",
+                    dates=", ".join(existing_entries[:5]) + ("..." if len(existing_entries) > 5 else ""),
+                ),
                 "error",
             )
             return render_template("timer/bulk_entry.html", **_bulk_ctx())
@@ -2106,7 +2109,15 @@ def bulk_entry():
                 task = Task.query.get(task_id)
                 task_name = f" - {task.name}" if task else ""
 
-            flash(f"Successfully created {len(created_entries)} time entries for {project.name}{task_name}", "success")
+            flash(
+                _(
+                    "Successfully created %(count)s time entries for %(project)s%(task)s",
+                    count=len(created_entries),
+                    project=project.name,
+                    task=task_name,
+                ),
+                "success",
+            )
             return redirect(url_for("main.dashboard"))
 
         except Exception as e:
@@ -2257,7 +2268,7 @@ def bulk_entry_for_project(project_id):
     # Check if project exists and is active
     project = Project.query.filter_by(id=project_id, status="active").first()
     if not project:
-        flash("Invalid project selected", "error")
+        flash(_("Invalid project selected"), "error")
         return redirect(url_for("main.dashboard"))
 
     # Get active projects/clients for dropdown
@@ -2357,7 +2368,7 @@ def resume_timer_by_id(timer_id):
 
     can_start, _unused = TimeTrackingService().can_start_timer(current_user.id)
     if not can_start:
-        flash("You already have an active timer. Stop it before resuming another one.", "error")
+        flash(_("You already have an active timer. Stop it before resuming another one."), "error")
         current_app.logger.info("Resume timer blocked: user already has an active timer")
         return redirect(url_for("main.dashboard"))
 
@@ -2529,11 +2540,11 @@ def resume_timer_by_id(timer_id):
     # Create success message
     if project:
         if task_name:
-            flash(f"Timer resumed for {project_name} - {task_name}", "success")
+            flash(_("Timer resumed for %(project)s - %(task)s", project=project_name, task=task_name), "success")
         else:
-            flash(f"Timer resumed for {project_name}", "success")
+            flash(_("Timer resumed for %(project)s", project=project_name), "success")
     elif client:
-        flash(f"Timer resumed for {client_name}", "success")
+        flash(_("Timer resumed for %(client)s", client=client_name), "success")
     else:
         flash(_("Timer resumed"), "success")
 

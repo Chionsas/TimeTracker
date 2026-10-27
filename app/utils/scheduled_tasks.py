@@ -4,6 +4,7 @@ import logging
 from datetime import datetime, timedelta
 
 from flask import current_app
+from flask_babel import gettext as _
 
 from app import db
 from app.models import (
@@ -469,7 +470,12 @@ def send_monthly_unpaid_hours_reports():
 
                 send_template_email(
                     to=email,
-                    subject=f"Monthly Unpaid Hours Report - {salesman_initial} ({last_month_start.strftime('%Y-%m-%d')} to {last_month_end.strftime('%Y-%m-%d')})",
+                    subject=_(
+                        "Monthly Unpaid Hours Report - %(salesman)s (%(start)s to %(end)s)",
+                        salesman=salesman_initial,
+                        start=last_month_start.strftime("%Y-%m-%d"),
+                        end=last_month_end.strftime("%Y-%m-%d"),
+                    ),
                     template="email/unpaid_hours_report.html",
                     salesman_initial=salesman_initial,
                     report_data=formatted_data,
@@ -1229,7 +1235,7 @@ def check_idle_timers():
                                 "user_id": entry.user_id,
                                 "timer_id": entry.id,
                                 "reason": "idle_needs_review",
-                                "message": (
+                                "message": _(
                                     "Your timer kept running while you were idle and now needs review. "
                                     "Trim it to your last activity or keep the time."
                                 ),
@@ -1360,21 +1366,19 @@ def _send_idle_push(entry, unanswered_action="review"):
         return
 
     if unanswered_action == "auto_stop":
-        message = (
+        message = _(
             "Your timer has been idle. Confirm you are still working or the timer "
             "will be stopped and the idle time kept."
         )
     else:
-        message = (
-            "Your timer has been idle. Confirm you are still working or it will be flagged for review."
-        )
+        message = _("Your timer has been idle. Confirm you are still working or it will be flagged for review.")
 
     note = {
         "kind": "idle_timeout",
-        "title": "Still working?",
+        "title": _("Still working?"),
         "message": message,
         "type": "warning",
-        "action": {"url": "/", "label": "Open TimeTracker"},
+        "action": {"url": "/", "label": _("Open TimeTracker")},
         "timer_id": entry.id,
         "idle_notified_at": entry.idle_notified_at.isoformat() if entry.idle_notified_at else None,
         "idle_unanswered_action": unanswered_action,
@@ -1421,10 +1425,10 @@ def _send_idle_stopped_push(entry, user_id=None):
 
     note = {
         "kind": "idle_auto_stop",
-        "title": "Timer stopped",
-        "message": "Your timer was stopped due to inactivity. The idle window was kept on the entry.",
+        "title": _("Timer stopped"),
+        "message": _("Your timer was stopped due to inactivity. The idle window was kept on the entry."),
         "type": "warning",
-        "action": {"url": "/time-entries", "label": "View entries"},
+        "action": {"url": "/time-entries", "label": _("View entries")},
         "timer_id": getattr(entry, "id", None),
     }
 

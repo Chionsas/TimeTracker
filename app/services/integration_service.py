@@ -6,6 +6,8 @@ import logging
 from datetime import datetime
 from typing import Any, Dict, List, Optional
 
+from flask_babel import gettext as _
+
 from app import db
 from app.constants import WebhookEvent
 from app.models import Integration, IntegrationCredential, IntegrationEvent, User
@@ -75,13 +77,16 @@ class IntegrationService:
             Dict with 'success', 'message', and 'integration'
         """
         if provider not in self._connector_registry:
-            return {"success": False, "message": f"Provider {provider} is not available."}
+            return {"success": False, "message": _("Provider %(provider)s is not available.", provider=provider)}
 
         # Google Calendar, CalDAV, and ActivityWatch are per-user, all others are global
         if provider in ("google_calendar", "caldav_calendar", "activitywatch"):
             is_global = False
             if not user_id:
-                return {"success": False, "message": f"{provider} integration requires a user_id."}
+                return {
+                    "success": False,
+                    "message": _("%(provider)s integration requires a user_id.", provider=provider),
+                }
         else:
             is_global = True
             user_id = None  # Global integrations don't have user_id
@@ -90,11 +95,17 @@ class IntegrationService:
         if is_global:
             existing = Integration.query.filter_by(provider=provider, is_global=True).first()
             if existing:
-                return {"success": False, "message": f"A global {provider} integration already exists."}
+                return {
+                    "success": False,
+                    "message": _("A global %(provider)s integration already exists.", provider=provider),
+                }
         else:
             existing = Integration.query.filter_by(provider=provider, user_id=user_id, is_global=False).first()
             if existing:
-                return {"success": False, "message": f"You already have a {provider} integration."}
+                return {
+                    "success": False,
+                    "message": _("You already have a %(provider)s integration.", provider=provider),
+                }
 
         connector_class = self._connector_registry[provider]
         display_name = connector_class.display_name if hasattr(connector_class, "display_name") else provider.title()
@@ -110,14 +121,14 @@ class IntegrationService:
 
         db.session.add(integration)
         if not safe_commit("create_integration", {"provider": provider, "user_id": user_id, "is_global": is_global}):
-            return {"success": False, "message": "Could not create integration due to a database error."}
+            return {"success": False, "message": _("Could not create integration due to a database error.")}
 
         emit_event(
             WebhookEvent.INTEGRATION_CREATED,
             {"integration_id": integration.id, "provider": provider, "user_id": user_id, "is_global": is_global},
         )
 
-        return {"success": True, "message": "Integration created successfully.", "integration": integration}
+        return {"success": True, "message": _("Integration created successfully."), "integration": integration}
 
     def get_integration(
         self, integration_id: int, user_id: Optional[int] = None, allow_admin_override: bool = False
@@ -188,7 +199,7 @@ class IntegrationService:
         """Delete an integration."""
         integration = self.get_integration(integration_id, user_id)
         if not integration:
-            return {"success": False, "message": "Integration not found."}
+            return {"success": False, "message": _("Integration not found.")}
 
         # Only admins can delete global integrations
         if integration.is_global:
@@ -196,7 +207,7 @@ class IntegrationService:
 
             user = User.query.get(user_id) if user_id else None
             if not user or not user.is_admin:
-                return {"success": False, "message": "Only administrators can delete global integrations."}
+                return {"success": False, "message": _("Only administrators can delete global integrations.")}
 
         # Explicitly delete associated credentials first
         credentials = IntegrationCredential.query.filter_by(integration_id=integration_id).all()
@@ -213,17 +224,17 @@ class IntegrationService:
         db.session.delete(integration)
 
         if not safe_commit("delete_integration", {"integration_id": integration_id}):
-            return {"success": False, "message": "Could not delete integration due to a database error."}
+            return {"success": False, "message": _("Could not delete integration due to a database error.")}
 
         emit_event(WebhookEvent.INTEGRATION_DELETED, {"integration_id": integration_id, "provider": provider})
 
-        return {"success": True, "message": "Integration deleted successfully."}
+        return {"success": True, "message": _("Integration deleted successfully.")}
 
     def reset_integration(self, integration_id: int, user_id: Optional[int] = None) -> Dict[str, Any]:
         """Reset an integration by removing credentials and clearing config."""
         integration = self.get_integration(integration_id, user_id)
         if not integration:
-            return {"success": False, "message": "Integration not found."}
+            return {"success": False, "message": _("Integration not found.")}
 
         # Only admins can reset global integrations
         if integration.is_global:
@@ -231,7 +242,7 @@ class IntegrationService:
 
             user = User.query.get(user_id) if user_id else None
             if not user or not user.is_admin:
-                return {"success": False, "message": "Only administrators can reset global integrations."}
+                return {"success": False, "message": _("Only administrators can reset global integrations.")}
 
         # Delete associated credentials
         credentials = IntegrationCredential.query.filter_by(integration_id=integration_id).all()
@@ -246,14 +257,14 @@ class IntegrationService:
         integration.last_error = None
 
         if not safe_commit("reset_integration", {"integration_id": integration_id}):
-            return {"success": False, "message": "Could not reset integration due to a database error."}
+            return {"success": False, "message": _("Could not reset integration due to a database error.")}
 
         emit_event(
             WebhookEvent.INTEGRATION_UPDATED,
             {"integration_id": integration_id, "provider": integration.provider, "action": "reset"},
         )
 
-        return {"success": True, "message": "Integration reset successfully. You can now reconfigure it."}
+        return {"success": True, "message": _("Integration reset successfully. You can now reconfigure it.")}
 
     def save_credentials(
         self,
@@ -268,7 +279,7 @@ class IntegrationService:
         """Save OAuth credentials for an integration."""
         integration = Integration.query.get(integration_id)
         if not integration:
-            return {"success": False, "message": "Integration not found."}
+            return {"success": False, "message": _("Integration not found.")}
 
         # Get or create credentials
         credentials = IntegrationCredential.query.filter_by(integration_id=integration_id).first()
@@ -288,9 +299,9 @@ class IntegrationService:
         integration.is_active = True
 
         if not safe_commit("save_integration_credentials", {"integration_id": integration_id}):
-            return {"success": False, "message": "Could not save credentials due to a database error."}
+            return {"success": False, "message": _("Could not save credentials due to a database error.")}
 
-        return {"success": True, "message": "Credentials saved successfully.", "credentials": credentials}
+        return {"success": True, "message": _("Credentials saved successfully."), "credentials": credentials}
 
     def test_connection(
         self, integration_id: int, user_id: Optional[int] = None, allow_admin_override: bool = False
@@ -298,11 +309,14 @@ class IntegrationService:
         """Test connection to integrated service."""
         integration = self.get_integration(integration_id, user_id, allow_admin_override=allow_admin_override)
         if not integration:
-            return {"success": False, "message": "Integration not found."}
+            return {"success": False, "message": _("Integration not found.")}
 
         connector = self.get_connector(integration)
         if not connector:
-            return {"success": False, "message": f"Connector for {integration.provider} is not available."}
+            return {
+                "success": False,
+                "message": _("Connector for %(provider)s is not available.", provider=integration.provider),
+            }
 
         try:
             result = connector.test_connection()
@@ -313,7 +327,7 @@ class IntegrationService:
             return result
         except Exception as e:
             logger.error(f"Error testing connection for integration {integration_id}: {e}")
-            return {"success": False, "message": f"Error testing connection: {str(e)}"}
+            return {"success": False, "message": _("Error testing connection: %(error)s", error=str(e))}
 
     def _log_event(
         self,

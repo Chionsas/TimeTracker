@@ -4,6 +4,8 @@ Service for project template business logic.
 
 from typing import Any, Dict, List, Optional
 
+from flask_babel import gettext as _
+
 from app import db
 from app.constants import WebhookEvent
 from app.models import Project, ProjectTemplate, Task, User
@@ -50,17 +52,17 @@ class ProjectTemplateService:
 
             db.session.add(template)
             if not safe_commit("create_template", {"name": name}):
-                return {"success": False, "message": "Could not create template due to a database error."}
+                return {"success": False, "message": _("Could not create template due to a database error.")}
 
             emit_event(
                 WebhookEvent.PROJECT_TEMPLATE_CREATED,
                 {"template_id": template.id, "template_name": template.name, "created_by": created_by},
             )
 
-            return {"success": True, "message": "Template created successfully.", "template": template}
+            return {"success": True, "message": _("Template created successfully."), "template": template}
         except Exception as e:
             db.session.rollback()
-            return {"success": False, "message": f"Error creating template: {str(e)}"}
+            return {"success": False, "message": _("Error creating template: %(error)s", error=str(e))}
 
     def create_project_from_template(
         self,
@@ -79,7 +81,7 @@ class ProjectTemplateService:
         try:
             template = ProjectTemplate.query.get(template_id)
             if not template:
-                return {"success": False, "message": "Template not found."}
+                return {"success": False, "message": _("Template not found.")}
 
             # Refresh template from database to ensure we have latest tasks data
             db.session.refresh(template)
@@ -215,10 +217,10 @@ class ProjectTemplateService:
             template.last_used_at = now_in_app_timezone()
             db.session.commit()
 
-            return {"success": True, "message": "Project created from template successfully.", "project": project}
+            return {"success": True, "message": _("Project created from template successfully."), "project": project}
         except Exception as e:
             db.session.rollback()
-            return {"success": False, "message": "Error creating project from template"}
+            return {"success": False, "message": _("Error creating project from template")}
 
     def get_template(self, template_id: int) -> Optional[ProjectTemplate]:
         """Get a template by ID"""
@@ -265,11 +267,11 @@ class ProjectTemplateService:
         try:
             template = ProjectTemplate.query.get(template_id)
             if not template:
-                return {"success": False, "message": "Template not found."}
+                return {"success": False, "message": _("Template not found.")}
 
             # Check permissions
             if template.created_by != user_id:
-                return {"success": False, "message": "You do not have permission to edit this template."}
+                return {"success": False, "message": _("You do not have permission to edit this template.")}
 
             # Update fields
             if "name" in kwargs:
@@ -298,16 +300,16 @@ class ProjectTemplateService:
                 template.is_public = kwargs["is_public"]
 
             if not safe_commit("update_template", {"template_id": template_id}):
-                return {"success": False, "message": "Could not update template due to a database error."}
+                return {"success": False, "message": _("Could not update template due to a database error.")}
 
             emit_event(
                 WebhookEvent.PROJECT_TEMPLATE_UPDATED, {"template_id": template.id, "template_name": template.name}
             )
 
-            return {"success": True, "message": "Template updated successfully.", "template": template}
+            return {"success": True, "message": _("Template updated successfully."), "template": template}
         except Exception as e:
             db.session.rollback()
-            return {"success": False, "message": f"Error updating template: {str(e)}"}
+            return {"success": False, "message": _("Error updating template: %(error)s", error=str(e))}
 
     def delete_template(self, template_id: int, user_id: int) -> Dict[str, Any]:
         """
@@ -319,23 +321,23 @@ class ProjectTemplateService:
         try:
             template = ProjectTemplate.query.get(template_id)
             if not template:
-                return {"success": False, "message": "Template not found."}
+                return {"success": False, "message": _("Template not found.")}
 
             # Check permissions
             if template.created_by != user_id:
-                return {"success": False, "message": "You do not have permission to delete this template."}
+                return {"success": False, "message": _("You do not have permission to delete this template.")}
 
             template_name = template.name
             db.session.delete(template)
 
             if not safe_commit("delete_template", {"template_id": template_id}):
-                return {"success": False, "message": "Could not delete template due to a database error."}
+                return {"success": False, "message": _("Could not delete template due to a database error.")}
 
             emit_event(
                 WebhookEvent.PROJECT_TEMPLATE_DELETED, {"template_id": template_id, "template_name": template_name}
             )
 
-            return {"success": True, "message": "Template deleted successfully."}
+            return {"success": True, "message": _("Template deleted successfully.")}
         except Exception as e:
             db.session.rollback()
-            return {"success": False, "message": f"Error deleting template: {str(e)}"}
+            return {"success": False, "message": _("Error deleting template: %(error)s", error=str(e))}

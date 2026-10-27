@@ -6,6 +6,8 @@ from datetime import date
 from decimal import Decimal
 from typing import Any, Dict, List, Optional
 
+from flask_babel import gettext as _
+
 from app import db
 from app.models import Expense
 from app.repositories import ExpenseRepository, ProjectRepository
@@ -50,11 +52,11 @@ class ExpenseService:
         if project_id:
             project = self.project_repo.get_by_id(project_id)
             if not project:
-                return {"success": False, "message": "Invalid project", "error": "invalid_project"}
+                return {"success": False, "message": _("Invalid project"), "error": "invalid_project"}
 
         # Validate amount
         if amount <= 0:
-            return {"success": False, "message": "Amount must be greater than zero", "error": "invalid_amount"}
+            return {"success": False, "message": _("Amount must be greater than zero"), "error": "invalid_amount"}
 
         # Use model directly for full field support
         from app.models import Expense
@@ -84,11 +86,11 @@ class ExpenseService:
         if not safe_commit("create_expense", {"project_id": project_id, "created_by": created_by}):
             return {
                 "success": False,
-                "message": "Could not create expense due to a database error",
+                "message": _("Could not create expense due to a database error"),
                 "error": "database_error",
             }
 
-        return {"success": True, "message": "Expense created successfully", "expense": expense}
+        return {"success": True, "message": _("Expense created successfully"), "expense": expense}
 
     def get_project_expenses(
         self, project_id: int, start_date: Optional[date] = None, end_date: Optional[date] = None
@@ -170,11 +172,11 @@ class ExpenseService:
         """
         expense = self.expense_repo.get_by_id(expense_id)
         if not expense:
-            return {"success": False, "message": "Expense not found", "error": "not_found"}
+            return {"success": False, "message": _("Expense not found"), "error": "not_found"}
 
         # Check permissions
         if not is_admin and expense.user_id != user_id:
-            return {"success": False, "message": "Access denied", "error": "access_denied"}
+            return {"success": False, "message": _("Access denied"), "error": "access_denied"}
 
         # Update fields
         for field in ("title", "description", "category", "currency_code", "payment_method", "status", "tags", "notes"):
@@ -193,11 +195,11 @@ class ExpenseService:
         if not safe_commit("update_expense", {"expense_id": expense_id, "user_id": user_id}):
             return {
                 "success": False,
-                "message": "Could not update expense due to a database error",
+                "message": _("Could not update expense due to a database error"),
                 "error": "database_error",
             }
 
-        return {"success": True, "message": "Expense updated successfully", "expense": expense}
+        return {"success": True, "message": _("Expense updated successfully"), "expense": expense}
 
     def delete_expense(self, expense_id: int, user_id: int, is_admin: bool = False) -> Dict[str, Any]:
         """
@@ -208,11 +210,11 @@ class ExpenseService:
         """
         expense = self.expense_repo.get_by_id(expense_id)
         if not expense:
-            return {"success": False, "message": "Expense not found", "error": "not_found"}
+            return {"success": False, "message": _("Expense not found"), "error": "not_found"}
 
         # Check permissions
         if not is_admin and expense.user_id != user_id:
-            return {"success": False, "message": "Access denied", "error": "access_denied"}
+            return {"success": False, "message": _("Access denied"), "error": "access_denied"}
 
         # Soft delete by setting status to rejected
         expense.status = "rejected"
@@ -220,8 +222,8 @@ class ExpenseService:
         if not safe_commit("delete_expense", {"expense_id": expense_id, "user_id": user_id}):
             return {
                 "success": False,
-                "message": "Could not delete expense due to a database error",
+                "message": _("Could not delete expense due to a database error"),
                 "error": "database_error",
             }
 
-        return {"success": True, "message": "Expense rejected successfully"}
+        return {"success": True, "message": _("Expense rejected successfully")}

@@ -71,7 +71,7 @@ def ai_context_preview():
 def ai_test_connection():
     """Test the configured AI provider. Admins/settings managers can use this from settings."""
     if not (current_user.is_admin or current_user.has_permission("manage_settings")):
-        return jsonify({"ok": False, "error": "Admin permission required", "error_code": "forbidden"}), 403
+        return jsonify({"ok": False, "error": _("Admin permission required"), "error_code": "forbidden"}), 403
     try:
         return jsonify(LLMService().test_connection())
     except AIServiceError as exc:
@@ -277,9 +277,9 @@ def api_version_check():
     """Admin only: compare installed version to latest GitHub release (cached)."""
     user = _effective_user_for_version_api()
     if user is None:
-        return jsonify({"error": "unauthorized", "message": "Authentication required"}), 401
+        return jsonify({"error": "unauthorized", "message": _("Authentication required")}), 401
     if not user.is_admin:
-        return jsonify({"error": "forbidden", "message": "Admin only"}), 403
+        return jsonify({"error": "forbidden", "message": _("Admin only")}), 403
     from app.services.version_service import VersionService
 
     return jsonify(VersionService.build_check_response(user))
@@ -291,9 +291,9 @@ def api_version_dismiss():
     """Admin only: remember not to show update popup for this normalized release version."""
     user = _effective_user_for_version_api()
     if user is None:
-        return jsonify({"error": "unauthorized", "message": "Authentication required"}), 401
+        return jsonify({"error": "unauthorized", "message": _("Authentication required")}), 401
     if not user.is_admin:
-        return jsonify({"error": "forbidden", "message": "Admin only"}), 403
+        return jsonify({"error": "forbidden", "message": _("Admin only")}), 403
     data = request.get_json(silent=True) or {}
     raw = data.get("latest_version")
     if not isinstance(raw, str) or not raw.strip():
@@ -413,7 +413,7 @@ def api_timer_heartbeat():
     """Record activity for the active timer (idle timeout safety net)."""
     active_timer = current_user.active_timer
     if not active_timer:
-        return jsonify({"error": "No active timer"}), 400
+        return jsonify({"error": _("No active timer")}), 400
 
     try:
         active_timer.record_heartbeat()
@@ -421,7 +421,7 @@ def api_timer_heartbeat():
     except Exception as e:
         db.session.rollback()
         current_app.logger.warning("Timer heartbeat failed: %s", e)
-        return jsonify({"error": "Failed to record heartbeat"}), 500
+        return jsonify({"error": _("Failed to record heartbeat")}), 500
 
     return ("", 204)
 
@@ -448,7 +448,7 @@ def api_timer_review():
 
     active_timer = current_user.active_timer
     if not active_timer:
-        return jsonify({"error": "No active timer"}), 400
+        return jsonify({"error": _("No active timer")}), 400
 
     try:
         if action == "continue":
@@ -456,7 +456,7 @@ def api_timer_review():
             active_timer.last_heartbeat_at = local_now()
             if not safe_commit("timer_review", {"user_id": current_user.id, "entry_id": active_timer.id}):
                 db.session.rollback()
-                return jsonify({"error": "Failed to resolve review"}), 500
+                return jsonify({"error": _("Failed to resolve review")}), 500
             return jsonify({"ok": True, "stopped": False})
 
         if action == "keep" and data.get("end_time"):
@@ -483,7 +483,7 @@ def api_timer_review():
     except Exception as e:
         db.session.rollback()
         current_app.logger.warning("Timer review failed: %s", e)
-        return jsonify({"error": "Failed to resolve review"}), 500
+        return jsonify({"error": _("Failed to resolve review")}), 500
 
 
 @api_bp.route("/api/timer/idle-response", methods=["POST"])
@@ -510,14 +510,14 @@ def api_timer_idle_response():
         current_app.logger.warning("Request validation failed: %s", e)
         return client_error_response("Invalid request", 400)
     except LookupError:
-        return jsonify({"error": "No active timer"}), 400
+        return jsonify({"error": _("No active timer")}), 400
     except RuntimeError:
         db.session.rollback()
-        return jsonify({"error": "Failed to resolve idle prompt"}), 500
+        return jsonify({"error": _("Failed to resolve idle prompt")}), 500
     except Exception as e:
         db.session.rollback()
         current_app.logger.warning("Idle response failed: %s", e)
-        return jsonify({"error": "Failed to resolve idle prompt"}), 500
+        return jsonify({"error": _("Failed to resolve idle prompt")}), 500
 
     payload = {"ok": True, "already_resolved": result["already_resolved"], "stopped": result["stopped"]}
     if result.get("time_entry") is not None:
@@ -647,7 +647,7 @@ def list_tasks_for_project():
     # Validate project exists and is active
     project = Project.query.filter_by(id=project_id, status="active").first()
     if not project:
-        return jsonify({"error": "Invalid project"}), 400
+        return jsonify({"error": _("Invalid project")}), 400
 
     query = Task.query.filter_by(project_id=project_id)
     if status:
@@ -671,10 +671,10 @@ def api_start_timer():
     notes = (data.get("notes") or "").strip() or None
 
     if not project_id:
-        return jsonify({"error": "Project ID is required"}), 400
+        return jsonify({"error": _("Project ID is required")}), 400
 
     if not user_can_access_project(current_user, project_id):
-        return jsonify({"error": "You do not have access to this project"}), 403
+        return jsonify({"error": _("You do not have access to this project")}), 403
 
     service = TimeTrackingService()
     result = service.start_timer(
@@ -727,7 +727,7 @@ def api_stop_timer():
     active_timer = current_user.active_timer
 
     if not active_timer:
-        return jsonify({"error": "No active timer to stop"}), 400
+        return jsonify({"error": _("No active timer to stop")}), 400
 
     service = TimeTrackingService()
     result = service.stop_timer(user_id=current_user.id, entry_id=active_timer.id)
@@ -759,7 +759,7 @@ def api_stop_timer_at():
     """Stop the active timer at a specific timestamp (idle adjustment)."""
     active_timer = current_user.active_timer
     if not active_timer:
-        return jsonify({"error": "No active timer to stop"}), 400
+        return jsonify({"error": _("No active timer to stop")}), 400
 
     data = request.get_json() or {}
     stop_time_str = data.get("stop_time")  # ISO string
@@ -779,7 +779,7 @@ def api_stop_timer_at():
         else:
             stop_time_local = parsed
     except Exception:
-        return jsonify({"error": "Invalid stop_time format"}), 400
+        return jsonify({"error": _("Invalid stop_time format")}), 400
 
     if stop_time_local <= active_timer.start_time:
         return jsonify({"error": "stop_time must be after start time"}), 400
@@ -793,7 +793,7 @@ def api_stop_timer_at():
         active_timer.stop_timer(end_time=stop_time_local)
     except Exception as e:
         current_app.logger.warning("Failed to stop timer at specific time: %s", e)
-        return jsonify({"error": "Failed to stop timer"}), 500
+        return jsonify({"error": _("Failed to stop timer")}), 500
 
     socketio.emit(
         "timer_stopped",
@@ -811,7 +811,7 @@ def api_resume_timer():
     """Resume timer for last used project/task or provided project/task."""
     can_start, _reason = TimeTrackingService().can_start_timer(current_user.id)
     if not can_start:
-        return jsonify({"error": "Timer already running"}), 400
+        return jsonify({"error": _("Timer already running")}), 400
 
     data = request.get_json() or {}
     project_id = data.get("project_id")
@@ -825,19 +825,19 @@ def api_resume_timer():
             .first()
         )
         if not last:
-            return jsonify({"error": "No previous entry to resume"}), 404
+            return jsonify({"error": _("No previous entry to resume")}), 404
         project_id = last.project_id
         task_id = last.task_id
 
     # Validate project is active
     project = Project.query.filter_by(id=project_id, status="active").first()
     if not project:
-        return jsonify({"error": "Invalid or inactive project"}), 400
+        return jsonify({"error": _("Invalid or inactive project")}), 400
 
     if task_id:
         task = Task.query.filter_by(id=task_id, project_id=project_id).first()
         if not task:
-            return jsonify({"error": "Invalid task for selected project"}), 400
+            return jsonify({"error": _("Invalid task for selected project")}), 400
 
     service = TimeTrackingService()
     result = service.start_timer(
@@ -944,7 +944,7 @@ def project_burndown(project_id):
     if not current_user.is_admin:
         has_entries = db.session.query(TimeEntry.id).filter_by(user_id=current_user.id, project_id=project_id).first()
         if not has_entries:
-            return jsonify({"error": "Access denied"}), 403
+            return jsonify({"error": _("Access denied")}), 403
 
     # Date range: last 30 days up to today
     end_date = datetime.utcnow().date()
@@ -1046,7 +1046,7 @@ def project_forecast(project_id):
     """
     try:
         if not user_can_access_project(current_user, project_id):
-            return jsonify({"ok": False, "error": "Access denied"}), 403
+            return jsonify({"ok": False, "error": _("Access denied")}), 403
 
         include_ai = _truthy_param(request.args.get("ai"))
         refresh = _truthy_param(request.args.get("refresh"))
@@ -1143,7 +1143,7 @@ def finish_focus_session():
         return jsonify({"error": "session_id is required"}), 400
     fs = FocusSession.query.get_or_404(session_id)
     if fs.user_id != current_user.id and not current_user.is_admin:
-        return jsonify({"error": "Access denied"}), 403
+        return jsonify({"error": _("Access denied")}), 403
 
     result = PomodoroService().end_session(session_id=session_id, notes=(data.get("notes") or "").strip() or None)
     return jsonify(result)
@@ -1165,9 +1165,9 @@ def complete_focus_cycle(session_id):
 
     fs = FocusSession.query.get_or_404(session_id)
     if fs.user_id != current_user.id and not current_user.is_admin:
-        return jsonify({"error": "Access denied"}), 403
+        return jsonify({"error": _("Access denied")}), 403
     if fs.ended_at:
-        return jsonify({"error": "Session already ended"}), 400
+        return jsonify({"error": _("Session already ended")}), 400
     return jsonify(PomodoroService().complete_cycle(session_id))
 
 
@@ -1179,9 +1179,9 @@ def interrupt_focus_session(session_id):
     data = request.get_json() or {}
     fs = FocusSession.query.get_or_404(session_id)
     if fs.user_id != current_user.id and not current_user.is_admin:
-        return jsonify({"error": "Access denied"}), 403
+        return jsonify({"error": _("Access denied")}), 403
     if fs.ended_at:
-        return jsonify({"error": "Session already ended"}), 400
+        return jsonify({"error": _("Session already ended")}), 400
     return jsonify(PomodoroService().log_interruption(session_id, reason=data.get("reason")))
 
 
@@ -1254,11 +1254,11 @@ def recurring_blocks_list_create():
         if ends_on:
             block.ends_on = datetime.fromisoformat(ends_on).date()
     except Exception:
-        return jsonify({"error": "Invalid starts_on/ends_on date format"}), 400
+        return jsonify({"error": _("Invalid starts_on/ends_on date format")}), 400
 
     db.session.add(block)
     if not safe_commit("create_recurring_block", {"user_id": current_user.id}):
-        return jsonify({"error": "Database error while creating recurring block"}), 500
+        return jsonify({"error": _("Database error while creating recurring block")}), 500
     return jsonify({"success": True, "block": block.to_dict()})
 
 
@@ -1267,12 +1267,12 @@ def recurring_blocks_list_create():
 def recurring_block_update_delete(block_id):
     block = RecurringBlock.query.get_or_404(block_id)
     if block.user_id != current_user.id and not current_user.is_admin:
-        return jsonify({"error": "Access denied"}), 403
+        return jsonify({"error": _("Access denied")}), 403
 
     if request.method == "DELETE":
         db.session.delete(block)
         if not safe_commit("delete_recurring_block", {"id": block.id}):
-            return jsonify({"error": "Database error while deleting recurring block"}), 500
+            return jsonify({"error": _("Database error while deleting recurring block")}), 500
         return jsonify({"success": True})
 
     data = request.get_json() or {}
@@ -1292,10 +1292,10 @@ def recurring_block_update_delete(block_id):
         if "ends_on" in data:
             block.ends_on = datetime.fromisoformat(data.get("ends_on")).date() if data.get("ends_on") else None
     except Exception:
-        return jsonify({"error": "Invalid starts_on/ends_on date format"}), 400
+        return jsonify({"error": _("Invalid starts_on/ends_on date format")}), 400
 
     if not safe_commit("update_recurring_block", {"id": block.id}):
-        return jsonify({"error": "Database error while updating recurring block"}), 500
+        return jsonify({"error": _("Database error while updating recurring block")}), 500
     return jsonify({"success": True, "block": block.to_dict()})
 
 
@@ -1317,7 +1317,7 @@ def saved_filters_list_create():
     filt = SavedFilter(user_id=current_user.id, name=name, scope=scope, payload=payload, is_shared=is_shared)
     db.session.add(filt)
     if not safe_commit("create_saved_filter", {"name": name, "scope": scope}):
-        return jsonify({"error": "Database error while creating saved filter"}), 500
+        return jsonify({"error": _("Database error while creating saved filter")}), 500
     return jsonify({"success": True, "filter": filt.to_dict()})
 
 
@@ -1326,10 +1326,10 @@ def saved_filters_list_create():
 def delete_saved_filter(filter_id):
     filt = SavedFilter.query.get_or_404(filter_id)
     if filt.user_id != current_user.id and not current_user.is_admin:
-        return jsonify({"error": "Access denied"}), 403
+        return jsonify({"error": _("Access denied")}), 403
     db.session.delete(filt)
     if not safe_commit("delete_saved_filter", {"id": filt.id}):
-        return jsonify({"error": "Database error while deleting saved filter"}), 500
+        return jsonify({"error": _("Database error while deleting saved filter")}), 500
     return jsonify({"success": True})
 
 
@@ -1354,7 +1354,7 @@ def create_entry():
         return jsonify({"error": "start_time and end_time are required"}), 400
 
     if not project_id and not client_id:
-        return jsonify({"error": "Either project_id or client_id is required"}), 400
+        return jsonify({"error": _("Either project_id or client_id is required")}), 400
 
     def parse_iso_local(s: str):
         try:
@@ -1371,7 +1371,7 @@ def create_entry():
     start_dt = parse_iso_local(start_time_str)
     end_dt = parse_iso_local(end_time_str)
     if not (start_dt and end_dt) or end_dt <= start_dt:
-        return jsonify({"error": "Invalid start/end time"}), 400
+        return jsonify({"error": _("Invalid start/end time")}), 400
 
     # Use service to create entry (handles validation)
     time_tracking_service = TimeTrackingService()
@@ -1502,7 +1502,7 @@ def calendar_events():
     start_dt = parse_iso(start)
     end_dt = parse_iso(end)
     if not (start_dt and end_dt):
-        return jsonify({"error": "Invalid date range"}), 400
+        return jsonify({"error": _("Invalid date range")}), 400
 
     # Get all calendar items using the new method
     result = CalendarEventModel.get_events_in_range(
@@ -1694,7 +1694,7 @@ def calendar_export():
     start_dt = parse_iso(start)
     end_dt = parse_iso(end)
     if not (start_dt and end_dt):
-        return jsonify({"error": "Invalid date range"}), 400
+        return jsonify({"error": _("Invalid date range")}), 400
 
     # Build query
     q = TimeEntry.query.filter(TimeEntry.user_id == current_user.id)
@@ -1788,7 +1788,7 @@ def calendar_export():
         )
         return response
 
-    return jsonify({"error": 'Invalid format. Use "ical" or "csv"'}), 400
+    return jsonify({"error": _('Invalid format. Use "ical" or "csv"')}), 400
 
 
 @api_bp.route("/api/projects")
@@ -1808,7 +1808,7 @@ def get_project_tasks(project_id):
     # Check if project exists and is active
     project = Project.query.filter_by(id=project_id, status="active").first()
     if not project:
-        return jsonify({"error": "Project not found or inactive"}), 404
+        return jsonify({"error": _("Project not found or inactive")}), 404
 
     # Return ALL tasks for the project (including done/cancelled).
     # This is used by the manual time entry UI where users may need to log time
@@ -1879,7 +1879,7 @@ def create_task_inline():
         project = Project.query.filter_by(id=project_id, status="active").first()
         if not project:
             if wants_json:
-                return jsonify({"error": "Project not found or inactive"}), 404
+                return jsonify({"error": _("Project not found or inactive")}), 404
             from flask import flash, redirect, url_for
 
             flash(_("Selected project does not exist or is inactive"), "error")
@@ -1955,7 +1955,7 @@ def create_task_inline():
 def get_entry(entry_id):
     entry = TimeEntry.query.get_or_404(entry_id)
     if entry.user_id != current_user.id and not current_user.is_admin:
-        return jsonify({"error": "Access denied"}), 403
+        return jsonify({"error": _("Access denied")}), 403
     payload = entry.to_dict()
     payload["project_name"] = entry.project.name if entry.project else None
     return jsonify(payload)
@@ -1967,7 +1967,7 @@ def get_entry(entry_id):
 def get_users():
     """Get active users (admin only). Uses a single aggregate query for total_hours to avoid N+1."""
     if not current_user.is_admin:
-        return jsonify({"error": "Access denied"}), 403
+        return jsonify({"error": _("Access denied")}), 403
 
     users = User.query.filter_by(is_active=True).order_by(User.username).all()
     if not users:
@@ -2146,7 +2146,7 @@ def update_entry(entry_id):
 
     # Check permissions
     if entry.user_id != current_user.id and not current_user.is_admin:
-        return jsonify({"error": "Access denied"}), 403
+        return jsonify({"error": _("Access denied")}), 403
 
     data = request.get_json() or {}
     reason = data.get("reason")  # Optional reason for the change
@@ -2290,12 +2290,12 @@ def get_editor_upload_folder() -> str:
 def upload_editor_image():
     """Handle image uploads from the markdown editor."""
     if "image" not in request.files:
-        return jsonify({"error": "No image provided"}), 400
+        return jsonify({"error": _("No image provided")}), 400
     file = request.files["image"]
     if not file or file.filename == "":
-        return jsonify({"error": "No image provided"}), 400
+        return jsonify({"error": _("No image provided")}), 400
     if not allowed_image_file(file.filename):
-        return jsonify({"error": "Invalid file type"}), 400
+        return jsonify({"error": _("Invalid file type")}), 400
 
     filename = secure_filename(file.filename)
     ext = filename.rsplit(".", 1)[1].lower()
@@ -2313,11 +2313,11 @@ def upload_editor_image():
 def upload_editor_images_bulk():
     """Handle multiple image uploads from the markdown editor."""
     if "images" not in request.files:
-        return jsonify({"error": "No images provided"}), 400
+        return jsonify({"error": _("No images provided")}), 400
 
     files = request.files.getlist("images")
     if not files or all(f.filename == "" for f in files):
-        return jsonify({"error": "No images provided"}), 400
+        return jsonify({"error": _("No images provided")}), 400
 
     uploaded_urls = []
     errors = []
@@ -2344,7 +2344,7 @@ def upload_editor_images_bulk():
             errors.append(f"File {idx + 1} ({file.filename}): upload failed")
 
     if not uploaded_urls and errors:
-        return jsonify({"error": "All uploads failed", "details": errors}), 400
+        return jsonify({"error": _("All uploads failed"), "details": errors}), 400
 
     response = {"success": True, "urls": uploaded_urls}
     if errors:

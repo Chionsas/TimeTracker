@@ -155,7 +155,7 @@ def restore(filename=None):
 
         # Initialize progress state
         token = uuid.uuid4().hex[:8]
-        RESTORE_PROGRESS[token] = {"status": "starting", "percent": 0, "message": "Queued"}
+        RESTORE_PROGRESS[token] = {"status": "starting", "percent": 0, "message": _("Queued")}
 
         def progress_cb(label, percent):
             RESTORE_PROGRESS[token] = {"status": "running", "percent": int(percent), "message": label}

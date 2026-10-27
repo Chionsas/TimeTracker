@@ -7,6 +7,7 @@ from typing import Any, Dict, List
 from urllib.parse import urlencode
 
 import requests
+from flask_babel import gettext as _
 
 from app.integrations.base import BaseConnector
 
@@ -119,14 +120,19 @@ class OutlookEmailConnector(BaseConnector):
     def test_connection(self) -> Dict[str, Any]:
         token = self.get_access_token()
         if not token:
-            return {"success": False, "message": "Not authenticated"}
+            return {"success": False, "message": _("Not authenticated")}
         r = requests.get(
             f"{self.API_BASE}/me",
             headers={"Authorization": f"Bearer {token}"},
             timeout=20,
         )
         if r.status_code == 200:
-            return {"success": True, "message": f"Outlook OK ({r.json().get('mail') or r.json().get('userPrincipalName')})"}
+            return {
+                "success": True,
+                "message": _(
+                    "Outlook OK (%(account)s)", account=r.json().get("mail") or r.json().get("userPrincipalName")
+                ),
+            }
         return {"success": False, "message": f"HTTP {r.status_code}"}
 
     def list_recent_threads(self, max_results: int = 25) -> List[Dict[str, Any]]:

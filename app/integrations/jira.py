@@ -12,6 +12,7 @@ from datetime import datetime, timedelta
 from typing import Any, Dict, Optional
 
 import requests
+from flask_babel import gettext as _
 
 from app.integrations.base import BaseConnector
 
@@ -143,7 +144,7 @@ class JiraConnector(BaseConnector):
         """Test connection to Jira."""
         token = self.get_access_token()
         if not token:
-            return {"success": False, "message": "No access token available"}
+            return {"success": False, "message": _("No access token available")}
 
         base_url = self.integration.config.get("jira_url", "https://your-domain.atlassian.net")
         api_url = f"{base_url}/rest/api/3/myself"
@@ -153,11 +154,14 @@ class JiraConnector(BaseConnector):
 
             if response.status_code == 200:
                 user_data = response.json()
-                return {"success": True, "message": f"Connected as {user_data.get('displayName', 'Unknown')}"}
+                return {
+                    "success": True,
+                    "message": _("Connected as %(name)s", name=user_data.get("displayName", "Unknown")),
+                }
             else:
-                return {"success": False, "message": f"API returned status {response.status_code}"}
+                return {"success": False, "message": _("API returned status %(status)s", status=response.status_code)}
         except Exception as e:
-            return {"success": False, "message": f"Connection error: {str(e)}"}
+            return {"success": False, "message": _("Connection error: %(error)s", error=str(e))}
 
     def _extract_description_text(self, issue_fields: Dict[str, Any]) -> Optional[str]:
         """Extract plain text from Jira description (ADF content structure)."""
@@ -254,7 +258,7 @@ class JiraConnector(BaseConnector):
 
         token = self.get_access_token()
         if not token:
-            return {"success": False, "message": "No access token available"}
+            return {"success": False, "message": _("No access token available")}
 
         from app.utils.integration_sync_context import require_sync_context
 
@@ -288,7 +292,10 @@ class JiraConnector(BaseConnector):
             )
 
             if response.status_code != 200:
-                return {"success": False, "message": f"Jira API returned status {response.status_code}"}
+                return {
+                    "success": False,
+                    "message": _("Jira API returned status %(status)s", status=response.status_code),
+                }
 
             issues = response.json().get("issues", [])
 
@@ -302,12 +309,12 @@ class JiraConnector(BaseConnector):
 
             return {
                 "success": True,
-                "message": f"Sync completed. Synced {synced_count} issues.",
+                "message": _("Sync completed. Synced %(count)d issues.", count=synced_count),
                 "synced_items": synced_count,
                 "errors": errors,
             }
         except Exception as e:
-            return {"success": False, "message": f"Sync failed: {str(e)}"}
+            return {"success": False, "message": _("Sync failed: %(error)s", error=str(e))}
 
     def sync_issue(self, issue_key: str) -> Dict[str, Any]:
         """

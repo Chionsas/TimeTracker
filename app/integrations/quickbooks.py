@@ -10,6 +10,7 @@ from datetime import datetime, timedelta
 from typing import Any, Dict, List, Optional
 
 import requests
+from flask_babel import gettext as _
 
 from app.integrations.base import BaseConnector
 from app.integrations.sync_config import (
@@ -181,11 +182,11 @@ class QuickBooksConnector(BaseConnector):
         try:
             realm_id = self.integration.config.get("realm_id") if self.integration else None
             if not realm_id:
-                return {"success": False, "message": "QuickBooks company not configured"}
+                return {"success": False, "message": _("QuickBooks company not configured")}
 
             access_token = self.get_access_token()
             if not access_token:
-                return {"success": False, "message": "QuickBooks access token not available"}
+                return {"success": False, "message": _("QuickBooks access token not available")}
 
             company_info = self._api_request(
                 "GET", f"/v3/company/{realm_id}/companyinfo/{realm_id}", access_token, realm_id
@@ -193,11 +194,14 @@ class QuickBooksConnector(BaseConnector):
 
             if company_info:
                 company_name = company_info.get("CompanyInfo", {}).get("CompanyName", "Unknown")
-                return {"success": True, "message": f"Connected to QuickBooks company: {company_name}"}
+                return {
+                    "success": True,
+                    "message": _("Connected to QuickBooks company: %(company)s", company=company_name),
+                }
             else:
-                return {"success": False, "message": "Failed to retrieve company information"}
+                return {"success": False, "message": _("Failed to retrieve company information")}
         except Exception as e:
-            return {"success": False, "message": f"Connection test failed: {str(e)}"}
+            return {"success": False, "message": _("Connection test failed: %(error)s", error=str(e))}
 
     def _api_request(
         self, method: str, endpoint: str, access_token: str, realm_id: str, json_data: Optional[Dict] = None
@@ -229,10 +233,10 @@ class QuickBooksConnector(BaseConnector):
             return response.json()
         except requests.exceptions.Timeout:
             logger.error(f"QuickBooks API request timeout: {method} {endpoint}")
-            raise ValueError("QuickBooks API request timed out. Please try again.")
+            raise ValueError(_("QuickBooks API request timed out. Please try again."))
         except requests.exceptions.ConnectionError as e:
             logger.error(f"QuickBooks API connection error: {e}")
-            raise ValueError(f"Failed to connect to QuickBooks API: {str(e)}")
+            raise ValueError(_("Failed to connect to QuickBooks API: %(error)s", error=str(e)))
         except requests.exceptions.HTTPError as e:
             error_detail = ""
             if e.response:
@@ -249,7 +253,7 @@ class QuickBooksConnector(BaseConnector):
             raise ValueError(error_msg)
         except Exception as e:
             logger.error(f"QuickBooks API request failed: {e}", exc_info=True)
-            raise ValueError(f"QuickBooks API request failed: {str(e)}")
+            raise ValueError(_("QuickBooks API request failed: %(error)s", error=str(e)))
 
     def sync_data(self, sync_type: str = "full") -> Dict[str, Any]:
         """Sync invoices and expenses with QuickBooks"""
@@ -262,17 +266,17 @@ class QuickBooksConnector(BaseConnector):
                 return {
                     "success": True,
                     "synced_count": 0,
-                    "message": "Export disabled by sync_direction",
+                    "message": _("Export disabled by sync_direction"),
                     "errors": [],
                 }
 
             realm_id = config.get("realm_id")
             if not realm_id:
-                return {"success": False, "message": "QuickBooks company not configured"}
+                return {"success": False, "message": _("QuickBooks company not configured")}
 
             access_token = self.get_access_token()
             if not access_token:
-                return {"success": False, "message": "No access token available. Please reconnect the integration."}
+                return {"success": False, "message": _("No access token available. Please reconnect the integration.")}
 
             synced_count = 0
             errors = []
@@ -357,19 +361,23 @@ class QuickBooksConnector(BaseConnector):
                 db.session.rollback()
                 return {
                     "success": False,
-                    "message": f"Database error during sync: {str(e)}",
+                    "message": _("Database error during sync: %(error)s", error=str(e)),
                     "synced_count": synced_count,
                     "errors": errors,
                 }
 
-            message = f"Successfully synced {synced_count} items."
+            message = _("Successfully synced %(count)d items.", count=synced_count)
             if errors:
-                message = f"Sync completed with {len(errors)} error(s). Synced {synced_count} items."
+                message = _(
+                    "Sync completed with %(errors)d error(s). Synced %(count)d items.",
+                    errors=len(errors),
+                    count=synced_count,
+                )
             return {"success": True, "synced_count": synced_count, "errors": errors, "message": message}
 
         except Exception as e:
             logger.error("QuickBooks sync failed", exc_info=True)
-            return {"success": False, "message": f"Sync failed: {str(e)}"}
+            return {"success": False, "message": _("Sync failed: %(error)s", error=str(e))}
 
     def _create_quickbooks_invoice(self, invoice, access_token: str, realm_id: str) -> Optional[Dict]:
         """Create invoice in QuickBooks"""

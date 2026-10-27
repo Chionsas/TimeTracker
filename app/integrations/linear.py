@@ -9,6 +9,8 @@ from __future__ import annotations
 import logging
 from typing import Any, Dict, List, Optional
 
+from flask_babel import gettext
+
 from app.integrations.base import BaseConnector
 from app.utils.integration_http import integration_session, session_request
 
@@ -45,7 +47,7 @@ class LinearConnector(BaseConnector):
     def _graphql(self, query: str, variables: Optional[Dict] = None) -> Dict[str, Any]:
         key = self._api_key()
         if not key:
-            raise ValueError("No Linear API key configured.")
+            raise ValueError(gettext("No Linear API key configured."))
         session = integration_session()
         resp = session_request(
             session,
@@ -66,7 +68,7 @@ class LinearConnector(BaseConnector):
             data = self._graphql("query { viewer { id name } }")
             viewer = data.get("viewer") or {}
             name = viewer.get("name") or viewer.get("id") or "OK"
-            return {"success": True, "message": f"Connected to Linear as {name}."}
+            return {"success": True, "message": gettext("Connected to Linear as %(name)s.", name=name)}
         except Exception as e:
             return {"success": False, "message": str(e)}
 
@@ -83,7 +85,10 @@ class LinearConnector(BaseConnector):
 
         key = self._api_key()
         if not key:
-            return {"success": False, "message": "No Linear API key. Save your key under Integrations → Linear."}
+            return {
+                "success": False,
+                "message": gettext("No Linear API key. Save your key under Integrations → Linear."),
+            }
 
         team_filter = (self.integration.config or {}).get("linear_team_keys", "")
         team_keys: Optional[List[str]] = None
@@ -218,11 +223,11 @@ class LinearConnector(BaseConnector):
             db.session.commit()
         except Exception as e:
             db.session.rollback()
-            return {"success": False, "message": f"Database error: {e}"}
+            return {"success": False, "message": gettext("Database error: %(error)s", error=e)}
 
-        msg = f"Processed {len(all_nodes)} Linear issues."
+        msg = gettext("Processed %(count)s Linear issues.", count=len(all_nodes))
         if errors:
-            msg += f" ({len(errors)} errors)"
+            msg += " " + gettext("(%(count)s errors)", count=len(errors))
         return {
             "success": True,
             "message": msg,

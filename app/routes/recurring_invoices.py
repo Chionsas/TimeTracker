@@ -138,7 +138,7 @@ def create_recurring_invoice():
             flash(_("Could not create recurring invoice due to a database error. Please check server logs."), "error")
             return render_template("recurring_invoices/create.html")
 
-        flash(f'Recurring invoice "{name}" created successfully', "success")
+        flash(_('Recurring invoice "%(name)s" created successfully', name=name), "success")
         return redirect(url_for("recurring_invoices.list_recurring_invoices"))
 
     # GET request - show form
@@ -258,7 +258,7 @@ def delete_recurring_invoice(recurring_id):
         flash(_("Could not delete recurring invoice due to a database error. Please check server logs."), "error")
         return redirect(url_for("recurring_invoices.list_recurring_invoices"))
 
-    flash(f'Recurring invoice "{name}" deleted successfully', "success")
+    flash(_('Recurring invoice "%(name)s" deleted successfully', name=name), "success")
     return redirect(url_for("recurring_invoices.list_recurring_invoices"))
 
 
@@ -271,7 +271,7 @@ def generate_invoice_now(recurring_id):
 
     # Check access permissions
     if not current_user.is_admin and recurring.created_by != current_user.id:
-        return jsonify({"error": "Permission denied"}), 403
+        return jsonify({"error": _("Permission denied")}), 403
 
     try:
         # Temporarily set next_run_date to today to allow generation
@@ -281,11 +281,13 @@ def generate_invoice_now(recurring_id):
         invoice = recurring.generate_invoice()
         if invoice:
             db.session.commit()
-            flash(f"Invoice {invoice.invoice_number} generated successfully", "success")
+            flash(
+                _("Invoice %(invoice_number)s generated successfully", invoice_number=invoice.invoice_number), "success"
+            )
             return jsonify({"success": True, "invoice_id": invoice.id, "invoice_number": invoice.invoice_number})
         else:
             recurring.next_run_date = original_next_run_date
-            return jsonify({"error": "Failed to generate invoice"}), 400
+            return jsonify({"error": _("Failed to generate invoice")}), 400
 
     except Exception as e:
         logger.error(f"Error generating invoice from recurring template: {e}")

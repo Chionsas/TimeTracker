@@ -6,6 +6,8 @@ import logging
 from decimal import Decimal
 from typing import Any, Dict, List, Optional
 
+from flask_babel import gettext as _
+
 from app import db
 from app.constants import WebhookEvent
 from app.models import Invoice, PaymentGateway, PaymentTransaction
@@ -40,7 +42,7 @@ class PaymentGatewayService:
             # Check if name already exists
             existing = PaymentGateway.query.filter_by(name=name).first()
             if existing:
-                return {"success": False, "message": "A gateway with this name already exists."}
+                return {"success": False, "message": _("A gateway with this name already exists.")}
 
             # Encrypt config (in production, use proper encryption)
             # For now, we'll store as JSON string
@@ -56,13 +58,13 @@ class PaymentGatewayService:
 
             db.session.add(gateway)
             if not safe_commit("create_gateway", {"name": name}):
-                return {"success": False, "message": "Could not create gateway due to a database error."}
+                return {"success": False, "message": _("Could not create gateway due to a database error.")}
 
             return {"success": True, "message": "Payment gateway created successfully.", "gateway": gateway}
         except Exception as e:
             db.session.rollback()
             logger.error(f"Error creating payment gateway: {e}")
-            return {"success": False, "message": f"Error creating gateway: {str(e)}"}
+            return {"success": False, "message": _("Error creating gateway: %(error)s", error=str(e))}
 
     def get_gateway(self, gateway_id: int) -> Optional[PaymentGateway]:
         """Get a gateway by ID"""

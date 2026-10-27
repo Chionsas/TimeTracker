@@ -10,6 +10,7 @@ from datetime import datetime, timedelta
 from typing import Any, Dict, List, Optional
 
 import requests
+from flask_babel import gettext as _
 
 from app.integrations.base import BaseConnector
 from app.integrations.sync_config import (
@@ -186,21 +187,21 @@ class XeroConnector(BaseConnector):
                     tenant_id = self.credentials.extra_data.get("tenantId")
 
             if not tenant_id:
-                return {"success": False, "message": "Xero tenant not configured"}
+                return {"success": False, "message": _("Xero tenant not configured")}
 
             access_token = self.get_access_token()
             if not access_token:
-                return {"success": False, "message": "Xero access token not available"}
+                return {"success": False, "message": _("Xero access token not available")}
 
             organisation_info = self._api_request("GET", "/api.xro/2.0/Organisation", access_token, tenant_id)
 
             if organisation_info:
                 org_name = organisation_info.get("Organisations", [{}])[0].get("Name", "Unknown")
-                return {"success": True, "message": f"Connected to Xero organisation: {org_name}"}
+                return {"success": True, "message": _("Connected to Xero organisation: %(name)s", name=org_name)}
             else:
-                return {"success": False, "message": "Failed to retrieve organisation information"}
+                return {"success": False, "message": _("Failed to retrieve organisation information")}
         except Exception as e:
-            return {"success": False, "message": f"Connection test failed: {str(e)}"}
+            return {"success": False, "message": _("Connection test failed: %(error)s", error=str(e))}
 
     def _api_request(
         self,
@@ -245,7 +246,7 @@ class XeroConnector(BaseConnector):
                 return {
                     "success": True,
                     "synced_count": 0,
-                    "message": "Export disabled by sync_direction",
+                    "message": _("Export disabled by sync_direction"),
                     "errors": [],
                 }
 
@@ -254,11 +255,11 @@ class XeroConnector(BaseConnector):
                 tenant_id = self.credentials.extra_data.get("tenantId")
 
             if not tenant_id:
-                return {"success": False, "message": "Xero tenant not configured"}
+                return {"success": False, "message": _("Xero tenant not configured")}
 
             access_token = self.get_access_token()
             if not access_token:
-                return {"success": False, "message": "Xero access token not available"}
+                return {"success": False, "message": _("Xero access token not available")}
 
             synced_count = 0
             errors = []
@@ -320,7 +321,7 @@ class XeroConnector(BaseConnector):
             return {"success": True, "synced_count": synced_count, "errors": errors}
 
         except Exception as e:
-            return {"success": False, "message": f"Sync failed: {str(e)}"}
+            return {"success": False, "message": _("Sync failed: %(error)s", error=str(e))}
 
     def _record_sync_error(self, entity_type: str, entity_id, message: str):
         try:

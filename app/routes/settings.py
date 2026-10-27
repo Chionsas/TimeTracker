@@ -63,7 +63,7 @@ def _keyboard_shortcuts_config():
 def api_keyboard_shortcuts_get():
     """GET current keyboard shortcut config (defaults + user overrides)."""
     if not current_user.is_authenticated:
-        return jsonify({"error": "Unauthorized"}), 401
+        return jsonify({"error": _("Unauthorized")}), 401
     return jsonify(_keyboard_shortcuts_config())
 
 
@@ -72,11 +72,11 @@ def api_keyboard_shortcuts_get():
 def api_keyboard_shortcuts_save():
     """POST to save user overrides. Body: { \"overrides\": { \"id\": \"key\", ... } }."""
     if not current_user.is_authenticated:
-        return jsonify({"error": "Unauthorized"}), 401
+        return jsonify({"error": _("Unauthorized")}), 401
     data = request.get_json(silent=True) or {}
     overrides = data.get("overrides")
     if overrides is not None and not isinstance(overrides, dict):
-        return jsonify({"error": "overrides must be an object"}), 400
+        return jsonify({"error": _("overrides must be an object")}), 400
     overrides = overrides or {}
     ok, err, merged, overrides_to_save = validate_overrides(overrides)
     if not ok:
@@ -95,7 +95,7 @@ def api_keyboard_shortcuts_save():
 def api_keyboard_shortcuts_reset():
     """POST to reset keyboard shortcuts to defaults."""
     if not current_user.is_authenticated:
-        return jsonify({"error": "Unauthorized"}), 401
+        return jsonify({"error": _("Unauthorized")}), 401
     current_user.keyboard_shortcuts_overrides = None
     try:
         db.session.commit()

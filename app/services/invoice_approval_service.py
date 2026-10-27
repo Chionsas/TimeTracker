@@ -5,6 +5,8 @@ Service for invoice approval workflow business logic.
 import logging
 from typing import Any, Dict, List, Optional
 
+from flask_babel import gettext as _
+
 from app import db
 from app.constants import WebhookEvent
 from app.models import Invoice, InvoiceApproval, User
@@ -39,13 +41,13 @@ class InvoiceApprovalService:
         try:
             invoice = Invoice.query.get(invoice_id)
             if not invoice:
-                return {"success": False, "message": "Invoice not found."}
+                return {"success": False, "message": _("Invoice not found.")}
 
             # Check if approval already exists
             existing = InvoiceApproval.query.filter_by(invoice_id=invoice_id, status="pending").first()
 
             if existing:
-                return {"success": False, "message": "An approval request is already pending for this invoice."}
+                return {"success": False, "message": _("An approval request is already pending for this invoice.")}
 
             # Create stages if not provided
             if not stages:
@@ -74,7 +76,7 @@ class InvoiceApprovalService:
 
             db.session.add(approval)
             if not safe_commit("request_approval", {"invoice_id": invoice_id}):
-                return {"success": False, "message": "Could not create approval request due to a database error."}
+                return {"success": False, "message": _("Could not create approval request due to a database error.")}
 
             emit_event(
                 WebhookEvent.INVOICE_APPROVAL_REQUESTED,
@@ -86,11 +88,11 @@ class InvoiceApprovalService:
                 },
             )
 
-            return {"success": True, "message": "Approval request created successfully.", "approval": approval}
+            return {"success": True, "message": _("Approval request created successfully."), "approval": approval}
         except Exception:
             db.session.rollback()
             logger.exception("Error creating approval request for invoice %s", sanitize_log_value(invoice_id))
-            return {"success": False, "message": "Error creating approval request"}
+            return {"success": False, "message": _("Error creating approval request")}
 
     def approve(self, approval_id: int, approver_id: int, comments: Optional[str] = None) -> Dict[str, Any]:
         """
@@ -102,19 +104,19 @@ class InvoiceApprovalService:
         try:
             approval = InvoiceApproval.query.get(approval_id)
             if not approval:
-                return {"success": False, "message": "Approval not found."}
+                return {"success": False, "message": _("Approval not found.")}
 
             if approval.status != "pending":
-                return {"success": False, "message": f"Approval is not pending (current status: {approval.status})."}
+                return {"success": False, "message": _("Approval is not pending (current status: %(status)s).", status=approval.status)}
 
             # Get current stage
             current_stage_data = approval.stages[approval.current_stage] if approval.stages else None
             if not current_stage_data:
-                return {"success": False, "message": "Invalid approval stage."}
+                return {"success": False, "message": _("Invalid approval stage.")}
 
             # Check if user is the approver for this stage
             if current_stage_data.get("approver_id") != approver_id:
-                return {"success": False, "message": "You are not authorized to approve at this stage."}
+                return {"success": False, "message": _("You are not authorized to approve at this stage.")}
 
             # Update current stage
             current_stage_data["status"] = "approved"
@@ -138,7 +140,7 @@ class InvoiceApprovalService:
                     invoice.status = "sent"
 
             if not safe_commit("approve_invoice", {"approval_id": approval_id}):
-                return {"success": False, "message": "Could not update approval due to a database error."}
+                return {"success": False, "message": _("Could not update approval due to a database error.")}
 
             # Emit event if fully approved
             if approval.status == "approved":
@@ -147,11 +149,11 @@ class InvoiceApprovalService:
                     {"invoice_id": approval.invoice_id, "approval_id": approval.id, "approved_by": approver_id},
                 )
 
-            return {"success": True, "message": "Invoice approved successfully.", "approval": approval}
+            return {"success": True, "message": _("Invoice approved successfully."), "approval": approval}
         except Exception:
             db.session.rollback()
             logger.exception("Error approving invoice approval %s", sanitize_log_value(approval_id))
-            return {"success": False, "message": "Error approving invoice"}
+            return {"success": False, "message": _("Error approving invoice")}
 
     def reject(self, approval_id: int, rejector_id: int, reason: str) -> Dict[str, Any]:
         """
@@ -163,10 +165,10 @@ class InvoiceApprovalService:
         try:
             approval = InvoiceApproval.query.get(approval_id)
             if not approval:
-                return {"success": False, "message": "Approval not found."}
+                return {"success": False, "message": _("Approval not found.")}
 
             if approval.status != "pending":
-                return {"success": False, "message": f"Approval is not pending (current status: {approval.status})."}
+                return {"success": False, "message": _("Approval is not pending (current status: %(status)s).", status=approval.status)}
 
             # Update approval
             approval.status = "rejected"
@@ -183,7 +185,7 @@ class InvoiceApprovalService:
                 approval.stages[approval.current_stage] = current_stage_data
 
             if not safe_commit("reject_invoice", {"approval_id": approval_id}):
-                return {"success": False, "message": "Could not update approval due to a database error."}
+                return {"success": False, "message": _("Could not update approval due to a database error.")}
 
             emit_event(
                 WebhookEvent.INVOICE_REJECTED,
@@ -195,11 +197,11 @@ class InvoiceApprovalService:
                 },
             )
 
-            return {"success": True, "message": "Invoice approval rejected.", "approval": approval}
+            return {"success": True, "message": _("Invoice approval rejected."), "approval": approval}
         except Exception:
             db.session.rollback()
             logger.exception("Error rejecting invoice approval %s", sanitize_log_value(approval_id))
-            return {"success": False, "message": "Error rejecting invoice"}
+            return {"success": False, "message": _("Error rejecting invoice")}
 
     def get_approval(self, approval_id: int) -> Optional[InvoiceApproval]:
         """Get an approval by ID"""

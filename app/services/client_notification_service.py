@@ -8,6 +8,8 @@ import re
 from datetime import datetime
 from typing import Any, Dict, List, Optional
 
+from flask_babel import gettext as _
+
 from app import db
 from app.models import Client, Contact
 from app.models.client_notification import ClientNotification, ClientNotificationPreferences, NotificationType
@@ -101,10 +103,14 @@ class ClientNotificationService:
         notification = self.create_notification(
             client_id=client_id,
             notification_type=NotificationType.INVOICE_CREATED.value,
-            title=f"New Invoice: {invoice.invoice_number}",
-            message=f"A new invoice has been created for {invoice.total_amount} {invoice.currency_code}.",
+            title=_("New Invoice: %(invoice_number)s", invoice_number=invoice.invoice_number),
+            message=_(
+                "A new invoice has been created for %(amount)s %(currency)s.",
+                amount=invoice.total_amount,
+                currency=invoice.currency_code,
+            ),
             link_url=f"/client-portal/invoices/{invoice_id}",
-            link_text="View Invoice",
+            link_text=_("View Invoice"),
             metadata={"invoice_id": invoice_id},
         )
         return notification
@@ -120,10 +126,15 @@ class ClientNotificationService:
         notification = self.create_notification(
             client_id=client_id,
             notification_type=NotificationType.INVOICE_PAID.value,
-            title=f"Invoice Paid: {invoice.invoice_number}",
-            message=f"Payment of {amount} {invoice.currency_code} has been received for invoice {invoice.invoice_number}.",
+            title=_("Invoice Paid: %(invoice_number)s", invoice_number=invoice.invoice_number),
+            message=_(
+                "Payment of %(amount)s %(currency)s has been received for invoice %(invoice_number)s.",
+                amount=amount,
+                currency=invoice.currency_code,
+                invoice_number=invoice.invoice_number,
+            ),
             link_url=f"/client-portal/invoices/{invoice_id}",
-            link_text="View Invoice",
+            link_text=_("View Invoice"),
             metadata={"invoice_id": invoice_id, "amount": amount},
         )
         return notification
@@ -139,10 +150,16 @@ class ClientNotificationService:
         notification = self.create_notification(
             client_id=client_id,
             notification_type=NotificationType.INVOICE_OVERDUE.value,
-            title=f"Overdue Invoice: {invoice.invoice_number}",
-            message=f"Invoice {invoice.invoice_number} is {days_overdue} days overdue. Amount: {invoice.outstanding_amount} {invoice.currency_code}.",
+            title=_("Overdue Invoice: %(invoice_number)s", invoice_number=invoice.invoice_number),
+            message=_(
+                "Invoice %(invoice_number)s is %(days)s days overdue. Amount: %(amount)s %(currency)s.",
+                invoice_number=invoice.invoice_number,
+                days=days_overdue,
+                amount=invoice.outstanding_amount,
+                currency=invoice.currency_code,
+            ),
             link_url=f"/client-portal/invoices/{invoice_id}",
-            link_text="View Invoice",
+            link_text=_("View Invoice"),
             metadata={"invoice_id": invoice_id, "days_overdue": days_overdue},
         )
         return notification
@@ -158,10 +175,13 @@ class ClientNotificationService:
         notification = self.create_notification(
             client_id=client_id,
             notification_type=NotificationType.TIME_ENTRY_APPROVAL.value,
-            title="Time Entry Approval Requested",
-            message=f"A time entry for {approval.time_entry.project.name if approval.time_entry.project else 'project'} requires your approval.",
+            title=_("Time Entry Approval Requested"),
+            message=_(
+                "A time entry for %(project)s requires your approval.",
+                project=approval.time_entry.project.name if approval.time_entry.project else _("project"),
+            ),
             link_url=f"/client-portal/approvals/{approval_id}",
-            link_text="Review Approval",
+            link_text=_("Review Approval"),
             metadata={"approval_id": approval_id, "time_entry_id": approval.time_entry_id},
         )
         return notification
@@ -177,10 +197,14 @@ class ClientNotificationService:
         notification = self.create_notification(
             client_id=client_id,
             notification_type=NotificationType.QUOTE_AVAILABLE.value,
-            title=f"New Quote: {quote.quote_number}",
-            message=f"A new quote has been created for {quote.total_amount} {quote.currency_code}.",
+            title=_("New Quote: %(quote_number)s", quote_number=quote.quote_number),
+            message=_(
+                "A new quote has been created for %(amount)s %(currency)s.",
+                amount=quote.total_amount,
+                currency=quote.currency_code,
+            ),
             link_url=f"/client-portal/quotes/{quote_id}",
-            link_text="View Quote",
+            link_text=_("View Quote"),
             metadata={"quote_id": quote_id},
         )
         return notification
@@ -196,10 +220,14 @@ class ClientNotificationService:
         notification = self.create_notification(
             client_id=client_id,
             notification_type=NotificationType.PROJECT_MILESTONE.value,
-            title=f"Milestone Reached: {milestone_name}",
-            message=f"Project {project.name} has reached the milestone: {milestone_name}.",
+            title=_("Milestone Reached: %(milestone)s", milestone=milestone_name),
+            message=_(
+                "Project %(project)s has reached the milestone: %(milestone)s.",
+                project=project.name,
+                milestone=milestone_name,
+            ),
             link_url=f"/client-portal/projects",
-            link_text="View Projects",
+            link_text=_("View Projects"),
             metadata={"project_id": project_id, "milestone": milestone_name},
         )
         return notification
@@ -215,10 +243,14 @@ class ClientNotificationService:
         notification = self.create_notification(
             client_id=client_id,
             notification_type=NotificationType.BUDGET_ALERT.value,
-            title=f"Budget Alert: {project.name}",
-            message=f"Project {project.name} has reached {budget_percentage:.0f}% of its budget.",
+            title=_("Budget Alert: %(project)s", project=project.name),
+            message=_(
+                "Project %(project)s has reached %(percentage).0f%% of its budget.",
+                project=project.name,
+                percentage=budget_percentage,
+            ),
             link_url=f"/client-portal/projects",
-            link_text="View Project",
+            link_text=_("View Project"),
             metadata={"project_id": project_id, "budget_percentage": budget_percentage},
         )
         return notification

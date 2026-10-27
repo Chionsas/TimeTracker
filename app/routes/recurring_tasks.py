@@ -127,7 +127,7 @@ def create_recurring_task():
         db.session.add(recurring_task)
         if not safe_commit("create_recurring_task"):
             if request.is_json:
-                return jsonify({"error": "Database error"}), 500
+                return jsonify({"error": _("Database error")}), 500
             flash(_("Could not create recurring task due to a database error."), "error")
             return render_template(
                 "recurring_tasks/create.html",
@@ -180,7 +180,7 @@ def edit_recurring_task(task_id):
 
         if not safe_commit("edit_recurring_task", {"task_id": task_id}):
             if request.is_json:
-                return jsonify({"error": "Database error"}), 500
+                return jsonify({"error": _("Database error")}), 500
             flash(_("Could not update recurring task due to a database error."), "error")
             return render_template(
                 "recurring_tasks/edit.html",
@@ -232,11 +232,11 @@ def toggle_recurring_task(task_id):
     recurring_task = RecurringTask.query.get_or_404(task_id)
 
     if not _can_manage_recurring_task(recurring_task):
-        return jsonify({"error": "Access denied"}), 403
+        return jsonify({"error": _("Access denied")}), 403
 
     recurring_task.is_active = not recurring_task.is_active
     if not safe_commit("toggle_recurring_task", {"task_id": task_id}):
-        return jsonify({"error": "Database error"}), 500
+        return jsonify({"error": _("Database error")}), 500
 
     return jsonify({"success": True, "is_active": recurring_task.is_active})
 
@@ -249,7 +249,7 @@ def run_recurring_task_now(task_id):
     recurring_task = RecurringTask.query.get_or_404(task_id)
 
     if not _can_manage_recurring_task(recurring_task):
-        return jsonify({"error": "Access denied"}), 403
+        return jsonify({"error": _("Access denied")}), 403
 
     if not recurring_task.is_active:
         return jsonify({"error": _("Recurring task is inactive")}), 400

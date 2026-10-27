@@ -90,11 +90,11 @@ def save_report_view():
     try:
         # Check if request has JSON data
         if not request.is_json:
-            return jsonify({"success": False, "message": "Request must be JSON"}), 400
+            return jsonify({"success": False, "message": _("Request must be JSON")}), 400
 
         data = request.get_json(silent=False)
         if data is None:
-            return jsonify({"success": False, "message": "Invalid JSON in request body"}), 400
+            return jsonify({"success": False, "message": _("Invalid JSON in request body")}), 400
 
         name = data.get("name")
         config = data.get("config", {})
@@ -102,13 +102,13 @@ def save_report_view():
         view_id = data.get("view_id")  # For editing existing reports
 
         if not name or not name.strip():
-            return jsonify({"success": False, "message": "Report name is required"}), 400
+            return jsonify({"success": False, "message": _("Report name is required")}), 400
 
         name = name.strip()
 
         # Validate config is a dictionary
         if not isinstance(config, dict):
-            return jsonify({"success": False, "message": "Config must be a dictionary"}), 400
+            return jsonify({"success": False, "message": _("Config must be a dictionary")}), 400
 
         # Extract iterative report generation settings
         iterative_report_generation = data.get("iterative_report_generation", False)
@@ -121,11 +121,11 @@ def save_report_view():
         if view_id:
             existing = SavedReportView.query.get(view_id)
             if not existing:
-                return jsonify({"success": False, "message": "Report not found"}), 404
+                return jsonify({"success": False, "message": _("Report not found")}), 404
 
             # Check permission
             if existing.owner_id != current_user.id and existing.scope == "private":
-                return jsonify({"success": False, "message": "You do not have permission to edit this report"}), 403
+                return jsonify({"success": False, "message": _("You do not have permission to edit this report")}), 403
 
             # Update existing
             existing.name = name
@@ -170,7 +170,7 @@ def save_report_view():
             )
         else:
             db.session.rollback()
-            return jsonify({"success": False, "message": "Failed to save report due to a database error"}), 500
+            return jsonify({"success": False, "message": _("Failed to save report due to a database error")}), 500
 
     except json.JSONDecodeError as e:
         return jsonify({"success": False, **client_error_payload(key="message")}), 400
@@ -224,17 +224,17 @@ def preview_report():
     try:
         # Validate JSON request
         if not request.is_json:
-            return jsonify({"success": False, "message": "Request must be JSON"}), 400
+            return jsonify({"success": False, "message": _("Request must be JSON")}), 400
 
         data = request.get_json(silent=False)
         if data is None:
-            return jsonify({"success": False, "message": "Invalid JSON in request body"}), 400
+            return jsonify({"success": False, "message": _("Invalid JSON in request body")}), 400
 
         config = data.get("config", {})
 
         # Validate that config is a dictionary
         if not isinstance(config, dict):
-            return jsonify({"success": False, "message": "Config must be a dictionary"}), 400
+            return jsonify({"success": False, "message": _("Config must be a dictionary")}), 400
 
         # Generate report data
         report_data = generate_report_data(config, current_user.id)
@@ -358,7 +358,7 @@ def generate_report_data(config, user_id=None):
                 user = User.query.get(user_id)
                 if not user:
                     # User not found, return empty results
-                    return {"success": False, "message": f"User {user_id} not found", "data": []}
+                    return {"success": False, "message": _("User %(user_id)s not found", user_id=user_id), "data": []}
                 if not user.is_admin:
                     query = query.filter(TimeEntry.user_id == user_id)
 
@@ -514,7 +514,7 @@ def generate_report_data(config, user_id=None):
         if user_id:
             user = User.query.get(user_id)
             if not user:
-                return {"success": False, "message": f"User {user_id} not found", "data": []}
+                return {"success": False, "message": _("User %(user_id)s not found", user_id=user_id), "data": []}
             if not user.is_admin:
                 query = query.filter(Expense.user_id == user_id)
 
@@ -578,7 +578,7 @@ def generate_report_data(config, user_id=None):
         if user_id:
             user = User.query.get(user_id)
             if not user:
-                return {"success": False, "message": f"User {user_id} not found", "data": []}
+                return {"success": False, "message": _("User %(user_id)s not found", user_id=user_id), "data": []}
             if not user.is_admin:
                 query = query.filter(Invoice.created_by == user_id)
 
@@ -745,7 +745,7 @@ def create_shared_report_link(view_id):
     """Create a share link for the current user (session auth for web UI)."""
     saved_view = SavedReportView.query.get_or_404(view_id)
     if saved_view.owner_id != current_user.id and not current_user.is_admin:
-        return jsonify({"error": "Access denied"}), 403
+        return jsonify({"error": _("Access denied")}), 403
 
     data = request.get_json(silent=True) or {}
     expiry = (data.get("expiry") or "never").lower()
@@ -755,7 +755,7 @@ def create_shared_report_link(view_id):
     elif expiry == "30d":
         expires_in_days = 30
     elif expiry not in ("never", ""):
-        return jsonify({"error": "Invalid expiry option"}), 400
+        return jsonify({"error": _("Invalid expiry option")}), 400
 
     password = (data.get("password") or "").strip() or None
     service = SharedReportService()
@@ -766,7 +766,7 @@ def create_shared_report_link(view_id):
         password=password,
     )
     if not safe_commit("create_shared_report_link", {"view_id": view_id}):
-        return jsonify({"error": "Failed to create share link"}), 500
+        return jsonify({"error": _("Failed to create share link")}), 500
 
     return jsonify(
         {
