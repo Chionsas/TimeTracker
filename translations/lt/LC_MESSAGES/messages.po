@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  TimeTracker\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-10-27 01:57+0200\n"
+"POT-Creation-Date: 2026-10-27 02:40+0200\n"
 "PO-Revision-Date: 2026-10-12 02:33+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: lt\n"
@@ -18,14 +18,14 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.18.0\n"
 
-#: app/__init__.py:619 app/routes/client_portal.py:102
+#: app/__init__.py:630 app/routes/client_portal.py:102
 #: app/routes/client_portal.py:109 app/routes/client_portal.py:267
 #: app/routes/client_portal.py:295 app/routes/client_portal.py:304
 #: app/routes/client_portal.py:308 app/routes/client_portal.py:336
 msgid "Please log in to access the client portal."
 msgstr "Prisijunk, kad galėtum naudotis klientų portalu."
 
-#: app/__init__.py:1182 app/__init__.py:1229
+#: app/__init__.py:1193 app/__init__.py:1240
 msgid "Your session expired or the page was open too long. Please try again."
 msgstr ""
 "Tavo sesija baigėsi arba puslapis buvo atidarytas per ilgai. Bandyk dar "
@@ -861,13 +861,13 @@ msgstr "Jei įjungi klientų portalo prieigą, pasirink klientą."
 
 #: app/routes/admin.py:1206 app/routes/auth.py:325 app/routes/auth.py:493
 #: app/routes/auth.py:615 app/routes/auth.py:912 app/routes/auth.py:1024
-#: app/routes/client_portal.py:491 app/templates/admin/user_form.html:69
+#: app/routes/client_portal.py:506 app/templates/admin/user_form.html:69
 #: app/templates/auth/change_password.html:28
 msgid "Password must be at least 8 characters long."
 msgstr "Slaptažodį turi sudaryti bent 8 simboliai."
 
 #: app/routes/admin.py:1216 app/routes/auth.py:328 app/routes/auth.py:916
-#: app/routes/auth.py:1028 app/routes/client_portal.py:495
+#: app/routes/auth.py:1028 app/routes/client_portal.py:510
 msgid "Passwords do not match."
 msgstr "Slaptažodžiai nesutampa."
 
@@ -1115,7 +1115,7 @@ msgid "No file uploaded"
 msgstr "Neįkeltas joks failas"
 
 #: app/routes/admin.py:2979 app/routes/admin.py:3090 app/routes/admin.py:4670
-#: app/routes/clients.py:1361 app/routes/comments.py:303
+#: app/routes/clients.py:1370 app/routes/comments.py:303
 #: app/routes/expenses.py:1390 app/routes/import_export.py:60
 #: app/routes/import_export.py:517 app/routes/import_export.py:690
 #: app/routes/invoices.py:1769 app/routes/invoices.py:1770
@@ -1196,7 +1196,7 @@ msgstr ""
 msgid "No logo to remove"
 msgstr "Nėra logotipo, kurį būtų galima pašalinti"
 
-#: app/routes/admin.py:4666 app/routes/clients.py:1356
+#: app/routes/admin.py:4666 app/routes/clients.py:1365
 #: app/routes/comments.py:298 app/routes/expenses.py:1384
 #: app/routes/import_export.py:55 app/routes/import_export.py:512
 #: app/routes/import_export.py:685 app/routes/invoices.py:1762
@@ -1218,7 +1218,7 @@ msgstr ""
 msgid "File size exceeds maximum allowed size (%(size).0f MB)"
 msgstr "Failo dydis viršija didžiausią leidžiamą dydį (%(size).0f MB)"
 
-#: app/routes/admin.py:4688 app/routes/admin.py:4695 app/routes/clients.py:1384
+#: app/routes/admin.py:4688 app/routes/admin.py:4695 app/routes/clients.py:1393
 #: app/routes/comments.py:326 app/routes/invoices.py:1811
 #: app/routes/invoices.py:1812 app/routes/projects.py:2366
 #: app/routes/quotes.py:1220 app/routes/quotes.py:2125
@@ -1440,8 +1440,8 @@ msgstr "Įvesk gavėjo el. pašto adresą"
 msgid "Test email sent successfully"
 msgstr "Bandomasis laiškas išsiųstas"
 
-#: app/routes/admin.py:5628 app/routes/admin.py:5854 app/utils/email.py:797
-#: app/utils/email.py:1022
+#: app/routes/admin.py:5628 app/routes/admin.py:5854 app/utils/email.py:799
+#: app/utils/email.py:1024
 msgid "Failed to send test email"
 msgstr "Nepavyko išsiųsti bandomojo laiško"
 
@@ -2537,181 +2537,181 @@ msgstr "Neteisingas naudotojo vardas arba slaptažodis."
 msgid "This portal is reserved for %(name)s."
 msgstr "Šis portalas skirtas tik klientui „%(name)s“."
 
-#: app/routes/client_portal.py:461
+#: app/routes/client_portal.py:476
 msgid "You have been logged out."
 msgstr "Atsijungei."
 
-#: app/routes/client_portal.py:471
+#: app/routes/client_portal.py:486
 msgid "Invalid or missing password setup token."
 msgstr "Netinkamas arba trūkstamas slaptažodžio nustatymo prieigos raktas."
 
-#: app/routes/client_portal.py:478
+#: app/routes/client_portal.py:493
 msgid "Invalid or expired password setup token. Please request a new one."
 msgstr ""
 "Slaptažodžio nustatymo prieigos raktas netinkamas arba nebegalioja. "
 "Paprašyk naujo."
 
-#: app/routes/client_portal.py:487 app/routes/integrations.py:616
+#: app/routes/client_portal.py:502 app/routes/integrations.py:616
 msgid "Password is required."
 msgstr "Įvesk slaptažodį."
 
-#: app/routes/client_portal.py:503
+#: app/routes/client_portal.py:518
 msgid "Could not set password due to a database error."
 msgstr "Nepavyko nustatyti slaptažodžio dėl duomenų bazės klaidos."
 
-#: app/routes/client_portal.py:506
+#: app/routes/client_portal.py:521
 msgid "Password set successfully! You can now log in to the portal."
 msgstr "Slaptažodis nustatytas! Dabar gali prisijungti prie portalo."
 
-#: app/routes/client_portal.py:532 app/routes/client_portal.py:669
-#: app/routes/client_portal.py:695 app/routes/client_portal.py:774
+#: app/routes/client_portal.py:547 app/routes/client_portal.py:684
+#: app/routes/client_portal.py:710 app/routes/client_portal.py:789
 msgid "Unable to load client portal data."
 msgstr "Nepavyko įkelti klientų portalo duomenų."
 
-#: app/routes/client_portal.py:630
+#: app/routes/client_portal.py:645
 msgid "widget_ids must be a list"
 msgstr "widget_ids turi būti sąrašas"
 
-#: app/routes/client_portal.py:633
+#: app/routes/client_portal.py:648
 #, python-format
 msgid "Invalid widget id(s): %(ids)s"
 msgstr "Netinkami valdiklių ID: %(ids)s"
 
-#: app/routes/client_portal.py:635
+#: app/routes/client_portal.py:650
 msgid "widget_order must be a list"
 msgstr "widget_order turi būti sąrašas"
 
-#: app/routes/client_portal.py:639
+#: app/routes/client_portal.py:654
 #, python-format
 msgid "Invalid widget id(s) in order: %(ids)s"
 msgstr "Eilėje nurodyti netinkami valdiklių ID: %(ids)s"
 
-#: app/routes/client_portal.py:725 app/routes/client_portal.py:1268
-#: app/routes/client_portal.py:1297 app/services/invoice_approval_service.py:44
+#: app/routes/client_portal.py:740 app/routes/client_portal.py:1283
+#: app/routes/client_portal.py:1312 app/services/invoice_approval_service.py:44
 msgid "Invoice not found."
 msgstr "Sąskaita faktūra nerasta."
 
-#: app/routes/client_portal.py:758 app/routes/client_portal.py:1115
-#: app/routes/client_portal.py:1161 app/routes/client_portal.py:1216
+#: app/routes/client_portal.py:773 app/routes/client_portal.py:1130
+#: app/routes/client_portal.py:1176 app/routes/client_portal.py:1231
 msgid "Quote not found."
 msgstr "Komercinis pasiūlymas nerastas."
 
-#: app/routes/client_portal.py:823 app/routes/client_portal.py:857
-#: app/routes/client_portal.py:949
+#: app/routes/client_portal.py:838 app/routes/client_portal.py:872
+#: app/routes/client_portal.py:964
 msgid "Issue reporting is not available."
 msgstr "Pranešti apie problemas negalima."
 
-#: app/routes/client_portal.py:874 app/routes/issues.py:189
+#: app/routes/client_portal.py:889 app/routes/issues.py:189
 #: app/routes/issues.py:338
 msgid "Title is required."
 msgstr "Įvesk pavadinimą."
 
-#: app/routes/client_portal.py:891 app/routes/integrations.py:1152
+#: app/routes/client_portal.py:906 app/routes/integrations.py:1152
 #: app/routes/integrations.py:1301 app/routes/issues.py:200
 msgid "Invalid project selected."
 msgstr "Pasirinktas netinkamas projektas."
 
-#: app/routes/client_portal.py:920 app/routes/issues.py:218
+#: app/routes/client_portal.py:935 app/routes/issues.py:218
 msgid "Could not create issue due to a database error."
 msgstr "Nepavyko sukurti problemos įrašo dėl duomenų bazės klaidos."
 
-#: app/routes/client_portal.py:933
+#: app/routes/client_portal.py:948
 msgid "Issue reported successfully. We will review it shortly."
 msgstr "Apie problemą pranešta. Netrukus ją peržiūrėsime."
 
-#: app/routes/client_portal.py:955
+#: app/routes/client_portal.py:970
 msgid "Issue not found."
 msgstr "Problema nerasta."
 
-#: app/routes/client_portal.py:1021 app/routes/client_portal.py:1041
-#: app/routes/client_portal.py:1077 app/routes/invoice_approvals.py:124
+#: app/routes/client_portal.py:1036 app/routes/client_portal.py:1056
+#: app/routes/client_portal.py:1092 app/routes/invoice_approvals.py:124
 #: app/services/invoice_approval_service.py:107
 #: app/services/invoice_approval_service.py:168
 msgid "Approval not found."
 msgstr "Patvirtinimas nerastas."
 
-#: app/routes/client_portal.py:1047 app/routes/client_portal.py:1088
+#: app/routes/client_portal.py:1062 app/routes/client_portal.py:1103
 msgid "No contact found for approval."
 msgstr "Patvirtinimui nerastas kontaktas."
 
-#: app/routes/client_portal.py:1056
+#: app/routes/client_portal.py:1071
 msgid "Time entry approved successfully."
 msgstr "Laiko įrašas patvirtintas."
 
-#: app/routes/client_portal.py:1058
+#: app/routes/client_portal.py:1073
 #, python-format
 msgid "Error approving time entry: %(error)s"
 msgstr "Nepavyko patvirtinti laiko įrašo: %(error)s"
 
-#: app/routes/client_portal.py:1082
+#: app/routes/client_portal.py:1097
 msgid "Rejection reason is required."
 msgstr "Nurodyk atmetimo priežastį."
 
-#: app/routes/client_portal.py:1095
+#: app/routes/client_portal.py:1110
 msgid "Time entry rejected."
 msgstr "Laiko įrašas atmestas."
 
-#: app/routes/client_portal.py:1097
+#: app/routes/client_portal.py:1112
 #, python-format
 msgid "Error rejecting time entry: %(error)s"
 msgstr "Nepavyko atmesti laiko įrašo: %(error)s"
 
-#: app/routes/client_portal.py:1119
+#: app/routes/client_portal.py:1134
 msgid "This quote cannot be accepted."
 msgstr "Šio komercinio pasiūlymo priimti negalima."
 
-#: app/routes/client_portal.py:1137
+#: app/routes/client_portal.py:1152
 #, python-format
 msgid "Quote %(quote_number)s Accepted by Client"
 msgstr "Klientas priėmė komercinį pasiūlymą %(quote_number)s"
 
-#: app/routes/client_portal.py:1147
+#: app/routes/client_portal.py:1162
 msgid "Quote accepted successfully. We will contact you shortly."
 msgstr "Komercinis pasiūlymas priimtas. Netrukus su tavimi susisieksime."
 
-#: app/routes/client_portal.py:1165
+#: app/routes/client_portal.py:1180
 msgid "This quote cannot be signed."
 msgstr "Šio komercinio pasiūlymo pasirašyti negalima."
 
-#: app/routes/client_portal.py:1170
+#: app/routes/client_portal.py:1185
 msgid "A signature is required to accept this quote."
 msgstr "Kad galėtum priimti šį komercinį pasiūlymą, reikia parašo."
 
-#: app/routes/client_portal.py:1183
+#: app/routes/client_portal.py:1198
 msgid "Could not save signature."
 msgstr "Nepavyko išsaugoti parašo."
 
-#: app/routes/client_portal.py:1185
+#: app/routes/client_portal.py:1200
 msgid "Quote signed and accepted."
 msgstr "Komercinis pasiūlymas pasirašytas ir priimtas."
 
-#: app/routes/client_portal.py:1195
+#: app/routes/client_portal.py:1210
 #, python-format
 msgid "Quote %(quote_number)s Signed by Client"
 msgstr "Klientas pasirašė komercinį pasiūlymą %(quote_number)s"
 
-#: app/routes/client_portal.py:1202
+#: app/routes/client_portal.py:1217
 msgid "Could not sign quote. Please try again."
 msgstr "Nepavyko pasirašyti komercinio pasiūlymo. Bandyk dar kartą."
 
-#: app/routes/client_portal.py:1220
+#: app/routes/client_portal.py:1235
 msgid "This quote cannot be rejected."
 msgstr "Šio komercinio pasiūlymo atmesti negalima."
 
-#: app/routes/client_portal.py:1240
+#: app/routes/client_portal.py:1255
 #, python-format
 msgid "Quote %(quote_number)s Rejected by Client"
 msgstr "Klientas atmetė komercinį pasiūlymą %(quote_number)s"
 
-#: app/routes/client_portal.py:1251
+#: app/routes/client_portal.py:1266
 msgid "Quote rejected. We appreciate your feedback."
 msgstr "Komercinis pasiūlymas atmestas. Dėkojame už atsiliepimą."
 
-#: app/routes/client_portal.py:1273 app/routes/client_portal.py:1301
+#: app/routes/client_portal.py:1288 app/routes/client_portal.py:1316
 msgid "This invoice is already paid."
 msgstr "Ši sąskaita faktūra jau apmokėta."
 
-#: app/routes/client_portal.py:1281 app/routes/client_portal.py:1307
+#: app/routes/client_portal.py:1296 app/routes/client_portal.py:1322
 msgid ""
 "Online payment is not currently available. Please contact us for payment "
 "instructions."
@@ -2719,78 +2719,78 @@ msgstr ""
 "Mokėti internetu šiuo metu negalima. Dėl mokėjimo instrukcijų susisiek su"
 " mumis."
 
-#: app/routes/client_portal.py:1317
+#: app/routes/client_portal.py:1332
 msgid "Payment could not be started."
 msgstr "Nepavyko pradėti mokėjimo."
 
-#: app/routes/client_portal.py:1330
+#: app/routes/client_portal.py:1345
 msgid "Invalid payment return."
 msgstr "Netinkamas grįžimas po mokėjimo."
 
-#: app/routes/client_portal.py:1343
+#: app/routes/client_portal.py:1358
 msgid "Payment capture failed. Please contact support."
 msgstr "Nepavyko užbaigti mokėjimo. Kreipkis į pagalbos tarnybą."
 
-#: app/routes/client_portal.py:1348
+#: app/routes/client_portal.py:1363
 msgid "Thank you! Your payment has been received."
 msgstr "Ačiū! Tavo mokėjimas gautas."
 
-#: app/routes/client_portal.py:1351
+#: app/routes/client_portal.py:1366
 msgid "Your payment is being processed. We will confirm once it is complete."
 msgstr "Tavo mokėjimas apdorojamas. Patvirtinsime, kai jis bus baigtas."
 
-#: app/routes/client_portal.py:1370
+#: app/routes/client_portal.py:1385
 msgid "Project not found."
 msgstr "Projektas nerastas."
 
-#: app/routes/client_portal.py:1376
+#: app/routes/client_portal.py:1391
 msgid "Comment cannot be empty."
 msgstr "Komentaras negali būti tuščias."
 
-#: app/routes/client_portal.py:1382
+#: app/routes/client_portal.py:1397
 msgid "Unable to post comment. Please contact support."
 msgstr "Nepavyko paskelbti komentaro. Susisiek su palaikymo komanda."
 
-#: app/routes/client_portal.py:1395
+#: app/routes/client_portal.py:1410
 msgid "Comment added successfully."
 msgstr "Komentaras pridėtas."
 
-#: app/routes/client_portal.py:1456
+#: app/routes/client_portal.py:1471
 msgid "Notification marked as read."
 msgstr "Pranešimas pažymėtas kaip perskaitytas."
 
-#: app/routes/client_portal.py:1458
+#: app/routes/client_portal.py:1473
 msgid "Notification not found."
 msgstr "Pranešimas nerastas."
 
-#: app/routes/client_portal.py:1475
+#: app/routes/client_portal.py:1490
 #, python-format
 msgid "Marked %(count)d notifications as read."
 msgstr "Pažymėta kaip perskaityta pranešimų: %(count)d."
 
-#: app/routes/client_portal.py:1547
+#: app/routes/client_portal.py:1562
 msgid "Invalid attachment type."
 msgstr "Netinkamas priedo tipas."
 
-#: app/routes/client_portal.py:1579
+#: app/routes/client_portal.py:1594
 msgid "Attachment not found or access denied."
 msgstr "Priedas nerastas arba prieiga uždrausta."
 
-#: app/routes/client_portal.py:1604
+#: app/routes/client_portal.py:1619
 msgid "Unable to load report data."
 msgstr "Nepavyko įkelti ataskaitos duomenų."
 
-#: app/routes/client_portal.py:1639
+#: app/routes/client_portal.py:1654
 msgid "Client Report"
 msgstr "Kliento ataskaita"
 
-#: app/routes/client_portal.py:1639 app/templates/client_portal/reports.html:15
+#: app/routes/client_portal.py:1654 app/templates/client_portal/reports.html:15
 #: app/templates/client_portal/reports.html:31
 #, python-format
 msgid "Last %(days)s days"
 msgstr "Pastarųjų %(days)s dienų"
 
-#: app/routes/client_portal.py:1641
+#: app/routes/client_portal.py:1656
 #: app/templates/email/scheduled_report.html:69
 #: app/templates/inventory/purchase_orders/view.html:183
 #: app/templates/inventory/stock_items/view.html:271
@@ -2803,7 +2803,7 @@ msgstr "Pastarųjų %(days)s dienų"
 msgid "Summary"
 msgstr "Suvestinė"
 
-#: app/routes/client_portal.py:1642 app/templates/admin/dashboard.html:114
+#: app/routes/client_portal.py:1657 app/templates/admin/dashboard.html:114
 #: app/templates/analytics/dashboard.html:43
 #: app/templates/analytics/dashboard_improved.html:35
 #: app/templates/analytics/mobile_dashboard.html:31
@@ -2812,7 +2812,7 @@ msgstr "Suvestinė"
 #: app/templates/client_portal/reports.html:47
 #: app/templates/client_portal/reports.html:114
 #: app/templates/client_portal/widgets/stats.html:18
-#: app/templates/clients/edit.html:214 app/templates/projects/dashboard.html:53
+#: app/templates/clients/edit.html:228 app/templates/projects/dashboard.html:53
 #: app/templates/projects/time_entries_overview.html:22
 #: app/templates/reports/index.html:26
 #: app/templates/reports/project_report.html:65
@@ -2827,12 +2827,12 @@ msgstr "Suvestinė"
 msgid "Total Hours"
 msgstr "Iš viso valandų"
 
-#: app/routes/client_portal.py:1644 app/templates/client_portal/reports.html:60
+#: app/routes/client_portal.py:1659 app/templates/client_portal/reports.html:60
 #: app/templates/invoices/list.html:24
 msgid "Total Invoiced"
 msgstr "Iš viso įtraukta į sąskaitas faktūras"
 
-#: app/routes/client_portal.py:1645
+#: app/routes/client_portal.py:1660
 #: app/templates/client_portal/invoices.html:40
 #: app/templates/client_portal/reports.html:73
 #: app/templates/invoices/_invoices_list.html:67
@@ -2844,12 +2844,12 @@ msgstr "Iš viso įtraukta į sąskaitas faktūras"
 #: app/templates/timer/time_entries_overview.html:105
 #: app/templates/timer/time_entries_overview.html:198
 #: app/templates/timer/view_timer.html:136
-#: app/templates/timer/view_timer.html:140 app/utils/i18n_helpers.py:66
-#: app/utils/i18n_helpers.py:78
+#: app/templates/timer/view_timer.html:140 app/utils/i18n_helpers.py:98
+#: app/utils/i18n_helpers.py:110
 msgid "Paid"
 msgstr "Apmokėta"
 
-#: app/routes/client_portal.py:1646 app/templates/admin/pdf_layout.html:1918
+#: app/routes/client_portal.py:1661 app/templates/admin/pdf_layout.html:1918
 #: app/templates/admin/quote_pdf_layout.html:1708
 #: app/templates/client_portal/invoice_detail.html:97
 #: app/templates/client_portal/reports.html:86
@@ -2859,13 +2859,13 @@ msgstr "Apmokėta"
 msgid "Outstanding"
 msgstr "Neapmokėta"
 
-#: app/routes/client_portal.py:1648 app/templates/analytics/dashboard.html:101
+#: app/routes/client_portal.py:1663 app/templates/analytics/dashboard.html:101
 #: app/templates/analytics/dashboard_improved.html:168
 #: app/templates/email/weekly_summary.html:104
 msgid "Hours by Project"
 msgstr "Valandos pagal projektą"
 
-#: app/routes/client_portal.py:1649 app/routes/reports.py:1017
+#: app/routes/client_portal.py:1664 app/routes/reports.py:1017
 #: app/static/calendar.js:1179 app/static/calendar.js:1186
 #: app/static/kiosk-timer.js:174
 #: app/templates/admin/custom_field_definitions/form.html:34
@@ -2958,14 +2958,14 @@ msgstr "Valandos pagal projektą"
 msgid "Project"
 msgstr "Projektas"
 
-#: app/routes/client_portal.py:1649 app/routes/client_portal.py:1656
+#: app/routes/client_portal.py:1664 app/routes/client_portal.py:1671
 #: app/templates/admin/dashboard.html:506
 #: app/templates/analytics/dashboard.html:218
 #: app/templates/analytics/dashboard_improved.html:215
 #: app/templates/analytics/mobile_dashboard.html:158
 #: app/templates/budget/project_detail.html:206
 #: app/templates/client_portal/reports.html:209
-#: app/templates/components/project_forecast.html:418
+#: app/templates/components/project_forecast.html:414
 #: app/templates/email/unpaid_hours_report.html:153
 #: app/templates/email/weekly_summary.html:111
 #: app/templates/main/dashboard.html:854
@@ -2985,7 +2985,7 @@ msgstr "Projektas"
 msgid "Hours"
 msgstr "Valandos"
 
-#: app/routes/client_portal.py:1649 app/templates/admin/dashboard.html:129
+#: app/routes/client_portal.py:1664 app/templates/admin/dashboard.html:129
 #: app/templates/analytics/dashboard.html:48
 #: app/templates/analytics/dashboard_improved.html:44
 #: app/templates/client_portal/reports.html:115
@@ -2998,11 +2998,11 @@ msgstr "Valandos"
 msgid "Billable Hours"
 msgstr "Apmokestinamos valandos"
 
-#: app/routes/client_portal.py:1655
+#: app/routes/client_portal.py:1670
 msgid "Time by Date"
 msgstr "Laikas pagal datą"
 
-#: app/routes/client_portal.py:1656 app/routes/reports.py:1013
+#: app/routes/client_portal.py:1671 app/routes/reports.py:1013
 #: app/templates/admin/client_surveys.html:27
 #: app/templates/admin/dashboard.html:337
 #: app/templates/analytics/dashboard.html:219
@@ -3069,23 +3069,23 @@ msgstr "Laikas pagal datą"
 msgid "Date"
 msgstr "Data"
 
-#: app/routes/client_portal.py:1703
+#: app/routes/client_portal.py:1718
 msgid "Could not save your feedback. Please try again."
 msgstr "Nepavyko išsaugoti tavo atsiliepimo. Bandyk dar kartą."
 
-#: app/routes/client_portal.py:1705
+#: app/routes/client_portal.py:1720
 msgid "Thank you for your feedback!"
 msgstr "Ačiū už atsiliepimą!"
 
-#: app/routes/client_portal.py:1707
+#: app/routes/client_portal.py:1722
 msgid "Invalid score."
 msgstr "Netinkamas įvertinimas."
 
-#: app/routes/client_portal.py:1753 app/routes/clients.py:1578
+#: app/routes/client_portal.py:1768 app/routes/clients.py:1587
 msgid "Message cannot be empty."
 msgstr "Žinutė negali būti tuščia."
 
-#: app/routes/client_portal.py:1755 app/routes/clients.py:1580
+#: app/routes/client_portal.py:1770 app/routes/clients.py:1589
 msgid "Message sent."
 msgstr "Žinutė išsiųsta."
 
@@ -3102,125 +3102,125 @@ msgstr "Nepavyko apdoroti paveikslėlio"
 msgid "Portal customization updated successfully"
 msgstr "Klientų portalo išvaizda atnaujinta"
 
-#: app/routes/clients.py:89
+#: app/routes/clients.py:95
 msgid "Search query is too long. Maximum 200 characters."
 msgstr "Paieškos užklausa per ilga. Daugiausia 200 simbolių."
 
-#: app/routes/clients.py:255 app/routes/clients.py:256
+#: app/routes/clients.py:261 app/routes/clients.py:262
 msgid "You do not have permission to create clients"
 msgstr "Neturi leidimo kurti klientų"
 
-#: app/routes/clients.py:289 app/routes/clients.py:290
-#: app/routes/clients.py:633
+#: app/routes/clients.py:295 app/routes/clients.py:296
+#: app/routes/clients.py:640
 msgid "Client name is required"
 msgstr "Įvesk kliento pavadinimą"
 
-#: app/routes/clients.py:298 app/routes/clients.py:301
-#: app/routes/clients.py:642 app/services/client_service.py:60
+#: app/routes/clients.py:304 app/routes/clients.py:307
+#: app/routes/clients.py:649 app/services/client_service.py:60
 msgid "A client with this name already exists"
 msgstr "Klientas tokiu pavadinimu jau yra"
 
-#: app/routes/clients.py:311 app/routes/clients.py:312
+#: app/routes/clients.py:317 app/routes/clients.py:318
 msgid "Invalid email address"
 msgstr "Netinkamas el. pašto adresas"
 
-#: app/routes/clients.py:320 app/routes/clients.py:321
-#: app/routes/clients.py:652 app/routes/projects.py:376
+#: app/routes/clients.py:326 app/routes/clients.py:327
+#: app/routes/clients.py:659 app/routes/projects.py:376
 #: app/routes/projects.py:990 app/routes/quotes.py:202
 msgid "Invalid hourly rate format"
 msgstr "Netinkamas valandinio įkainio formatas"
 
-#: app/routes/clients.py:330 app/routes/clients.py:663
+#: app/routes/clients.py:336 app/routes/clients.py:670
 msgid "Prepaid hours must be a positive number."
 msgstr "Iš anksto apmokėtų valandų skaičius turi būti teigiamas."
 
-#: app/routes/clients.py:342 app/routes/clients.py:677
+#: app/routes/clients.py:348 app/routes/clients.py:684
 msgid "Prepaid reset day must be between 1 and 28."
 msgstr "Iš anksto apmokėtų valandų atnaujinimo diena turi būti nuo 1 iki 28."
 
-#: app/routes/clients.py:364 app/routes/clients.py:369
-#: app/routes/clients.py:718 app/routes/projects.py:443
+#: app/routes/clients.py:370 app/routes/clients.py:375
+#: app/routes/clients.py:725 app/routes/projects.py:443
 #: app/routes/projects.py:1085
 #, python-format
 msgid "Custom field '%(field)s' is required"
 msgstr "Užpildyk savą lauką „%(field)s“"
 
-#: app/routes/clients.py:397
+#: app/routes/clients.py:404
 msgid "Could not create client due to a database error."
 msgstr "Nepavyko sukurti kliento dėl duomenų bazės klaidos."
 
-#: app/routes/clients.py:400
+#: app/routes/clients.py:407
 msgid "Could not create client due to a database error. Please check server logs."
 msgstr ""
 "Nepavyko sukurti kliento dėl duomenų bazės klaidos. Patikrink serverio "
 "žurnalus."
 
-#: app/routes/clients.py:433
+#: app/routes/clients.py:440
 #, python-format
 msgid "Client \"%(name)s\" created successfully"
 msgstr "Klientas „%(name)s“ sukurtas"
 
-#: app/routes/clients.py:450 app/routes/clients.py:606
+#: app/routes/clients.py:457 app/routes/clients.py:613
 msgid "You do not have access to this client."
 msgstr "Neturi prieigos prie šio kliento."
 
-#: app/routes/clients.py:612
+#: app/routes/clients.py:619
 msgid "You do not have permission to edit clients"
 msgstr "Neturi leidimo redaguoti klientų"
 
-#: app/routes/clients.py:692
+#: app/routes/clients.py:699
 msgid "Portal username is required when enabling portal access."
 msgstr "Jei įjungi portalo prieigą, įvesk portalo naudotojo vardą."
 
-#: app/routes/clients.py:701
+#: app/routes/clients.py:708
 msgid "This portal username is already in use by another client."
 msgstr "Šį portalo naudotojo vardą jau naudoja kitas klientas."
 
-#: app/routes/clients.py:747
+#: app/routes/clients.py:754
 msgid "That custom domain is already used by another client."
 msgstr "Šį savą domeną jau naudoja kitas klientas."
 
-#: app/routes/clients.py:770
+#: app/routes/clients.py:779
 msgid "Could not update client due to a database error. Please check server logs."
 msgstr ""
 "Nepavyko atnaujinti kliento dėl duomenų bazės klaidos. Patikrink serverio"
 " žurnalus."
 
-#: app/routes/clients.py:777
+#: app/routes/clients.py:786
 #, python-format
 msgid "Client \"%(name)s\" updated successfully"
 msgstr "Klientas „%(name)s“ atnaujintas"
 
-#: app/routes/clients.py:795
+#: app/routes/clients.py:804
 msgid "You do not have permission to send portal emails"
 msgstr "Neturi leidimo siųsti portalo el. laiškų"
 
-#: app/routes/clients.py:800
+#: app/routes/clients.py:809
 msgid "Client portal is not enabled for this client."
 msgstr "Šiam klientui klientų portalas neįjungtas."
 
-#: app/routes/clients.py:804
+#: app/routes/clients.py:813
 msgid "Portal username is not set for this client."
 msgstr "Šiam klientui nenustatytas portalo naudotojo vardas."
 
-#: app/routes/clients.py:808
+#: app/routes/clients.py:817
 msgid "Client email address is not set. Cannot send password setup email."
 msgstr ""
 "Nenustatytas kliento el. pašto adresas, todėl slaptažodžio nustatymo "
 "laiško išsiųsti negalima."
 
-#: app/routes/clients.py:815
+#: app/routes/clients.py:824
 msgid "Could not generate password setup token due to a database error."
 msgstr ""
 "Nepavyko sugeneruoti slaptažodžio nustatymo prieigos rakto dėl duomenų "
 "bazės klaidos."
 
-#: app/routes/clients.py:830
+#: app/routes/clients.py:839
 #, python-format
 msgid "Password setup email sent successfully to %(email)s"
 msgstr "Slaptažodžio nustatymo laiškas išsiųstas adresu %(email)s"
 
-#: app/routes/clients.py:842
+#: app/routes/clients.py:851
 msgid ""
 "Email server is not configured. Please configure email settings in Admin "
 "→ Email Configuration or set MAIL_SERVER environment variable."
@@ -3229,7 +3229,7 @@ msgstr ""
 "skiltyje Administravimas → El. pašto konfigūracija arba nustatyk aplinkos"
 " kintamąjį MAIL_SERVER."
 
-#: app/routes/clients.py:849
+#: app/routes/clients.py:858
 msgid ""
 "Failed to send password setup email. Please check email configuration and"
 " server logs for details."
@@ -3237,42 +3237,42 @@ msgstr ""
 "Nepavyko išsiųsti slaptažodžio nustatymo laiško. Patikrink el. pašto "
 "konfigūraciją ir serverio žurnalus."
 
-#: app/routes/clients.py:855
+#: app/routes/clients.py:864
 #, python-format
 msgid "An error occurred while sending the email: %(error)s"
 msgstr "Siunčiant el. laišką įvyko klaida: %(error)s"
 
-#: app/routes/clients.py:870
+#: app/routes/clients.py:879
 msgid "You do not have permission to archive clients"
 msgstr "Neturi leidimo archyvuoti klientų"
 
-#: app/routes/clients.py:874
+#: app/routes/clients.py:883
 msgid "Client is already inactive"
 msgstr "Klientas jau neaktyvus"
 
-#: app/routes/clients.py:880
+#: app/routes/clients.py:889
 #, python-format
 msgid "Client \"%(name)s\" archived successfully"
 msgstr "Klientas „%(name)s“ archyvuotas"
 
-#: app/routes/clients.py:901
+#: app/routes/clients.py:910
 msgid "You do not have permission to activate clients"
 msgstr "Neturi leidimo aktyvuoti klientų"
 
-#: app/routes/clients.py:905
+#: app/routes/clients.py:914
 msgid "Client is already active"
 msgstr "Klientas jau aktyvus"
 
-#: app/routes/clients.py:909
+#: app/routes/clients.py:918
 #, python-format
 msgid "Client \"%(name)s\" activated successfully"
 msgstr "Klientas „%(name)s“ aktyvuotas"
 
-#: app/routes/clients.py:933 app/routes/clients.py:990
+#: app/routes/clients.py:942 app/routes/clients.py:999
 msgid "You do not have permission to delete clients"
 msgstr "Neturi leidimo ištrinti klientų"
 
-#: app/routes/clients.py:938
+#: app/routes/clients.py:947
 msgid ""
 "Cannot delete client with existing projects. Please delete all projects "
 "first."
@@ -3280,7 +3280,7 @@ msgstr ""
 "Negalima ištrinti kliento, kuris turi projektų. Pirmiausia ištrink visus "
 "projektus."
 
-#: app/routes/clients.py:946
+#: app/routes/clients.py:955
 msgid ""
 "Cannot delete client with existing invoices. Please delete all invoices "
 "first before deleting the client."
@@ -3288,40 +3288,40 @@ msgstr ""
 "Negalima ištrinti kliento, kuris turi sąskaitų faktūrų. Pirmiausia "
 "ištrink visas jo sąskaitas faktūras."
 
-#: app/routes/clients.py:963
+#: app/routes/clients.py:972
 msgid "Could not delete client due to a database error. Please check server logs."
 msgstr ""
 "Nepavyko ištrinti kliento dėl duomenų bazės klaidos. Patikrink serverio "
 "žurnalus."
 
-#: app/routes/clients.py:977
+#: app/routes/clients.py:986
 #, python-format
 msgid "Client \"%(name)s\" deleted successfully"
 msgstr "Klientas „%(name)s“ ištrintas"
 
-#: app/routes/clients.py:996
+#: app/routes/clients.py:1005
 msgid "No clients selected for deletion"
 msgstr "Nepasirinkai, kuriuos klientus ištrinti"
 
-#: app/routes/clients.py:1013 app/routes/clients.py:1123
+#: app/routes/clients.py:1022 app/routes/clients.py:1132
 #: app/routes/projects.py:1357 app/routes/projects.py:1446
 #, python-format
 msgid "'%(name)s': Permission denied"
 msgstr "„%(name)s“: neturi leidimo"
 
-#: app/routes/clients.py:1019
+#: app/routes/clients.py:1028
 #, python-format
 msgid "'%(name)s': Has projects"
 msgstr "„%(name)s“: turi projektų"
 
-#: app/routes/clients.py:1028
+#: app/routes/clients.py:1037
 #, python-format
 msgid "'%(name)s': Has %(count)s invoice(s). Please delete all invoices first."
 msgstr ""
 "„%(name)s“: turi sąskaitų faktūrų (%(count)s). Pirmiausia ištrink visas "
 "sąskaitas faktūras."
 
-#: app/routes/clients.py:1057
+#: app/routes/clients.py:1066
 msgid ""
 "Could not delete clients due to a database error. Please check server "
 "logs."
@@ -3329,7 +3329,7 @@ msgstr ""
 "Nepavyko ištrinti klientų dėl duomenų bazės klaidos. Patikrink serverio "
 "žurnalus."
 
-#: app/routes/clients.py:1063
+#: app/routes/clients.py:1072
 #, python-format
 msgid "Successfully deleted %(num)d client"
 msgid_plural "Successfully deleted %(num)d clients"
@@ -3337,7 +3337,7 @@ msgstr[0] "Ištrintas %(num)d klientas"
 msgstr[1] "Ištrinti %(num)d klientai"
 msgstr[2] "Ištrinta %(num)d klientų"
 
-#: app/routes/clients.py:1076
+#: app/routes/clients.py:1085
 #, python-format
 msgid "Skipped %(num)d client: %(errors)s"
 msgid_plural "Skipped %(num)d clients: %(errors)s"
@@ -3345,24 +3345,24 @@ msgstr[0] "Praleistas %(num)d klientas. Priežastys: %(errors)s"
 msgstr[1] "Praleisti %(num)d klientai. Priežastys: %(errors)s"
 msgstr[2] "Praleista %(num)d klientų. Priežastys: %(errors)s"
 
-#: app/routes/clients.py:1085
+#: app/routes/clients.py:1094
 msgid "No clients were deleted"
 msgstr "Nė vienas klientas nebuvo ištrintas"
 
-#: app/routes/clients.py:1097
+#: app/routes/clients.py:1106
 msgid "You do not have permission to change client status"
 msgstr "Neturi leidimo keisti kliento būsenos"
 
-#: app/routes/clients.py:1104
+#: app/routes/clients.py:1113
 msgid "No clients selected"
 msgstr "Nepasirinkta jokių klientų"
 
-#: app/routes/clients.py:1108 app/routes/invoices.py:664
+#: app/routes/clients.py:1117 app/routes/invoices.py:664
 #: app/routes/projects.py:1431 app/routes/tasks.py:757 app/routes/tasks.py:1728
 msgid "Invalid status"
 msgstr "Netinkama būsena"
 
-#: app/routes/clients.py:1143
+#: app/routes/clients.py:1152
 msgid ""
 "Could not update client status due to a database error. Please check "
 "server logs."
@@ -3370,18 +3370,18 @@ msgstr ""
 "Nepavyko atnaujinti kliento būsenos dėl duomenų bazės klaidos. Patikrink "
 "serverio žurnalus."
 
-#: app/routes/clients.py:1147 app/routes/projects.py:1510
+#: app/routes/clients.py:1156 app/routes/projects.py:1510
 #: app/templates/workday/history.html:118
 #: app/templates/workday/history.html:125
 msgid "active"
 msgstr "aktyvi"
 
-#: app/routes/clients.py:1147 app/routes/projects.py:1510
+#: app/routes/clients.py:1156 app/routes/projects.py:1510
 #: app/templates/admin/geofences.html:22
 msgid "inactive"
 msgstr "neaktyvi"
 
-#: app/routes/clients.py:1151
+#: app/routes/clients.py:1160
 #, python-format
 msgid "Successfully marked %(num)d client as %(status)s"
 msgid_plural "Successfully marked %(num)d clients as %(status)s"
@@ -3389,26 +3389,26 @@ msgstr[0] "%(num)d kliento būsena pakeista į „%(status)s“"
 msgstr[1] "%(num)d klientų būsena pakeista į „%(status)s“"
 msgstr[2] "%(num)d klientų būsena pakeista į „%(status)s“"
 
-#: app/routes/clients.py:1162
+#: app/routes/clients.py:1171
 #, python-format
 msgid "Some clients could not be updated: %(errors)s"
 msgstr "Nepavyko atnaujinti kai kurių klientų: %(errors)s"
 
-#: app/routes/clients.py:1169
+#: app/routes/clients.py:1178
 msgid "No clients were updated"
 msgstr "Nė vienas klientas nebuvo atnaujintas"
 
-#: app/routes/clients.py:1365 app/routes/comments.py:307
+#: app/routes/clients.py:1374 app/routes/comments.py:307
 #: app/routes/projects.py:2347 app/routes/quotes.py:1201
 msgid "File type not allowed"
 msgstr "Failo tipas neleidžiamas"
 
-#: app/routes/clients.py:1374 app/routes/comments.py:316
+#: app/routes/clients.py:1383 app/routes/comments.py:316
 #: app/routes/projects.py:2356 app/routes/quotes.py:1210
 msgid "File size exceeds maximum allowed size (10 MB)"
 msgstr "Failo dydis viršija didžiausią leistiną dydį (10 MB)"
 
-#: app/routes/clients.py:1395 app/routes/comments.py:337
+#: app/routes/clients.py:1404 app/routes/comments.py:337
 #: app/routes/invoices.py:1824 app/routes/invoices.py:1825
 #: app/routes/projects.py:2377 app/routes/quotes.py:1231
 #: app/routes/quotes.py:2138 app/routes/quotes.py:2139
@@ -3416,7 +3416,7 @@ msgstr "Failo dydis viršija didžiausią leistiną dydį (10 MB)"
 msgid "Invalid upload path"
 msgstr "Netinkamas įkėlimo kelias"
 
-#: app/routes/clients.py:1420 app/routes/clients.py:1436
+#: app/routes/clients.py:1429 app/routes/clients.py:1445
 #: app/routes/comments.py:358 app/routes/projects.py:2402
 #: app/routes/projects.py:2418 app/routes/quotes.py:1265
 msgid ""
@@ -3426,7 +3426,7 @@ msgstr ""
 "Nepavyko įkelti priedo dėl duomenų bazės klaidos. Patikrink serverio "
 "žurnalus."
 
-#: app/routes/clients.py:1433 app/routes/projects.py:2415
+#: app/routes/clients.py:1442 app/routes/projects.py:2415
 msgid ""
 "The attachments feature requires a database migration. Please run: flask "
 "db upgrade"
@@ -3434,18 +3434,18 @@ msgstr ""
 "Priedų funkcijai reikalinga duomenų bazės migracija. Paleisk: flask db "
 "upgrade"
 
-#: app/routes/clients.py:1458 app/routes/comments.py:375
+#: app/routes/clients.py:1467 app/routes/comments.py:375
 #: app/routes/projects.py:2439 app/routes/quotes.py:1286
 msgid "Attachment uploaded successfully"
 msgstr "Priedas įkeltas"
 
-#: app/routes/clients.py:1482 app/routes/comments.py:407
+#: app/routes/clients.py:1491 app/routes/comments.py:407
 #: app/routes/projects.py:2463 app/routes/quotes.py:1310
 #: app/routes/team_chat.py:455
 msgid "File not found"
 msgstr "Failas nerastas"
 
-#: app/routes/clients.py:1514 app/routes/projects.py:2497
+#: app/routes/clients.py:1523 app/routes/projects.py:2497
 #: app/routes/quotes.py:1349
 msgid ""
 "Could not delete attachment due to a database error. Please check server "
@@ -3454,7 +3454,7 @@ msgstr ""
 "Nepavyko ištrinti priedo dėl duomenų bazės klaidos. Patikrink serverio "
 "žurnalus."
 
-#: app/routes/clients.py:1524 app/routes/comments.py:440
+#: app/routes/clients.py:1533 app/routes/comments.py:440
 #: app/routes/projects.py:2512 app/routes/quotes.py:1359
 msgid "Attachment deleted successfully"
 msgstr "Priedas ištrintas"
@@ -4538,7 +4538,7 @@ msgstr "Išplėstiniai nustatymai"
 #: app/templates/integrations/wizard_linear.html:87
 #: app/templates/tasks/list.html:54 app/templates/tasks/list.html:181
 #: app/templates/tasks/my_tasks.html:74 app/templates/tasks/my_tasks.html:133
-#: app/utils/i18n_helpers.py:18 app/utils/i18n_helpers.py:30
+#: app/utils/i18n_helpers.py:50 app/utils/i18n_helpers.py:62
 msgid "Review"
 msgstr "Peržiūra"
 
@@ -4594,7 +4594,7 @@ msgstr "Darbo erdvė"
 #: app/static/onboarding.js:873 app/templates/admin/oidc_user_detail.html:61
 #: app/templates/analytics/mobile_dashboard.html:49
 #: app/templates/auth/login.html:40 app/templates/client_portal/base.html:259
-#: app/templates/client_portal/base.html:350
+#: app/templates/client_portal/base.html:351
 #: app/templates/client_portal/dashboard.html:92
 #: app/templates/client_portal/project_comments.html:9
 #: app/templates/client_portal/projects.html:4
@@ -4947,7 +4947,7 @@ msgstr "Atsargų judėjimas užregistruotas."
 #: app/routes/inventory.py:1166 app/services/ldap_service.py:416
 #: app/templates/admin/clear_cache.html:160
 #: app/templates/admin/clear_cache.html:193
-#: app/templates/invoices/edit.html:868 app/templates/invoices/edit.html:870
+#: app/templates/invoices/edit.html:869 app/templates/invoices/edit.html:871
 #: app/templates/invoices/view.html:445 app/templates/invoices/view.html:592
 #: app/templates/invoices/view.html:594 app/templates/invoices/view.html:688
 #: app/templates/invoices/view.html:690 app/templates/invoices/view.html:700
@@ -5509,7 +5509,7 @@ msgstr "Sąskaita faktūra išsiųsta adresu %(email)s"
 msgid "Invoice email sent successfully"
 msgstr "Sąskaita faktūra išsiųsta el. paštu"
 
-#: app/routes/invoices.py:1609 app/utils/email.py:1144
+#: app/routes/invoices.py:1609 app/utils/email.py:1147
 msgid "Failed to send invoice email"
 msgstr "Nepavyko išsiųsti sąskaitos faktūros el. laiško"
 
@@ -7750,7 +7750,7 @@ msgstr "Įtraukta į sąskaitą"
 #: app/templates/timer/manual_entry.html:108
 #: app/templates/timer/time_entries_overview.html:98
 #: app/templates/timer/timer_page.html:188
-#: app/templates/timer/view_timer.html:81 app/utils/email.py:163
+#: app/templates/timer/view_timer.html:81 app/utils/email.py:165
 msgid "Client"
 msgstr "Klientas"
 
@@ -8479,7 +8479,7 @@ msgstr "Negalima pradėti asmeninio pokalbio su savimi"
 msgid "User is not active"
 msgstr "Naudotojas neaktyvus"
 
-#: app/routes/time_approvals.py:90 app/services/client_approval_service.py:95
+#: app/routes/time_approvals.py:90 app/services/client_approval_service.py:96
 #: app/services/time_approval_service.py:110
 msgid "Time entry approved"
 msgstr "Laiko įrašas patvirtintas"
@@ -8488,12 +8488,12 @@ msgstr "Laiko įrašas patvirtintas"
 msgid "Rejection reason required"
 msgstr "Nurodyk atmetimo priežastį"
 
-#: app/routes/time_approvals.py:118 app/services/client_approval_service.py:110
+#: app/routes/time_approvals.py:118 app/services/client_approval_service.py:111
 #: app/services/time_approval_service.py:134
 msgid "Time entry rejected"
 msgstr "Laiko įrašas atmestas"
 
-#: app/routes/time_approvals.py:144 app/services/client_approval_service.py:80
+#: app/routes/time_approvals.py:144 app/services/client_approval_service.py:81
 #: app/services/time_approval_service.py:74
 msgid "Approval requested"
 msgstr "Patvirtinimo paprašyta"
@@ -9301,7 +9301,7 @@ msgid "Update Project"
 msgstr "Atnaujinti projektą"
 
 #: app/routes/workflow_helpers.py:30 app/templates/invoices/edit.html:10
-#: app/templates/invoices/edit.html:322 app/templates/invoices/edit.html:798
+#: app/templates/invoices/edit.html:322 app/templates/invoices/edit.html:799
 #: app/templates/invoices/view.html:20 app/templates/invoices/view.html:522
 #: app/templates/quotes/view.html:41 app/templates/quotes/view.html:479
 msgid "Send Email"
@@ -9574,97 +9574,97 @@ msgstr "Sąskaitoje faktūroje nėra neapmokėtos sumos"
 msgid "Checkout failed"
 msgstr "Nepavyko atlikti apmokėjimo"
 
-#: app/services/client_approval_service.py:26
+#: app/services/client_approval_service.py:27
 #: app/services/time_approval_service.py:28
 #: app/services/time_tracking_service.py:688
 #: app/services/time_tracking_service.py:883
 msgid "Time entry not found"
 msgstr "Laiko įrašas nerastas"
 
-#: app/services/client_approval_service.py:30
+#: app/services/client_approval_service.py:31
 msgid "Project has no associated client"
 msgstr "Projektas nesusietas su klientu"
 
-#: app/services/client_approval_service.py:34 app/services/client_service.py:93
+#: app/services/client_approval_service.py:35 app/services/client_service.py:93
 msgid "Client not found"
 msgstr "Klientas nerastas"
 
-#: app/services/client_approval_service.py:42
+#: app/services/client_approval_service.py:43
 #: app/services/time_approval_service.py:34
 msgid "Approval already pending"
 msgstr "Patvirtinimo jau laukiama"
 
-#: app/services/client_approval_service.py:86
-#: app/services/client_approval_service.py:101
+#: app/services/client_approval_service.py:87
+#: app/services/client_approval_service.py:102
 #: app/services/time_approval_service.py:80
 #: app/services/time_approval_service.py:116
 #: app/services/time_approval_service.py:140
 msgid "Approval not found"
 msgstr "Patvirtinimas nerastas"
 
-#: app/services/client_approval_service.py:89
-#: app/services/client_approval_service.py:104
+#: app/services/client_approval_service.py:90
+#: app/services/client_approval_service.py:105
 #: app/services/time_approval_service.py:83
 #: app/services/time_approval_service.py:119
 msgid "Approval is not pending"
 msgstr "Patvirtinimo nelaukiama"
 
-#: app/services/client_approval_service.py:163
+#: app/services/client_approval_service.py:165
 #, python-format
 msgid "Time Entry Approval Requested - %(project)s"
 msgstr "Prašoma patvirtinti laiko įrašą – %(project)s"
 
-#: app/services/client_approval_service.py:177
+#: app/services/client_approval_service.py:179
 #, python-format
 msgid "Client has approved time entry %(id)s."
 msgstr "Klientas patvirtino laiko įrašą %(id)s."
 
-#: app/services/client_approval_service.py:178
+#: app/services/client_approval_service.py:180
 #: app/services/time_approval_service.py:257
 msgid "Time Entry Approved"
 msgstr "Laiko įrašas patvirtintas"
 
-#: app/services/client_approval_service.py:180
+#: app/services/client_approval_service.py:182
 #, python-format
 msgid "Client has rejected time entry %(id)s."
 msgstr "Klientas atmetė laiko įrašą %(id)s."
 
-#: app/services/client_approval_service.py:181
+#: app/services/client_approval_service.py:183
 #: app/services/time_approval_service.py:260
 msgid "Time Entry Rejected"
 msgstr "Laiko įrašas atmestas"
 
-#: app/services/client_approval_service.py:183
+#: app/services/client_approval_service.py:185
 #: app/services/time_approval_service.py:262
 #, python-format
 msgid "Reason: %(reason)s"
 msgstr "Priežastis: %(reason)s"
 
-#: app/services/client_notification_service.py:106
+#: app/services/client_notification_service.py:108
 #, python-format
 msgid "New Invoice: %(invoice_number)s"
 msgstr "Nauja sąskaita faktūra: %(invoice_number)s"
 
-#: app/services/client_notification_service.py:108
+#: app/services/client_notification_service.py:110
 #, python-format
 msgid "A new invoice has been created for %(amount)s %(currency)s."
 msgstr "Išrašyta nauja sąskaita faktūra: %(amount)s %(currency)s."
 
-#: app/services/client_notification_service.py:113
-#: app/services/client_notification_service.py:137
-#: app/services/client_notification_service.py:162
+#: app/services/client_notification_service.py:115
+#: app/services/client_notification_service.py:140
+#: app/services/client_notification_service.py:166
 #: app/templates/email/overdue_invoice.html:109
 #: app/templates/invoice_approvals/view.html:13
 #: app/templates/invoices/view.html:46 app/templates/payments/view.html:208
 msgid "View Invoice"
 msgstr "Peržiūrėti sąskaitą faktūrą"
 
-#: app/services/client_notification_service.py:129
+#: app/services/client_notification_service.py:132
 #, python-format
 msgid "Invoice Paid: %(invoice_number)s"
 msgstr "Sąskaita faktūra apmokėta: %(invoice_number)s"
 
-#: app/services/client_notification_service.py:131
+#: app/services/client_notification_service.py:134
 #, python-format
 msgid ""
 "Payment of %(amount)s %(currency)s has been received for invoice "
@@ -9673,12 +9673,12 @@ msgstr ""
 "Gautas %(amount)s %(currency)s mokėjimas už sąskaitą faktūrą "
 "%(invoice_number)s."
 
-#: app/services/client_notification_service.py:153
+#: app/services/client_notification_service.py:157
 #, python-format
 msgid "Overdue Invoice: %(invoice_number)s"
 msgstr "Pradelsta sąskaita faktūra: %(invoice_number)s"
 
-#: app/services/client_notification_service.py:155
+#: app/services/client_notification_service.py:159
 #, python-format
 msgid ""
 "Invoice %(invoice_number)s is %(days)s days overdue. Amount: %(amount)s "
@@ -9687,35 +9687,35 @@ msgstr ""
 "Sąskaitos faktūros %(invoice_number)s apmokėjimas vėluoja (dienų: "
 "%(days)s). Suma: %(amount)s %(currency)s."
 
-#: app/services/client_notification_service.py:178
+#: app/services/client_notification_service.py:183
 #: app/services/time_approval_service.py:244
 msgid "Time Entry Approval Requested"
 msgstr "Prašoma patvirtinti laiko įrašą"
 
-#: app/services/client_notification_service.py:180
+#: app/services/client_notification_service.py:185
 #, python-format
 msgid "A time entry for %(project)s requires your approval."
 msgstr "Reikia patvirtinti laiko įrašą (%(project)s)."
 
-#: app/services/client_notification_service.py:181
+#: app/services/client_notification_service.py:186
 msgid "project"
 msgstr "projektas nenurodytas"
 
-#: app/services/client_notification_service.py:184
+#: app/services/client_notification_service.py:189
 msgid "Review Approval"
 msgstr "Peržiūrėti prašymą"
 
-#: app/services/client_notification_service.py:200
+#: app/services/client_notification_service.py:206
 #, python-format
 msgid "New Quote: %(quote_number)s"
 msgstr "Naujas komercinis pasiūlymas: %(quote_number)s"
 
-#: app/services/client_notification_service.py:202
+#: app/services/client_notification_service.py:208
 #, python-format
 msgid "A new quote has been created for %(amount)s %(currency)s."
 msgstr "Parengtas naujas komercinis pasiūlymas: %(amount)s %(currency)s."
 
-#: app/services/client_notification_service.py:207
+#: app/services/client_notification_service.py:213
 #: app/templates/email/quote_approval_rejected.html:99
 #: app/templates/email/quote_approved.html:85
 #: app/templates/email/quote_expired.html:84
@@ -9724,32 +9724,32 @@ msgstr "Parengtas naujas komercinis pasiūlymas: %(amount)s %(currency)s."
 msgid "View Quote"
 msgstr "Peržiūrėti komercinį pasiūlymą"
 
-#: app/services/client_notification_service.py:223
+#: app/services/client_notification_service.py:230
 #, python-format
 msgid "Milestone Reached: %(milestone)s"
 msgstr "Pasiektas etapas: %(milestone)s"
 
-#: app/services/client_notification_service.py:225
+#: app/services/client_notification_service.py:232
 #, python-format
 msgid "Project %(project)s has reached the milestone: %(milestone)s."
 msgstr "Projekte %(project)s pasiektas etapas: %(milestone)s."
 
-#: app/services/client_notification_service.py:230
+#: app/services/client_notification_service.py:237
 #: app/templates/main/help.html:58
 msgid "View Projects"
 msgstr "Peržiūrėti projektus"
 
-#: app/services/client_notification_service.py:246
+#: app/services/client_notification_service.py:254
 #, python-format
 msgid "Budget Alert: %(project)s"
 msgstr "Biudžeto įspėjimas: %(project)s"
 
-#: app/services/client_notification_service.py:248
+#: app/services/client_notification_service.py:256
 #, python-format
 msgid "Project %(project)s has reached %(percentage).0f%% of its budget."
 msgstr "Projekte %(project)s išnaudota %(percentage).0f %% biudžeto."
 
-#: app/services/client_notification_service.py:253
+#: app/services/client_notification_service.py:261
 #: app/templates/budget/project_detail.html:17
 #: app/templates/projects/_projects_list.html:148
 #: app/templates/projects/list.html:236 app/templates/quotes/view.html:182
@@ -9772,7 +9772,7 @@ msgstr "Nepavyko atnaujinti kliento dėl duomenų bazės klaidos"
 msgid "Client updated successfully"
 msgstr "Klientas atnaujintas"
 
-#: app/services/client_survey_service.py:74
+#: app/services/client_survey_service.py:76
 msgid "How did we do? Quick feedback"
 msgstr "Kaip mums sekėsi? Trumpa apklausa"
 
@@ -9801,7 +9801,7 @@ msgstr "Nepavyko ištrinti komentaro"
 msgid "Invoice %(invoice_number)s from %(company)s"
 msgstr "Sąskaita faktūra %(invoice_number)s iš %(company)s"
 
-#: app/services/email_service.py:67 app/utils/email.py:1135
+#: app/services/email_service.py:67 app/utils/email.py:1138
 #, python-format
 msgid "Invoice %(invoice_number)s"
 msgstr "Sąskaita faktūra %(invoice_number)s"
@@ -10025,7 +10025,7 @@ msgid "Your timer has been running for %(hours)sh or more — still active?"
 msgstr "Tavo laikmatis veikia jau %(hours)s val. ar ilgiau — ar dar dirbi?"
 
 #: app/services/notification_service.py:387
-#: app/templates/components/project_forecast.html:351
+#: app/templates/components/project_forecast.html:347
 msgid "No time logged yet"
 msgstr "Laiko dar neužregistruota"
 
@@ -11196,7 +11196,7 @@ msgstr "Naujausios veiklos nėra"
 
 #: app/static/dashboard-enhancements.js:207 app/templates/activity/feed.html:10
 #: app/templates/client_portal/base.html:304
-#: app/templates/client_portal/base.html:389 app/templates/deals/view.html:145
+#: app/templates/client_portal/base.html:390 app/templates/deals/view.html:145
 #: app/templates/integrations/activitywatch_inbox.html:20
 #: app/templates/leads/view.html:138
 msgid "Activity"
@@ -11339,7 +11339,7 @@ msgstr "pasirinkta"
 #: app/templates/clients/_clients_list.html:19
 #: app/templates/clients/list.html:335 app/templates/clients/view.html:281
 #: app/templates/clients/view.html:283 app/templates/clients/view.html:515
-#: app/templates/clients/view.html:634 app/templates/clients/view.html:650
+#: app/templates/clients/view.html:632 app/templates/clients/view.html:648
 #: app/templates/comments/_comment.html:41
 #: app/templates/comments/_comment.html:85
 #: app/templates/components/bulk_actions_widget.html:89
@@ -11447,10 +11447,10 @@ msgstr "Rodoma %(start)s-%(end)s iš %(total)s"
 #: app/templates/client_portal/dashboard.html:104
 #: app/templates/client_portal/new_issue.html:82
 #: app/templates/client_portal/quote_detail.html:205
-#: app/templates/clients/create.html:130 app/templates/clients/edit.html:173
+#: app/templates/clients/create.html:144 app/templates/clients/edit.html:187
 #: app/templates/clients/view.html:241 app/templates/clients/view.html:464
-#: app/templates/clients/view.html:600 app/templates/clients/view.html:635
-#: app/templates/clients/view.html:651 app/templates/comments/_comment.html:120
+#: app/templates/clients/view.html:598 app/templates/clients/view.html:633
+#: app/templates/clients/view.html:649 app/templates/comments/_comment.html:120
 #: app/templates/comments/_comment.html:140
 #: app/templates/comments/_comment.html:164
 #: app/templates/comments/_comments_section.html:44
@@ -11482,8 +11482,8 @@ msgstr "Rodoma %(start)s-%(end)s iš %(total)s"
 #: app/templates/invoice_approvals/list.html:85
 #: app/templates/invoice_approvals/request.html:38
 #: app/templates/invoices/create.html:101 app/templates/invoices/edit.html:321
-#: app/templates/invoices/edit.html:332 app/templates/invoices/edit.html:715
-#: app/templates/invoices/edit.html:797
+#: app/templates/invoices/edit.html:332 app/templates/invoices/edit.html:716
+#: app/templates/invoices/edit.html:798
 #: app/templates/invoices/generate_from_time.html:189
 #: app/templates/invoices/list.html:111 app/templates/invoices/list.html:139
 #: app/templates/invoices/list.html:171 app/templates/invoices/view.html:386
@@ -11885,6 +11885,7 @@ msgid "Switch project"
 msgstr "Perjungti projektą"
 
 #: app/static/floating-timer-bar.js:76
+#: app/templates/client_portal/_language_switcher.html:12
 #: app/templates/components/multi_select.html:122
 #: app/templates/kanban/columns.html:65
 #: app/templates/projects/time_entries_overview.html:39
@@ -12238,7 +12239,7 @@ msgid "Show keyboard shortcuts"
 msgstr "Rodyti sparčiuosius klavišus"
 
 #: app/static/keyboard-shortcuts-advanced.js:86
-#: app/static/onboarding-enhanced.js:194 app/templates/clients/create.html:139
+#: app/static/onboarding-enhanced.js:194 app/templates/clients/create.html:153
 #: app/templates/main/help.html:3 app/templates/main/help.html:8
 #: app/templates/main/help.html:12 app/templates/partials/_sidebar.html:761
 #: app/templates/partials/_topbar.html:57 app/templates/timer/calendar.html:337
@@ -12627,8 +12628,8 @@ msgstr "Kurį laiką nieko neveikei. Atsijungti dabar?"
 msgid "Auto-logout"
 msgstr "Automatinis atsijungimas"
 
-#: app/static/kiosk-mode.js:180 app/templates/client_portal/base.html:310
-#: app/templates/client_portal/base.html:393 app/templates/kiosk/base.html:132
+#: app/static/kiosk-mode.js:180 app/templates/client_portal/base.html:311
+#: app/templates/client_portal/base.html:395 app/templates/kiosk/base.html:132
 #: app/templates/partials/_topbar.html:133
 msgid "Logout"
 msgstr "Atsijungti"
@@ -13012,7 +13013,7 @@ msgstr ""
 
 #: app/static/onboarding-enhanced.js:535 app/static/onboarding.js:861
 #: app/templates/client_portal/base.html:256
-#: app/templates/client_portal/base.html:347
+#: app/templates/client_portal/base.html:348
 #: app/templates/expenses/dashboard.html:7 app/templates/main/dashboard.html:28
 #: app/templates/main/dashboard.html:29 app/templates/main/donate.html:8
 #: app/templates/main/productivity_dashboard.html:7
@@ -13528,7 +13529,7 @@ msgstr "Įjungti"
 
 #: app/static/smart-notifications.js:711 app/static/toast-notifications.js:21
 #: app/templates/client_portal/base.html:279
-#: app/templates/client_portal/base.html:370
+#: app/templates/client_portal/base.html:371
 #: app/templates/client_portal/notifications.html:4
 #: app/templates/client_portal/notifications.html:9
 #: app/templates/client_portal/notifications.html:14
@@ -13599,8 +13600,8 @@ msgstr "Uždaryti pranešimą"
 #: app/templates/budget/project_detail.html:67
 #: app/templates/main/dashboard.html:2196 app/templates/projects/view.html:315
 #: app/templates/timer/edit_timer.html:1067
-#: app/templates/timer/manual_entry.html:1162 app/utils/i18n_helpers.py:275
-#: app/utils/i18n_helpers.py:281
+#: app/templates/timer/manual_entry.html:1162 app/utils/i18n_helpers.py:307
+#: app/utils/i18n_helpers.py:313
 msgid "Warning"
 msgstr "Įspėjimas"
 
@@ -13941,8 +13942,8 @@ msgstr "Visam laikui pašalinti raginimus (25 €)"
 msgid "Buy me a coffee"
 msgstr "Buy Me a Coffee"
 
-#: app/templates/base.html:100 app/utils/i18n_helpers.py:115
-#: app/utils/i18n_helpers.py:131
+#: app/templates/base.html:100 app/utils/i18n_helpers.py:147
+#: app/utils/i18n_helpers.py:163
 msgid "PayPal"
 msgstr "PayPal"
 
@@ -13993,7 +13994,7 @@ msgstr "Naujas klientas"
 
 #: app/templates/base.html:196 app/templates/budget/dashboard.html:17
 #: app/templates/client_portal/base.html:301
-#: app/templates/client_portal/base.html:386
+#: app/templates/client_portal/base.html:387
 #: app/templates/client_portal/reports.html:4
 #: app/templates/client_portal/reports.html:9
 #: app/templates/client_portal/reports.html:14
@@ -14440,10 +14441,10 @@ msgstr "Prieigos raktas"
 #: app/templates/tasks/_kanban.html:100 app/templates/timer/calendar.html:1000
 #: app/templates/weekly_goals/edit.html:88
 #: app/templates/weekly_goals/index.html:176
-#: app/templates/weekly_goals/view.html:69 app/utils/i18n_helpers.py:51
-#: app/utils/i18n_helpers.py:57 app/utils/i18n_helpers.py:244
-#: app/utils/i18n_helpers.py:255 app/utils/i18n_helpers.py:287
-#: app/utils/i18n_helpers.py:293
+#: app/templates/weekly_goals/view.html:69 app/utils/i18n_helpers.py:83
+#: app/utils/i18n_helpers.py:89 app/utils/i18n_helpers.py:276
+#: app/utils/i18n_helpers.py:287 app/utils/i18n_helpers.py:319
+#: app/utils/i18n_helpers.py:325
 msgid "Active"
 msgstr "Aktyvus"
 
@@ -14495,9 +14496,9 @@ msgstr "Nebegalioja"
 #: app/templates/recurring_tasks/list.html:180
 #: app/templates/recurring_tasks/view.html:62
 #: app/templates/reports/index.html:411 app/templates/reports/scheduled.html:76
-#: app/templates/timer/calendar.html:1000 app/utils/i18n_helpers.py:51
-#: app/utils/i18n_helpers.py:57 app/utils/i18n_helpers.py:287
-#: app/utils/i18n_helpers.py:293
+#: app/templates/timer/calendar.html:1000 app/utils/i18n_helpers.py:83
+#: app/utils/i18n_helpers.py:89 app/utils/i18n_helpers.py:319
+#: app/utils/i18n_helpers.py:325
 msgid "Inactive"
 msgstr "Neaktyvus"
 
@@ -14574,7 +14575,7 @@ msgstr "Aiškus šio prieigos rakto pavadinimas"
 #: app/templates/client_portal/quote_detail.html:78
 #: app/templates/client_portal/time_entries.html:67
 #: app/templates/client_portal/widgets/time_entries.html:24
-#: app/templates/clients/create.html:32 app/templates/clients/create.html:158
+#: app/templates/clients/create.html:32 app/templates/clients/create.html:172
 #: app/templates/clients/edit.html:31
 #: app/templates/components/inline_create_client_modal.html:31
 #: app/templates/deals/activity_form.html:54 app/templates/deals/form.html:97
@@ -14593,7 +14594,7 @@ msgstr "Aiškus šio prieigos rakto pavadinimas"
 #: app/templates/invoices/edit.html:96 app/templates/invoices/edit.html:140
 #: app/templates/invoices/edit.html:195 app/templates/invoices/edit.html:211
 #: app/templates/invoices/edit.html:268 app/templates/invoices/edit.html:283
-#: app/templates/invoices/edit.html:653
+#: app/templates/invoices/edit.html:654
 #: app/templates/invoices/pdf_default.html:88
 #: app/templates/invoices/view.html:155 app/templates/invoices/view.html:181
 #: app/templates/invoices/view.html:211 app/templates/issues/edit.html:30
@@ -14975,7 +14976,7 @@ msgstr "Failo pavadinimas"
 #: app/templates/reports/saved_views_list.html:59
 #: app/templates/tasks/_kanban.html:1366 app/templates/tasks/edit.html:272
 #: app/templates/time_entry_templates/view.html:118
-#: app/templates/timer/edit_timer.html:710 app/utils/email.py:1236
+#: app/templates/timer/edit_timer.html:710 app/utils/email.py:1239
 msgid "Created"
 msgstr "Sukurta"
 
@@ -15405,9 +15406,9 @@ msgstr "Komentaras"
 #: app/templates/payments/view.html:42 app/templates/per_diem/list.html:67
 #: app/templates/per_diem/list.html:176 app/templates/per_diem/list.html:255
 #: app/templates/per_diem/view.html:69
-#: app/templates/workday/admin_violations.html:9 app/utils/i18n_helpers.py:142
-#: app/utils/i18n_helpers.py:153 app/utils/i18n_helpers.py:220
-#: app/utils/i18n_helpers.py:232
+#: app/templates/workday/admin_violations.html:9 app/utils/i18n_helpers.py:174
+#: app/utils/i18n_helpers.py:185 app/utils/i18n_helpers.py:252
+#: app/utils/i18n_helpers.py:264
 msgid "Pending"
 msgstr "Laukiama"
 
@@ -15451,14 +15452,14 @@ msgid "Currently active"
 msgstr "Šiuo metu aktyvūs"
 
 #: app/templates/admin/dashboard.html:54
-#: app/templates/admin/system_info.html:21 app/templates/clients/edit.html:206
+#: app/templates/admin/system_info.html:21 app/templates/clients/edit.html:220
 msgid "Total Projects"
 msgstr "Iš viso projektų"
 
 #: app/templates/admin/dashboard.html:69
 #: app/templates/analytics/dashboard.html:53
 #: app/templates/client_portal/widgets/stats.html:6
-#: app/templates/clients/edit.html:210 app/templates/reports/index.html:28
+#: app/templates/clients/edit.html:224 app/templates/reports/index.html:28
 msgid "Active Projects"
 msgstr "Aktyvūs projektai"
 
@@ -15633,8 +15634,8 @@ msgstr "Nustatymai"
 msgid "System Info"
 msgstr "Sistemos informacija"
 
-#: app/templates/admin/dashboard.html:301 app/templates/clients/create.html:100
-#: app/templates/clients/edit.html:94 app/templates/clients/view.html:136
+#: app/templates/admin/dashboard.html:301 app/templates/clients/create.html:114
+#: app/templates/clients/edit.html:108 app/templates/clients/view.html:136
 #: app/templates/partials/_sidebar.html:699
 #: app/templates/projects/create.html:117 app/templates/projects/edit.html:98
 #: app/templates/projects/view.html:188
@@ -15739,14 +15740,14 @@ msgstr "Naujausia veikla"
 #: app/templates/timer/calendar.html:869 app/templates/timer/calendar.html:873
 #: app/templates/timer/calendar.html:886
 #: app/templates/timer/manual_entry.html:33 app/templates/user/profile.html:77
-#: app/utils/email.py:366 app/utils/email.py:611 app/utils/email.py:927
-#: app/utils/email.py:928 app/utils/email.py:1185 app/utils/email.py:1188
-#: app/utils/email.py:1232 app/utils/email.py:1235 app/utils/email.py:1279
-#: app/utils/email.py:1282 app/utils/email.py:1327 app/utils/email.py:1330
-#: app/utils/email.py:1390 app/utils/email.py:1393 app/utils/email.py:1421
-#: app/utils/email.py:1442 app/utils/email.py:1471 app/utils/email.py:1492
-#: app/utils/email.py:1521 app/utils/email.py:1522 app/utils/email.py:1544
-#: app/utils/email.py:1633
+#: app/utils/email.py:368 app/utils/email.py:613 app/utils/email.py:929
+#: app/utils/email.py:930 app/utils/email.py:1188 app/utils/email.py:1191
+#: app/utils/email.py:1235 app/utils/email.py:1238 app/utils/email.py:1282
+#: app/utils/email.py:1285 app/utils/email.py:1330 app/utils/email.py:1333
+#: app/utils/email.py:1393 app/utils/email.py:1396 app/utils/email.py:1424
+#: app/utils/email.py:1445 app/utils/email.py:1474 app/utils/email.py:1495
+#: app/utils/email.py:1524 app/utils/email.py:1525 app/utils/email.py:1547
+#: app/utils/email.py:1637
 msgid "N/A"
 msgstr "N/d"
 
@@ -15969,7 +15970,7 @@ msgstr "Nepavyko atnaujinti būsenos. Bandyk dar kartą."
 
 #: app/templates/admin/email_support.html:449
 #: app/templates/admin/peppol_setup_wizard.html:255
-#: app/templates/invoices/edit.html:825 app/templates/invoices/view.html:549
+#: app/templates/invoices/edit.html:826 app/templates/invoices/view.html:549
 msgid "Sending..."
 msgstr "Siunčiama..."
 
@@ -16406,9 +16407,9 @@ msgstr "Įkeltas"
 #: app/templates/weekly_goals/index.html:51
 #: app/templates/weekly_goals/index.html:180
 #: app/templates/weekly_goals/view.html:71 app/templates/workflows/list.html:67
-#: app/templates/workflows/view.html:66 app/utils/i18n_helpers.py:223
-#: app/utils/i18n_helpers.py:235 app/utils/i18n_helpers.py:246
-#: app/utils/i18n_helpers.py:257
+#: app/templates/workflows/view.html:66 app/utils/i18n_helpers.py:255
+#: app/utils/i18n_helpers.py:267 app/utils/i18n_helpers.py:278
+#: app/utils/i18n_helpers.py:289
 msgid "Failed"
 msgstr "Nepavyko"
 
@@ -16717,8 +16718,8 @@ msgstr "Išdavėjas"
 #: app/templates/admin/oidc_debug.html:73
 #: app/templates/admin/oidc_debug.html:74
 #: app/templates/integrations/health.html:86
-#: app/templates/integrations/list.html:91 app/utils/email.py:670
-#: app/utils/email.py:671 app/utils/email.py:672 app/utils/email.py:676
+#: app/templates/integrations/list.html:91 app/utils/email.py:672
+#: app/utils/email.py:673 app/utils/email.py:674 app/utils/email.py:678
 msgid "Not configured"
 msgstr "Nesukonfigūruota"
 
@@ -16746,7 +16747,7 @@ msgstr "Nustatyta"
 #: app/templates/integrations/wizard_jira.html:255
 #: app/templates/integrations/wizard_quickbooks.html:224
 #: app/templates/integrations/wizard_xero.html:207
-#: app/templates/recurring_tasks/view.html:83 app/utils/email.py:368
+#: app/templates/recurring_tasks/view.html:83 app/utils/email.py:370
 msgid "Not set"
 msgstr "Nenustatyta"
 
@@ -17242,7 +17243,7 @@ msgstr "Veiklos statistika"
 #: app/templates/calendar/view.html:84 app/templates/calendar/view.html:109
 #: app/templates/calendar/view.html:110 app/templates/calendar/view.html:117
 #: app/templates/client_portal/base.html:265
-#: app/templates/client_portal/base.html:356
+#: app/templates/client_portal/base.html:357
 #: app/templates/client_portal/projects.html:59
 #: app/templates/client_portal/time_entries.html:4
 #: app/templates/client_portal/time_entries.html:9
@@ -17266,7 +17267,7 @@ msgstr "Laiko įrašai"
 #: app/templates/integrations/wizard_quickbooks.html:227
 #: app/templates/integrations/wizard_xero.html:210
 #: app/templates/invoices/edit.html:123 app/templates/invoices/edit.html:132
-#: app/templates/invoices/edit.html:550 app/templates/invoices/edit.html:561
+#: app/templates/invoices/edit.html:551 app/templates/invoices/edit.html:562
 #: app/templates/mileage/gps.html:20 app/templates/projects/add_good.html:47
 #: app/templates/projects/edit_good.html:47
 #: app/templates/projects/health.html:42
@@ -17344,7 +17345,8 @@ msgstr "Diena"
 #: app/templates/admin/email_templates/list.html:42
 #: app/templates/admin/email_templates/view.html:56
 #: app/templates/admin/payroll_templates.html:46
-#: app/templates/admin/settings.html:804
+#: app/templates/admin/settings.html:804 app/templates/clients/create.html:57
+#: app/templates/clients/edit.html:64
 #: app/templates/components/theme_picker.html:60
 msgid "Default"
 msgstr "Numatytasis"
@@ -17627,7 +17629,7 @@ msgstr "Adresas"
 
 #: app/templates/admin/pdf_layout.html:1826
 #: app/templates/admin/quote_pdf_layout.html:1620
-#: app/templates/clients/create.html:67 app/templates/clients/edit.html:61
+#: app/templates/clients/create.html:81 app/templates/clients/edit.html:75
 #: app/templates/clients/view.html:121 app/templates/contacts/form.html:42
 #: app/templates/contacts/list.html:30 app/templates/contacts/list.html:54
 #: app/templates/contacts/view.html:37
@@ -17707,7 +17709,7 @@ msgstr "Kliento informacija"
 
 #: app/templates/admin/pdf_layout.html:1862
 #: app/templates/admin/quote_pdf_layout.html:1656
-#: app/templates/clients/create.html:20 app/templates/clients/create.html:142
+#: app/templates/clients/create.html:20 app/templates/clients/create.html:156
 #: app/templates/clients/edit.html:20
 #: app/templates/components/inline_create_client_modal.html:22
 #: app/templates/import_export/index.html:69
@@ -18510,7 +18512,7 @@ msgstr "Šrifto stilius"
 #: app/templates/admin/quote_pdf_layout.html:3697
 #: app/templates/components/theme_picker.html:71
 #: app/templates/inventory/reports/turnover.html:68
-#: app/templates/inventory/stock_items/view.html:209 app/utils/email.py:367
+#: app/templates/inventory/stock_items/view.html:209 app/utils/email.py:369
 msgid "Normal"
 msgstr "Įprastas"
 
@@ -19130,8 +19132,8 @@ msgstr "Pirmiausia pasirink sąskaitą faktūrą"
 #: app/templates/invoices/_invoices_list.html:63
 #: app/templates/invoices/list.html:49 app/templates/invoices/list.html:130
 #: app/templates/quotes/_quotes_list.html:65 app/templates/quotes/list.html:82
-#: app/templates/quotes/view.html:73 app/utils/i18n_helpers.py:65
-#: app/utils/i18n_helpers.py:77
+#: app/templates/quotes/view.html:73 app/utils/i18n_helpers.py:97
+#: app/utils/i18n_helpers.py:109
 msgid "Sent"
 msgstr "Išsiųsta"
 
@@ -19561,7 +19563,7 @@ msgstr "Laikmačiai"
 
 #: app/templates/admin/settings.html:36
 #: app/templates/client_portal/base.html:262
-#: app/templates/client_portal/base.html:353
+#: app/templates/client_portal/base.html:354
 #: app/templates/client_portal/invoice_detail.html:9
 #: app/templates/client_portal/invoices.html:4
 #: app/templates/client_portal/invoices.html:9
@@ -19580,7 +19582,7 @@ msgstr "Sąskaitos faktūros"
 
 #: app/templates/admin/settings.html:37
 #: app/templates/client_portal/base.html:295
-#: app/templates/client_portal/base.html:380
+#: app/templates/client_portal/base.html:381
 #: app/templates/client_portal/quote_detail.html:9
 #: app/templates/client_portal/quotes.html:4
 #: app/templates/client_portal/quotes.html:9
@@ -20053,23 +20055,23 @@ msgstr "Įmonės svetainė"
 msgid "Company Address (free text / fallback)"
 msgstr "Įmonės adresas (laisvas tekstas / atsarginis variantas)"
 
-#: app/templates/admin/settings.html:379 app/templates/clients/create.html:77
-#: app/templates/clients/edit.html:71
+#: app/templates/admin/settings.html:379 app/templates/clients/create.html:91
+#: app/templates/clients/edit.html:85
 msgid "Street"
 msgstr "Gatvė"
 
-#: app/templates/admin/settings.html:380 app/templates/clients/create.html:78
-#: app/templates/clients/edit.html:72
+#: app/templates/admin/settings.html:380 app/templates/clients/create.html:92
+#: app/templates/clients/edit.html:86
 msgid "Street and number"
 msgstr "Gatvė ir namo numeris"
 
-#: app/templates/admin/settings.html:383 app/templates/clients/create.html:81
-#: app/templates/clients/edit.html:75
+#: app/templates/admin/settings.html:383 app/templates/clients/create.html:95
+#: app/templates/clients/edit.html:89
 msgid "Postcode"
 msgstr "Pašto kodas"
 
-#: app/templates/admin/settings.html:387 app/templates/clients/create.html:85
-#: app/templates/clients/edit.html:79 app/templates/per_diem/form.html:70
+#: app/templates/admin/settings.html:387 app/templates/clients/create.html:99
+#: app/templates/clients/edit.html:93 app/templates/per_diem/form.html:70
 msgid "City"
 msgstr "Miestas"
 
@@ -20904,7 +20906,7 @@ msgid "Setup Status"
 msgstr "Sąrankos būsena"
 
 #: app/templates/admin/telemetry.html:38
-#: app/templates/components/project_forecast.html:287
+#: app/templates/components/project_forecast.html:283
 #: app/templates/tasks/view.html:27
 msgid "Complete"
 msgstr "Užbaigta"
@@ -21182,7 +21184,7 @@ msgstr "Pakartok naują slaptažodį"
 msgid "Require password change on next login"
 msgstr "Reikalauti pakeisti slaptažodį kitą kartą prisijungus"
 
-#: app/templates/admin/user_form.html:84 app/templates/clients/edit.html:124
+#: app/templates/admin/user_form.html:84 app/templates/clients/edit.html:138
 #: app/templates/email/client_portal_password_setup.html:72
 msgid "Client Portal Access"
 msgstr "Prieiga prie klientų portalo"
@@ -21212,7 +21214,7 @@ msgstr ""
 "neapribojama. Taip pat pažymėk „Tik portalas“, kad naudotojas negalėtų "
 "naudotis įprasta TimeTracker sąsaja."
 
-#: app/templates/admin/user_form.html:95 app/templates/clients/edit.html:132
+#: app/templates/admin/user_form.html:95 app/templates/clients/edit.html:146
 msgid "Enable Client Portal"
 msgstr "Įjungti klientų portalą"
 
@@ -21461,7 +21463,7 @@ msgid "Required"
 msgstr "Privalomas"
 
 #: app/templates/admin/custom_field_definitions/list.html:48
-#: app/templates/invoices/edit.html:784 app/templates/invoices/edit.html:793
+#: app/templates/invoices/edit.html:785 app/templates/invoices/edit.html:794
 #: app/templates/invoices/list.html:135 app/templates/invoices/view.html:517
 #: app/templates/kanban/columns.html:203 app/templates/kiosk/dashboard.html:326
 #: app/templates/kiosk/dashboard.html:338
@@ -21567,7 +21569,7 @@ msgstr "HTML šablonas"
 
 #: app/templates/admin/email_templates/create.html:55
 #: app/templates/admin/email_templates/edit.html:72
-#: app/templates/invoices/edit.html:793 app/templates/invoices/view.html:517
+#: app/templates/invoices/edit.html:794 app/templates/invoices/view.html:517
 msgid "Custom Message"
 msgstr "Savas pranešimas"
 
@@ -22733,7 +22735,7 @@ msgstr "Atliktos užduotys"
 #: app/templates/milestones/form.html:32 app/templates/tasks/list.html:26
 #: app/templates/tasks/list.html:53 app/templates/tasks/list.html:180
 #: app/templates/tasks/my_tasks.html:57 app/templates/tasks/my_tasks.html:132
-#: app/utils/i18n_helpers.py:17 app/utils/i18n_helpers.py:29
+#: app/utils/i18n_helpers.py:49 app/utils/i18n_helpers.py:61
 msgid "In Progress"
 msgstr "Vykdoma"
 
@@ -22742,7 +22744,7 @@ msgstr "Vykdoma"
 #: app/templates/tasks/create.html:90 app/templates/tasks/list.html:25
 #: app/templates/tasks/list.html:52 app/templates/tasks/list.html:179
 #: app/templates/tasks/my_tasks.html:40 app/templates/tasks/my_tasks.html:131
-#: app/utils/i18n_helpers.py:16 app/utils/i18n_helpers.py:28
+#: app/utils/i18n_helpers.py:48 app/utils/i18n_helpers.py:60
 msgid "To Do"
 msgstr "Reikia atlikti"
 
@@ -22825,9 +22827,9 @@ msgstr "Neapmokestinamas"
 #: app/templates/tasks/my_tasks.html:91 app/templates/weekly_goals/edit.html:89
 #: app/templates/weekly_goals/index.html:39
 #: app/templates/weekly_goals/index.html:172
-#: app/templates/weekly_goals/view.html:67 app/utils/i18n_helpers.py:222
-#: app/utils/i18n_helpers.py:234 app/utils/i18n_helpers.py:245
-#: app/utils/i18n_helpers.py:256
+#: app/templates/weekly_goals/view.html:67 app/utils/i18n_helpers.py:254
+#: app/utils/i18n_helpers.py:266 app/utils/i18n_helpers.py:277
+#: app/utils/i18n_helpers.py:288
 msgid "Completed"
 msgstr "Atlikta"
 
@@ -22844,10 +22846,10 @@ msgstr "Atlikta"
 #: app/templates/projects/list.html:579 app/templates/tasks/list.html:56
 #: app/templates/tasks/list.html:183 app/templates/tasks/my_tasks.html:135
 #: app/templates/weekly_goals/edit.html:91
-#: app/templates/weekly_goals/view.html:73 app/utils/i18n_helpers.py:20
-#: app/utils/i18n_helpers.py:32 app/utils/i18n_helpers.py:68
-#: app/utils/i18n_helpers.py:80 app/utils/i18n_helpers.py:247
-#: app/utils/i18n_helpers.py:258
+#: app/templates/weekly_goals/view.html:73 app/utils/i18n_helpers.py:52
+#: app/utils/i18n_helpers.py:64 app/utils/i18n_helpers.py:100
+#: app/utils/i18n_helpers.py:112 app/utils/i18n_helpers.py:279
+#: app/utils/i18n_helpers.py:290
 msgid "Cancelled"
 msgstr "Atšaukta"
 
@@ -23344,6 +23346,8 @@ msgid "Remove current picture"
 msgstr "Pašalinti dabartinę nuotrauką"
 
 #: app/templates/auth/edit_profile.html:59
+#: app/templates/client_portal/_language_switcher.html:5
+#: app/templates/clients/create.html:54 app/templates/clients/edit.html:61
 #: app/templates/partials/_topbar.html:80 app/templates/user/settings.html:290
 msgid "Language"
 msgstr "Kalba"
@@ -23699,14 +23703,14 @@ msgstr "viršyta"
 
 #: app/templates/budget/dashboard.html:153
 #: app/templates/budget/project_detail.html:48
-#: app/templates/budget/project_detail.html:65 app/utils/i18n_helpers.py:268
+#: app/templates/budget/project_detail.html:65 app/utils/i18n_helpers.py:300
 msgid "Over Budget"
 msgstr "Viršytas biudžetas"
 
 #: app/templates/budget/dashboard.html:157
 #: app/templates/budget/project_detail.html:66
 #: app/templates/projects/health.html:19 app/templates/projects/view.html:311
-#: app/utils/i18n_helpers.py:275 app/utils/i18n_helpers.py:281
+#: app/utils/i18n_helpers.py:307 app/utils/i18n_helpers.py:313
 msgid "Critical"
 msgstr "Kritinė"
 
@@ -24298,7 +24302,7 @@ msgstr "Pažymėti kaip svarbią"
 #: app/templates/client_portal/base.html:13
 #: app/templates/client_portal/base.html:20
 #: app/templates/client_portal/base.html:242
-#: app/templates/client_portal/base.html:332
+#: app/templates/client_portal/base.html:333
 #: app/templates/client_portal/dashboard.html:4
 #: app/templates/client_portal/dashboard.html:8
 #: app/templates/client_portal/dashboard.html:13
@@ -24360,7 +24364,7 @@ msgstr ""
 #: app/templates/client_portal/approval_detail.html:9
 #: app/templates/client_portal/approvals.html:9
 #: app/templates/client_portal/base.html:268
-#: app/templates/client_portal/base.html:359
+#: app/templates/client_portal/base.html:360
 #: app/templates/expenses/approvals.html:7 app/templates/expenses/list.html:19
 msgid "Approvals"
 msgstr "Patvirtinimai"
@@ -24437,8 +24441,8 @@ msgstr "Atgal į patvirtinimus"
 #: app/templates/mileage/list.html:87 app/templates/mileage/list.html:218
 #: app/templates/mileage/view.html:196 app/templates/per_diem/list.html:68
 #: app/templates/per_diem/list.html:177 app/templates/per_diem/list.html:257
-#: app/templates/per_diem/view.html:73 app/utils/i18n_helpers.py:143
-#: app/utils/i18n_helpers.py:154
+#: app/templates/per_diem/view.html:73 app/utils/i18n_helpers.py:175
+#: app/utils/i18n_helpers.py:186
 msgid "Approved"
 msgstr "Patvirtinta"
 
@@ -24452,8 +24456,8 @@ msgstr "Patvirtinta"
 #: app/templates/per_diem/list.html:178 app/templates/per_diem/list.html:259
 #: app/templates/per_diem/view.html:77
 #: app/templates/quotes/_quotes_list.html:69 app/templates/quotes/list.html:84
-#: app/templates/quotes/view.html:77 app/utils/i18n_helpers.py:144
-#: app/utils/i18n_helpers.py:155
+#: app/templates/quotes/view.html:77 app/utils/i18n_helpers.py:176
+#: app/utils/i18n_helpers.py:187
 msgid "Rejected"
 msgstr "Atmesta"
 
@@ -24507,7 +24511,7 @@ msgid "No approvals found for this status."
 msgstr "Šios būsenos patvirtinimų nerasta."
 
 #: app/templates/client_portal/base.html:275
-#: app/templates/client_portal/base.html:366
+#: app/templates/client_portal/base.html:367
 #: app/templates/client_portal/issue_detail.html:9
 #: app/templates/client_portal/issues.html:4
 #: app/templates/client_portal/issues.html:9
@@ -24520,7 +24524,7 @@ msgid "Issues"
 msgstr "Problemos"
 
 #: app/templates/client_portal/base.html:285
-#: app/templates/client_portal/base.html:376
+#: app/templates/client_portal/base.html:377
 #: app/templates/client_portal/messages.html:3
 #: app/templates/client_portal/messages.html:7
 #: app/templates/clients/messages.html:4 app/templates/clients/messages.html:10
@@ -24538,30 +24542,30 @@ msgid "More"
 msgstr "Daugiau"
 
 #: app/templates/client_portal/base.html:298
-#: app/templates/client_portal/base.html:383
+#: app/templates/client_portal/base.html:384
 #: app/templates/client_portal/documents.html:4
 #: app/templates/client_portal/documents.html:9
 #: app/templates/client_portal/documents.html:14
 msgid "Documents"
 msgstr "Dokumentai"
 
-#: app/templates/client_portal/base.html:315
+#: app/templates/client_portal/base.html:316
 msgid "Toggle menu"
 msgstr "Perjungti meniu"
 
-#: app/templates/client_portal/base.html:446
+#: app/templates/client_portal/base.html:448
 msgid "Approval update"
 msgstr "Patvirtinimo naujiena"
 
-#: app/templates/client_portal/base.html:446
+#: app/templates/client_portal/base.html:448
 msgid "A time entry approval was requested."
 msgstr "Pateiktas prašymas patvirtinti laiko įrašą."
 
-#: app/templates/client_portal/base.html:446
+#: app/templates/client_portal/base.html:448
 msgid "An approval was updated."
 msgstr "Patvirtinimas atnaujintas."
 
-#: app/templates/client_portal/base.html:451
+#: app/templates/client_portal/base.html:453
 #: app/templates/expenses/dashboard.html:37
 #: app/templates/tasks/_kanban.html:972 app/templates/tasks/_kanban.html:1048
 #: app/templates/timer/time_entries_overview.html:210
@@ -24706,7 +24710,7 @@ msgstr "Sąskaitos faktūros eilutės"
 #: app/templates/inventory/warehouses/view.html:150
 #: app/templates/invoices/edit.html:97 app/templates/invoices/edit.html:144
 #: app/templates/invoices/edit.html:146 app/templates/invoices/edit.html:148
-#: app/templates/invoices/edit.html:586 app/templates/invoices/view.html:156
+#: app/templates/invoices/edit.html:587 app/templates/invoices/view.html:156
 #: app/templates/invoices/view.html:213 app/templates/kiosk/dashboard.html:172
 #: app/templates/kiosk/dashboard.html:263
 #: app/templates/projects/add_good.html:56
@@ -24722,7 +24726,7 @@ msgstr "Kiekis"
 #: app/templates/client_portal/quote_detail.html:71
 #: app/templates/client_portal/quote_detail.html:89
 #: app/templates/invoices/edit.html:98 app/templates/invoices/edit.html:152
-#: app/templates/invoices/edit.html:153 app/templates/invoices/edit.html:589
+#: app/templates/invoices/edit.html:153 app/templates/invoices/edit.html:590
 #: app/templates/invoices/pdf_default.html:90
 #: app/templates/invoices/view.html:157 app/templates/invoices/view.html:214
 #: app/templates/projects/add_good.html:61
@@ -24757,18 +24761,18 @@ msgstr "%(client_name)s sąskaitos faktūros"
 #: app/templates/timer/_time_entries_list.html:168
 #: app/templates/timer/time_entries_overview.html:106
 #: app/templates/timer/time_entries_overview.html:199
-#: app/templates/timer/view_timer.html:144 app/utils/i18n_helpers.py:88
-#: app/utils/i18n_helpers.py:99
+#: app/templates/timer/view_timer.html:144 app/utils/i18n_helpers.py:120
+#: app/utils/i18n_helpers.py:131
 msgid "Unpaid"
 msgstr "Neapmokėta"
 
 #: app/templates/client_portal/invoices.html:60
-#: app/templates/components/project_forecast.html:308
+#: app/templates/components/project_forecast.html:304
 #: app/templates/invoices/_invoices_list.html:71
 #: app/templates/invoices/list.html:27 app/templates/invoices/list.html:55
 #: app/templates/invoices/list.html:132 app/templates/main/dashboard.html:783
 #: app/templates/tasks/_kanban.html:105 app/templates/tasks/overdue.html:35
-#: app/utils/i18n_helpers.py:67 app/utils/i18n_helpers.py:79
+#: app/utils/i18n_helpers.py:99 app/utils/i18n_helpers.py:111
 msgid "Overdue"
 msgstr "Pradelsta"
 
@@ -24960,7 +24964,7 @@ msgstr ""
 "sąskaitas faktūras"
 
 #: app/templates/client_portal/login.html:54
-#: app/templates/clients/edit.html:147
+#: app/templates/clients/edit.html:161
 msgid "portal_username"
 msgstr "portal_username"
 
@@ -24969,11 +24973,11 @@ msgstr "portal_username"
 msgid "Enter your password"
 msgstr "Įvesk slaptažodį"
 
-#: app/templates/client_portal/login.html:66
+#: app/templates/client_portal/login.html:67
 msgid "If you have a TimeTracker user account with portal access,"
 msgstr "Jei turi TimeTracker naudotojo paskyrą su prieiga prie portalo,"
 
-#: app/templates/client_portal/login.html:67
+#: app/templates/client_portal/login.html:68
 msgid "log in here instead"
 msgstr "prisijunk čia"
 
@@ -25018,8 +25022,8 @@ msgstr "Pasirink projektą (nebūtina)"
 #: app/templates/tasks/create.html:63 app/templates/tasks/create.html:82
 #: app/templates/tasks/create.html:473 app/templates/tasks/edit.html:71
 #: app/templates/tasks/edit.html:658 app/templates/tasks/list.html:63
-#: app/templates/tasks/my_tasks.html:142 app/utils/i18n_helpers.py:39
-#: app/utils/i18n_helpers.py:45
+#: app/templates/tasks/my_tasks.html:142 app/utils/i18n_helpers.py:71
+#: app/utils/i18n_helpers.py:77
 msgid "Low"
 msgstr "Žemas"
 
@@ -25034,8 +25038,8 @@ msgstr "Žemas"
 #: app/templates/tasks/create.html:64 app/templates/tasks/create.html:82
 #: app/templates/tasks/create.html:474 app/templates/tasks/edit.html:72
 #: app/templates/tasks/edit.html:659 app/templates/tasks/list.html:64
-#: app/templates/tasks/my_tasks.html:143 app/utils/i18n_helpers.py:39
-#: app/utils/i18n_helpers.py:45
+#: app/templates/tasks/my_tasks.html:143 app/utils/i18n_helpers.py:71
+#: app/utils/i18n_helpers.py:77
 msgid "Medium"
 msgstr "Vidutinis"
 
@@ -25050,8 +25054,8 @@ msgstr "Vidutinis"
 #: app/templates/tasks/create.html:65 app/templates/tasks/create.html:82
 #: app/templates/tasks/create.html:475 app/templates/tasks/edit.html:73
 #: app/templates/tasks/edit.html:660 app/templates/tasks/list.html:65
-#: app/templates/tasks/my_tasks.html:144 app/utils/i18n_helpers.py:39
-#: app/utils/i18n_helpers.py:45
+#: app/templates/tasks/my_tasks.html:144 app/utils/i18n_helpers.py:71
+#: app/utils/i18n_helpers.py:77
 msgid "High"
 msgstr "Aukštas"
 
@@ -25063,8 +25067,8 @@ msgstr "Aukštas"
 #: app/templates/tasks/create.html:66 app/templates/tasks/create.html:82
 #: app/templates/tasks/create.html:476 app/templates/tasks/edit.html:74
 #: app/templates/tasks/edit.html:661 app/templates/tasks/list.html:66
-#: app/templates/tasks/my_tasks.html:145 app/utils/i18n_helpers.py:39
-#: app/utils/i18n_helpers.py:45
+#: app/templates/tasks/my_tasks.html:145 app/utils/i18n_helpers.py:71
+#: app/utils/i18n_helpers.py:77
 msgid "Urgent"
 msgstr "Skubus"
 
@@ -25231,7 +25235,7 @@ msgstr "Komercinio pasiūlymo eilutės"
 #: app/templates/inventory/warehouses/view.html:85
 #: app/templates/inventory/warehouses/view.html:100
 #: app/templates/invoices/edit.html:272 app/templates/invoices/edit.html:301
-#: app/templates/invoices/edit.html:671
+#: app/templates/invoices/edit.html:672
 #: app/templates/invoices/pdf_default.html:139
 #: app/templates/quotes/_edit_quote_form_scripts.html:237
 #: app/templates/quotes/create.html:130 app/templates/quotes/edit.html:204
@@ -25628,7 +25632,7 @@ msgstr ""
 "pirmąjį klientą ir pradėk!"
 
 #: app/templates/clients/create.html:4 app/templates/clients/create.html:10
-#: app/templates/clients/create.html:131 app/templates/clients/list.html:14
+#: app/templates/clients/create.html:145 app/templates/clients/list.html:14
 #: app/templates/components/inline_create_client_modal.html:9
 #: app/templates/components/inline_create_client_modal.html:46
 msgid "Create Client"
@@ -25649,7 +25653,7 @@ msgstr ""
 msgid "Enter client name"
 msgstr "Įvesk kliento pavadinimą"
 
-#: app/templates/clients/create.html:24 app/templates/clients/create.html:146
+#: app/templates/clients/create.html:24 app/templates/clients/create.html:160
 #: app/templates/clients/edit.html:24
 #: app/templates/components/inline_create_client_modal.html:26
 #: app/templates/project_templates/create.html:52
@@ -25689,60 +25693,68 @@ msgstr "Pagrindinio kontaktinio asmens vardas"
 msgid "contact@client.com"
 msgstr "contact@client.com"
 
-#: app/templates/clients/create.html:54 app/templates/clients/edit.html:37
+#: app/templates/clients/create.html:62 app/templates/clients/edit.html:69
+msgid ""
+"Used for emails to this client and as the client portal language. The "
+"portal visitor can still switch."
+msgstr ""
+"Šia kalba klientui siunčiami el. laiškai ir rodomas klientų portalas. "
+"Portalo lankytojas kalbą gali pakeisti."
+
+#: app/templates/clients/create.html:68 app/templates/clients/edit.html:37
 msgid "Monthly Prepaid Hours"
 msgstr "Mėnesio iš anksto apmokėtos valandos"
 
-#: app/templates/clients/create.html:55 app/templates/clients/edit.html:38
+#: app/templates/clients/create.html:69 app/templates/clients/edit.html:38
 msgid "e.g. 50"
 msgstr "pvz., 50"
 
-#: app/templates/clients/create.html:56 app/templates/clients/edit.html:39
+#: app/templates/clients/create.html:70 app/templates/clients/edit.html:39
 msgid "Leave empty if this client has no prepaid allocation."
 msgstr "Palik tuščią, jei šis klientas neturi iš anksto apmokėto valandų paketo."
 
-#: app/templates/clients/create.html:59 app/templates/clients/edit.html:42
+#: app/templates/clients/create.html:73 app/templates/clients/edit.html:42
 msgid "Prepaid Reset Day"
 msgstr "Iš anksto apmokėtų valandų atnaujinimo diena"
 
-#: app/templates/clients/create.html:61 app/templates/clients/edit.html:44
+#: app/templates/clients/create.html:75 app/templates/clients/edit.html:44
 msgid "Day of the month when prepaid hours reset (1-28)."
 msgstr "Mėnesio diena, kurią iš anksto apmokėtos valandos atnaujinamos (1-28)."
 
-#: app/templates/clients/create.html:68 app/templates/clients/edit.html:62
+#: app/templates/clients/create.html:82 app/templates/clients/edit.html:76
 msgid "+1 (555) 123-4567"
 msgstr "+1 (555) 123-4567"
 
-#: app/templates/clients/create.html:71 app/templates/clients/edit.html:65
+#: app/templates/clients/create.html:85 app/templates/clients/edit.html:79
 msgid "Address (free text / fallback)"
 msgstr "Adresas (laisvas tekstas / atsarginis)"
 
-#: app/templates/clients/create.html:72 app/templates/clients/edit.html:66
+#: app/templates/clients/create.html:86 app/templates/clients/edit.html:80
 msgid "Client address"
 msgstr "Kliento adresas"
 
-#: app/templates/clients/create.html:89 app/templates/clients/edit.html:83
+#: app/templates/clients/create.html:103 app/templates/clients/edit.html:97
 msgid "Country (ISO alpha-2)"
 msgstr "Šalis (ISO alpha-2)"
 
-#: app/templates/clients/create.html:93 app/templates/clients/edit.html:87
+#: app/templates/clients/create.html:107 app/templates/clients/edit.html:101
 msgid "VAT ID"
 msgstr "PVM mokėtojo kodas"
 
-#: app/templates/clients/create.html:102 app/templates/clients/edit.html:96
+#: app/templates/clients/create.html:116 app/templates/clients/edit.html:110
 msgid "These custom fields are defined globally and available for all clients."
 msgstr "Šie savi laukai apibrėžti visuotinai ir prieinami visiems klientams."
 
-#: app/templates/clients/create.html:116 app/templates/clients/edit.html:110
+#: app/templates/clients/create.html:130 app/templates/clients/edit.html:124
 #: app/templates/projects/create.html:133 app/templates/projects/edit.html:114
 msgid "Enter value"
 msgstr "Įvesk reikšmę"
 
-#: app/templates/clients/create.html:143
+#: app/templates/clients/create.html:157
 msgid "Choose a clear, descriptive name for the client organization."
 msgstr "Pasirink aiškų, apibūdinantį kliento organizacijos pavadinimą."
 
-#: app/templates/clients/create.html:147
+#: app/templates/clients/create.html:161
 msgid ""
 "Set the standard hourly rate for this client. This will automatically "
 "populate when creating new projects."
@@ -25750,22 +25762,22 @@ msgstr ""
 "Nustatyk standartinį šio kliento valandinį įkainį. Jis bus automatiškai "
 "įrašomas kuriant naujus projektus."
 
-#: app/templates/clients/create.html:150 app/templates/contacts/view.html:25
+#: app/templates/clients/create.html:164 app/templates/contacts/view.html:25
 #: app/templates/leads/view.html:41
 msgid "Contact Information"
 msgstr "Kontaktinė informacija"
 
-#: app/templates/clients/create.html:151
+#: app/templates/clients/create.html:165
 msgid "Add contact details for easy communication and record keeping."
 msgstr ""
 "Pridėk kontaktinius duomenis, kad būtų paprasčiau bendrauti ir tvarkyti "
 "įrašus."
 
-#: app/templates/clients/create.html:154 app/templates/clients/view.html:179
+#: app/templates/clients/create.html:168 app/templates/clients/view.html:179
 msgid "Prepaid Hours"
 msgstr "Iš anksto apmokėtos valandos"
 
-#: app/templates/clients/create.html:155
+#: app/templates/clients/create.html:169
 msgid ""
 "Configure monthly included hours and the reset day if this client has a "
 "retainer or prepaid bundle."
@@ -25773,7 +25785,7 @@ msgstr ""
 "Nustatyk mėnesio įskaičiuotas valandas ir atnaujinimo dieną, jei šis "
 "klientas turi abonentinę sutartį ar iš anksto apmokėtą paketą."
 
-#: app/templates/clients/create.html:159
+#: app/templates/clients/create.html:173
 msgid "Provide context about the client relationship or typical project types."
 msgstr "Aprašyk bendradarbiavimą su klientu arba įprastus projektų tipus."
 
@@ -25782,7 +25794,7 @@ msgstr "Aprašyk bendradarbiavimą su klientu arba įprastus projektų tipus."
 msgid "Edit Client"
 msgstr "Redaguoti klientą"
 
-#: app/templates/clients/edit.html:126
+#: app/templates/clients/edit.html:140
 msgid ""
 "Enable portal access for this client. Clients can log in with their own "
 "credentials to view projects, invoices, and time entries."
@@ -25790,7 +25802,7 @@ msgstr ""
 "Įjunk šio kliento prieigą prie portalo. Klientas galės prisijungti savo "
 "duomenimis ir peržiūrėti projektus, sąskaitas faktūras bei laiko įrašus."
 
-#: app/templates/clients/edit.html:127
+#: app/templates/clients/edit.html:141
 msgid ""
 "This is the recommended setup for external clients (login URL: /client-"
 "portal/login)."
@@ -25798,41 +25810,41 @@ msgstr ""
 "Tai rekomenduojama sąranka išorės klientams (prisijungimo URL: /client-"
 "portal/login)."
 
-#: app/templates/clients/edit.html:138
+#: app/templates/clients/edit.html:152
 msgid "Enable Issue Reporting"
 msgstr "Įjungti pranešimus apie problemas"
 
-#: app/templates/clients/edit.html:141
+#: app/templates/clients/edit.html:155
 msgid "Allow clients to report bugs and issues through the portal"
 msgstr "Leisti klientams pranešti apie klaidas ir problemas per portalą"
 
-#: app/templates/clients/edit.html:146
+#: app/templates/clients/edit.html:160
 msgid "Portal Username"
 msgstr "Portalo naudotojo vardas"
 
-#: app/templates/clients/edit.html:148
+#: app/templates/clients/edit.html:162
 msgid "Unique username for portal login"
 msgstr "Unikalus naudotojo vardas prisijungti prie portalo"
 
-#: app/templates/clients/edit.html:151
+#: app/templates/clients/edit.html:165
 msgid "Portal Password"
 msgstr "Portalo slaptažodis"
 
-#: app/templates/clients/edit.html:152
+#: app/templates/clients/edit.html:166
 #: app/templates/integrations/caldav_setup.html:99
 #: app/templates/integrations/manage.html:257
 msgid "Leave empty to keep current password"
 msgstr "Palik tuščią, kad liktų dabartinis slaptažodis"
 
-#: app/templates/clients/edit.html:153
+#: app/templates/clients/edit.html:167
 msgid "Set a new password or leave empty to keep current"
 msgstr "Nustatyk naują slaptažodį arba palik tuščią, kad liktų dabartinis"
 
-#: app/templates/clients/edit.html:156
+#: app/templates/clients/edit.html:170
 msgid "Custom portal domain"
 msgstr "Savas portalo domenas"
 
-#: app/templates/clients/edit.html:159
+#: app/templates/clients/edit.html:173
 msgid ""
 "Optional CNAME hostname for white-label portal access. Point DNS to this "
 "server, then issue a certificate (see nginx/CUSTOM_DOMAINS.md). Requires "
@@ -25843,24 +25855,24 @@ msgstr ""
 "Reikia įjungti Administravimas → Nustatymai → Leisti savus portalo "
 "domenus."
 
-#: app/templates/clients/edit.html:165
+#: app/templates/clients/edit.html:179
 msgid "Current portal username"
 msgstr "Dabartinis portalo naudotojo vardas"
 
-#: app/templates/clients/edit.html:174
+#: app/templates/clients/edit.html:188
 msgid "Update Client"
 msgstr "Atnaujinti klientą"
 
-#: app/templates/clients/edit.html:183
+#: app/templates/clients/edit.html:197
 msgid "Send Password Setup Email"
 msgstr "Siųsti slaptažodžio nustatymo laišką"
 
-#: app/templates/clients/edit.html:187
+#: app/templates/clients/edit.html:201
 #, python-format
 msgid "Send an email to %(email)s with a link to set their portal password."
 msgstr "Siųsti laišką adresu %(email)s su nuoroda portalo slaptažodžiui nustatyti."
 
-#: app/templates/clients/edit.html:193
+#: app/templates/clients/edit.html:207
 msgid ""
 "Email address is required to send password setup email. Please set the "
 "client email address above."
@@ -25868,11 +25880,11 @@ msgstr ""
 "Laiškui išsiųsti reikia el. pašto adreso. Aukščiau nurodyk kliento el. "
 "pašto adresą."
 
-#: app/templates/clients/edit.html:202
+#: app/templates/clients/edit.html:216
 msgid "Client Statistics"
 msgstr "Kliento statistika"
 
-#: app/templates/clients/edit.html:218
+#: app/templates/clients/edit.html:232
 msgid "Est. Total Cost"
 msgstr "Numatomos bendros sąnaudos"
 
@@ -25980,7 +25992,7 @@ msgstr "Šis klientas neturi apmokestinamo laiko, neįtraukto į sąskaitą."
 msgid "No unbilled time"
 msgstr "Nėra laiko, neįtraukto į sąskaitą"
 
-#: app/templates/clients/view.html:26 app/templates/clients/view.html:598
+#: app/templates/clients/view.html:26 app/templates/clients/view.html:596
 msgid "Invoice unbilled time"
 msgstr "Išrašyti sąskaitą už neįtrauktą laiką"
 
@@ -26000,7 +26012,7 @@ msgstr "Aktyvinti klientą?"
 msgid "Activate Client"
 msgstr "Aktyvinti klientą"
 
-#: app/templates/clients/view.html:45 app/templates/clients/view.html:648
+#: app/templates/clients/view.html:45 app/templates/clients/view.html:646
 msgid "Delete Client"
 msgstr "Ištrinti klientą"
 
@@ -26122,7 +26134,7 @@ msgstr "Priedų dar nėra"
 #: app/templates/projects/_projects_list.html:93
 #: app/templates/projects/list.html:36 app/templates/projects/list.html:173
 #: app/templates/projects/list.html:613 app/templates/projects/view.html:150
-#: app/utils/i18n_helpers.py:51 app/utils/i18n_helpers.py:57
+#: app/utils/i18n_helpers.py:83 app/utils/i18n_helpers.py:89
 msgid "Archived"
 msgstr "Archyvuotas"
 
@@ -26189,27 +26201,27 @@ msgstr ""
 msgid "Estimated total"
 msgstr "Numatoma suma"
 
-#: app/templates/clients/view.html:596
+#: app/templates/clients/view.html:594
 msgid "Create a draft invoice?"
 msgstr "Sukurti sąskaitos faktūros juodraštį?"
 
-#: app/templates/clients/view.html:599
+#: app/templates/clients/view.html:597
 msgid "Create invoice"
 msgstr "Sukurti sąskaitą faktūrą"
 
-#: app/templates/clients/view.html:617 app/templates/clients/view.html:623
+#: app/templates/clients/view.html:615 app/templates/clients/view.html:621
 msgid "Could not create invoice."
 msgstr "Nepavyko sukurti sąskaitos faktūros."
 
-#: app/templates/clients/view.html:631
+#: app/templates/clients/view.html:629
 msgid "Are you sure you want to delete this note?"
 msgstr "Ar tikrai nori ištrinti šią pastabą?"
 
-#: app/templates/clients/view.html:633
+#: app/templates/clients/view.html:631
 msgid "Delete Note"
 msgstr "Ištrinti pastabą"
 
-#: app/templates/clients/view.html:649
+#: app/templates/clients/view.html:647
 msgid "Are you sure you want to delete this client? This action cannot be undone."
 msgstr "Ar tikrai nori ištrinti šį klientą? Šio veiksmo negalima atšaukti."
 
@@ -26726,7 +26738,7 @@ msgid "Refresh forecast"
 msgstr "Atnaujinti prognozę"
 
 #: app/templates/components/project_forecast.html:57
-#: app/templates/components/project_forecast.html:591
+#: app/templates/components/project_forecast.html:587
 msgid "Could not load forecast."
 msgstr "Nepavyko įkelti prognozės."
 
@@ -26739,17 +26751,17 @@ msgid "Logged hours"
 msgstr "Užregistruotos valandos"
 
 #: app/templates/components/project_forecast.html:74
-#: app/templates/components/project_forecast.html:267
+#: app/templates/components/project_forecast.html:263
 msgid "Projected remaining"
 msgstr "Prognozuojamas likutis"
 
 #: app/templates/components/project_forecast.html:76
-#: app/templates/components/project_forecast.html:271
+#: app/templates/components/project_forecast.html:267
 msgid "Over budget"
 msgstr "Viršytas biudžetas"
 
 #: app/templates/components/project_forecast.html:90
-#: app/templates/components/project_forecast.html:312
+#: app/templates/components/project_forecast.html:308
 #: app/templates/reports/estimates_vs_actuals.html:53
 msgid "No data"
 msgstr "Duomenų nėra"
@@ -26786,107 +26798,107 @@ msgstr "Rizikos"
 msgid "Recommendations"
 msgstr "Rekomendacijos"
 
-#: app/templates/components/project_forecast.html:263
+#: app/templates/components/project_forecast.html:259
 msgid "Logged"
 msgstr "Užregistruota"
 
-#: app/templates/components/project_forecast.html:280
+#: app/templates/components/project_forecast.html:276
 msgid "budget used"
 msgstr "biudžeto panaudota"
 
-#: app/templates/components/project_forecast.html:282
-#: app/templates/components/project_forecast.html:358
+#: app/templates/components/project_forecast.html:278
+#: app/templates/components/project_forecast.html:354
 msgid "No budget set"
 msgstr "Biudžetas nenustatytas"
 
-#: app/templates/components/project_forecast.html:289
+#: app/templates/components/project_forecast.html:285
 msgid "days to completion"
 msgstr "d. iki užbaigimo"
 
-#: app/templates/components/project_forecast.html:291
-#: app/templates/components/project_forecast.html:348
+#: app/templates/components/project_forecast.html:287
+#: app/templates/components/project_forecast.html:344
 msgid "Insufficient data"
 msgstr "Nepakanka duomenų"
 
-#: app/templates/components/project_forecast.html:300
+#: app/templates/components/project_forecast.html:296
 msgid "On track"
 msgstr "Pagal planą"
 
-#: app/templates/components/project_forecast.html:304
+#: app/templates/components/project_forecast.html:300
 #: app/templates/projects/health.html:17
 msgid "At risk"
 msgstr "Kyla rizika"
 
-#: app/templates/components/project_forecast.html:321
+#: app/templates/components/project_forecast.html:317
 msgid "increasing"
 msgstr "didėja"
 
-#: app/templates/components/project_forecast.html:322
+#: app/templates/components/project_forecast.html:318
 msgid "decreasing"
 msgstr "mažėja"
 
-#: app/templates/components/project_forecast.html:323
+#: app/templates/components/project_forecast.html:319
 msgid "stable"
 msgstr "stabili"
 
-#: app/templates/components/project_forecast.html:337
+#: app/templates/components/project_forecast.html:333
 msgid "days before deadline"
 msgstr "d. iki termino"
 
-#: app/templates/components/project_forecast.html:339
+#: app/templates/components/project_forecast.html:335
 msgid "days past deadline"
 msgstr "d. po termino"
 
-#: app/templates/components/project_forecast.html:342
+#: app/templates/components/project_forecast.html:338
 msgid "days from today"
 msgstr "d. nuo šiandien"
 
-#: app/templates/components/project_forecast.html:350
+#: app/templates/components/project_forecast.html:346
 msgid "No estimated hours set"
 msgstr "Numatomos valandos nenustatytos"
 
-#: app/templates/components/project_forecast.html:372
+#: app/templates/components/project_forecast.html:368
 msgid "Approaching budget limit"
 msgstr "Artėjama prie biudžeto ribos"
 
-#: app/templates/components/project_forecast.html:377
+#: app/templates/components/project_forecast.html:373
 msgid "used"
 msgstr "panaudota"
 
-#: app/templates/components/project_forecast.html:381
+#: app/templates/components/project_forecast.html:377
 msgid "done"
 msgstr "atlikta"
 
-#: app/templates/components/project_forecast.html:385
+#: app/templates/components/project_forecast.html:381
 msgid "overdue"
 msgstr "pradelsta"
 
-#: app/templates/components/project_forecast.html:388
+#: app/templates/components/project_forecast.html:384
 msgid "complete"
 msgstr "atlikta"
 
-#: app/templates/components/project_forecast.html:399
+#: app/templates/components/project_forecast.html:395
 msgid "No entries in the last 14 days"
 msgstr "Per pastarąsias 14 dienų įrašų nėra"
 
-#: app/templates/components/project_forecast.html:430
+#: app/templates/components/project_forecast.html:426
 msgid "Avg/day"
 msgstr "Vid. per dieną"
 
-#: app/templates/components/project_forecast.html:456
+#: app/templates/components/project_forecast.html:452
 msgid "Avg"
 msgstr "Vid."
 
-#: app/templates/components/project_forecast.html:482
+#: app/templates/components/project_forecast.html:478
 #: app/templates/timer/_time_entries_list.html:211
 msgid "No time entries yet"
 msgstr "Laiko įrašų dar nėra"
 
-#: app/templates/components/project_forecast.html:518
+#: app/templates/components/project_forecast.html:514
 msgid "AI insights require the AI helper to be configured in Settings."
 msgstr "Kad veiktų DI įžvalgos, nustatymuose sukonfigūruok DI pagalbininką."
 
-#: app/templates/components/project_forecast.html:520
+#: app/templates/components/project_forecast.html:516
 msgid "Could not load AI insights. Try again later."
 msgstr "Nepavyko įkelti DI įžvalgų. Bandyk vėliau."
 
@@ -27783,7 +27795,7 @@ msgstr "Pasiūlymo informacija:"
 #: app/templates/expenses/form.html:116
 #: app/templates/invoices/pdf_default.html:163
 #: app/templates/payments/create.html:47
-#: app/templates/quotes/pdf_default.html:145
+#: app/templates/quotes/pdf_default.html:145 app/utils/pdf_generator.py:1365
 #: app/utils/pdf_generator_fallback.py:332
 msgid "Total Amount:"
 msgstr "Iš viso:"
@@ -28013,7 +28025,7 @@ msgstr "Aprašymas:"
 msgid "View Task"
 msgstr "Peržiūrėti užduotį"
 
-#: app/templates/email/test_email.html:6 app/utils/email.py:733
+#: app/templates/email/test_email.html:6 app/utils/email.py:735
 msgid "TimeTracker Email Test"
 msgstr "TimeTracker el. pašto patikra"
 
@@ -28614,8 +28626,8 @@ msgstr "Pagal būseną"
 #: app/templates/mileage/list.html:89 app/templates/mileage/list.html:222
 #: app/templates/mileage/view.html:204 app/templates/per_diem/list.html:70
 #: app/templates/per_diem/list.html:179 app/templates/per_diem/list.html:261
-#: app/templates/per_diem/view.html:81 app/utils/i18n_helpers.py:145
-#: app/utils/i18n_helpers.py:156
+#: app/templates/per_diem/view.html:81 app/utils/i18n_helpers.py:177
+#: app/utils/i18n_helpers.py:188
 msgid "Reimbursed"
 msgstr "Kompensuota"
 
@@ -29958,8 +29970,8 @@ msgid "Last error"
 msgstr "Paskutinė klaida"
 
 #: app/templates/integrations/health.html:62
-#: app/templates/invoices/_invoices_list.html:85 app/utils/i18n_helpers.py:224
-#: app/utils/i18n_helpers.py:236
+#: app/templates/invoices/_invoices_list.html:85 app/utils/i18n_helpers.py:256
+#: app/utils/i18n_helpers.py:268
 msgid "Partial"
 msgstr "Iš dalies"
 
@@ -31712,7 +31724,7 @@ msgstr "Pridėti prekę"
 #: app/templates/inventory/purchase_orders/form.html:85
 #: app/templates/inventory/purchase_orders/form.html:159
 #: app/templates/invoices/edit.html:270 app/templates/invoices/edit.html:295
-#: app/templates/invoices/edit.html:665 app/templates/quotes/create.html:65
+#: app/templates/invoices/edit.html:666 app/templates/quotes/create.html:65
 #: app/templates/quotes/create.html:128 app/templates/quotes/edit.html:70
 #: app/templates/quotes/edit.html:108 app/templates/quotes/edit.html:202
 #: app/templates/quotes/template_form.html:93
@@ -31754,8 +31766,8 @@ msgstr "Pirkimo užsakymų tiekėjams tvarkymas"
 #: app/templates/invoices/_invoices_list.html:59
 #: app/templates/invoices/list.html:46 app/templates/invoices/list.html:129
 #: app/templates/quotes/_quotes_list.html:63 app/templates/quotes/list.html:81
-#: app/templates/quotes/view.html:71 app/utils/i18n_helpers.py:64
-#: app/utils/i18n_helpers.py:76
+#: app/templates/quotes/view.html:71 app/utils/i18n_helpers.py:96
+#: app/utils/i18n_helpers.py:108
 msgid "Draft"
 msgstr "Juodraštis"
 
@@ -32639,19 +32651,19 @@ msgstr "Mokėjimas"
 
 #: app/templates/invoices/_invoices_list.html:84
 #: app/templates/invoices/list.html:65 app/templates/payments/view.html:196
-#: app/utils/i18n_helpers.py:89 app/utils/i18n_helpers.py:100
+#: app/utils/i18n_helpers.py:121 app/utils/i18n_helpers.py:132
 msgid "Partially Paid"
 msgstr "Iš dalies apmokėta"
 
 #: app/templates/invoices/_invoices_list.html:88
 #: app/templates/invoices/list.html:66 app/templates/payments/view.html:192
-#: app/utils/i18n_helpers.py:90 app/utils/i18n_helpers.py:101
+#: app/utils/i18n_helpers.py:122 app/utils/i18n_helpers.py:133
 msgid "Fully Paid"
 msgstr "Visiškai apmokėta"
 
 #: app/templates/invoices/_invoices_list.html:93
-#: app/templates/invoices/list.html:67 app/utils/i18n_helpers.py:91
-#: app/utils/i18n_helpers.py:102
+#: app/templates/invoices/list.html:67 app/utils/i18n_helpers.py:123
+#: app/utils/i18n_helpers.py:134
 msgid "Overpaid"
 msgstr "Permokėta"
 
@@ -32793,7 +32805,7 @@ msgstr "Projekto valandos"
 msgid "Select Stock Item"
 msgstr "Pasirink atsargų prekę"
 
-#: app/templates/invoices/edit.html:141 app/templates/invoices/edit.html:583
+#: app/templates/invoices/edit.html:141 app/templates/invoices/edit.html:584
 msgid "e.g., Web Development Services"
 msgstr "pvz., Svetainių kūrimo paslaugos"
 
@@ -32801,7 +32813,7 @@ msgstr "pvz., Svetainių kūrimo paslaugos"
 msgid "Quantity is from logged hours and cannot be edited"
 msgstr "Kiekis paimamas iš užregistruotų valandų ir negali būti redaguojamas"
 
-#: app/templates/invoices/edit.html:156 app/templates/invoices/edit.html:592
+#: app/templates/invoices/edit.html:156 app/templates/invoices/edit.html:593
 #: app/templates/quotes/_edit_quote_form_scripts.html:178
 #: app/templates/quotes/edit.html:113
 msgid "Remove item"
@@ -32842,63 +32854,63 @@ msgstr "Susietos išlaidos – kategorijos redaguoti negalima"
 #: app/templates/invoices/edit.html:215 app/templates/projects/add_cost.html:38
 #: app/templates/projects/edit_cost.html:45
 #: app/templates/quotes/_edit_quote_form_scripts.html:185
-#: app/templates/quotes/edit.html:161 app/utils/i18n_helpers.py:164
-#: app/utils/i18n_helpers.py:181
+#: app/templates/quotes/edit.html:161 app/utils/i18n_helpers.py:196
+#: app/utils/i18n_helpers.py:213
 msgid "Travel"
 msgstr "Kelionės"
 
 #: app/templates/invoices/edit.html:216
 #: app/templates/quotes/_edit_quote_form_scripts.html:186
-#: app/templates/quotes/edit.html:162 app/utils/i18n_helpers.py:165
-#: app/utils/i18n_helpers.py:182
+#: app/templates/quotes/edit.html:162 app/utils/i18n_helpers.py:197
+#: app/utils/i18n_helpers.py:214
 msgid "Meals"
 msgstr "Maitinimas"
 
-#: app/templates/invoices/edit.html:217 app/utils/i18n_helpers.py:166
-#: app/utils/i18n_helpers.py:183
+#: app/templates/invoices/edit.html:217 app/utils/i18n_helpers.py:198
+#: app/utils/i18n_helpers.py:215
 msgid "Accommodation"
 msgstr "Apgyvendinimas"
 
 #: app/templates/invoices/edit.html:218
 #: app/templates/quotes/_edit_quote_form_scripts.html:187
-#: app/templates/quotes/edit.html:163 app/utils/i18n_helpers.py:167
-#: app/utils/i18n_helpers.py:184
+#: app/templates/quotes/edit.html:163 app/utils/i18n_helpers.py:199
+#: app/utils/i18n_helpers.py:216
 msgid "Supplies"
 msgstr "Reikmenys"
 
-#: app/templates/invoices/edit.html:219 app/utils/i18n_helpers.py:168
-#: app/utils/i18n_helpers.py:185
+#: app/templates/invoices/edit.html:219 app/utils/i18n_helpers.py:200
+#: app/utils/i18n_helpers.py:217
 msgid "Software"
 msgstr "Programinė įranga"
 
 #: app/templates/invoices/edit.html:220 app/templates/projects/add_cost.html:41
 #: app/templates/projects/edit_cost.html:48
 #: app/templates/quotes/_edit_quote_form_scripts.html:189
-#: app/templates/quotes/edit.html:165 app/utils/i18n_helpers.py:169
-#: app/utils/i18n_helpers.py:186
+#: app/templates/quotes/edit.html:165 app/utils/i18n_helpers.py:201
+#: app/utils/i18n_helpers.py:218
 msgid "Equipment"
 msgstr "Įranga"
 
 #: app/templates/invoices/edit.html:221 app/templates/projects/add_cost.html:40
 #: app/templates/projects/edit_cost.html:47
 #: app/templates/quotes/_edit_quote_form_scripts.html:188
-#: app/templates/quotes/edit.html:164 app/utils/i18n_helpers.py:170
-#: app/utils/i18n_helpers.py:187
+#: app/templates/quotes/edit.html:164 app/utils/i18n_helpers.py:202
+#: app/utils/i18n_helpers.py:219
 msgid "Services"
 msgstr "Paslaugos"
 
-#: app/templates/invoices/edit.html:222 app/utils/i18n_helpers.py:171
-#: app/utils/i18n_helpers.py:188
+#: app/templates/invoices/edit.html:222 app/utils/i18n_helpers.py:203
+#: app/utils/i18n_helpers.py:220
 msgid "Marketing"
 msgstr "Rinkodara"
 
-#: app/templates/invoices/edit.html:223 app/utils/i18n_helpers.py:172
-#: app/utils/i18n_helpers.py:189
+#: app/templates/invoices/edit.html:223 app/utils/i18n_helpers.py:204
+#: app/utils/i18n_helpers.py:221
 msgid "Training"
 msgstr "Mokymai"
 
 #: app/templates/invoices/edit.html:224 app/templates/invoices/edit.html:291
-#: app/templates/invoices/edit.html:661 app/templates/kiosk/dashboard.html:203
+#: app/templates/invoices/edit.html:662 app/templates/kiosk/dashboard.html:203
 #: app/templates/payments/create.html:105 app/templates/payments/edit.html:71
 #: app/templates/projects/add_cost.html:43
 #: app/templates/projects/add_good.html:35
@@ -32907,8 +32919,8 @@ msgstr "Mokymai"
 #: app/templates/quotes/_edit_quote_form_scripts.html:190
 #: app/templates/quotes/_edit_quote_form_scripts.html:224
 #: app/templates/quotes/edit.html:166 app/templates/quotes/edit.html:223
-#: app/utils/i18n_helpers.py:118 app/utils/i18n_helpers.py:134
-#: app/utils/i18n_helpers.py:173 app/utils/i18n_helpers.py:190
+#: app/utils/i18n_helpers.py:150 app/utils/i18n_helpers.py:166
+#: app/utils/i18n_helpers.py:205 app/utils/i18n_helpers.py:222
 msgid "Other"
 msgstr "Kita"
 
@@ -32943,18 +32955,18 @@ msgid "Add Good"
 msgstr "Pridėti prekę"
 
 #: app/templates/invoices/edit.html:271 app/templates/invoices/edit.html:298
-#: app/templates/invoices/edit.html:668 app/templates/quotes/create.html:67
+#: app/templates/invoices/edit.html:669 app/templates/quotes/create.html:67
 #: app/templates/quotes/create.html:129 app/templates/quotes/edit.html:72
 #: app/templates/quotes/edit.html:110 app/templates/quotes/edit.html:203
 #: app/templates/quotes/template_form.html:96
 msgid "Price"
 msgstr "Kaina"
 
-#: app/templates/invoices/edit.html:280 app/templates/invoices/edit.html:650
+#: app/templates/invoices/edit.html:280 app/templates/invoices/edit.html:651
 msgid "e.g., Software License"
 msgstr "pvz., Programinės įrangos licencija"
 
-#: app/templates/invoices/edit.html:287 app/templates/invoices/edit.html:657
+#: app/templates/invoices/edit.html:287 app/templates/invoices/edit.html:658
 #: app/templates/projects/add_good.html:31
 #: app/templates/projects/edit_good.html:31
 #: app/templates/quotes/_edit_quote_form_scripts.html:220
@@ -32962,7 +32974,7 @@ msgstr "pvz., Programinės įrangos licencija"
 msgid "Product"
 msgstr "Produktas"
 
-#: app/templates/invoices/edit.html:288 app/templates/invoices/edit.html:658
+#: app/templates/invoices/edit.html:288 app/templates/invoices/edit.html:659
 #: app/templates/projects/add_good.html:32
 #: app/templates/projects/edit_good.html:32
 #: app/templates/quotes/_edit_quote_form_scripts.html:221
@@ -32970,7 +32982,7 @@ msgstr "Produktas"
 msgid "Service"
 msgstr "Paslauga"
 
-#: app/templates/invoices/edit.html:289 app/templates/invoices/edit.html:659
+#: app/templates/invoices/edit.html:289 app/templates/invoices/edit.html:660
 #: app/templates/projects/add_good.html:33
 #: app/templates/projects/edit_good.html:33
 #: app/templates/quotes/_edit_quote_form_scripts.html:222
@@ -32978,7 +32990,7 @@ msgstr "Paslauga"
 msgid "Material"
 msgstr "Medžiaga"
 
-#: app/templates/invoices/edit.html:290 app/templates/invoices/edit.html:660
+#: app/templates/invoices/edit.html:290 app/templates/invoices/edit.html:661
 #: app/templates/main/dashboard.html:1006
 #: app/templates/partials/_topbar.html:128
 #: app/templates/projects/add_good.html:34
@@ -32988,7 +33000,7 @@ msgstr "Medžiaga"
 msgid "License"
 msgstr "Licencija"
 
-#: app/templates/invoices/edit.html:304 app/templates/invoices/edit.html:674
+#: app/templates/invoices/edit.html:304 app/templates/invoices/edit.html:675
 msgid "Remove good"
 msgstr "Pašalinti prekę"
 
@@ -33025,57 +33037,57 @@ msgstr "Eksportuoti PDF"
 msgid "Duplicate Invoice"
 msgstr "Dubliuoti sąskaitą faktūrą"
 
-#: app/templates/invoices/edit.html:711
+#: app/templates/invoices/edit.html:712
 msgid "Are you sure you want to unlink this expense from the invoice?"
 msgstr "Ar tikrai nori atsieti šias išlaidas nuo sąskaitos faktūros?"
 
-#: app/templates/invoices/edit.html:713
+#: app/templates/invoices/edit.html:714
 msgid "Unlink Expense"
 msgstr "Atsieti išlaidas"
 
-#: app/templates/invoices/edit.html:714
+#: app/templates/invoices/edit.html:715
 msgid "Unlink"
 msgstr "Atsieti"
 
-#: app/templates/invoices/edit.html:765
+#: app/templates/invoices/edit.html:766
 msgid "Please add at least one item, expense, or extra good to the invoice"
 msgstr ""
 "Pridėk prie sąskaitos faktūros bent vieną eilutę, išlaidas arba papildomą"
 " prekę"
 
-#: app/templates/invoices/edit.html:776 app/templates/invoices/view.html:500
+#: app/templates/invoices/edit.html:777 app/templates/invoices/view.html:500
 msgid "Send Invoice via Email"
 msgstr "Siųsti sąskaitą faktūrą el. paštu"
 
-#: app/templates/invoices/edit.html:780 app/templates/invoices/view.html:504
+#: app/templates/invoices/edit.html:781 app/templates/invoices/view.html:504
 #: app/templates/quotes/view.html:452
 msgid "Recipient Email"
 msgstr "Gavėjo el. paštas"
 
-#: app/templates/invoices/edit.html:784
+#: app/templates/invoices/edit.html:785
 msgid "Email Template"
 msgstr "El. laiško šablonas"
 
-#: app/templates/invoices/edit.html:786 app/templates/invoices/view.html:510
+#: app/templates/invoices/edit.html:787 app/templates/invoices/view.html:510
 msgid "Default Template"
 msgstr "Numatytasis šablonas"
 
-#: app/templates/invoices/edit.html:851 app/templates/invoices/view.html:575
+#: app/templates/invoices/edit.html:852 app/templates/invoices/view.html:575
 #: app/templates/invoices/view.html:672
 msgid "Unexpected response format"
 msgstr "Netikėtas atsakymo formatas"
 
-#: app/templates/invoices/edit.html:857 app/templates/invoices/edit.html:859
+#: app/templates/invoices/edit.html:858 app/templates/invoices/edit.html:860
 #: app/templates/invoices/view.html:581 app/templates/invoices/view.html:583
 msgid "Invoice email sent successfully!"
 msgstr "Sąskaitos faktūros el. laiškas išsiųstas!"
 
-#: app/templates/invoices/edit.html:865 app/templates/invoices/view.html:589
-#: app/utils/email.py:1700
+#: app/templates/invoices/edit.html:866 app/templates/invoices/view.html:589
+#: app/utils/email.py:1704
 msgid "Failed to send email"
 msgstr "Nepavyko išsiųsti el. laiško"
 
-#: app/templates/invoices/edit.html:878 app/templates/invoices/view.html:602
+#: app/templates/invoices/edit.html:879 app/templates/invoices/view.html:602
 msgid "Failed to send email. Please check server logs for details."
 msgstr ""
 "Nepavyko išsiųsti el. laiško. Išsamesnės informacijos ieškok serverio "
@@ -33404,14 +33416,14 @@ msgid "Expense"
 msgstr "Išlaida"
 
 #: app/templates/invoices/pdf_default.html:153
-#: app/templates/quotes/pdf_default.html:117
+#: app/templates/quotes/pdf_default.html:117 app/utils/pdf_generator.py:1348
 #: app/utils/pdf_generator_fallback.py:320
 #: app/utils/pdf_generator_fallback.py:644
 msgid "Subtotal:"
 msgstr "Tarpinė suma:"
 
 #: app/templates/invoices/pdf_default.html:158
-#: app/templates/quotes/pdf_default.html:140
+#: app/templates/quotes/pdf_default.html:140 app/utils/pdf_generator.py:1357
 #: app/utils/pdf_generator_fallback.py:327
 #, python-format
 msgid "Tax (%(rate).2f%%):"
@@ -38238,27 +38250,27 @@ msgid "Select method"
 msgstr "Pasirink būdą"
 
 #: app/templates/payments/create.html:97 app/templates/payments/edit.html:63
-#: app/utils/i18n_helpers.py:112 app/utils/i18n_helpers.py:128
+#: app/utils/i18n_helpers.py:144 app/utils/i18n_helpers.py:160
 msgid "Bank Transfer"
 msgstr "Banko pavedimas"
 
 #: app/templates/payments/create.html:98 app/templates/payments/edit.html:64
-#: app/utils/i18n_helpers.py:110 app/utils/i18n_helpers.py:126
+#: app/utils/i18n_helpers.py:142 app/utils/i18n_helpers.py:158
 msgid "Cash"
 msgstr "Grynieji pinigai"
 
 #: app/templates/payments/create.html:99 app/templates/payments/edit.html:65
-#: app/utils/i18n_helpers.py:111 app/utils/i18n_helpers.py:127
+#: app/utils/i18n_helpers.py:143 app/utils/i18n_helpers.py:159
 msgid "Check"
 msgstr "Čekis"
 
 #: app/templates/payments/create.html:100 app/templates/payments/edit.html:66
-#: app/utils/i18n_helpers.py:113 app/utils/i18n_helpers.py:129
+#: app/utils/i18n_helpers.py:145 app/utils/i18n_helpers.py:161
 msgid "Credit Card"
 msgstr "Kredito kortelė"
 
 #: app/templates/payments/create.html:101 app/templates/payments/edit.html:67
-#: app/utils/i18n_helpers.py:114 app/utils/i18n_helpers.py:130
+#: app/utils/i18n_helpers.py:146 app/utils/i18n_helpers.py:162
 msgid "Debit Card"
 msgstr "Debeto kortelė"
 
@@ -42725,8 +42737,8 @@ msgid "e.g. bug, frontend"
 msgstr "pvz., klaida, sąsaja"
 
 #: app/templates/tasks/list.html:55 app/templates/tasks/list.html:182
-#: app/templates/tasks/my_tasks.html:134 app/utils/i18n_helpers.py:19
-#: app/utils/i18n_helpers.py:31
+#: app/templates/tasks/my_tasks.html:134 app/utils/i18n_helpers.py:51
+#: app/utils/i18n_helpers.py:63
 msgid "Done"
 msgstr "Atlikta"
 
@@ -45549,7 +45561,7 @@ msgstr "Nuoroda nukopijuota į iškarpinę"
 msgid "Could not copy link"
 msgstr "Nepavyko nukopijuoti nuorodos"
 
-#: app/utils/email.py:148
+#: app/utils/email.py:150
 #, python-format
 msgid ""
 "\n"
@@ -45583,17 +45595,17 @@ msgstr ""
 "Pagarbiai\n"
 "TimeTracker komanda\n"
 
-#: app/utils/email.py:167
+#: app/utils/email.py:169
 #, python-format
 msgid "Set Your Client Portal Password - %(name)s"
 msgstr "Klientų portalo slaptažodžio nustatymas – %(name)s"
 
-#: app/utils/email.py:281
+#: app/utils/email.py:283
 #, python-format
 msgid "Invoice %(invoice_number)s is %(days_overdue)s days overdue"
 msgstr "Sąskaita faktūra %(invoice_number)s pradelsta %(days_overdue)s d."
 
-#: app/utils/email.py:287
+#: app/utils/email.py:289
 #, python-format
 msgid ""
 "\n"
@@ -45602,7 +45614,7 @@ msgstr ""
 "\n"
 "Peržiūrėti sąskaitą faktūrą: %(invoice_url)s\n"
 
-#: app/utils/email.py:290
+#: app/utils/email.py:292
 #, python-format
 msgid ""
 "\n"
@@ -45643,12 +45655,12 @@ msgstr ""
 "TimeTracker – laiko apskaita ir projektų valdymas\n"
 "    "
 
-#: app/utils/email.py:339
+#: app/utils/email.py:341
 #, python-format
 msgid "You've been assigned to task: %(name)s"
 msgstr "Tau priskirta užduotis: %(name)s"
 
-#: app/utils/email.py:342 app/utils/email.py:590
+#: app/utils/email.py:344 app/utils/email.py:592
 #, python-format
 msgid ""
 "\n"
@@ -45657,7 +45669,7 @@ msgstr ""
 "\n"
 "Peržiūrėti užduotį: %(task_url)s\n"
 
-#: app/utils/email.py:345
+#: app/utils/email.py:347
 #, python-format
 msgid ""
 "\n"
@@ -45698,21 +45710,21 @@ msgstr ""
 "TimeTracker – laiko apskaita ir projektų valdymas\n"
 "    "
 
-#: app/utils/email.py:370
+#: app/utils/email.py:372
 msgid "No description provided"
 msgstr "Aprašymas nepateiktas"
 
-#: app/utils/email.py:394
+#: app/utils/email.py:396
 #, python-format
 msgid "Your Weekly Time Summary (%(start_date)s to %(end_date)s)"
 msgstr "Tavo savaitės laiko suvestinė (nuo %(start_date)s iki %(end_date)s)"
 
-#: app/utils/email.py:398
+#: app/utils/email.py:400
 #, python-format
 msgid "- %(name)s: %(hours)s hours"
 msgstr "- %(name)s: %(hours)s val."
 
-#: app/utils/email.py:402
+#: app/utils/email.py:404
 #, python-format
 msgid ""
 "\n"
@@ -45721,7 +45733,7 @@ msgstr ""
 "\n"
 "Peržiūrėti išsamias ataskaitas: %(reports_url)s\n"
 
-#: app/utils/email.py:405
+#: app/utils/email.py:407
 #, python-format
 msgid ""
 "\n"
@@ -45758,20 +45770,20 @@ msgstr ""
 "TimeTracker – laiko apskaita ir projektų valdymas\n"
 "    "
 
-#: app/utils/email.py:448
+#: app/utils/email.py:450
 msgid "daily"
 msgstr "dienos"
 
-#: app/utils/email.py:448
+#: app/utils/email.py:450
 msgid "weekly"
 msgstr "savaitės"
 
-#: app/utils/email.py:449
+#: app/utils/email.py:451
 #, python-format
 msgid "Working time limit exceeded (%(period_label)s)"
 msgstr "Viršytas %(period_label)s darbo laiko limitas"
 
-#: app/utils/email.py:452
+#: app/utils/email.py:454
 #, python-format
 msgid ""
 "\n"
@@ -45782,7 +45794,7 @@ msgstr ""
 "Pateik trumpą pagrindimą TimeTracker programoje:\n"
 "%(justify_url)s\n"
 
-#: app/utils/email.py:454
+#: app/utils/email.py:456
 msgid ""
 "\n"
 "Please provide a brief justification in TimeTracker.\n"
@@ -45790,7 +45802,7 @@ msgstr ""
 "\n"
 "Pateik trumpą pagrindimą TimeTracker programoje.\n"
 
-#: app/utils/email.py:458
+#: app/utils/email.py:460
 #, python-format
 msgid ""
 "Hello %(display_name)s,\n"
@@ -45817,11 +45829,11 @@ msgstr ""
 "---\n"
 "TimeTracker\n"
 
-#: app/utils/email.py:503
+#: app/utils/email.py:505
 msgid "Reminder: log your time today"
 msgstr "Priminimas: užregistruok šiandienos laiką"
 
-#: app/utils/email.py:505
+#: app/utils/email.py:507
 #, python-format
 msgid ""
 "\n"
@@ -45830,12 +45842,12 @@ msgstr ""
 "\n"
 "Apžvalga: %(dashboard_url)s\n"
 
-#: app/utils/email.py:507
+#: app/utils/email.py:509
 #, python-format
 msgid "<p><a href=\"%(dashboard_url)s\">Open Dashboard</a></p>"
 msgstr "<p><a href=\"%(dashboard_url)s\">Atidaryti apžvalgą</a></p>"
 
-#: app/utils/email.py:510
+#: app/utils/email.py:512
 #, python-format
 msgid ""
 "Hello %(name)s,\n"
@@ -45854,7 +45866,7 @@ msgstr ""
 "---\n"
 "TimeTracker\n"
 
-#: app/utils/email.py:521
+#: app/utils/email.py:523
 #, python-format
 msgid ""
 "<p>Hello %(name)s,</p>\n"
@@ -45869,31 +45881,31 @@ msgstr ""
 "%(dashboard_html)s\n"
 "<p style=\"color:#64748b;font-size:0.875rem;\">— TimeTracker</p>"
 
-#: app/utils/email.py:535
+#: app/utils/email.py:537
 msgid "Reminder: start your workday"
 msgstr "Priminimas: pradėk darbo dieną"
 
-#: app/utils/email.py:541
+#: app/utils/email.py:543
 #, python-format
 msgid "Dashboard: %(dashboard_url)s"
 msgstr "Apžvalga: %(dashboard_url)s"
 
-#: app/utils/email.py:544
+#: app/utils/email.py:546
 #, python-format
 msgid "Attendance history (request a correction if needed): %(history_url)s"
 msgstr "Lankomumo istorija (jei reikia, pateik pataisymo prašymą): %(history_url)s"
 
-#: app/utils/email.py:549
+#: app/utils/email.py:551
 #, python-format
 msgid "<a href=\"%(dashboard_url)s\">Open Dashboard</a>"
 msgstr "<a href=\"%(dashboard_url)s\">Atidaryti apžvalgą</a>"
 
-#: app/utils/email.py:551
+#: app/utils/email.py:553
 #, python-format
 msgid "<a href=\"%(history_url)s\">Attendance history</a>"
 msgstr "<a href=\"%(history_url)s\">Lankomumo istorija</a>"
 
-#: app/utils/email.py:554
+#: app/utils/email.py:556
 #, python-format
 msgid ""
 "Hello %(display)s,\n"
@@ -45912,7 +45924,7 @@ msgstr ""
 "---\n"
 "TimeTracker\n"
 
-#: app/utils/email.py:565
+#: app/utils/email.py:567
 #, python-format
 msgid ""
 "<p>Hello %(display)s,</p>\n"
@@ -45927,12 +45939,12 @@ msgstr ""
 "%(html_links_block)s\n"
 "<p style=\"color:#64748b;font-size:0.875rem;\">— TimeTracker</p>"
 
-#: app/utils/email.py:587
+#: app/utils/email.py:589
 #, python-format
 msgid "You were mentioned in a comment on: %(name)s"
 msgstr "Tave paminėjo komentare: %(name)s"
 
-#: app/utils/email.py:593
+#: app/utils/email.py:595
 #, python-format
 msgid ""
 "\n"
@@ -45965,31 +45977,31 @@ msgstr ""
 "TimeTracker – laiko apskaita ir projektų valdymas\n"
 "        "
 
-#: app/utils/email.py:681
+#: app/utils/email.py:683
 msgid "Mail server not configured or set to localhost"
 msgstr "Pašto serveris nesukonfigūruotas arba nustatytas į localhost"
 
-#: app/utils/email.py:684
+#: app/utils/email.py:686
 msgid "Default sender email should be configured with a real email address"
 msgstr "Kaip numatytąjį siuntėjo el. pašto adresą nurodyk tikrą el. pašto adresą"
 
-#: app/utils/email.py:687
+#: app/utils/email.py:689
 msgid "Cannot use both TLS and SSL. Choose one."
 msgstr "Negalima naudoti TLS ir SSL kartu. Pasirink vieną."
 
-#: app/utils/email.py:690
+#: app/utils/email.py:692
 msgid "MAIL_USERNAME not set (may be required for authentication)"
 msgstr "MAIL_USERNAME nenustatytas (gali būti reikalingas autentifikacijai)"
 
-#: app/utils/email.py:693
+#: app/utils/email.py:695
 msgid "MAIL_PASSWORD not set but MAIL_USERNAME is configured"
 msgstr "MAIL_PASSWORD nenustatytas, nors MAIL_USERNAME sukonfigūruotas"
 
-#: app/utils/email.py:717 app/utils/email.py:975
+#: app/utils/email.py:719 app/utils/email.py:977
 msgid "Invalid recipient email address"
 msgstr "Neteisingas gavėjo el. pašto adresas"
 
-#: app/utils/email.py:723
+#: app/utils/email.py:725
 msgid ""
 "Mail server not configured. Please set MAIL_SERVER in environment "
 "variables."
@@ -45997,7 +46009,7 @@ msgstr ""
 "Pašto serveris nesukonfigūruotas. Nustatyk MAIL_SERVER aplinkos "
 "kintamuosiuose."
 
-#: app/utils/email.py:736
+#: app/utils/email.py:738
 #, python-format
 msgid ""
 "\n"
@@ -46038,28 +46050,28 @@ msgstr ""
 "TimeTracker – laiko apskaita ir projektų valdymas\n"
 "        "
 
-#: app/utils/email.py:792 app/utils/email.py:1017
+#: app/utils/email.py:794 app/utils/email.py:1019
 #, python-format
 msgid "Test email sent successfully to %(recipient_email)s"
 msgstr "Bandomasis el. laiškas išsiųstas adresu %(recipient_email)s"
 
-#: app/utils/email.py:855 app/utils/email.py:1610
+#: app/utils/email.py:857 app/utils/email.py:1614
 msgid "Your Company"
 msgstr "Įmonė"
 
-#: app/utils/email.py:857
+#: app/utils/email.py:859
 #, python-format
 msgid "Invoice %(invoice_number)s from %(company_name)s"
 msgstr "%(company_name)s: sąskaita faktūra %(invoice_number)s"
 
-#: app/utils/email.py:905
+#: app/utils/email.py:907
 #, python-format
 msgid "Invoice %(invoice_number)s - Please see attached PDF for details."
 msgstr ""
 "Sąskaita faktūra %(invoice_number)s – išsami informacija pridėtame PDF "
 "faile."
 
-#: app/utils/email.py:914
+#: app/utils/email.py:916
 #, python-format
 msgid ""
 "\n"
@@ -46086,7 +46098,7 @@ msgstr ""
 "- Suma: %(total_amount)s %(currency_code)s\n"
 "\n"
 
-#: app/utils/email.py:937
+#: app/utils/email.py:939
 #, python-format
 msgid ""
 "\n"
@@ -46105,54 +46117,54 @@ msgstr ""
 "---\n"
 "%(company_name)s\n"
 
-#: app/utils/email.py:979
+#: app/utils/email.py:981
 msgid "Mail server not configured"
 msgstr "Pašto serveris nesukonfigūruotas"
 
-#: app/utils/email.py:985
+#: app/utils/email.py:987
 msgid "Email template not found"
 msgstr "El. laiško šablonas nerastas"
 
-#: app/utils/email.py:987
+#: app/utils/email.py:989
 msgid "Email template has no HTML content"
 msgstr "El. laiško šablone nėra HTML turinio"
 
-#: app/utils/email.py:993
+#: app/utils/email.py:995
 msgid "Invoice not found for the given invoice_id."
 msgstr "Sąskaita faktūra pagal nurodytą invoice_id nerasta."
 
-#: app/utils/email.py:997
+#: app/utils/email.py:999
 msgid "No invoice found. Create an invoice first to test with real data."
 msgstr ""
 "Sąskaitų faktūrų nerasta. Pirmiausia sukurk sąskaitą faktūrą, kad galėtum"
 " išbandyti su tikrais duomenimis."
 
-#: app/utils/email.py:1003
+#: app/utils/email.py:1005
 #, python-format
 msgid "Invoice template test: %(name)s"
 msgstr "Sąskaitos faktūros šablono bandymas: %(name)s"
 
-#: app/utils/email.py:1048
+#: app/utils/email.py:1051
 msgid "Failed to build invoice email"
 msgstr "Nepavyko parengti sąskaitos faktūros el. laiško"
 
-#: app/utils/email.py:1120
+#: app/utils/email.py:1123
 #, python-format
 msgid "Invoice email sent successfully to %(recipient_email)s"
 msgstr "Sąskaitos faktūros el. laiškas išsiųstas adresu %(recipient_email)s"
 
-#: app/utils/email.py:1158
+#: app/utils/email.py:1161
 #, python-format
 msgid "Quote %(quote_number)s has been sent to %(client)s"
 msgstr "Komercinis pasiūlymas %(quote_number)s išsiųstas (%(client)s)"
 
-#: app/utils/email.py:1160
+#: app/utils/email.py:1163
 msgid "client"
 msgstr "klientas"
 
-#: app/utils/email.py:1164 app/utils/email.py:1210 app/utils/email.py:1258
-#: app/utils/email.py:1304 app/utils/email.py:1364 app/utils/email.py:1470
-#: app/utils/email.py:1520
+#: app/utils/email.py:1167 app/utils/email.py:1213 app/utils/email.py:1261
+#: app/utils/email.py:1307 app/utils/email.py:1367 app/utils/email.py:1473
+#: app/utils/email.py:1523
 #, python-format
 msgid ""
 "\n"
@@ -46161,7 +46173,7 @@ msgstr ""
 "\n"
 "Peržiūrėti pasiūlymą: %(quote_url)s\n"
 
-#: app/utils/email.py:1167
+#: app/utils/email.py:1170
 #, python-format
 msgid ""
 "\n"
@@ -46196,12 +46208,12 @@ msgstr ""
 "TimeTracker – laiko apskaita ir projektų valdymas\n"
 "    "
 
-#: app/utils/email.py:1207
+#: app/utils/email.py:1210
 #, python-format
 msgid "Quote %(quote_number)s has been accepted"
 msgstr "Komercinis pasiūlymas %(quote_number)s priimtas"
 
-#: app/utils/email.py:1213
+#: app/utils/email.py:1216
 #, python-format
 msgid ""
 "\n"
@@ -46238,16 +46250,16 @@ msgstr ""
 "TimeTracker – laiko apskaita ir projektų valdymas\n"
 "    "
 
-#: app/utils/email.py:1236
+#: app/utils/email.py:1239
 msgid "Not yet created"
 msgstr "Dar nesukurtas"
 
-#: app/utils/email.py:1255
+#: app/utils/email.py:1258
 #, python-format
 msgid "Quote %(quote_number)s has been rejected"
 msgstr "Komercinis pasiūlymas %(quote_number)s atmestas"
 
-#: app/utils/email.py:1261
+#: app/utils/email.py:1264
 #, python-format
 msgid ""
 "\n"
@@ -46282,12 +46294,12 @@ msgstr ""
 "TimeTracker – laiko apskaita ir projektų valdymas\n"
 "    "
 
-#: app/utils/email.py:1301
+#: app/utils/email.py:1304
 #, python-format
 msgid "Quote %(quote_number)s has expired"
 msgstr "Komercinio pasiūlymo %(quote_number)s galiojimas baigėsi"
 
-#: app/utils/email.py:1307
+#: app/utils/email.py:1310
 #, python-format
 msgid ""
 "\n"
@@ -46326,7 +46338,7 @@ msgstr ""
 "TimeTracker – laiko apskaita ir projektų valdymas\n"
 "    "
 
-#: app/utils/email.py:1351
+#: app/utils/email.py:1354
 #, python-format
 msgid "Quote %(quote_number)s expires in %(num)d day"
 msgid_plural "Quote %(quote_number)s expires in %(num)d days"
@@ -46334,7 +46346,7 @@ msgstr[0] "Komerciniam pasiūlymui %(quote_number)s galioti liko %(num)d diena"
 msgstr[1] "Komerciniam pasiūlymui %(quote_number)s galioti liko %(num)d dienos"
 msgstr[2] "Komerciniam pasiūlymui %(quote_number)s galioti liko %(num)d dienų"
 
-#: app/utils/email.py:1357
+#: app/utils/email.py:1360
 #, python-format
 msgid "Quote %(quote_number)s will expire in %(num)d day."
 msgid_plural "Quote %(quote_number)s will expire in %(num)d days."
@@ -46342,7 +46354,7 @@ msgstr[0] "Komerciniam pasiūlymui %(quote_number)s galioti liko %(num)d diena."
 msgstr[1] "Komerciniam pasiūlymui %(quote_number)s galioti liko %(num)d dienos."
 msgstr[2] "Komerciniam pasiūlymui %(quote_number)s galioti liko %(num)d dienų."
 
-#: app/utils/email.py:1367
+#: app/utils/email.py:1370
 #, python-format
 msgid ""
 "\n"
@@ -46383,12 +46395,12 @@ msgstr ""
 "TimeTracker – laiko apskaita ir projektų valdymas\n"
 "    "
 
-#: app/utils/email.py:1418
+#: app/utils/email.py:1421
 #, python-format
 msgid "Approval requested: Quote %(quote_number)s"
 msgstr "Laukia patvirtinimo: komercinis pasiūlymas %(quote_number)s"
 
-#: app/utils/email.py:1420
+#: app/utils/email.py:1423
 #, python-format
 msgid ""
 "\n"
@@ -46397,7 +46409,7 @@ msgstr ""
 "\n"
 "Peržiūrėti pasiūlymą: %(quote_url)s\n"
 
-#: app/utils/email.py:1424
+#: app/utils/email.py:1427
 #, python-format
 msgid ""
 "\n"
@@ -46432,12 +46444,12 @@ msgstr ""
 "TimeTracker – laiko apskaita ir projektų valdymas\n"
 "    "
 
-#: app/utils/email.py:1468
+#: app/utils/email.py:1471
 #, python-format
 msgid "Quote %(quote_number)s has been approved"
 msgstr "Komercinis pasiūlymas %(quote_number)s patvirtintas"
 
-#: app/utils/email.py:1474
+#: app/utils/email.py:1477
 #, python-format
 msgid ""
 "\n"
@@ -46473,12 +46485,12 @@ msgstr ""
 "TimeTracker – laiko apskaita ir projektų valdymas\n"
 "    "
 
-#: app/utils/email.py:1518
+#: app/utils/email.py:1521
 #, python-format
 msgid "Quote %(quote_number)s approval rejected"
 msgstr "Komercinio pasiūlymo %(quote_number)s patvirtinimas atmestas"
 
-#: app/utils/email.py:1525
+#: app/utils/email.py:1528
 #, python-format
 msgid ""
 "\n"
@@ -46515,16 +46527,16 @@ msgstr ""
 "TimeTracker – laiko apskaita ir projektų valdymas\n"
 "    "
 
-#: app/utils/email.py:1606
+#: app/utils/email.py:1610
 msgid "PDF generation failed"
 msgstr "Nepavyko sugeneruoti PDF"
 
-#: app/utils/email.py:1614
+#: app/utils/email.py:1618
 #, python-format
 msgid "Quote %(quote_number)s from %(company_name)s"
 msgstr "%(company_name)s: komercinis pasiūlymas %(quote_number)s"
 
-#: app/utils/email.py:1619
+#: app/utils/email.py:1623
 #, python-format
 msgid ""
 "\n"
@@ -46551,7 +46563,7 @@ msgstr ""
 "- Suma: %(total_amount)s %(currency_code)s\n"
 "\n"
 
-#: app/utils/email.py:1642
+#: app/utils/email.py:1646
 #, python-format
 msgid ""
 "\n"
@@ -46571,7 +46583,7 @@ msgstr ""
 "---\n"
 "%(company_name)s\n"
 
-#: app/utils/email.py:1696
+#: app/utils/email.py:1700
 msgid "Email sent successfully"
 msgstr "El. laiškas išsiųstas"
 
@@ -46602,27 +46614,27 @@ msgstr ""
 "Įvyko duomenų bazės klaida. Jei problema kartojasi, susisiek su palaikymo"
 " komanda."
 
-#: app/utils/i18n_helpers.py:116 app/utils/i18n_helpers.py:132
+#: app/utils/i18n_helpers.py:148 app/utils/i18n_helpers.py:164
 msgid "Stripe"
 msgstr "Stripe"
 
-#: app/utils/i18n_helpers.py:117 app/utils/i18n_helpers.py:133
+#: app/utils/i18n_helpers.py:149 app/utils/i18n_helpers.py:165
 msgid "Company Card"
 msgstr "Įmonės kortelė"
 
-#: app/utils/i18n_helpers.py:221 app/utils/i18n_helpers.py:233
+#: app/utils/i18n_helpers.py:253 app/utils/i18n_helpers.py:265
 msgid "Processing"
 msgstr "Apdorojama"
 
-#: app/utils/i18n_helpers.py:266
+#: app/utils/i18n_helpers.py:298
 msgid "80% Budget Warning"
 msgstr "Įspėjimas: išnaudota 80 % biudžeto"
 
-#: app/utils/i18n_helpers.py:267
+#: app/utils/i18n_helpers.py:299
 msgid "Budget Limit Reached"
 msgstr "Pasiektas biudžeto limitas"
 
-#: app/utils/i18n_helpers.py:275 app/utils/i18n_helpers.py:281
+#: app/utils/i18n_helpers.py:307 app/utils/i18n_helpers.py:313
 msgid "Info"
 msgstr "Informacija"
 
