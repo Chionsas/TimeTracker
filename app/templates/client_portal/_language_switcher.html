@@ -1,0 +1,13 @@
+{# Portal language switch for this visitor. The client's default language (set by staff) stays as it is. #}
+<form method="post" action="{{ url_for('client_portal.set_language') }}" class="inline-flex items-center {{ switcher_class|default('') }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <input type="hidden" name="next" value="{{ request.full_path.rstrip('?') }}">
+    <label for="portal-language-{{ switcher_id|default('nav') }}" class="sr-only">{{ _('Language') }}</label>
+    <i class="fas fa-globe text-text-muted-light dark:text-text-muted-dark mr-2" aria-hidden="true"></i>
+    <select id="portal-language-{{ switcher_id|default('nav') }}" name="language" onchange="this.form.submit()" class="form-input py-1 text-sm w-auto">
+        {% for code, name in config.LANGUAGES.items() %}
+        <option value="{{ code }}" {% if current_language_code == code %}selected{% endif %}>{{ name }}</option>
+        {% endfor %}
+    </select>
+    <noscript><button type="submit" class="ml-2 text-sm">{{ _('Apply') }}</button></noscript>
+</form>

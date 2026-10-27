@@ -12,6 +12,7 @@ from flask_babel import gettext as _
 from app import db
 from app.models import Client, TimeEntry
 from app.models.client_time_approval import ClientApprovalPolicy, ClientApprovalStatus, ClientTimeApproval
+from app.utils.i18n_helpers import in_client_locale
 
 logger = logging.getLogger(__name__)
 
@@ -142,6 +143,7 @@ class ClientApprovalService:
         except Exception as e:
             logger.debug("SocketIO emit for client approval update skipped: %s", e)
 
+    @in_client_locale(lambda self, *a, **k: k.get("client", a[0] if a else None))
     def _notify_client_contacts(self, client: Client, approval: ClientTimeApproval):
         """Send notifications to client contacts"""
         from app.models import Contact

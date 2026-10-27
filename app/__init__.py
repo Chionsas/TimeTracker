@@ -529,6 +529,17 @@ def create_app(config=None):
     # Internationalization: locale selector compatible with Flask-Babel v4+
     def _select_locale():
         try:
+            # 0) Client portal pages: the visitor's own switch, then the language set on the client.
+            #    Kept apart from session["preferred_language"] so a portal visit never changes the
+            #    language of a staff session in the same browser.
+            if request.blueprint == "client_portal":
+                if session.get("portal_language"):
+                    return _normalize_locale(session.get("portal_language"))
+                from app.routes.client_portal import get_current_client
+
+                portal_client = get_current_client()
+                if portal_client is not None and portal_client.preferred_language:
+                    return _normalize_locale(portal_client.preferred_language)
             # 1) User preference from DB
             from flask_login import current_user
 

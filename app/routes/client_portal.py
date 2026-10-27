@@ -449,6 +449,21 @@ def login():
         )
 
 
+@client_portal_bp.route("/client-portal/language", methods=["POST"])
+def set_language():
+    """Switch the portal language for this visitor; the client's default language is left as it is."""
+    code = (request.form.get("language") or "").strip()
+    if code in current_app.config.get("LANGUAGES", {}):
+        session["portal_language"] = code
+    else:
+        session.pop("portal_language", None)
+    return safe_redirect(
+        request.form.get("next"),
+        fallback=url_for("client_portal.login"),
+        allowed_prefixes=("/client-portal",),
+    )
+
+
 @client_portal_bp.route("/client-portal/logout")
 def logout():
     """Client portal logout"""

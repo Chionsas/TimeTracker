@@ -14,6 +14,7 @@ from app import db
 from app.models import Client, Contact
 from app.models.client_notification import ClientNotification, ClientNotificationPreferences, NotificationType
 from app.utils.email import send_template_email
+from app.utils.i18n_helpers import in_client_locale
 
 logger = logging.getLogger(__name__)
 
@@ -92,6 +93,7 @@ class ClientNotificationService:
 
         return notification
 
+    @in_client_locale(lambda self, *a, **k: k.get("client_id", a[1] if len(a) > 1 else None))
     def notify_invoice_created(self, invoice_id: int, client_id: int):
         """Notify client about new invoice"""
         from app.models import Invoice
@@ -115,6 +117,7 @@ class ClientNotificationService:
         )
         return notification
 
+    @in_client_locale(lambda self, *a, **k: k.get("client_id", a[1] if len(a) > 1 else None))
     def notify_invoice_paid(self, invoice_id: int, client_id: int, amount: float):
         """Notify client about invoice payment"""
         from app.models import Invoice
@@ -139,6 +142,7 @@ class ClientNotificationService:
         )
         return notification
 
+    @in_client_locale(lambda self, *a, **k: k.get("client_id", a[1] if len(a) > 1 else None))
     def notify_invoice_overdue(self, invoice_id: int, client_id: int, days_overdue: int):
         """Notify client about overdue invoice"""
         from app.models import Invoice
@@ -164,6 +168,7 @@ class ClientNotificationService:
         )
         return notification
 
+    @in_client_locale(lambda self, *a, **k: k.get("client_id", a[1] if len(a) > 1 else None))
     def notify_time_entry_approval(self, approval_id: int, client_id: int):
         """Notify client about time entry approval request"""
         from app.models.client_time_approval import ClientTimeApproval
@@ -186,6 +191,7 @@ class ClientNotificationService:
         )
         return notification
 
+    @in_client_locale(lambda self, *a, **k: k.get("client_id", a[1] if len(a) > 1 else None))
     def notify_quote_available(self, quote_id: int, client_id: int):
         """Notify client about new quote"""
         from app.models import Quote
@@ -209,6 +215,7 @@ class ClientNotificationService:
         )
         return notification
 
+    @in_client_locale(lambda self, *a, **k: k.get("client_id", a[1] if len(a) > 1 else None))
     def notify_project_milestone(self, project_id: int, client_id: int, milestone_name: str):
         """Notify client about project milestone"""
         from app.models import Project
@@ -232,6 +239,7 @@ class ClientNotificationService:
         )
         return notification
 
+    @in_client_locale(lambda self, *a, **k: k.get("client_id", a[1] if len(a) > 1 else None))
     def notify_budget_alert(self, project_id: int, client_id: int, budget_percentage: float):
         """Notify client about budget threshold"""
         from app.models import Project

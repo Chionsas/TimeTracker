@@ -58,6 +58,20 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
+                        <label for="preferred_language" class="form-label">{{ _('Language') }}</label>
+                        {% set client_language = request.form.get('preferred_language', client.preferred_language or '') %}
+                        <select id="preferred_language" name="preferred_language" class="form-input">
+                            <option value="">{{ _('Default') }}</option>
+                            {% for code, name in config.LANGUAGES.items() %}
+                            <option value="{{ code }}" {% if client_language == code %}selected{% endif %}>{{ name }}</option>
+                            {% endfor %}
+                        </select>
+                        <p class="text-xs text-text-muted-light dark:text-text-muted-dark mt-1">{{ _('Used for emails to this client and as the client portal language. The portal visitor can still switch.') }}</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
                         <label for="phone" class="form-label">{{ _('Phone') }}</label>
                         <input type="tel" id="phone" name="phone" value="{{ request.form.get('phone', client.phone or '') }}" placeholder="{{ _('+1 (555) 123-4567') }}" class="form-input">
                     </div>

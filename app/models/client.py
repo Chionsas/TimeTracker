@@ -47,6 +47,9 @@ class Client(db.Model):
         db.Boolean, default=True, nullable=False
     )  # Enable/disable issue reporting in portal
     custom_domain = db.Column(db.String(255), unique=True, nullable=True, index=True)  # e.g. portal.client.com
+    # Language for this client's portal (until the viewer switches) and for emails sent to the client.
+    # NULL keeps the default: the browser's language in the portal, the sender's language in emails.
+    preferred_language = db.Column(db.String(10), nullable=True)
 
     # Custom fields for flexible data storage (e.g., debtor_number, ERP IDs, etc.)
     custom_fields = db.Column(db.JSON, nullable=True)

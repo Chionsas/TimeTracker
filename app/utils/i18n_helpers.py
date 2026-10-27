@@ -5,8 +5,40 @@ This module provides translation functions for all enum-based fields in models,
 ensuring consistent translations across the application.
 """
 
+import functools
+from contextlib import nullcontext
+
+from flask_babel import force_locale
 from flask_babel import gettext as _
 from flask_babel import lazy_gettext as _l
+
+
+def client_locale(client):
+    """Context for text sent to a client (emails, portal notifications, attached PDFs).
+
+    Uses the client's preferred language when one is set; otherwise the current locale
+    (the sender's) stays in effect. ``client`` may be a Client or a client id.
+    """
+    if client is not None and not hasattr(client, "preferred_language"):
+        from app.models import Client
+
+        client = Client.query.get(client)
+    code = getattr(client, "preferred_language", None)
+    return force_locale(code) if code else nullcontext()
+
+
+def in_client_locale(get_client):
+    """Decorator: run the function in ``client_locale(get_client(*args, **kwargs))``."""
+
+    def decorator(func):
+        @functools.wraps(func)
+        def wrapper(*args, **kwargs):
+            with client_locale(get_client(*args, **kwargs)):
+                return func(*args, **kwargs)
+
+        return wrapper
+
+    return decorator
 
 
 # Task Status Translations

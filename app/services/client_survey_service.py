@@ -9,6 +9,7 @@ from app import db
 from app.models.client_survey import ClientSurvey
 from app.utils.db import safe_commit
 from app.utils.email import send_template_email
+from app.utils.i18n_helpers import in_client_locale
 
 logger = logging.getLogger(__name__)
 
@@ -16,6 +17,7 @@ logger = logging.getLogger(__name__)
 class ClientSurveyService:
     """Create and send NPS surveys after project close or invoice payment."""
 
+    @in_client_locale(lambda self, **k: k.get("client_id"))
     def create_and_send(
         self,
         *,

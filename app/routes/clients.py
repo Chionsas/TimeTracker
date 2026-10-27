@@ -72,6 +72,12 @@ def _enforce_clients_module():
     return redirect(url_for("main.dashboard"))
 
 
+
+def _form_preferred_language():
+    """The client language chosen in the form: a configured language code, or None for the default."""
+    code = (request.form.get("preferred_language") or "").strip()
+    return code if code in current_app.config.get("LANGUAGES", {}) else None
+
 @clients_bp.route("/clients")
 @login_required
 def list_clients():
@@ -389,6 +395,7 @@ def create_client():
         )
         if custom_fields:
             client.custom_fields = custom_fields
+        client.preferred_language = _form_preferred_language()
 
         db.session.add(client)
         if not safe_commit("create_client", {"name": name}):
@@ -753,6 +760,8 @@ def edit_client(client_id):
         else:
             client.custom_domain = None
         client.custom_fields = custom_fields if custom_fields else None
+        if "preferred_language" in request.form:
+            client.preferred_language = _form_preferred_language()
 
         # Update portal credentials
         if portal_enabled:

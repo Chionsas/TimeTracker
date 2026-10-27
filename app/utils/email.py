@@ -9,6 +9,7 @@ from flask_babel import format_decimal, gettext as _, ngettext
 from flask_mail import Mail, Message
 
 from app import db
+from app.utils.i18n_helpers import in_client_locale
 from app.utils.safe_template_render import render_sandboxed_string
 from app.utils.urls import safe_external_url_for
 
@@ -99,6 +100,7 @@ def send_async_email(app, msg):
             current_app.logger.error(f"Failed to send email: {e}")
 
 
+@in_client_locale(lambda client, *a, **k: client)
 def send_client_portal_password_setup_email(client, token):
     """Send password setup email to client
 
@@ -1022,6 +1024,7 @@ def send_invoice_template_test_email(template_id, recipient_email, invoice_id=No
         return False, _("Failed to send test email")
 
 
+@in_client_locale(lambda invoice, *a, **k: invoice.client)
 def send_invoice_email(invoice, recipient_email, sender_user=None, custom_message=None, email_template_id=None):
     """Send an invoice via email with PDF attachment
 
@@ -1558,6 +1561,7 @@ TimeTracker - Time Tracking & Project Management
     send_email(subject, user.email, text_body, html_body)
 
 
+@in_client_locale(lambda quote, *a, **k: quote.client)
 def send_quote_email(quote, recipient_email, sender_user=None, custom_message=None):
     """Send a quote via email with PDF attachment
 
