@@ -11768,7 +11768,7 @@ msgstr "Administratoriaus apžvalga"
 
 #: app/templates/admin/dashboard.html:12
 msgid "System overview and management"
-msgstr "Sistemos apžvalga ir valdymas"
+msgstr "Sistemos būsena ir valdymas"
 
 #: app/templates/admin/dashboard.html:24
 #: app/templates/admin/system_info.html:20
@@ -41413,7 +41413,7 @@ msgstr "Pradžia"
 
 #: app/templates/workday/history.html:24
 msgid "End time (optional)"
-msgstr "Pabaigos laikas (nebūtina)"
+msgstr "Pabaiga (nebūtina)"
 
 #: app/templates/workday/history.html:29
 msgid "e.g. Forgot to clock in"
