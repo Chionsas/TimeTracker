@@ -2513,7 +2513,7 @@ def pdf_layout():
     try:
         if not initial_html:
             env = current_app.jinja_env
-            html_src, _, _ = env.loader.get_source(env, "invoices/pdf_default.html")
+            html_src, _path, _uptodate = env.loader.get_source(env, "invoices/pdf_default.html")
             # Extract body only for editor
             try:
                 import re as _re
@@ -2526,7 +2526,7 @@ def pdf_layout():
         if not initial_css:
             try:
                 env = current_app.jinja_env
-                css_src, _, _ = env.loader.get_source(env, "invoices/pdf_styles_default.css")
+                css_src, _path, _uptodate = env.loader.get_source(env, "invoices/pdf_styles_default.css")
                 initial_css = css_src
             except Exception as e:
                 # Log but continue - CSS loading failure is not critical
@@ -3773,7 +3773,7 @@ def pdf_layout_preview():
 
                 with open(logo_path, "rb") as f:
                     data = base64.b64encode(f.read()).decode("utf-8")
-                mime_type, _ = mimetypes.guess_type(logo_path)
+                mime_type, _encoding = mimetypes.guess_type(logo_path)
                 if not mime_type:
                     mime_type = "image/png"
                 return f"data:{mime_type};base64,{data}"
@@ -4383,7 +4383,7 @@ def quote_pdf_layout_preview():
 
                 with open(logo_path, "rb") as f:
                     data = base64.b64encode(f.read()).decode("utf-8")
-                mime_type, _ = mimetypes.guess_type(logo_path)
+                mime_type, _encoding = mimetypes.guess_type(logo_path)
                 if not mime_type:
                     mime_type = "image/png"
                 return f"data:{mime_type};base64,{data}"

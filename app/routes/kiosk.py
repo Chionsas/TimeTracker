@@ -4,6 +4,7 @@ from datetime import datetime
 from decimal import Decimal, InvalidOperation
 
 from flask import Blueprint, current_app, flash, jsonify, redirect, render_template, request, session, url_for
+from flask_babel import gettext
 from flask_babel import gettext as _
 from flask_login import current_user, login_required, login_user, logout_user
 from sqlalchemy import func, or_
@@ -501,7 +502,7 @@ def kiosk_start_timer():
 
         log_event("timer.started", user_id=current_user.id, project_id=project_id, task_id=task_id)
 
-        return jsonify({"success": True, "timer_id": new_timer.id, "message": _("Timer started successfully")})
+        return jsonify({"success": True, "timer_id": new_timer.id, "message": gettext("Timer started successfully")})
     except Exception as e:
         db.session.rollback()
         current_app.logger.exception("Error starting timer: %s", e)
