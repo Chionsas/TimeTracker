@@ -214,7 +214,7 @@
                     <div class="text-xs text-text-muted-light dark:text-text-muted-dark">{{ _('Total Hours') }}</div>
                 </li>
                 <li>
-                    <div class="text-amber-600 text-xl font-bold">{{ "%.2f"|format(client.estimated_total_cost) }}</div>
+                    <div class="text-amber-600 text-xl font-bold">{{ client.estimated_total_cost|format_currency }}</div>
                     <div class="text-xs text-text-muted-light dark:text-text-muted-dark">{{ _('Est. Total Cost') }}</div>
                 </li>
             </ul>

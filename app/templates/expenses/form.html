@@ -113,7 +113,7 @@
             <div class="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
                 <p class="text-sm text-blue-800 dark:text-blue-200">
                     <i class="fas fa-info-circle mr-1"></i>
-                    <strong>{{ _('Total Amount:') }}</strong> <span id="total_display">{{ (expense.amount + (expense.tax_amount or 0)) if expense else '0.00' }}</span> {{ expense.currency_code if expense else 'EUR' }}
+                    <strong>{{ _('Total Amount:') }}</strong> <span id="total_display">{{ ((expense.amount + (expense.tax_amount or 0)) if expense else 0)|format_currency(expense.currency_code if expense else 'EUR') }}</span>
                 </p>
             </div>
         </div>
@@ -298,7 +298,7 @@ function updateTotal() {
     const taxAmount = parseFloat(document.getElementById('tax_amount').value) || 0;
     const total = amount + taxAmount;
     const currency = document.getElementById('currency_code').value;
-    document.getElementById('total_display').textContent = total.toFixed(2) + ' ' + currency;
+    document.getElementById('total_display').textContent = formatMoney(total, currency);
 }
 
 document.getElementById('amount').addEventListener('input', updateTotal);

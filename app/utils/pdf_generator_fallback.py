@@ -7,7 +7,7 @@ import os
 from datetime import datetime
 
 from flask import current_app
-from flask_babel import gettext as _
+from flask_babel import format_currency, gettext as _
 from reportlab.lib import colors
 from reportlab.lib.enums import TA_CENTER, TA_LEFT, TA_RIGHT
 from reportlab.lib.pagesizes import A4
@@ -357,7 +357,7 @@ class InvoicePDFGeneratorFallback:
     def _format_currency(self, value):
         """Format numeric currency with thousands separators and 2 decimals."""
         try:
-            return f"{float(value):,.2f} {self.settings.currency}"
+            return format_currency(float(value), self.settings.currency)
         except Exception:
             return f"{value} {self.settings.currency}"
 

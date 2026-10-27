@@ -530,8 +530,8 @@ def test_payments_with_different_currencies(app, test_client_with_auth, admin_us
         data = response.data.decode("utf-8")
 
         # Both currencies should be displayed
-        assert "USD" in data
-        assert "EUR" in data
+        assert "$1,000.00" in data  # format_currency writes each amount the English way
+        assert "€850.00" in data
 
 
 if __name__ == "__main__":

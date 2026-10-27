@@ -292,9 +292,9 @@
 
 <script src="{{ url_for('static', filename='vendor/chartjs/chart.umd.js') }}"></script>
 <script nonce="{{ csp_nonce() }}">
-window.BUDGET_CURRENCY_SYMBOL = {{ (settings.currency|currency_symbol)|tojson }};
+window.BUDGET_CURRENCY = {{ settings.currency|tojson }};
 function budgetFormatCurrency(value) {
-    return window.BUDGET_CURRENCY_SYMBOL + ' ' + Number(value).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    return formatMoney(value, window.BUDGET_CURRENCY);
 }
 document.addEventListener('DOMContentLoaded', function() {
     // Cost Trend Chart
@@ -341,7 +341,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 tooltip: {
                     callbacks: {
                         label: function(context) {
-                            return '{{ _("Cost") }}: $' + context.parsed.y.toFixed(2);
+                            return '{{ _("Cost") }}: ' + budgetFormatCurrency(context.parsed.y);
                         }
                     },
                     backgroundColor: isDarkMode ? '#1f2937' : '#ffffff',

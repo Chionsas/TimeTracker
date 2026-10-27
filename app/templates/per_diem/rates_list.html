@@ -38,10 +38,10 @@
                             <div class="font-medium">{{ rate.city + ', ' if rate.city else '' }}{{ rate.country }}</div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                            {{ '%.2f'|format(rate.full_day_rate) }}
+                            {{ rate.full_day_rate|format_money }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                            {{ '%.2f'|format(rate.half_day_rate) }}
+                            {{ rate.half_day_rate|format_money }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm">
                             {{ rate.currency_code }}

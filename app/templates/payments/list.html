@@ -26,16 +26,16 @@
         </div>
         <div class="bg-card-light dark:bg-card-dark p-6 rounded-xl border border-border-light dark:border-border-dark shadow-sm">
             <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ _('Total Amount') }}</h3>
-            <p class="text-2xl font-bold text-green-600 dark:text-green-400 mt-2">{{ currency|currency_symbol }}{{ "%.2f"|format(summary.total_amount) }}</p>
+            <p class="text-2xl font-bold text-green-600 dark:text-green-400 mt-2">{{ summary.total_amount|format_currency(currency) }}</p>
         </div>
         <div class="bg-card-light dark:bg-card-dark p-6 rounded-xl border border-border-light dark:border-border-dark shadow-sm">
             <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ _('Completed') }}</h3>
             <p class="text-2xl font-bold text-blue-600 dark:text-blue-400 mt-2">{{ summary.completed_count }}</p>
-            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">{{ currency|currency_symbol }}{{ "%.2f"|format(summary.completed_amount) }}</p>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">{{ summary.completed_amount|format_currency(currency) }}</p>
         </div>
         <div class="bg-card-light dark:bg-card-dark p-6 rounded-xl border border-border-light dark:border-border-dark shadow-sm">
             <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ _('Gateway Fees') }}</h3>
-            <p class="text-2xl font-bold text-red-600 dark:text-red-400 mt-2">{{ currency|currency_symbol }}{{ "%.2f"|format(summary.total_fees) }}</p>
+            <p class="text-2xl font-bold text-red-600 dark:text-red-400 mt-2">{{ summary.total_fees|format_currency(currency) }}</p>
         </div>
     </div>
 
@@ -146,11 +146,11 @@
                             </td>
                             <td class="p-4 table-number" data-label="{{ _('Amount') }}">
                                 <span class="font-semibold text-green-600 dark:text-green-400">
-                                    {{ payment.amount }} {{ payment.currency or 'EUR' }}
+                                    {{ payment.amount|format_currency(payment.currency) }}
                                 </span>
                                 {% if payment.gateway_fee %}
                                 <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                                    {{ _('Fee: %(amount)s %(currency)s', amount=payment.gateway_fee, currency=payment.currency or 'EUR') }}
+                                    {{ _('Fee: %(amount)s %(currency)s', amount=payment.gateway_fee|format_money, currency=payment.currency or 'EUR') }}
                                 </div>
                                 {% endif %}
                             </td>

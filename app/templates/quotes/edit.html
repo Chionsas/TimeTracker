@@ -109,7 +109,7 @@
                     <input type="text" name="item_unit[]" placeholder="{{ _('Unit') }}" value="{{ item.unit or '' }}" class="md:col-span-1 min-w-0 form-input item-unit">
                     <input type="number" name="item_price[]" placeholder="{{ _('Price') }}" value="{{ item.unit_price }}" step="0.01" min="0" class="md:col-span-1 min-w-0 form-input item-price" data-calc-trigger>
                     <div class="md:col-span-1 min-w-0 flex items-center justify-between gap-2">
-                        <span class="font-medium item-total">{{ "%.2f"|format(item.total_amount) }}</span>
+                        <span class="font-medium item-total">{{ item.total_amount|format_money }}</span>
                         <button type="button" class="remove-item shrink-0 bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:text-rose-300 px-3 py-2 rounded hover:bg-rose-200 dark:hover:bg-rose-900/50 transition" title="{{ _('Remove item') }}"><i class="fas fa-trash"></i></button>
                     </div>
                 </div>

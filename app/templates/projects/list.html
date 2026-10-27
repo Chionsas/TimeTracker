@@ -182,7 +182,7 @@
                 </td>
                 <td class="p-4" data-label="{{ _('Rate') }}">
                     {% if project.hourly_rate %}
-                        <span class="px-2 py-1 rounded-md text-xs font-medium bg-primary/10 text-primary">{{ '%.2f'|format(project.hourly_rate|float) }}/h</span>
+                        <span class="px-2 py-1 rounded-md text-xs font-medium bg-primary/10 text-primary">{{ project.hourly_rate|format_currency }}/h</span>
                     {% else %}
                         <span class="text-text-muted-light dark:text-text-muted-dark">—</span>
                     {% endif %}
@@ -311,7 +311,7 @@
                                 </div>
                             </div>
                             <div class="text-xs text-text-muted-light dark:text-text-muted-dark mt-1">
-                                {{ "%.2f"|format(consumed) }} / {{ "%.2f"|format(total) }}
+                                {{ consumed|format_currency }} / {{ total|format_currency }}
                             </div>
                         </div>
                     {% endif %}
@@ -349,7 +349,7 @@
                             {% endif %}
                             {% if project.hourly_rate %}
                             <span class="text-xs text-text-muted-light dark:text-text-muted-dark">
-                                {{ '%.2f'|format(project.hourly_rate|float) }}/h
+                                {{ project.hourly_rate|format_currency }}/h
                             </span>
                             {% endif %}
                         </div>

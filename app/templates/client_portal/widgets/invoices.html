@@ -29,7 +29,7 @@
                     </div>
                     <div class="flex items-center space-x-4 text-sm text-text-muted-light dark:text-text-muted-dark">
                         <span><i class="fas fa-calendar mr-1"></i>{{ invoice.issue_date|user_date }}</span>
-                        <span class="font-semibold text-text-light dark:text-text-dark">{{ "%.2f"|format(invoice.total_amount) }} {{ invoice.currency_code }}</span>
+                        <span class="font-semibold text-text-light dark:text-text-dark">{{ invoice.total_amount|format_currency(invoice.currency_code) }}</span>
                     </div>
                 </div>
                 <i class="fas fa-chevron-right text-text-muted-light dark:text-text-muted-dark group-hover:text-primary group-hover:translate-x-1 transition-all"></i>

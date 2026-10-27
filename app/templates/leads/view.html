@@ -96,7 +96,7 @@
                 {% if lead.estimated_value is not none and lead.estimated_value %}
                 <div>
                     <h3 class="text-sm font-medium text-text-muted-light dark:text-text-muted-dark">{{ _('Estimated Value') }}</h3>
-                    <p>{{ "%.2f"|format(lead.estimated_value) }} {{ lead.currency_code }}</p>
+                    <p>{{ lead.estimated_value|format_currency(lead.currency_code) }}</p>
                 </div>
                 {% endif %}
                 {% if lead.owner %}

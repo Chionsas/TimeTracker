@@ -332,8 +332,8 @@ class EnhancedAnalyticsDashboard {
             this.updateChangeIndicator('billableHoursChange', summaryData.billable_hours_change);
             document.getElementById('billablePercentage').textContent = summaryData.billable_percentage;
 
-            document.getElementById('totalRevenue').textContent = `${this.currency} ${this.formatNumber(revenueData.total_revenue)}`;
-            document.getElementById('avgHourlyRate').textContent = `${this.currency} ${this.formatNumber(revenueData.avg_hourly_rate)}/h`;
+            document.getElementById('totalRevenue').textContent = formatMoney(revenueData.total_revenue, this.currency);
+            document.getElementById('avgHourlyRate').textContent = `${formatMoney(revenueData.avg_hourly_rate, this.currency)}/h`;
 
             document.getElementById('avgDailyHours').textContent = `${summaryData.avg_daily_hours}h`;
             document.getElementById('activeProjects').textContent = summaryData.active_projects;
@@ -492,7 +492,7 @@ class EnhancedAnalyticsDashboard {
             const ctx = document.getElementById('revenueChart').getContext('2d');
             this.charts.revenue = new Chart(ctx, { type: 'bar', data: { labels: data.project_labels, datasets: [{ label: `${i18n_analytics.revenue_label || 'Revenue'} (${this.currency})`, data: data.project_revenue, backgroundColor: 'rgba(245, 158, 11, 0.8)', borderColor: '#f59e0b', borderWidth: 2 }] }, options: {
                 responsive: true, maintainAspectRatio: false,
-                plugins: { legend: { display: false }, tooltip: { backgroundColor: 'rgba(255,255,255,0.9)', titleColor: '#111827', bodyColor: '#6b7280', borderColor: '#e5e7eb', borderWidth: 1, padding: 12, callbacks: { label: (c) => `${this.currency} ${this.formatNumber(c.parsed.y)}` } } },
+                plugins: { legend: { display: false }, tooltip: { backgroundColor: 'rgba(255,255,255,0.9)', titleColor: '#111827', bodyColor: '#6b7280', borderColor: '#e5e7eb', borderWidth: 1, padding: 12, callbacks: { label: (c) => formatMoney(c.parsed.y, this.currency) } } },
                 scales: { y: { beginAtZero: true, title: { display: true, text: `${i18n_analytics.revenue_label || 'Revenue'} (${this.currency})` } }, x: { ticks: { maxRotation: 45, minRotation: 45 } } }
             }});
         } catch (error) {
@@ -586,7 +586,7 @@ class EnhancedAnalyticsDashboard {
                         borderWidth: 1,
                         padding: 12,
                         callbacks: {
-                            label: (c) => `${this.currency} ${this.formatNumber(c.parsed.y)}`
+                            label: (c) => formatMoney(c.parsed.y, this.currency)
                         }
                     }
                 },
@@ -645,7 +645,7 @@ class EnhancedAnalyticsDashboard {
                             label: (ctx) => {
                                 const label = ctx.label || '';
                                 const value = ctx.parsed || 0;
-                                return `${label}: ${this.currency} ${this.formatNumber(value)}`;
+                                return `${label}: ${formatMoney(value, this.currency)}`;
                             }
                         }
                     }
@@ -682,7 +682,7 @@ class EnhancedAnalyticsDashboard {
                         borderWidth: 1,
                         padding: 12,
                         callbacks: {
-                            label: (c) => `${this.currency} ${this.formatNumber(c.parsed.y)}`
+                            label: (c) => formatMoney(c.parsed.y, this.currency)
                         }
                     }
                 },
@@ -712,7 +712,7 @@ class EnhancedAnalyticsDashboard {
             const data = await response.json();
         
         // Update summary stats
-        document.getElementById('potentialRevenue').textContent = `${this.currency} ${this.formatNumber(data.potential_revenue)}`;
+        document.getElementById('potentialRevenue').textContent = formatMoney(data.potential_revenue, this.currency);
         document.getElementById('collectionRate').textContent = `${data.collection_rate}%`;
         
         const ctx = document.getElementById('revenueVsPaymentsChart').getContext('2d');
@@ -745,7 +745,7 @@ class EnhancedAnalyticsDashboard {
                                 const value = ctx.parsed || 0;
                                 const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
                                 const pct = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
-                                return `${label}: ${this.currency} ${this.formatNumber(value)} (${pct}%)`;
+                                return `${label}: ${formatMoney(value, this.currency)} (${pct}%)`;
                             }
                         }
                     }
@@ -790,8 +790,6 @@ class EnhancedAnalyticsDashboard {
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a'); a.href = url; a.download = `analytics-${new Date().toISOString().split('T')[0]}.csv`; a.click(); window.URL.revokeObjectURL(url);
     }
-
-    formatNumber(num) { return new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(num); }
 
     showError(message) {
         if (window.toastManager) { window.toastManager.error(message, 'Error', 5000); return; }

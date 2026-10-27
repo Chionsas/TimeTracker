@@ -70,7 +70,7 @@
                     </td>
                     <td class="py-3" data-label="{{ _('Value') }}">
                         {% if deal.value %}
-                        {{ deal.currency_code }} {{ '%.2f'|format(deal.value) }}
+                        {{ deal.value|format_currency(deal.currency_code) }}
                         {% else %}
                         N/A
                         {% endif %}

@@ -25,13 +25,13 @@
         {% if quote.total_amount %}
         <div>
             <dt class="font-medium text-gray-700 dark:text-gray-300">{{ _('Total Amount') }}</dt>
-            <dd class="text-gray-600 dark:text-gray-400">{{ "%.2f"|format(quote.total_amount) }} {{ quote.currency_code }}</dd>
+            <dd class="text-gray-600 dark:text-gray-400">{{ quote.total_amount|format_currency(quote.currency_code) }}</dd>
         </div>
         {% endif %}
         {% if quote.hourly_rate %}
         <div>
             <dt class="font-medium text-gray-700 dark:text-gray-300">{{ _('Hourly Rate') }}</dt>
-            <dd class="text-gray-600 dark:text-gray-400">{{ "%.2f"|format(quote.hourly_rate) }} {{ quote.currency_code }}</dd>
+            <dd class="text-gray-600 dark:text-gray-400">{{ quote.hourly_rate|format_currency(quote.currency_code) }}</dd>
         </div>
         {% endif %}
     </dl>

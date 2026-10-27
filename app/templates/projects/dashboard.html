@@ -69,7 +69,7 @@
         <div class="flex items-center justify-between">
             <div>
                 <p class="text-text-muted-light dark:text-text-muted-dark text-xs sm:text-sm">{{ _('Budget Used') }}</p>
-                <p class="text-xl sm:text-3xl font-bold mt-1 sm:mt-2">{{ "%.0f"|format(budget_data.consumed_amount) }}</p>
+                <p class="text-xl sm:text-3xl font-bold mt-1 sm:mt-2">{{ budget_data.consumed_amount|format_currency }}</p>
                 {% if budget_data.budget_amount > 0 %}
                 <p class="text-xs {% if budget_data.threshold_exceeded %}text-red-500{% else %}text-text-muted-light dark:text-text-muted-dark{% endif %} mt-1">
                     {{ "%.1f"|format(budget_data.percentage) }}% {{ _('of budget') }}
@@ -128,12 +128,12 @@
         <div class="mt-4 grid grid-cols-2 gap-4 text-sm">
             <div>
                 <p class="text-text-muted-light dark:text-text-muted-dark">{{ _('Budget') }}</p>
-                <p class="text-lg font-semibold">{{ "%.2f"|format(budget_data.budget_amount) }}</p>
+                <p class="text-lg font-semibold">{{ budget_data.budget_amount|format_currency }}</p>
             </div>
             <div>
                 <p class="text-text-muted-light dark:text-text-muted-dark">{{ _('Remaining') }}</p>
                 <p class="text-lg font-semibold {% if budget_data.remaining_amount < 0 %}text-red-500{% else %}text-green-500{% endif %}">
-                    {{ "%.2f"|format(budget_data.remaining_amount) }}
+                    {{ budget_data.remaining_amount|format_currency }}
                 </p>
             </div>
         </div>

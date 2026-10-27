@@ -590,9 +590,7 @@ function toggleImportant(noteId, setImportant) {
       ', {{ _("Total hours") }}: ' +
       hours +
       ' h, {{ _("Estimated total") }}: ' +
-      cur +
-      ' ' +
-      est +
+      formatMoney(est, cur) +
       '. {{ _("Create a draft invoice?") }}';
     const ok = await window.showConfirm(msg, {
       title: '{{ _("Invoice unbilled time") }}',

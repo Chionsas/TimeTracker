@@ -79,7 +79,7 @@
                 <div>
                     <div class="flex justify-between items-center mb-2">
                         <span class="text-sm font-medium">{{ _('Monthly Budget') }}</span>
-                        <span class="text-sm font-semibold">€{{ '%.2f'|format(category.monthly_budget) }}</span>
+                        <span class="text-sm font-semibold">{{ category.monthly_budget|format_currency }}</span>
                     </div>
                     {% if monthly_utilization is defined %}
                     <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3">
@@ -95,7 +95,7 @@
                 <div>
                     <div class="flex justify-between items-center mb-2">
                         <span class="text-sm font-medium">{{ _('Quarterly Budget') }}</span>
-                        <span class="text-sm font-semibold">€{{ '%.2f'|format(category.quarterly_budget) }}</span>
+                        <span class="text-sm font-semibold">{{ category.quarterly_budget|format_currency }}</span>
                     </div>
                     {% if quarterly_utilization is defined %}
                     <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3">
@@ -111,7 +111,7 @@
                 <div>
                     <div class="flex justify-between items-center mb-2">
                         <span class="text-sm font-medium">{{ _('Yearly Budget') }}</span>
-                        <span class="text-sm font-semibold">€{{ '%.2f'|format(category.yearly_budget) }}</span>
+                        <span class="text-sm font-semibold">{{ category.yearly_budget|format_currency }}</span>
                     </div>
                     {% if yearly_utilization is defined %}
                     <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3">

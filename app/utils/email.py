@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 from threading import Thread
 
 from flask import current_app, render_template
-from flask_babel import gettext as _, ngettext
+from flask_babel import format_decimal, gettext as _, ngettext
 from flask_mail import Mail, Message
 
 from app import db
@@ -309,7 +309,7 @@ TimeTracker - Time Tracking & Project Management
         client_name=invoice.client_name,
         days_overdue=days_overdue,
         currency_code=invoice.currency_code,
-        total_amount=invoice.total_amount,
+        total_amount=format_decimal(invoice.total_amount or 0, format="#,##0.00"),
         due_date=invoice.due_date,
         view_line=view_line,
     )
@@ -927,7 +927,7 @@ Invoice Details:
             issue_date=invoice.issue_date.strftime("%Y-%m-%d") if invoice.issue_date else _("N/A"),
             due_date=invoice.due_date.strftime("%Y-%m-%d") if invoice.due_date else _("N/A"),
             currency_code=invoice.currency_code,
-            total_amount=invoice.total_amount,
+            total_amount=format_decimal(invoice.total_amount or 0, format="#,##0.00"),
         )
 
         if custom_message:
@@ -1184,7 +1184,7 @@ TimeTracker - Time Tracking & Project Management
         title=quote.title,
         client=quote.client.name if quote.client else _("N/A"),
         currency_code=quote.currency_code,
-        total_amount=quote.total_amount,
+        total_amount=format_decimal(quote.total_amount or 0, format="#,##0.00"),
         sent_at=quote.sent_at.strftime("%Y-%m-%d %H:%M") if quote.sent_at else _("N/A"),
         view_line=view_line,
     )
@@ -1231,7 +1231,7 @@ TimeTracker - Time Tracking & Project Management
         title=quote.title,
         client=quote.client.name if quote.client else _("N/A"),
         currency_code=quote.currency_code,
-        total_amount=quote.total_amount,
+        total_amount=format_decimal(quote.total_amount or 0, format="#,##0.00"),
         accepted_at=quote.accepted_at.strftime("%Y-%m-%d %H:%M") if quote.accepted_at else _("N/A"),
         project=_("Created") if quote.has_project else _("Not yet created"),
         view_line=view_line,
@@ -1278,7 +1278,7 @@ TimeTracker - Time Tracking & Project Management
         title=quote.title,
         client=quote.client.name if quote.client else _("N/A"),
         currency_code=quote.currency_code,
-        total_amount=quote.total_amount,
+        total_amount=format_decimal(quote.total_amount or 0, format="#,##0.00"),
         rejected_at=quote.rejected_at.strftime("%Y-%m-%d %H:%M") if quote.rejected_at else _("N/A"),
         view_line=view_line,
     )
@@ -1326,7 +1326,7 @@ TimeTracker - Time Tracking & Project Management
         title=quote.title,
         client=quote.client.name if quote.client else _("N/A"),
         currency_code=quote.currency_code,
-        total_amount=quote.total_amount,
+        total_amount=format_decimal(quote.total_amount or 0, format="#,##0.00"),
         valid_until=quote.valid_until.strftime("%Y-%m-%d") if quote.valid_until else _("N/A"),
         view_line=view_line,
     )
@@ -1389,7 +1389,7 @@ TimeTracker - Time Tracking & Project Management
         title=quote.title,
         client=quote.client.name if quote.client else _("N/A"),
         currency_code=quote.currency_code,
-        total_amount=quote.total_amount,
+        total_amount=format_decimal(quote.total_amount or 0, format="#,##0.00"),
         valid_until=quote.valid_until.strftime("%Y-%m-%d") if quote.valid_until else _("N/A"),
         view_line=view_line,
     )
@@ -1441,7 +1441,7 @@ TimeTracker - Time Tracking & Project Management
         title=quote.title,
         client=quote.client.name if quote.client else _("N/A"),
         currency_code=quote.currency_code,
-        total_amount=quote.total_amount,
+        total_amount=format_decimal(quote.total_amount or 0, format="#,##0.00"),
         requester=requester,
         view_line=view_line,
     )
@@ -1491,7 +1491,7 @@ TimeTracker - Time Tracking & Project Management
         title=quote.title,
         client=quote.client.name if quote.client else _("N/A"),
         currency_code=quote.currency_code,
-        total_amount=quote.total_amount,
+        total_amount=format_decimal(quote.total_amount or 0, format="#,##0.00"),
         approver=approver,
         view_line=view_line,
     )
@@ -1543,7 +1543,7 @@ TimeTracker - Time Tracking & Project Management
         title=quote.title,
         client=quote.client.name if quote.client else _("N/A"),
         currency_code=quote.currency_code,
-        total_amount=quote.total_amount,
+        total_amount=format_decimal(quote.total_amount or 0, format="#,##0.00"),
         rejecter=rejecter,
         reason=reason,
         view_line=view_line,
@@ -1632,7 +1632,7 @@ Quote Details:
             title=quote.title,
             valid_until=quote.valid_until.strftime("%Y-%m-%d") if quote.valid_until else _("N/A"),
             currency_code=quote.currency_code,
-            total_amount=quote.total_amount,
+            total_amount=format_decimal(quote.total_amount or 0, format="#,##0.00"),
         )
 
         if custom_message:

@@ -47,7 +47,7 @@
         </div>
         <div class="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg">
             <div class="text-sm text-gray-600 dark:text-gray-400">{{ _('Estimated Amount') }}</div>
-            <div id="summaryEstimatedAmount" class="text-2xl font-bold text-green-600 dark:text-green-400">{{ "%.2f"|format(summary.total_estimated_amount) }}</div>
+            <div id="summaryEstimatedAmount" class="text-2xl font-bold text-green-600 dark:text-green-400">{{ summary.total_estimated_amount|format_currency }}</div>
         </div>
         <div class="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg">
             <div class="text-sm text-gray-600 dark:text-gray-400">{{ _('Clients with Unpaid Hours') }}</div>
@@ -92,7 +92,7 @@
                             <span class="font-semibold">{{ "%.2f"|format(data.total_hours) }}</span> {{ _('hours') }}
                         </td>
                         <td class="p-3" data-label="{{ _('Estimated Amount') }}">
-                            <span class="font-semibold text-green-600 dark:text-green-400">{{ "%.2f"|format(data.estimated_amount) }}</span>
+                            <span class="font-semibold text-green-600 dark:text-green-400">{{ data.estimated_amount|format_currency }}</span>
                         </td>
                         <td class="p-3" data-label="{{ _('Projects') }}"
                             <div class="space-y-1">
@@ -101,7 +101,7 @@
                                     <span class="font-medium">{{ project.project.name }}</span>
                                     <span class="text-gray-600 dark:text-gray-400">: {{ "%.2f"|format(project.hours) }}h</span>
                                     {% if project.rate > 0 %}
-                                    <span class="text-gray-500 dark:text-gray-500">@ {{ "%.2f"|format(project.rate) }}/h</span>
+                                    <span class="text-gray-500 dark:text-gray-500">@ {{ project.rate|format_currency }}/h</span>
                                     {% endif %}
                                 </div>
                                 {% endfor %}
@@ -213,7 +213,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     function updateSummary(summary) {
         document.getElementById('summaryTotalHours').textContent = summary.total_unpaid_hours.toFixed(2);
-        document.getElementById('summaryEstimatedAmount').textContent = summary.total_estimated_amount.toFixed(2);
+        document.getElementById('summaryEstimatedAmount').textContent = formatMoney(summary.total_estimated_amount, {{ currency|tojson }});
         document.getElementById('summaryClientsCount').textContent = summary.clients_count;
     }
     
@@ -239,7 +239,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 `<div class="text-sm">
                     <span class="font-medium">${escapeHtml(proj.project_name)}</span>
                     <span class="text-gray-600 dark:text-gray-400">: ${proj.hours.toFixed(2)}h</span>
-                    ${proj.rate > 0 ? `<span class="text-gray-500 dark:text-gray-500">@ ${proj.rate.toFixed(2)}/h</span>` : ''}
+                    ${proj.rate > 0 ? `<span class="text-gray-500 dark:text-gray-500">@ ${formatMoney(proj.rate, {{ currency|tojson }})}/h</span>` : ''}
                 </div>`
             ).join('');
             
@@ -256,7 +256,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         <span class="font-semibold">${data.total_hours.toFixed(2)}</span> {{ _('hours') }}
                     </td>
                     <td class="p-3">
-                        <span class="font-semibold text-green-600 dark:text-green-400">${data.estimated_amount.toFixed(2)}</span>
+                        <span class="font-semibold text-green-600 dark:text-green-400">${formatMoney(data.estimated_amount, {{ currency|tojson }})}</span>
                     </td>
                     <td class="p-3">
                         <div class="space-y-1">${projectsHtml}</div>

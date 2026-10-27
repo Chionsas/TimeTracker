@@ -19,7 +19,7 @@
                 <li><strong>{{ _('Quote Number:') }}</strong> {{ quote.quote_number }}</li>
                 <li><strong>{{ _('Client:') }}</strong> {{ client.name }}</li>
                 <li><strong>{{ _('Title:') }}</strong> {{ quote.title }}</li>
-                <li><strong>{{ _('Total Amount:') }}</strong> {{ "%.2f"|format(quote.total_amount) }} {{ quote.currency_code }}</li>
+                <li><strong>{{ _('Total Amount:') }}</strong> {{ quote.total_amount|format_currency(quote.currency_code) }}</li>
                 <li><strong>{{ _('Rejected Date:') }}</strong> {{ quote.rejected_at|user_datetime if quote.rejected_at else _('N/A') }}</li>
             </ul>
         </div>

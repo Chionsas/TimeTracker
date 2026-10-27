@@ -86,8 +86,8 @@
                             {% if item.line_kind == 'good' and item.sku %}<br><span class="text-xs opacity-70">{{ _('SKU') }}: {{ item.sku }}</span>{% endif %}
                         </td>
                         <td class="p-3" data-label="{{ _('Quantity') }}">{{ "%.2f"|format(item.quantity) }} {% if item.unit %}{{ item.unit }}{% endif %}</td>
-                        <td class="p-3" data-label="{{ _('Unit Price') }}">{{ "%.2f"|format(item.unit_price) }} {{ quote.currency_code }}</td>
-                        <td class="p-3 font-medium" data-label="{{ _('Total') }}">{{ "%.2f"|format(item.total_amount) }} {{ quote.currency_code }}</td>
+                        <td class="p-3" data-label="{{ _('Unit Price') }}">{{ item.unit_price|format_currency(quote.currency_code) }}</td>
+                        <td class="p-3 font-medium" data-label="{{ _('Total') }}">{{ item.total_amount|format_currency(quote.currency_code) }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -101,17 +101,17 @@
             <div class="space-y-2">
                 <div class="flex justify-between">
                     <span class="text-text-muted-light dark:text-text-muted-dark">{{ _('Subtotal') }}:</span>
-                    <span>{{ "%.2f"|format(quote.subtotal) }} {{ quote.currency_code }}</span>
+                    <span>{{ quote.subtotal|format_currency(quote.currency_code) }}</span>
                 </div>
                 {% if quote.tax_rate > 0 %}
                 <div class="flex justify-between">
                     <span class="text-text-muted-light dark:text-text-muted-dark">{{ _('Tax') }} ({{ "%.2f"|format(quote.tax_rate) }}%):</span>
-                    <span>{{ "%.2f"|format(quote.tax_amount) }} {{ quote.currency_code }}</span>
+                    <span>{{ quote.tax_amount|format_currency(quote.currency_code) }}</span>
                 </div>
                 {% endif %}
                 <div class="flex justify-between text-lg font-bold pt-2 border-t border-border-light dark:border-border-dark">
                     <span>{{ _('Total') }}:</span>
-                    <span>{{ "%.2f"|format(quote.total_amount) }} {{ quote.currency_code }}</span>
+                    <span>{{ quote.total_amount|format_currency(quote.currency_code) }}</span>
                 </div>
             </div>
         </div>

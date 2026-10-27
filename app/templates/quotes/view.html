@@ -119,15 +119,15 @@
                                     {% if item.line_kind == 'good' and item.sku %}<div class="text-xs text-text-muted-light dark:text-text-muted-dark mt-1">{{ _('SKU') }}: {{ item.sku }}</div>{% endif %}
                                 </td>
                                 <td class="p-3">{{ "%.2f"|format(item.quantity) }} {% if item.unit %}{{ item.unit }}{% endif %}</td>
-                                <td class="p-3">{{ "%.2f"|format(item.unit_price) }} {{ quote.currency_code }}</td>
-                                <td class="p-3 font-medium">{{ "%.2f"|format(item.total_amount) }} {{ quote.currency_code }}</td>
+                                <td class="p-3">{{ item.unit_price|format_currency(quote.currency_code) }}</td>
+                                <td class="p-3 font-medium">{{ item.total_amount|format_currency(quote.currency_code) }}</td>
                             </tr>
                             {% endfor %}
                         </tbody>
                         <tfoot>
                             <tr class="border-t-2 border-border-light dark:border-border-dark">
                                 <td colspan="3" class="p-3 text-right font-medium">{{ _('Subtotal') }}:</td>
-                                <td class="p-3 font-medium">{{ "%.2f"|format(quote.subtotal) }} {{ quote.currency_code }}</td>
+                                <td class="p-3 font-medium">{{ quote.subtotal|format_currency(quote.currency_code) }}</td>
                             </tr>
                             {% if quote.discount_value > 0 %}
                             <tr>
@@ -143,22 +143,22 @@
                                         <br><span class="text-xs text-gray-500">({{ quote.discount_reason }})</span>
                                     {% endif %}
                                 </td>
-                                <td class="p-3 font-medium text-red-600 dark:text-red-400">-{{ "%.2f"|format(quote.discount_value) }} {{ quote.currency_code }}</td>
+                                <td class="p-3 font-medium text-red-600 dark:text-red-400">-{{ quote.discount_value|format_currency(quote.currency_code) }}</td>
                             </tr>
                             <tr>
                                 <td colspan="3" class="p-3 text-right font-medium">{{ _('Subtotal After Discount') }}:</td>
-                                <td class="p-3 font-medium">{{ "%.2f"|format(quote.subtotal_after_discount) }} {{ quote.currency_code }}</td>
+                                <td class="p-3 font-medium">{{ quote.subtotal_after_discount|format_currency(quote.currency_code) }}</td>
                             </tr>
                             {% endif %}
                             {% if quote.tax_amount > 0 %}
                             <tr>
                                 <td colspan="3" class="p-3 text-right font-medium">{{ _('Tax') }} ({{ "%.2f"|format(quote.tax_rate) }}%):</td>
-                                <td class="p-3 font-medium">{{ "%.2f"|format(quote.tax_amount) }} {{ quote.currency_code }}</td>
+                                <td class="p-3 font-medium">{{ quote.tax_amount|format_currency(quote.currency_code) }}</td>
                             </tr>
                             {% endif %}
                             <tr class="border-t-2 border-border-light dark:border-border-dark">
                                 <td colspan="3" class="p-3 text-right font-bold text-lg">{{ _('Total') }}:</td>
-                                <td class="p-3 font-bold text-lg">{{ "%.2f"|format(quote.total_amount) }} {{ quote.currency_code }}</td>
+                                <td class="p-3 font-bold text-lg">{{ quote.total_amount|format_currency(quote.currency_code) }}</td>
                             </tr>
                         </tfoot>
                     </table>

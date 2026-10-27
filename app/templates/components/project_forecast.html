@@ -8,7 +8,7 @@
 <div id="projectForecast-{{ project.id }}"
      class="bg-card-light dark:bg-card-dark p-6 rounded-xl border border-border-light dark:border-border-dark shadow-sm animated-card mt-6"
      data-project-id="{{ project.id }}"
-     data-currency-symbol="{{ (currency or 'EUR')|currency_symbol }}"
+     data-currency="{{ currency or 'EUR' }}"
      data-ai-enabled="{{ '1' if ai_enabled else '0' }}">
 
     <!-- Header -->
@@ -184,7 +184,7 @@
     if (!root) return;
 
     var projectId = root.dataset.projectId;
-    var currencySymbol = root.dataset.currencySymbol || '$';
+    var currency = root.dataset.currency || 'EUR';
     var aiEnabledInitial = root.dataset.aiEnabled === '1';
 
     var state = {
@@ -209,11 +209,7 @@
     }
     function fmtMoney(v) {
         if (v === null || v === undefined || isNaN(v)) return '—';
-        try {
-            return currencySymbol + Number(v).toLocaleString(undefined, { maximumFractionDigits: 0 });
-        } catch (e) {
-            return currencySymbol + Math.round(Number(v) || 0);
-        }
+        return formatMoney(v, currency);
     }
     function fmtDateLong(iso) {
         if (!iso) return '—';

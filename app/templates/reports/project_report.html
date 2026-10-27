@@ -73,7 +73,7 @@
                 <td class="p-2" data-label="{{ _('Project') }}">{{ project.name }}</td>
                 <td class="p-2" data-label="{{ _('Total Hours') }}">{{ "%.2f"|format(project.total_hours) }}</td>
                 <td class="p-2" data-label="{{ _('Billable Hours') }}">{{ "%.2f"|format(project.billable_hours) }}</td>
-                <td class="p-2" data-label="{{ _('Billable Amount') }}">{{ "%.2f"|format(project.billable_amount) }}</td>
+                <td class="p-2" data-label="{{ _('Billable Amount') }}">{{ project.billable_amount|format_currency }}</td>
             </tr>
             {% else %}
             <tr>

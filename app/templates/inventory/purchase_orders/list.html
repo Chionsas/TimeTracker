@@ -87,7 +87,7 @@
                     {% endif %}
                 </td>
                 <td class="p-4 font-medium" data-label="{{ _('Total Amount') }}">
-                    {{ "%.2f"|format(po.total_amount) }} {{ po.currency_code }}
+                    {{ po.total_amount|format_currency(po.currency_code) }}
                 </td>
                 <td class="p-4 mobile-actions" data-label="{{ _('Actions') }}">
                     <a href="{{ url_for('inventory.view_purchase_order', po_id=po.id) }}" class="text-primary hover:underline mr-3">

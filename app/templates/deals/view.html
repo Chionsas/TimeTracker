@@ -60,7 +60,7 @@
                 {% if deal.value is not none and deal.value %}
                 <div>
                     <h3 class="text-sm font-medium text-text-muted-light dark:text-text-muted-dark">{{ _('Value') }}</h3>
-                    <p>{{ "%.2f"|format(deal.value) }} {{ deal.currency_code }}</p>
+                    <p>{{ deal.value|format_currency(deal.currency_code) }}</p>
                 </div>
                 {% endif %}
                 <div>

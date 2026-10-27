@@ -682,7 +682,7 @@
             if (data.estimated_value_tracked != null && data.estimated_value_tracked > 0) {
                 if (estWrap) estWrap.classList.remove('hidden');
                 if (estCur) estCur.textContent = data.estimated_value_currency || 'EUR';
-                if (estAmt) estAmt.textContent = Number(data.estimated_value_tracked).toFixed(2);
+                if (estAmt) estAmt.textContent = formatNumber(data.estimated_value_tracked);
             } else if (estWrap) {
                 estWrap.classList.add('hidden');
             }

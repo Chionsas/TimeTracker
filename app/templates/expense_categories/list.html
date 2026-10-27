@@ -99,7 +99,7 @@
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm" data-label="Monthly Budget">
                             {% if category.monthly_budget %}
-                            €{{ '%.2f'|format(category.monthly_budget) }}
+                            {{ category.monthly_budget|format_currency }}
                             {% else %}
                             <span class="text-gray-400 dark:text-gray-500">{{ _('No budget') }}</span>
                             {% endif %}

@@ -48,11 +48,11 @@
                 {% endif %}
                 <div>
                     <label class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ _('Default Cost') }}</label>
-                    <p class="mt-1">{{ "%.2f"|format(item.default_cost) if item.default_cost else '—' }} {{ item.currency_code }}</p>
+                    <p class="mt-1">{{ item.default_cost|format_currency(item.currency_code) if item.default_cost else '—' }}</p>
                 </div>
                 <div>
                     <label class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ _('Default Price') }}</label>
-                    <p class="mt-1">{{ "%.2f"|format(item.default_price) if item.default_price else '—' }} {{ item.currency_code }}</p>
+                    <p class="mt-1">{{ item.default_price|format_currency(item.currency_code) if item.default_price else '—' }}</p>
                 </div>
                 <!-- Suppliers -->
                 {% if item.supplier_items.filter_by(is_active=True).count() > 0 %}
@@ -74,7 +74,7 @@
                                 </div>
                                 <div class="text-sm text-gray-600 dark:text-gray-400">
                                     {% if supplier_item.unit_cost %}
-                                        {{ "%.2f"|format(supplier_item.unit_cost) }} {{ supplier_item.currency_code }}
+                                        {{ supplier_item.unit_cost|format_currency(supplier_item.currency_code) }}
                                     {% endif %}
                                     {% if supplier_item.supplier_sku %}
                                         | SKU: {{ supplier_item.supplier_sku }}
@@ -187,7 +187,7 @@
                         {% set lot = lot_data.lot %}
                         <tr>
                             <td class="p-3 font-semibold mobile-card-header" data-label="{{ _('Quantity') }}">{{ lot_data.quantity }} {{ item.unit }}</td>
-                            <td class="p-3" data-label="{{ _('Unit Cost') }}">{{ "%.2f"|format(lot_data.unit_cost) }} {{ item.currency_code }}</td>
+                            <td class="p-3" data-label="{{ _('Unit Cost') }}">{{ lot_data.unit_cost|format_currency(item.currency_code) }}</td>
                             <td class="p-3" data-label="{{ _('Devaluation') }}">
                                 {% if lot_data.is_devalued and lot_data.devaluation_percentage is not none %}
                                     <span class="px-2 py-1 text-xs rounded-full bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200">
@@ -219,7 +219,7 @@
                     <tfoot>
                         <tr class="font-bold">
                             <td class="p-3">{{ warehouse_data.total_quantity }} {{ item.unit }}</td>
-                            <td class="p-3">{{ "%.2f"|format(warehouse_data.total_value) }} {{ item.currency_code }}</td>
+                            <td class="p-3">{{ warehouse_data.total_value|format_currency(item.currency_code) }}</td>
                             <td class="p-3" colspan="3">{{ _('Total') }}</td>
                         </tr>
                     </tfoot>

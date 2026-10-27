@@ -273,6 +273,23 @@ def test_format_money_filter(app):
 
 @pytest.mark.unit
 @pytest.mark.utils
+def test_money_filters_follow_request_locale(app):
+    """Amounts are written the way the viewer's language writes money (CLDR)."""
+    from flask_babel import force_locale
+
+    register_template_filters(app)
+    fmt_money = app.jinja_env.filters["format_money"]
+    fmt_currency = app.jinja_env.filters["format_currency"]
+    with app.test_request_context():
+        with force_locale("en"):
+            assert fmt_currency(1234.5, "EUR") == "€1,234.50"
+        with force_locale("de"):
+            assert fmt_money(1234.5) == "1.234,50"
+            assert fmt_currency(1234.5, "EUR") == "1.234,50\xa0€"
+
+
+@pytest.mark.unit
+@pytest.mark.utils
 def test_format_money_filter_invalid(app):
     """Test format_money filter with invalid input."""
     register_template_filters(app)

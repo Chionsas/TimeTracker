@@ -23,7 +23,7 @@
     </div>
     <div class="bg-card-light dark:bg-card-dark p-4 rounded-xl border border-border-light dark:border-border-dark shadow-sm">
         <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">{{ _('Total Value') }}</h3>
-        <p class="text-2xl font-bold">{{ "%.2f"|format(analytics.total_value) }} EUR</p>
+        <p class="text-2xl font-bold">{{ analytics.total_value|format_currency }}</p>
     </div>
     <div class="bg-card-light dark:bg-card-dark p-4 rounded-xl border border-border-light dark:border-border-dark shadow-sm">
         <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">{{ _('Acceptance Rate') }}</h3>
@@ -31,7 +31,7 @@
     </div>
     <div class="bg-card-light dark:bg-card-dark p-4 rounded-xl border border-border-light dark:border-border-dark shadow-sm">
         <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">{{ _('Avg Quote Value') }}</h3>
-        <p class="text-2xl font-bold">{{ "%.2f"|format(analytics.avg_value) }} EUR</p>
+        <p class="text-2xl font-bold">{{ analytics.avg_value|format_currency }}</p>
     </div>
 </div>
 
@@ -53,7 +53,7 @@
             {% for client_data in analytics.quotes_by_client %}
             <div class="flex justify-between items-center">
                 <span>{{ client_data.name }}</span>
-                <span class="font-medium">{{ client_data.count }} ({{ "%.2f"|format(client_data.total) }} EUR)</span>
+                <span class="font-medium">{{ client_data.count }} ({{ client_data.total|format_currency }})</span>
             </div>
             {% endfor %}
         </div>

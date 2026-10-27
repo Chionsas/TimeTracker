@@ -90,7 +90,7 @@
                 {% endif %}
                 <tr>
                     <td>{{ _('Amount:') }}</td>
-                    <td><strong>{{ quote.currency_code }} {{ "%.2f"|format(quote.total_amount) }}</strong></td>
+                    <td><strong>{{ quote.total_amount|format_currency(quote.currency_code) }}</strong></td>
                 </tr>
             </table>
         </div>

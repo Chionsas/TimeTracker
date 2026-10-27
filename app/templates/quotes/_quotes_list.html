@@ -53,7 +53,7 @@
                 <td class="p-4" data-label="{{ _('Client') }}">{{ quote.client.name }}</td>
                 <td class="p-4" data-label="{{ _('Amount') }}">
                     {% if quote.total_amount %}
-                        <span class="px-2 py-1 rounded-md text-xs font-medium bg-primary/10 text-primary">{{ "%.2f"|format(quote.total_amount) }} {{ quote.currency_code }}</span>
+                        <span class="px-2 py-1 rounded-md text-xs font-medium bg-primary/10 text-primary">{{ quote.total_amount|format_currency(quote.currency_code) }}</span>
                     {% else %}
                         <span class="text-text-muted-light dark:text-text-muted-dark">—</span>
                     {% endif %}

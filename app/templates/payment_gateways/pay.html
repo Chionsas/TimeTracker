@@ -13,7 +13,7 @@
             </div>
             <div class="flex justify-between">
                 <span class="text-text-muted-light dark:text-text-muted-dark">{{ _('Amount Due') }}:</span>
-                <span class="font-bold text-lg">{{ invoice.currency_code }} {{ "%.2f"|format(invoice.total_amount) }}</span>
+                <span class="font-bold text-lg">{{ invoice.total_amount|format_currency(invoice.currency_code) }}</span>
             </div>
             <div class="flex justify-between">
                 <span class="text-text-muted-light dark:text-text-muted-dark">{{ _('Due Date') }}:</span>

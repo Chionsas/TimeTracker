@@ -16,6 +16,14 @@
  * translation falls back to the English text, so the strings in the source
  * are always the complete English UI. The catalog is read at call time, not
  * at load time, so this file may run before the catalog script.
+ *
+ * Amounts are written the way the page's locale writes them, matching the
+ * format_currency / format_money template filters:
+ *
+ *   formatMoney(1234.5, 'EUR')   // en "€1,234.50", lt "1 234,50 €"
+ *   formatNumber(1.5)            // en "1.50", lt "1,50"
+ *
+ * Values for <input type="number"> must stay toFixed(): inputs expect a dot.
  */
 (function (global) {
     'use strict';
@@ -50,6 +58,31 @@
         return interpolate(text, Object.assign({ num: n }, params));
     }
 
+    function locale() {
+        return (global.i18n && global.i18n.locale ? global.i18n.locale : 'en').replace('_', '-');
+    }
+
+    function formatNumber(value, digits) {
+        var d = digits === undefined ? 2 : digits;
+        var n = Number(value);
+        try {
+            return new Intl.NumberFormat(locale(), { minimumFractionDigits: d, maximumFractionDigits: d }).format(n);
+        } catch (e) {
+            return n.toFixed(d);
+        }
+    }
+
+    function formatMoney(value, currency) {
+        var n = Number(value);
+        try {
+            return new Intl.NumberFormat(locale(), { style: 'currency', currency: currency || 'EUR' }).format(n);
+        } catch (e) {
+            return n.toFixed(2) + (currency ? ' ' + currency : '');
+        }
+    }
+
     global.gettext = gettext;
     global.ngettext = ngettext;
+    global.formatNumber = formatNumber;
+    global.formatMoney = formatMoney;
 })(window);

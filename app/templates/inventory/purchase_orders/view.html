@@ -113,31 +113,31 @@
                             <td class="p-4 {% if item.quantity_received < item.quantity_ordered %}text-amber-600{% else %}text-green-600{% endif %}" data-label="{{ _('Quantity Received') }}">
                                 {{ item.quantity_received }}
                             </td>
-                            <td class="p-4" data-label="{{ _('Unit Cost') }}">{{ "%.2f"|format(item.unit_cost) }} {{ item.currency_code }}</td>
-                            <td class="p-4 font-medium" data-label="{{ _('Line Total') }}">{{ "%.2f"|format(item.line_total) }} {{ item.currency_code }}</td>
+                            <td class="p-4" data-label="{{ _('Unit Cost') }}">{{ item.unit_cost|format_currency(item.currency_code) }}</td>
+                            <td class="p-4 font-medium" data-label="{{ _('Line Total') }}">{{ item.line_total|format_currency(item.currency_code) }}</td>
                         </tr>
                         {% endfor %}
                     </tbody>
                     <tfoot>
                         <tr class="font-semibold">
                             <td colspan="5" class="p-4 text-right">{{ _('Subtotal') }}:</td>
-                            <td class="p-4">{{ "%.2f"|format(purchase_order.subtotal) }} {{ purchase_order.currency_code }}</td>
+                            <td class="p-4">{{ purchase_order.subtotal|format_currency(purchase_order.currency_code) }}</td>
                         </tr>
                         {% if purchase_order.shipping_cost > 0 %}
                         <tr>
                             <td colspan="5" class="p-4 text-right">{{ _('Shipping') }}:</td>
-                            <td class="p-4">{{ "%.2f"|format(purchase_order.shipping_cost) }} {{ purchase_order.currency_code }}</td>
+                            <td class="p-4">{{ purchase_order.shipping_cost|format_currency(purchase_order.currency_code) }}</td>
                         </tr>
                         {% endif %}
                         {% if purchase_order.tax_amount > 0 %}
                         <tr>
                             <td colspan="5" class="p-4 text-right">{{ _('Tax') }}:</td>
-                            <td class="p-4">{{ "%.2f"|format(purchase_order.tax_amount) }} {{ purchase_order.currency_code }}</td>
+                            <td class="p-4">{{ purchase_order.tax_amount|format_currency(purchase_order.currency_code) }}</td>
                         </tr>
                         {% endif %}
                         <tr class="font-bold text-lg">
                             <td colspan="5" class="p-4 text-right">{{ _('Total') }}:</td>
-                            <td class="p-4">{{ "%.2f"|format(purchase_order.total_amount) }} {{ purchase_order.currency_code }}</td>
+                            <td class="p-4">{{ purchase_order.total_amount|format_currency(purchase_order.currency_code) }}</td>
                         </tr>
                     </tfoot>
                 </table>
@@ -189,7 +189,7 @@
                 <div>
                     <label class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ _('Total Amount') }}</label>
                     <p class="text-2xl font-bold text-primary mt-1">
-                        {{ "%.2f"|format(purchase_order.total_amount) }} {{ purchase_order.currency_code }}
+                        {{ purchase_order.total_amount|format_currency(purchase_order.currency_code) }}
                     </p>
                 </div>
                 <div>

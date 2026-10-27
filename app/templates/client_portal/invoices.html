@@ -107,7 +107,7 @@
                     </td>
                     <td class="py-4 px-6">
                         <div class="font-semibold text-text-light dark:text-text-dark">
-                            {{ "%.2f"|format(invoice.total_amount) }} {{ invoice.currency_code }}
+                            {{ invoice.total_amount|format_currency(invoice.currency_code) }}
                         </div>
                     </td>
                     <td class="py-4 px-6">

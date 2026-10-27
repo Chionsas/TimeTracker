@@ -1,5 +1,7 @@
 from datetime import datetime
 
+from flask_babel import format_currency, format_decimal
+
 from app.utils.timezone import (
     convert_app_datetime_to_user,
     format_local_datetime,
@@ -375,21 +377,26 @@ def register_template_filters(app):
 
     @app.template_filter("format_money")
     def format_money_filter(value):
+        """Format an amount with two decimals in the request locale (1,234.56 / 1 234,56)."""
         try:
-            return f"{float(value):,.2f}"
+            return format_decimal(float(value), format="#,##0.00")
         except Exception:
             return str(value)
 
     @app.template_filter("format_currency")
     def format_currency_filter(value, currency_code=None):
-        """Format a number with thousand separators and currency symbol from settings."""
+        """Format an amount with its currency the way the request locale writes money.
+
+        CLDR decides symbol position, spacing and separators: en "€1,234.56",
+        lt and de "1 234,56 €" / "1.234,56 €". Without a code, the Settings currency is used.
+        """
         if value is None:
             return ""
         try:
-            num_str = f"{float(value):,.2f}"
+            amount = float(value)
         except (TypeError, ValueError):
             return str(value)
-        if currency_code is None:
+        if not currency_code:
             try:
                 from app.models import Settings
 
@@ -397,35 +404,10 @@ def register_template_filters(app):
                 currency_code = settings.currency if settings else "EUR"
             except Exception:
                 currency_code = "EUR"
-        currency_symbols = {
-            "USD": "$",
-            "EUR": "€",
-            "GBP": "£",
-            "JPY": "¥",
-            "CNY": "¥",
-            "INR": "₹",
-            "AUD": "A$",
-            "CAD": "C$",
-            "CHF": "CHF",
-            "SEK": "kr",
-            "NOK": "kr",
-            "DKK": "kr",
-            "PLN": "zł",
-            "CZK": "Kč",
-            "RUB": "₽",
-            "BRL": "R$",
-            "ZAR": "R",
-            "MXN": "MX$",
-            "SGD": "S$",
-            "HKD": "HK$",
-            "NZD": "NZ$",
-            "KRW": "₩",
-            "TRY": "₺",
-            "AED": "د.إ",
-            "SAR": "﷼",
-        }
-        symbol = currency_symbols.get((currency_code or "").upper(), currency_code or "EUR")
-        return f"{symbol} {num_str}"
+        try:
+            return format_currency(amount, (currency_code or "EUR").upper())
+        except Exception:
+            return f"{amount:,.2f} {currency_code}"
 
     @app.template_filter("days_until")
     def days_until_filter(d):

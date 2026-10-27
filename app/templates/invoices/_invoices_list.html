@@ -96,7 +96,7 @@
                         <span class="px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-200">{{ ps }}</span>
                     {% endif %}
                 </td>
-                <td class="p-4 table-number" data-label="{{ _('Total') }}">{{ "%.2f"|format(invoice.total_amount) }} {{ invoice.currency_code }}</td>
+                <td class="p-4 table-number" data-label="{{ _('Total') }}">{{ invoice.total_amount|format_currency(invoice.currency_code) }}</td>
                 <td class="p-4 table-number" data-label="{{ _('Due Date') }}">
                     {% if invoice.due_date %}
                         {% set is_overdue = invoice._is_overdue %}

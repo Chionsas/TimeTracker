@@ -130,7 +130,7 @@
                             <td class="p-4 font-mono text-sm" data-label="{{ _('Supplier SKU') }}">{{ supplier_item.supplier_sku or '—' }}</td>
                             <td class="p-4" data-label="{{ _('Unit Cost') }}">
                                 {% if supplier_item.unit_cost %}
-                                    {{ "%.2f"|format(supplier_item.unit_cost) }} {{ supplier_item.currency_code }}
+                                    {{ supplier_item.unit_cost|format_currency(supplier_item.currency_code) }}
                                 {% else %}
                                     —
                                 {% endif %}

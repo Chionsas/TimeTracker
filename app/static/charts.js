@@ -468,9 +468,6 @@ function formatHours(hours) {
 
 // Utility function to format currency
 function formatCurrency(value, currency = 'USD') {
-    return new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: currency
-    }).format(value);
+    return formatMoney(value, currency);
 }
 

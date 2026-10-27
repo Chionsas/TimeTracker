@@ -73,7 +73,7 @@
             <p><strong>{{ _('Total Hours:') }}</strong> {{ "%.2f"|format(report_data.summary.get('total_hours', 0)) }}</p>
             {% endif %}
             {% if report_data.summary.get('total_amount') is not none %}
-            <p><strong>{{ _('Total Amount:') }}</strong> {{ "%.2f"|format(report_data.summary.get('total_amount', 0)) }}</p>
+            <p><strong>{{ _('Total Amount:') }}</strong> {{ report_data.summary.get('total_amount', 0)|format_currency }}</p>
             {% endif %}
             {% if report_data.summary.get('invoice_count') is not none %}
             <p><strong>{{ _('Invoice Count:') }}</strong> {{ report_data.summary.get('invoice_count', 0) }}</p>

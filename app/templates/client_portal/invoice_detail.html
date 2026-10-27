@@ -65,8 +65,8 @@
                     <tr class="border-b border-border-light dark:border-border-dark">
                         <td class="p-3" data-label="{{ _('Description') }}">{{ item.description }}</td>
                         <td class="p-3" data-label="{{ _('Quantity') }}">{{ "%.2f"|format(item.quantity) }}</td>
-                        <td class="p-3" data-label="{{ _('Unit Price') }}">{{ "%.2f"|format(item.unit_price) }} {{ invoice.currency_code }}</td>
-                        <td class="p-3 font-medium" data-label="{{ _('Total') }}">{{ "%.2f"|format(item.total_amount) }} {{ invoice.currency_code }}</td>
+                        <td class="p-3" data-label="{{ _('Unit Price') }}">{{ item.unit_price|format_currency(invoice.currency_code) }}</td>
+                        <td class="p-3 font-medium" data-label="{{ _('Total') }}">{{ item.total_amount|format_currency(invoice.currency_code) }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -80,22 +80,22 @@
             <div class="space-y-2">
                 <div class="flex justify-between">
                     <span class="text-text-muted-light dark:text-text-muted-dark">{{ _('Subtotal') }}:</span>
-                    <span>{{ "%.2f"|format(invoice.subtotal) }} {{ invoice.currency_code }}</span>
+                    <span>{{ invoice.subtotal|format_currency(invoice.currency_code) }}</span>
                 </div>
                 {% if invoice.tax_rate > 0 %}
                 <div class="flex justify-between">
                     <span class="text-text-muted-light dark:text-text-muted-dark">{{ _('Tax') }} ({{ "%.2f"|format(invoice.tax_rate) }}%):</span>
-                    <span>{{ "%.2f"|format(invoice.tax_amount) }} {{ invoice.currency_code }}</span>
+                    <span>{{ invoice.tax_amount|format_currency(invoice.currency_code) }}</span>
                 </div>
                 {% endif %}
                 <div class="flex justify-between text-lg font-bold pt-2 border-t border-border-light dark:border-border-dark">
                     <span>{{ _('Total') }}:</span>
-                    <span>{{ "%.2f"|format(invoice.total_amount) }} {{ invoice.currency_code }}</span>
+                    <span>{{ invoice.total_amount|format_currency(invoice.currency_code) }}</span>
                 </div>
                 {% if invoice.payment_status != 'fully_paid' %}
                 <div class="flex justify-between text-sm text-red-600 pt-2">
                     <span>{{ _('Outstanding') }}:</span>
-                    <span>{{ "%.2f"|format(invoice.outstanding_amount) }} {{ invoice.currency_code }}</span>
+                    <span>{{ invoice.outstanding_amount|format_currency(invoice.currency_code) }}</span>
                 </div>
                 {% endif %}
             </div>

@@ -163,8 +163,8 @@
                 <tr class="border-b border-border-light dark:border-border-dark">
                     <td class="p-2">{{ item.description }}</td>
                     <td class="p-2">{{ "%.2f"|format(item.quantity) }}</td>
-                    <td class="p-2">{{ "%.2f"|format(item.unit_price) }} {{ invoice.currency_code }}</td>
-                    <td class="p-2">{{ "%.2f"|format(item.total_amount) }} {{ invoice.currency_code }}</td>
+                    <td class="p-2">{{ item.unit_price|format_currency(invoice.currency_code) }}</td>
+                    <td class="p-2">{{ item.total_amount|format_currency(invoice.currency_code) }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -193,7 +193,7 @@
                     <td class="p-2">{{ expense.category|capitalize }}</td>
                     <td class="p-2">{{ expense.expense_date|format_date if expense.expense_date else '-' }}</td>
                     <td class="p-2">{{ expense.vendor or '-' }}</td>
-                    <td class="p-2">{{ "%.2f"|format(expense.total_amount) }} {{ expense.currency_code }}</td>
+                    <td class="p-2">{{ expense.total_amount|format_currency(expense.currency_code) }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -222,8 +222,8 @@
                     <td class="p-2">{{ good.description or '-' }}</td>
                     <td class="p-2">{{ good.category|capitalize }}</td>
                     <td class="p-2">{{ "%.2f"|format(good.quantity) }}</td>
-                    <td class="p-2">{{ "%.2f"|format(good.unit_price) }} {{ invoice.currency_code }}</td>
-                    <td class="p-2">{{ "%.2f"|format(good.total_amount) }} {{ invoice.currency_code }}</td>
+                    <td class="p-2">{{ good.unit_price|format_currency(invoice.currency_code) }}</td>
+                    <td class="p-2">{{ good.total_amount|format_currency(invoice.currency_code) }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -235,23 +235,23 @@
         <div class="w-full md:w-1/3">
             <div class="flex justify-between">
                 <span>{{ _('Subtotal') }}</span>
-                <span>{{ "%.2f"|format(invoice.subtotal) }} {{ invoice.currency_code }}</span>
+                <span>{{ invoice.subtotal|format_currency(invoice.currency_code) }}</span>
             </div>
             <div class="flex justify-between">
                 <span>{{ _('Tax (%(rate).2f%%)', rate=invoice.tax_rate) }}</span>
-                <span>{{ "%.2f"|format(invoice.tax_amount) }} {{ invoice.currency_code }}</span>
+                <span>{{ invoice.tax_amount|format_currency(invoice.currency_code) }}</span>
             </div>
             <div class="flex justify-between font-bold text-lg border-t border-gray-300 dark:border-gray-600 pt-2">
                 <span>{{ _('Total') }}</span>
-                <span>{{ "%.2f"|format(invoice.total_amount) }} {{ invoice.currency_code }}</span>
+                <span>{{ invoice.total_amount|format_currency(invoice.currency_code) }}</span>
             </div>
             <div class="flex justify-between text-green-600 dark:text-green-400 mt-2">
                 <span>{{ _('Amount Paid') }}</span>
-                <span>{{ "%.2f"|format(invoice.amount_paid or 0) }} {{ invoice.currency_code }}</span>
+                <span>{{ (invoice.amount_paid or 0)|format_currency(invoice.currency_code) }}</span>
             </div>
             <div class="flex justify-between font-semibold text-red-600 dark:text-red-400 border-t border-gray-300 dark:border-gray-600 pt-2 mt-2">
                 <span>{{ _('Outstanding') }}</span>
-                <span>{{ "%.2f"|format(invoice.outstanding_amount) }} {{ invoice.currency_code }}</span>
+                <span>{{ invoice.outstanding_amount|format_currency(invoice.currency_code) }}</span>
             </div>
         </div>
     </div>
@@ -281,9 +281,9 @@
                 <tr class="border-b border-border-light dark:border-border-dark hover:bg-gray-50 dark:hover:bg-gray-700">
                     <td class="p-2">{{ payment.payment_date|format_date if payment.payment_date else _('N/A') }}</td>
                     <td class="p-2 font-semibold text-green-600 dark:text-green-400">
-                        {{ "%.2f"|format(payment.amount) }} {{ payment.currency or invoice.currency_code }}
+                        {{ payment.amount|format_currency(payment.currency or invoice.currency_code) }}
                         {% if payment.gateway_fee %}
-                        <span class="text-xs text-gray-500 dark:text-gray-400">({{ _('Fee: %(amount)s', amount="%.2f"|format(payment.gateway_fee)) }})</span>
+                        <span class="text-xs text-gray-500 dark:text-gray-400">({{ _('Fee: %(amount)s', amount=payment.gateway_fee|format_currency(payment.currency or invoice.currency_code)) }})</span>
                         {% endif %}
                     </td>
                     <td class="p-2">{{ payment.method or _('N/A') }}</td>

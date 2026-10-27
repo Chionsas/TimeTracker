@@ -211,13 +211,13 @@ document.addEventListener('DOMContentLoaded', function() {
             
             const totalEl = row.querySelector('.item-total');
             if (totalEl) {
-                totalEl.textContent = total.toFixed(2);
+                totalEl.textContent = formatNumber(total);
             }
             
             subtotal += total;
         });
         
-        document.getElementById('po-subtotal').textContent = subtotal.toFixed(2);
+        document.getElementById('po-subtotal').textContent = formatNumber(subtotal);
     }
     
     // Add item button

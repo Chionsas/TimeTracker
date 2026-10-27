@@ -24,7 +24,7 @@ except Exception:
     FontConfiguration = None  # type: ignore
     _WEASYPRINT_AVAILABLE = False
 from flask import current_app
-from flask_babel import gettext as _
+from flask_babel import format_currency, format_decimal, gettext as _
 
 from app import db
 from app.models import InvoicePDFTemplate, QuotePDFTemplate, Settings
@@ -755,7 +755,7 @@ class InvoicePDFGenerator:
 
         def format_money(value):
             try:
-                return f"{float(value):,.2f} {self.settings.currency}"
+                return format_currency(float(value), self.settings.currency)
             except Exception:
                 return f"{value} {self.settings.currency}"
 
@@ -941,7 +941,7 @@ class InvoicePDFGenerator:
         def format_money(value):
             """Format money for template"""
             try:
-                return f"{float(value):,.2f}"
+                return format_decimal(float(value), format="#,##0.00")
             except Exception:
                 return str(value)
 
@@ -1345,7 +1345,7 @@ class InvoicePDFGenerator:
         # Subtotal
         rows.append(f"""
         <tr>
-            <td colspan="3" class="num">Subtotal:</td>
+            <td colspan="3" class="num">{html_lib.escape(_("Subtotal:"))}</td>
             <td class="num">{self._format_currency(self.invoice.subtotal)}</td>
         </tr>
         """)
@@ -1354,7 +1354,7 @@ class InvoicePDFGenerator:
         if self.invoice.tax_rate > 0:
             rows.append(f"""
             <tr>
-                <td colspan="3" class="num">Tax ({self.invoice.tax_rate:.2f}%):</td>
+                <td colspan="3" class="num">{html_lib.escape(_("Tax (%(rate).2f%%):", rate=self.invoice.tax_rate))}</td>
                 <td class="num">{self._format_currency(self.invoice.tax_amount)}</td>
             </tr>
             """)
@@ -1362,7 +1362,7 @@ class InvoicePDFGenerator:
         # Total
         rows.append(f"""
         <tr>
-            <td colspan="3" class="num">Total Amount:</td>
+            <td colspan="3" class="num">{html_lib.escape(_("Total Amount:"))}</td>
             <td class="num">{self._format_currency(self.invoice.total_amount)}</td>
         </tr>
         """)
@@ -1394,9 +1394,9 @@ class InvoicePDFGenerator:
         return ""
 
     def _format_currency(self, value):
-        """Format numeric currency with thousands separators and 2 decimals."""
+        """Format an amount with its currency in the current locale."""
         try:
-            return f"{float(value):,.2f} {self.settings.currency}"
+            return format_currency(float(value), self.settings.currency)
         except Exception:
             return f"{value} {self.settings.currency}"
 
@@ -2092,7 +2092,7 @@ class QuotePDFGenerator:
         def format_money(value):
             try:
                 currency = getattr(quote_wrapper, "currency_code", None) or self.settings.currency
-                return f"{float(value):,.2f} {currency}"
+                return format_currency(float(value), currency)
             except Exception:
                 currency = getattr(quote_wrapper, "currency_code", None) or self.settings.currency
                 return f"{value} {currency}"
@@ -2235,7 +2235,7 @@ class QuotePDFGenerator:
         def format_money(value):
             """Format money for template"""
             try:
-                return f"{float(value):,.2f}"
+                return format_decimal(float(value), format="#,##0.00")
             except Exception:
                 return str(value)
 

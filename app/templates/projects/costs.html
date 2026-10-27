@@ -51,11 +51,11 @@
     </div>
     <div class="bg-card-light dark:bg-card-dark p-6 rounded-xl border border-border-light dark:border-border-dark shadow-sm">
         <h3 class="text-sm font-medium text-text-muted-light dark:text-text-muted-dark">{{ _('Total Amount') }}</h3>
-        <p class="text-2xl font-bold mt-2">{{ '%.2f'|format(total_costs) }}</p>
+        <p class="text-2xl font-bold mt-2">{{ total_costs|format_currency }}</p>
     </div>
     <div class="bg-card-light dark:bg-card-dark p-6 rounded-xl border border-border-light dark:border-border-dark shadow-sm">
         <h3 class="text-sm font-medium text-text-muted-light dark:text-text-muted-dark">{{ _('Billable Amount') }}</h3>
-        <p class="text-2xl font-bold mt-2">{{ '%.2f'|format(billable_costs) }}</p>
+        <p class="text-2xl font-bold mt-2">{{ billable_costs|format_currency }}</p>
     </div>
     <div class="bg-card-light dark:bg-card-dark p-6 rounded-xl border border-border-light dark:border-border-dark shadow-sm">
         <h3 class="text-sm font-medium text-text-muted-light dark:text-text-muted-dark">{{ _('Categories') }}</h3>
@@ -89,7 +89,7 @@
                 <td class="px-6 py-4" data-label="{{ _('Category') }}">
                     <span class="px-2 py-1 text-xs rounded bg-gray-100 dark:bg-gray-800">{{ cost.category|capitalize }}</span>
                 </td>
-                <td class="px-6 py-4 font-medium" data-label="{{ _('Amount') }}">{{ '%.2f'|format(cost.amount) }} {{ cost.currency_code }}</td>
+                <td class="px-6 py-4 font-medium" data-label="{{ _('Amount') }}">{{ cost.amount|format_currency(cost.currency_code) }}</td>
                 <td class="px-6 py-4" data-label="{{ _('Status') }}">
                     {% if cost.is_invoiced %}
                     <span class="px-2 py-1 text-xs rounded bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300">{{ _('Invoiced') }}</span>
@@ -134,7 +134,7 @@
         {% for item in category_breakdown %}
         <div class="p-4 rounded border border-border-light dark:border-border-dark">
             <div class="text-sm text-text-muted-light dark:text-text-muted-dark">{{ item.category|capitalize }}</div>
-            <div class="text-xl font-bold">{{ '%.2f'|format(item.total_amount) }}</div>
+            <div class="text-xl font-bold">{{ item.total_amount|format_currency }}</div>
             <div class="text-xs text-text-muted-light dark:text-text-muted-dark">{{ item.count }} {{ _('item(s)') }}</div>
         </div>
         {% endfor %}

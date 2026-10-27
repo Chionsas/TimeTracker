@@ -259,7 +259,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const price = parseFloat(row.querySelector('.item-price')?.value || 0);
             const total = qty * price;
             const totalEl = row.querySelector('.item-total');
-            if (totalEl) totalEl.textContent = total.toFixed(2);
+            if (totalEl) totalEl.textContent = formatNumber(total);
             if (qty > 0) {
                 itemsTotal += total;
                 const desc = row.querySelector('.item-description')?.value?.trim();
@@ -291,10 +291,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const grand = itemsTotal + expTotal + goodsTotal;
         const el = (id) => document.getElementById(id);
-        if (el('quote-items-section-total')) el('quote-items-section-total').textContent = itemsTotal.toFixed(2);
-        if (el('quote-expenses-section-total')) el('quote-expenses-section-total').textContent = expTotal.toFixed(2);
-        if (el('quote-goods-section-total')) el('quote-goods-section-total').textContent = goodsTotal.toFixed(2);
-        if (el('quote-all-lines-subtotal')) el('quote-all-lines-subtotal').textContent = grand.toFixed(2);
+        if (el('quote-items-section-total')) el('quote-items-section-total').textContent = formatNumber(itemsTotal);
+        if (el('quote-expenses-section-total')) el('quote-expenses-section-total').textContent = formatNumber(expTotal);
+        if (el('quote-goods-section-total')) el('quote-goods-section-total').textContent = formatNumber(goodsTotal);
+        if (el('quote-all-lines-subtotal')) el('quote-all-lines-subtotal').textContent = formatNumber(grand);
         if (el('items-count')) el('items-count').textContent = itemsCount;
         if (el('quote-expenses-count')) el('quote-expenses-count').textContent = expCount;
         if (el('quote-goods-count')) el('quote-goods-count').textContent = goodsCount;

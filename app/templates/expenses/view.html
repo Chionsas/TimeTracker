@@ -47,21 +47,21 @@
                 <div>
                     <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ _('Amount') }}</dt>
                     <dd class="mt-1 text-sm font-semibold text-gray-900 dark:text-gray-100">
-                        {{ expense.currency_code }} {{ '%.2f'|format(expense.amount) }}
+                        {{ expense.amount|format_currency(expense.currency_code) }}
                     </dd>
                 </div>
                 
                 <div>
                     <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ _('Tax Amount') }}</dt>
                     <dd class="mt-1 text-sm text-gray-900 dark:text-gray-100">
-                        {{ expense.currency_code }} {{ '%.2f'|format(expense.tax_amount or 0) }}
+                        {{ (expense.tax_amount or 0)|format_currency(expense.currency_code) }}
                     </dd>
                 </div>
                 
                 <div class="md:col-span-2 bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg">
                     <dt class="text-sm font-medium text-blue-800 dark:text-blue-200">{{ _('Total Amount (incl. tax)') }}</dt>
                     <dd class="mt-1 text-xl font-bold text-blue-900 dark:text-blue-100">
-                        {{ expense.currency_code }} {{ '%.2f'|format(expense.total_amount) }}
+                        {{ expense.total_amount|format_currency(expense.currency_code) }}
                     </dd>
                 </div>
                 

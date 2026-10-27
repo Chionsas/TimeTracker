@@ -51,7 +51,7 @@
                             {{ _('N/A') }}
                         {% endif %}
                     </td>
-                    <td class="p-3 font-medium" data-label="{{ _('Amount') }}">{{ "%.2f"|format(quote.total_amount) }} {{ quote.currency_code }}</td>
+                    <td class="p-3 font-medium" data-label="{{ _('Amount') }}">{{ quote.total_amount|format_currency(quote.currency_code) }}</td>
                     <td class="p-3" data-label="{{ _('Status') }}">
                         <span class="px-2 py-1 text-xs rounded-full 
                             {% if quote.status == 'accepted' %}bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200

@@ -116,7 +116,7 @@
                         <label class="flex items-start gap-3 p-3 rounded border border-border-light dark:border-border-dark hover:bg-background-light dark:hover:bg-background-dark">
                             <input type="checkbox" class="mt-1" name="project_costs[]" value="{{ cost.id }}">
                             <div class="flex-1 text-sm">
-                                <div class="font-medium">{{ cost.description }} ({{ cost.category|title }}) · {{ '%.2f'|format(cost.amount) }} {{ cost.currency_code }}</div>
+                                <div class="font-medium">{{ cost.description }} ({{ cost.category|title }}) · {{ cost.amount|format_currency(cost.currency_code) }}</div>
                                 <div class="text-text-muted-light dark:text-text-muted-dark">{{ cost.cost_date|format_date }}</div>
                             </div>
                         </label>
@@ -138,7 +138,7 @@
                         <label class="flex items-start gap-3 p-3 rounded border border-border-light dark:border-border-dark hover:bg-background-light dark:hover:bg-background-dark">
                             <input type="checkbox" class="mt-1" name="expenses[]" value="{{ expense.id }}">
                             <div class="flex-1 text-sm">
-                                <div class="font-medium">{{ expense.title }} ({{ expense.category|title }}) · {{ '%.2f'|format(expense.total_amount) }} {{ expense.currency_code }}</div>
+                                <div class="font-medium">{{ expense.title }} ({{ expense.category|title }}) · {{ expense.total_amount|format_currency(expense.currency_code) }}</div>
                                 <div class="text-text-muted-light dark:text-text-muted-dark">
                                     {{ expense.expense_date|format_date }}
                                     {% if expense.vendor %} · {{ _('Vendor') }}: {{ expense.vendor }}{% endif %}
@@ -161,9 +161,9 @@
                         <label class="flex items-start gap-3 p-3 rounded border border-border-light dark:border-border-dark hover:bg-background-light dark:hover:bg-background-dark">
                             <input type="checkbox" class="mt-1" name="extra_goods[]" value="{{ good.id }}">
                             <div class="flex-1 text-sm">
-                                <div class="font-medium">{{ good.name }} ({{ good.category|title }}) · {{ '%.2f'|format(good.quantity) }} x {{ '%.2f'|format(good.unit_price) }} {{ good.currency_code }}</div>
+                                <div class="font-medium">{{ good.name }} ({{ good.category|title }}) · {{ '%.2f'|format(good.quantity) }} x {{ good.unit_price|format_currency(good.currency_code) }}</div>
                                 <div class="text-text-muted-light dark:text-text-muted-dark">
-                                    {{ _('Total') }}: {{ '%.2f'|format(good.total_amount) }} {{ good.currency_code }}
+                                    {{ _('Total') }}: {{ good.total_amount|format_currency(good.currency_code) }}
                                     {% if good.description %} · {{ good.description[:80] }}{% if good.description|length > 80 %}…{% endif %}{% endif %}
                                 </div>
                             </div>
@@ -197,9 +197,9 @@
         <div class="bg-card-light dark:bg-card-dark p-6 rounded-xl border border-border-light dark:border-border-dark shadow-sm">
             <h3 class="text-lg font-semibold mb-3">{{ _('Selection Summary') }}</h3>
             <div class="text-sm text-text-muted-light dark:text-text-muted-dark">{{ _('Total available hours') }}: <span class="font-semibold text-text-light dark:text-text-dark">{{ '%.2f'|format(total_available_hours) }}</span></div>
-            <div class="text-sm text-text-muted-light dark:text-text-muted-dark">{{ _('Total available costs') }}: <span class="font-semibold text-text-light dark:text-text-dark">{{ '%.2f'|format(total_available_costs) }} {{ currency }}</span></div>
-            <div class="text-sm text-text-muted-light dark:text-text-muted-dark">{{ _('Total available expenses') }}: <span class="font-semibold text-text-light dark:text-text-dark">{{ '%.2f'|format(total_available_expenses) }} {{ currency }}</span></div>
-            <div class="text-sm text-text-muted-light dark:text-text-muted-dark">{{ _('Total available goods') }}: <span class="font-semibold text-text-light dark:text-text-dark">{{ '%.2f'|format(total_available_goods) }} {{ currency }}</span></div>
+            <div class="text-sm text-text-muted-light dark:text-text-muted-dark">{{ _('Total available costs') }}: <span class="font-semibold text-text-light dark:text-text-dark">{{ total_available_costs|format_currency(currency) }}</span></div>
+            <div class="text-sm text-text-muted-light dark:text-text-muted-dark">{{ _('Total available expenses') }}: <span class="font-semibold text-text-light dark:text-text-dark">{{ total_available_expenses|format_currency(currency) }}</span></div>
+            <div class="text-sm text-text-muted-light dark:text-text-muted-dark">{{ _('Total available goods') }}: <span class="font-semibold text-text-light dark:text-text-dark">{{ total_available_goods|format_currency(currency) }}</span></div>
             {% if prepaid_plan_hours %}
             <div class="mt-4 pt-4 border-t border-border-light dark:border-border-dark">
                 <h4 class="text-sm font-semibold text-text-light dark:text-text-dark mb-2">{{ _('Prepaid Hours Overview') }}</h4>

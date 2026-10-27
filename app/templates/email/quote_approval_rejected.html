@@ -81,7 +81,7 @@
                 <p><strong>{{ _('Quote Number:') }}</strong> {{ quote.quote_number }}</p>
                 <p><strong>{{ _('Title:') }}</strong> {{ quote.title }}</p>
                 <p><strong>{{ _('Client:') }}</strong> {{ quote.client.name if quote.client else _('N/A') }}</p>
-                <p><strong>{{ _('Total Amount:') }}</strong> {{ quote.currency_code }} {{ "%.2f"|format(quote.total_amount) }}</p>
+                <p><strong>{{ _('Total Amount:') }}</strong> {{ quote.total_amount|format_currency(quote.currency_code) }}</p>
                 <p><strong>{{ _('Rejected By:') }}</strong> {{ quote.rejecter.full_name or quote.rejecter.username if quote.rejecter else _('N/A') }}</p>
                 <p><strong>{{ _('Rejected At:') }}</strong> {{ quote.rejected_at|user_datetime if quote.rejected_at else _('N/A') }}</p>
             </div>

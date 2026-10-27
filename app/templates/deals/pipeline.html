@@ -37,7 +37,7 @@
                         <p class="text-xs text-text-muted-light dark:text-text-muted-dark mb-2">{{ deal.client.name }}</p>
                         {% endif %}
                         {% if deal.value %}
-                        <p class="text-sm font-semibold text-primary">{{ deal.currency_code }} {{ '%.2f'|format(deal.value) }}</p>
+                        <p class="text-sm font-semibold text-primary">{{ deal.value|format_currency(deal.currency_code) }}</p>
                         {% endif %}
                         <div class="mt-2 flex items-center justify-between">
                             <span class="text-xs text-text-muted-light dark:text-text-muted-dark">{{ deal.probability }}%</span>

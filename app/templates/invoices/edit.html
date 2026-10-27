@@ -164,7 +164,7 @@
                     <div id="items-subtotal" class="mt-3 p-3 bg-blue-50/30 dark:bg-blue-950/10 rounded-lg border border-blue-200/30 dark:border-blue-800/30">
                         <div class="flex justify-between items-center text-sm font-medium">
                             <span class="text-text-muted-light dark:text-text-muted-dark">{{ _('Items Subtotal') }}:</span>
-                            <span class="text-lg font-bold text-blue-700 dark:text-blue-400">{{ invoice.currency_code }} <span id="items-subtotal-amount">0.00</span></span>
+                            <span class="text-lg font-bold text-blue-700 dark:text-blue-400"><span id="items-subtotal-amount">{{ 0|format_currency(invoice.currency_code) }}</span></span>
                         </div>
                     </div>
                 </div>
@@ -242,7 +242,7 @@
                     <div id="expenses-subtotal" class="mt-3 p-3 bg-amber-50/30 dark:bg-amber-950/10 rounded-lg border border-amber-200/30 dark:border-amber-800/30">
                         <div class="flex justify-between items-center text-sm font-medium">
                             <span class="text-text-muted-light dark:text-text-muted-dark">{{ _('Expenses Subtotal') }}:</span>
-                            <span class="text-lg font-bold text-amber-700 dark:text-amber-400">{{ invoice.currency_code }} <span id="expenses-subtotal-amount">0.00</span></span>
+                            <span class="text-lg font-bold text-amber-700 dark:text-amber-400"><span id="expenses-subtotal-amount">{{ 0|format_currency(invoice.currency_code) }}</span></span>
                         </div>
                     </div>
                 </div>
@@ -312,7 +312,7 @@
                     <div id="goods-subtotal" class="mt-3 p-3 bg-emerald-50/30 dark:bg-emerald-950/10 rounded-lg border border-emerald-200/30 dark:border-emerald-800/30">
                         <div class="flex justify-between items-center text-sm font-medium">
                             <span class="text-text-muted-light dark:text-text-muted-dark">{{ _('Goods Subtotal') }}:</span>
-                            <span class="text-lg font-bold text-emerald-700 dark:text-emerald-400">{{ invoice.currency_code }} <span id="goods-subtotal-amount">0.00</span></span>
+                            <span class="text-lg font-bold text-emerald-700 dark:text-emerald-400"><span id="goods-subtotal-amount">{{ 0|format_currency(invoice.currency_code) }}</span></span>
                         </div>
                     </div>
                 </div>
@@ -377,29 +377,29 @@
                 <div class="space-y-3">
                     <div class="flex justify-between text-sm">
                         <span class="text-text-muted-light dark:text-text-muted-dark">{{ _('Items') }} (<span id="preview-items-count">0</span>)</span>
-                        <span class="font-medium" id="preview-items-total">0.00</span>
+                        <span class="font-medium" id="preview-items-total">{{ 0|format_currency(invoice.currency_code) }}</span>
                     </div>
                     <div class="flex justify-between text-sm">
                         <span class="text-text-muted-light dark:text-text-muted-dark">{{ _('Expenses') }} (<span id="preview-expenses-count">0</span>)</span>
-                        <span class="font-medium" id="preview-expenses-total">0.00</span>
+                        <span class="font-medium" id="preview-expenses-total">{{ 0|format_currency(invoice.currency_code) }}</span>
                     </div>
                     <div class="flex justify-between text-sm">
                         <span class="text-text-muted-light dark:text-text-muted-dark">{{ _('Goods') }} (<span id="preview-goods-count">0</span>)</span>
-                        <span class="font-medium" id="preview-goods-total">0.00</span>
+                        <span class="font-medium" id="preview-goods-total">{{ 0|format_currency(invoice.currency_code) }}</span>
                     </div>
                     <div class="flex justify-between text-sm pt-3 border-t border-border-light dark:border-border-dark">
                         <span class="font-medium">{{ _('Subtotal') }}</span>
-                        <span class="font-semibold" id="preview-subtotal">0.00</span>
+                        <span class="font-semibold" id="preview-subtotal">{{ 0|format_currency(invoice.currency_code) }}</span>
                     </div>
                     <div class="flex justify-between text-sm">
                         <span class="text-text-muted-light dark:text-text-muted-dark">
                             {{ _('Tax') }} (<span id="preview-tax-rate">{{ '%.2f'|format(invoice.tax_rate) }}</span>%)
                         </span>
-                        <span class="font-medium" id="preview-tax-amount">0.00</span>
+                        <span class="font-medium" id="preview-tax-amount">{{ 0|format_currency(invoice.currency_code) }}</span>
                     </div>
                     <div class="flex justify-between items-center pt-3 border-t-2 border-primary">
                         <span class="text-lg font-bold">{{ _('Total') }}</span>
-                        <span class="text-2xl font-bold text-primary" id="preview-total">0.00</span>
+                        <span class="text-2xl font-bold text-primary" id="preview-total">{{ 0|format_currency(invoice.currency_code) }}</span>
                     </div>
                 </div>
                 
@@ -407,11 +407,11 @@
                 <div class="pt-4 border-t border-border-light dark:border-border-dark space-y-2 text-sm">
                     <div class="flex justify-between">
                         <span class="text-text-muted-light dark:text-text-muted-dark">{{ _('Amount Paid') }}</span>
-                        <span class="font-semibold text-emerald-600 dark:text-emerald-400">{{ '%.2f'|format(invoice.amount_paid or 0) }}</span>
+                        <span class="font-semibold text-emerald-600 dark:text-emerald-400">{{ (invoice.amount_paid or 0)|format_currency(invoice.currency_code) }}</span>
                     </div>
                     <div class="flex justify-between">
                         <span class="text-text-muted-light dark:text-text-muted-dark">{{ _('Outstanding') }}</span>
-                        <span class="font-semibold" id="preview-outstanding">{{ '%.2f'|format(invoice.outstanding_amount) }}</span>
+                        <span class="font-semibold" id="preview-outstanding">{{ invoice.outstanding_amount|format_currency(invoice.currency_code) }}</span>
                     </div>
                 </div>
             </div>
@@ -438,6 +438,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const expensesContainer = document.getElementById('invoice-expenses');
     const goodsContainer = document.getElementById('invoice-goods');
     const taxRateInput = document.getElementById('tax_rate');
+    const invoiceCurrency = {{ invoice.currency_code|tojson }};
     
     // Calculate totals function
     function calculateTotals() {
@@ -490,22 +491,22 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('items-count').textContent = itemsCount;
         document.getElementById('expenses-count').textContent = expensesCount;
         document.getElementById('goods-count').textContent = goodsCount;
-        document.getElementById('items-subtotal-amount').textContent = itemsTotal.toFixed(2);
-        document.getElementById('expenses-subtotal-amount').textContent = expensesTotal.toFixed(2);
-        document.getElementById('goods-subtotal-amount').textContent = goodsTotal.toFixed(2);
+        document.getElementById('items-subtotal-amount').textContent = formatMoney(itemsTotal, invoiceCurrency);
+        document.getElementById('expenses-subtotal-amount').textContent = formatMoney(expensesTotal, invoiceCurrency);
+        document.getElementById('goods-subtotal-amount').textContent = formatMoney(goodsTotal, invoiceCurrency);
         
         // Update preview panel
         document.getElementById('preview-items-count').textContent = itemsCount;
         document.getElementById('preview-expenses-count').textContent = expensesCount;
         document.getElementById('preview-goods-count').textContent = goodsCount;
-        document.getElementById('preview-items-total').textContent = itemsTotal.toFixed(2);
-        document.getElementById('preview-expenses-total').textContent = expensesTotal.toFixed(2);
-        document.getElementById('preview-goods-total').textContent = goodsTotal.toFixed(2);
-        document.getElementById('preview-subtotal').textContent = subtotal.toFixed(2);
+        document.getElementById('preview-items-total').textContent = formatMoney(itemsTotal, invoiceCurrency);
+        document.getElementById('preview-expenses-total').textContent = formatMoney(expensesTotal, invoiceCurrency);
+        document.getElementById('preview-goods-total').textContent = formatMoney(goodsTotal, invoiceCurrency);
+        document.getElementById('preview-subtotal').textContent = formatMoney(subtotal, invoiceCurrency);
         document.getElementById('preview-tax-rate').textContent = taxRate.toFixed(2);
-        document.getElementById('preview-tax-amount').textContent = taxAmount.toFixed(2);
-        document.getElementById('preview-total').textContent = total.toFixed(2);
-        document.getElementById('preview-outstanding').textContent = outstanding.toFixed(2);
+        document.getElementById('preview-tax-amount').textContent = formatMoney(taxAmount, invoiceCurrency);
+        document.getElementById('preview-total').textContent = formatMoney(total, invoiceCurrency);
+        document.getElementById('preview-outstanding').textContent = formatMoney(outstanding, invoiceCurrency);
     }
     
     // Stock items and warehouses data
