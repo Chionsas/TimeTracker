@@ -9612,7 +9612,7 @@ msgstr "Patvirtinimo nelaukiama"
 #: app/services/client_approval_service.py:163
 #, python-format
 msgid "Time Entry Approval Requested - %(project)s"
-msgstr ""
+msgstr "Prašoma patvirtinti laiko įrašą – %(project)s"
 
 #: app/services/client_approval_service.py:177
 #, python-format
@@ -9643,12 +9643,12 @@ msgstr "Priežastis: %(reason)s"
 #: app/services/client_notification_service.py:106
 #, python-format
 msgid "New Invoice: %(invoice_number)s"
-msgstr ""
+msgstr "Nauja sąskaita faktūra: %(invoice_number)s"
 
 #: app/services/client_notification_service.py:108
 #, python-format
 msgid "A new invoice has been created for %(amount)s %(currency)s."
-msgstr ""
+msgstr "Išrašyta nauja sąskaita faktūra: %(amount)s %(currency)s."
 
 #: app/services/client_notification_service.py:113
 #: app/services/client_notification_service.py:137
@@ -9662,7 +9662,7 @@ msgstr "Peržiūrėti sąskaitą faktūrą"
 #: app/services/client_notification_service.py:129
 #, python-format
 msgid "Invoice Paid: %(invoice_number)s"
-msgstr ""
+msgstr "Sąskaita faktūra apmokėta: %(invoice_number)s"
 
 #: app/services/client_notification_service.py:131
 #, python-format
@@ -9670,11 +9670,13 @@ msgid ""
 "Payment of %(amount)s %(currency)s has been received for invoice "
 "%(invoice_number)s."
 msgstr ""
+"Gautas %(amount)s %(currency)s mokėjimas už sąskaitą faktūrą "
+"%(invoice_number)s."
 
 #: app/services/client_notification_service.py:153
 #, python-format
 msgid "Overdue Invoice: %(invoice_number)s"
-msgstr ""
+msgstr "Pradelsta sąskaita faktūra: %(invoice_number)s"
 
 #: app/services/client_notification_service.py:155
 #, python-format
@@ -9682,34 +9684,36 @@ msgid ""
 "Invoice %(invoice_number)s is %(days)s days overdue. Amount: %(amount)s "
 "%(currency)s."
 msgstr ""
+"Sąskaitos faktūros %(invoice_number)s apmokėjimas vėluoja (dienų: "
+"%(days)s). Suma: %(amount)s %(currency)s."
 
 #: app/services/client_notification_service.py:178
 #: app/services/time_approval_service.py:244
 msgid "Time Entry Approval Requested"
-msgstr ""
+msgstr "Prašoma patvirtinti laiko įrašą"
 
 #: app/services/client_notification_service.py:180
 #, python-format
 msgid "A time entry for %(project)s requires your approval."
-msgstr ""
+msgstr "Reikia patvirtinti laiko įrašą (%(project)s)."
 
 #: app/services/client_notification_service.py:181
 msgid "project"
-msgstr ""
+msgstr "projektas nenurodytas"
 
 #: app/services/client_notification_service.py:184
 msgid "Review Approval"
-msgstr ""
+msgstr "Peržiūrėti prašymą"
 
 #: app/services/client_notification_service.py:200
 #, python-format
 msgid "New Quote: %(quote_number)s"
-msgstr ""
+msgstr "Naujas komercinis pasiūlymas: %(quote_number)s"
 
 #: app/services/client_notification_service.py:202
 #, python-format
 msgid "A new quote has been created for %(amount)s %(currency)s."
-msgstr ""
+msgstr "Parengtas naujas komercinis pasiūlymas: %(amount)s %(currency)s."
 
 #: app/services/client_notification_service.py:207
 #: app/templates/email/quote_approval_rejected.html:99
@@ -9723,12 +9727,12 @@ msgstr "Peržiūrėti komercinį pasiūlymą"
 #: app/services/client_notification_service.py:223
 #, python-format
 msgid "Milestone Reached: %(milestone)s"
-msgstr ""
+msgstr "Pasiektas etapas: %(milestone)s"
 
 #: app/services/client_notification_service.py:225
 #, python-format
 msgid "Project %(project)s has reached the milestone: %(milestone)s."
-msgstr ""
+msgstr "Projekte %(project)s pasiektas etapas: %(milestone)s."
 
 #: app/services/client_notification_service.py:230
 #: app/templates/main/help.html:58
@@ -9738,12 +9742,12 @@ msgstr "Peržiūrėti projektus"
 #: app/services/client_notification_service.py:246
 #, python-format
 msgid "Budget Alert: %(project)s"
-msgstr ""
+msgstr "Biudžeto įspėjimas: %(project)s"
 
 #: app/services/client_notification_service.py:248
 #, python-format
 msgid "Project %(project)s has reached %(percentage).0f%% of its budget."
-msgstr ""
+msgstr "Projekte %(project)s išnaudota %(percentage).0f %% biudžeto."
 
 #: app/services/client_notification_service.py:253
 #: app/templates/budget/project_detail.html:17
@@ -9770,7 +9774,7 @@ msgstr "Klientas atnaujintas"
 
 #: app/services/client_survey_service.py:74
 msgid "How did we do? Quick feedback"
-msgstr ""
+msgstr "Kaip mums sekėsi? Trumpa apklausa"
 
 #: app/services/comment_service.py:74
 msgid "Parent comment not found"
@@ -9800,7 +9804,7 @@ msgstr "Sąskaita faktūra %(invoice_number)s iš %(company)s"
 #: app/services/email_service.py:67 app/utils/email.py:1135
 #, python-format
 msgid "Invoice %(invoice_number)s"
-msgstr ""
+msgstr "Sąskaita faktūra %(invoice_number)s"
 
 #: app/services/email_service.py:79 app/services/email_service.py:107
 #, python-format
@@ -25358,7 +25362,7 @@ msgstr "Nustatyk slaptažodį, kad galėtum pradėti"
 #: app/templates/client_portal/set_password.html:38
 #: app/templates/email/client_portal_password_setup.html:97
 msgid "Set Your Password"
-msgstr "Nustatyk savo slaptažodį"
+msgstr "Nustatyti slaptažodį"
 
 #: app/templates/client_portal/set_password.html:40
 msgid "Set a password for your client portal account"
@@ -27433,7 +27437,7 @@ msgstr "Tai automatinis TimeTracker pranešimas."
 
 #: app/templates/email/client_notification.html:28
 msgid "If you have any questions, please contact us directly."
-msgstr "Jei turi klausimų, susisiek su mumis tiesiogiai."
+msgstr "Kilus klausimų, prašome kreiptis tiesiogiai."
 
 #: app/templates/email/client_portal_password_setup.html:76
 #: app/templates/email/comment_mention.html:74
@@ -27450,18 +27454,16 @@ msgstr "Jei turi klausimų, susisiek su mumis tiesiogiai."
 #: app/templates/email/working_time_weekly_exceeded.html:1
 #, python-format
 msgid "Hello %(name)s,"
-msgstr "Labas, %(name)s,"
+msgstr "Laba diena, %(name)s,"
 
 #: app/templates/email/client_portal_password_setup.html:78
 #, python-format
 msgid "You have been granted access to the %(portal)s for %(client)s."
-msgstr ""
-"Tau suteikta prieiga prie kliento %(client)s paskyros sistemoje "
-"%(portal)s."
+msgstr "Klientui %(client)s suteikta prieiga prie %(portal)s."
 
 #: app/templates/email/client_portal_password_setup.html:78
 msgid "TimeTracker Client Portal"
-msgstr "TimeTracker klientų portalas"
+msgstr "TimeTracker klientų portalo"
 
 #: app/templates/email/client_portal_password_setup.html:83
 msgid "Portal Username:"
@@ -27472,20 +27474,20 @@ msgid ""
 "To complete your portal setup, please set your password by clicking the "
 "button below:"
 msgstr ""
-"Kad užbaigtum portalo sąranką, spustelėk žemiau esantį mygtuką ir "
-"nustatyk slaptažodį:"
+"Portalo paskyrai užbaigti reikia nustatyti slaptažodį – tam skirtas "
+"mygtukas žemiau:"
 
 #: app/templates/email/client_portal_password_setup.html:102
 msgid ""
 "This link will expire in 24 hours. If you need a new link, please contact"
 " your administrator."
 msgstr ""
-"Ši nuoroda galios 24 valandas. Jei reikia naujos nuorodos, susisiek su "
-"administratoriumi."
+"Nuoroda galios 24 valandas. Prireikus naujos nuorodos, prašome kreiptis į"
+" administratorių."
 
 #: app/templates/email/client_portal_password_setup.html:105
 msgid "Once you've set your password, you'll be able to:"
-msgstr "Kai nusistatysi slaptažodį, galėsi:"
+msgstr "Nustačius slaptažodį, portale bus galima:"
 
 #: app/templates/email/client_portal_password_setup.html:107
 msgid "View your projects and their status"
@@ -27503,7 +27505,9 @@ msgstr "Peržiūrėti savo projektų laiko įrašus"
 msgid ""
 "If you did not request this access, please contact your administrator "
 "immediately."
-msgstr "Jei šios prieigos neprašei, iškart susisiek su administratoriumi."
+msgstr ""
+"Jei šios prieigos nebuvo prašyta, prašome nedelsiant kreiptis į "
+"administratorių."
 
 #: app/templates/email/client_portal_password_setup.html:116
 #: app/templates/email/comment_mention.html:99
@@ -27522,24 +27526,24 @@ msgstr "TimeTracker – laiko apskaita ir projektų valdymas"
 
 #: app/templates/email/client_portal_password_setup.html:117
 msgid "This is an automated email. Please do not reply to this message."
-msgstr "Tai automatinis el. laiškas. Neatsakyk į jį."
+msgstr "Tai automatinis el. laiškas – prašome į jį neatsakyti."
 
 #: app/templates/email/client_survey.html:10
 msgid "Quick feedback"
-msgstr "Trumpas atsiliepimas"
+msgstr "Trumpa apklausa"
 
 #: app/templates/email/client_survey.html:13
 #, python-format
 msgid "Hi %(name)s,"
-msgstr "Labas, %(name)s,"
+msgstr "Laba diena, %(name)s,"
 
 #: app/templates/email/client_survey.html:14
 msgid ""
 "We would love to know how we did. Please take 30 seconds to rate your "
 "experience (0 = not likely, 10 = extremely likely)."
 msgstr ""
-"Norėtume sužinoti, kaip mums sekėsi. Skirk 30 sekundžių ir įvertink savo "
-"patirtį (0 – vargu ar rekomenduotum, 10 – tikrai rekomenduotum)."
+"Norėtume sužinoti, kaip mums sekėsi. Įvertinimas užtruks vos 30 sekundžių"
+" (0 – visai nerekomenduotina, 10 – labai rekomenduotina)."
 
 #: app/templates/email/client_survey.html:18
 msgid "Leave feedback"
@@ -27584,15 +27588,15 @@ msgstr "Pranešimų nuostatas gali pakeisti savo naudotojo nustatymuose."
 #: app/templates/email/test_email.html:108
 #: app/templates/email/unpaid_hours_report.html:119
 msgid "Hello,"
-msgstr "Labas,"
+msgstr "Laba diena,"
 
 #: app/templates/email/invoice.html:69
 msgid "Please find attached invoice"
-msgstr "Siunčiame sąskaitą faktūrą"
+msgstr "Pridedame sąskaitą faktūrą"
 
 #: app/templates/email/invoice.html:69
 msgid "for your records."
-msgstr "tavo apskaitai."
+msgstr "apskaitai."
 
 #: app/templates/email/invoice.html:74
 #: app/templates/email/overdue_invoice.html:78
@@ -27608,7 +27612,7 @@ msgstr "Išrašymo data:"
 #: app/templates/email/task_assigned.html:97
 #: app/templates/invoices/view.html:77
 msgid "Due Date:"
-msgstr "Terminas:"
+msgstr "Apmokėti iki:"
 
 #: app/templates/email/invoice.html:86
 #: app/templates/email/overdue_invoice.html:86
@@ -27622,11 +27626,11 @@ msgstr "Žinutė:"
 
 #: app/templates/email/invoice.html:99
 msgid "Please remit payment by the due date."
-msgstr "Apmokėk iki termino."
+msgstr "Prašome apmokėti iki nurodytos datos."
 
 #: app/templates/email/invoice.html:101
 msgid "Thank you for your business!"
-msgstr "Ačiū, kad renkiesi mus!"
+msgstr "Dėkojame už bendradarbiavimą!"
 
 #: app/templates/email/invoice.html:106 app/templates/email/test_email.html:148
 #: app/templates/email/unpaid_hours_report.html:186
@@ -27638,8 +27642,8 @@ msgid ""
 "This invoice was sent automatically. Please contact us if you have any "
 "questions."
 msgstr ""
-"Ši sąskaita faktūra išsiųsta automatiškai. Jei turi klausimų, susisiek su"
-" mumis."
+"Ši sąskaita faktūra išsiųsta automatiškai. Kilus klausimų, prašome "
+"kreiptis."
 
 #: app/templates/email/overdue_invoice.html:65
 msgid "Invoice Overdue"
@@ -27696,11 +27700,11 @@ msgstr "Komercinis pasiūlymas"
 
 #: app/templates/email/quote.html:69
 msgid "Please find attached quote"
-msgstr "Siunčiame komercinį pasiūlymą"
+msgstr "Pridedame komercinį pasiūlymą"
 
 #: app/templates/email/quote.html:69
 msgid "for your review."
-msgstr "susipažinti."
+msgstr "peržiūrai."
 
 #: app/templates/email/quote.html:74 app/templates/email/quote_accepted.html:19
 #: app/templates/email/quote_approval_rejected.html:81
@@ -27738,19 +27742,19 @@ msgstr "Galioja iki:"
 msgid ""
 "Please review the attached quote and let us know if you have any "
 "questions."
-msgstr "Peržiūrėk pridėtą komercinį pasiūlymą ir, jei turi klausimų, parašyk mums."
+msgstr "Kilus klausimų dėl pridėto komercinio pasiūlymo, prašome kreiptis."
 
 #: app/templates/email/quote.html:107
 msgid "Thank you for your interest!"
-msgstr "Ačiū, kad domiesi!"
+msgstr "Dėkojame už susidomėjimą!"
 
 #: app/templates/email/quote.html:113
 msgid ""
 "This quote was sent automatically. Please contact us if you have any "
 "questions."
 msgstr ""
-"Šis komercinis pasiūlymas išsiųstas automatiškai. Jei turi klausimų, "
-"susisiek su mumis."
+"Šis komercinis pasiūlymas išsiųstas automatiškai. Kilus klausimų, prašome"
+" kreiptis."
 
 #: app/templates/email/quote_accepted.html:6
 #: app/templates/email/quote_accepted.html:10
@@ -45564,11 +45568,25 @@ msgid ""
 "Best regards,\n"
 "TimeTracker Team\n"
 msgstr ""
+"\n"
+"Laba diena, %(name)s,\n"
+"\n"
+"Suteikta prieiga prie TimeTracker klientų portalo.\n"
+"\n"
+"Slaptažodį nustatyti ir prisijungti prie portalo galima šia nuoroda:\n"
+"%(setup_url)s\n"
+"\n"
+"Nuoroda galios 24 valandas.\n"
+"\n"
+"Jei šios prieigos nebuvo prašyta, prašome kreiptis į administratorių.\n"
+"\n"
+"Pagarbiai\n"
+"TimeTracker komanda\n"
 
 #: app/utils/email.py:167
 #, python-format
 msgid "Set Your Client Portal Password - %(name)s"
-msgstr ""
+msgstr "Klientų portalo slaptažodžio nustatymas – %(name)s"
 
 #: app/utils/email.py:281
 #, python-format
@@ -46027,17 +46045,19 @@ msgstr "Bandomasis el. laiškas išsiųstas adresu %(recipient_email)s"
 
 #: app/utils/email.py:855 app/utils/email.py:1610
 msgid "Your Company"
-msgstr ""
+msgstr "Įmonė"
 
 #: app/utils/email.py:857
 #, python-format
 msgid "Invoice %(invoice_number)s from %(company_name)s"
-msgstr ""
+msgstr "%(company_name)s: sąskaita faktūra %(invoice_number)s"
 
 #: app/utils/email.py:905
 #, python-format
 msgid "Invoice %(invoice_number)s - Please see attached PDF for details."
 msgstr ""
+"Sąskaita faktūra %(invoice_number)s – išsami informacija pridėtame PDF "
+"faile."
 
 #: app/utils/email.py:914
 #, python-format
@@ -46054,6 +46074,17 @@ msgid ""
 "- Amount: %(currency_code)s %(total_amount)s\n"
 "\n"
 msgstr ""
+"\n"
+"Laba diena,\n"
+"\n"
+"Pridedame sąskaitą faktūrą %(invoice_number)s apskaitai.\n"
+"\n"
+"Sąskaitos faktūros duomenys:\n"
+"- Numeris: %(invoice_number)s\n"
+"- Išrašymo data: %(issue_date)s\n"
+"- Apmokėti iki: %(due_date)s\n"
+"- Suma: %(total_amount)s %(currency_code)s\n"
+"\n"
 
 #: app/utils/email.py:937
 #, python-format
@@ -46066,6 +46097,13 @@ msgid ""
 "---\n"
 "%(company_name)s\n"
 msgstr ""
+"\n"
+"Prašome apmokėti iki nurodytos datos.\n"
+"\n"
+"Dėkojame už bendradarbiavimą!\n"
+"\n"
+"---\n"
+"%(company_name)s\n"
 
 #: app/utils/email.py:979
 msgid "Mail server not configured"
@@ -46484,7 +46522,7 @@ msgstr "Nepavyko sugeneruoti PDF"
 #: app/utils/email.py:1614
 #, python-format
 msgid "Quote %(quote_number)s from %(company_name)s"
-msgstr ""
+msgstr "%(company_name)s: komercinis pasiūlymas %(quote_number)s"
 
 #: app/utils/email.py:1619
 #, python-format
@@ -46501,6 +46539,17 @@ msgid ""
 "- Amount: %(currency_code)s %(total_amount)s\n"
 "\n"
 msgstr ""
+"\n"
+"Laba diena,\n"
+"\n"
+"Pridedame komercinį pasiūlymą %(quote_number)s peržiūrai.\n"
+"\n"
+"Pasiūlymo duomenys:\n"
+"- Numeris: %(quote_number)s\n"
+"- Pavadinimas: %(title)s\n"
+"- Galioja iki: %(valid_until)s\n"
+"- Suma: %(total_amount)s %(currency_code)s\n"
+"\n"
 
 #: app/utils/email.py:1642
 #, python-format
@@ -46514,6 +46563,13 @@ msgid ""
 "---\n"
 "%(company_name)s\n"
 msgstr ""
+"\n"
+"Kilus klausimų dėl pridėto komercinio pasiūlymo, prašome kreiptis.\n"
+"\n"
+"Dėkojame už susidomėjimą!\n"
+"\n"
+"---\n"
+"%(company_name)s\n"
 
 #: app/utils/email.py:1696
 msgid "Email sent successfully"
