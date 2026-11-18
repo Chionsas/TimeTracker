@@ -1,10 +1,13 @@
 """Stripe payment provider."""
 
+import logging
 from decimal import Decimal
-from typing import Dict, Optional
+from typing import Any, Dict, Optional
 
 from app.payments.base import CheckoutResult, PaymentProvider, WebhookResult
-from app.utils.stripe_integration import StripeIntegration
+from app.utils.stripe_integration import StripeIntegration, from_stripe_amount, to_stripe_amount
+
+logger = logging.getLogger(__name__)
 
 
 class StripeProvider(PaymentProvider):
@@ -64,9 +67,10 @@ class StripeProvider(PaymentProvider):
             data_obj.get("payment_intent") if event_type == "checkout.session.completed" else data_obj.get("id")
         ) or ""
 
+        currency = (data_obj.get("currency") or "EUR").upper()
         amount_cents = data_obj.get("amount_received") or data_obj.get("amount_total") or data_obj.get("amount") or 0
         try:
-            amount = (Decimal(str(amount_cents)) / 100) if amount_cents else Decimal("0")
+            amount = from_stripe_amount(amount_cents, currency) if amount_cents else Decimal("0")
         except Exception:
             amount = Decimal("0")
 
@@ -76,6 +80,37 @@ class StripeProvider(PaymentProvider):
             transaction_id=transaction_id,
             invoice_id=invoice_id or None,
             amount=amount,
-            currency=(data_obj.get("currency") or "EUR").upper(),
+            currency=currency,
             raw=data_obj,
         )
+
+    def refund(
+        self,
+        *,
+        gateway_transaction_id: str,
+        amount: Decimal,
+        currency: str,
+        reason: Optional[str] = None,
+    ) -> Dict[str, Any]:
+        """Refund a Stripe payment intent via the Refunds API."""
+        api_key = self.config.get("api_key")
+        if not api_key:
+            return {"success": False, "message": "Stripe API key not configured"}
+        try:
+            import stripe
+
+            stripe.api_key = api_key
+            amount_int = to_stripe_amount(amount, currency)
+            params: Dict[str, Any] = {
+                "payment_intent": gateway_transaction_id,
+                "amount": amount_int,
+            }
+            if reason:
+                # Stripe accepts: duplicate, fraudulent, requested_by_customer
+                params["reason"] = "requested_by_customer"
+                params["metadata"] = {"reason": reason[:500]}
+            refund = stripe.Refund.create(**params)
+            return {"success": True, "refund_id": refund.get("id"), "raw": dict(refund)}
+        except Exception as exc:
+            logger.error("Stripe refund failed: %s", exc)
+            return {"success": False, "message": str(exc)}

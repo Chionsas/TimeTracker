@@ -58,7 +58,7 @@ from app.integrations.slack_connector import PROVIDER_KEY as SLACK_PROVIDER
 from app.integrations.slack_connector import SlackConnector
 from app.models import Integration
 from app.utils.db import safe_commit
-from app.utils.error_handling import client_error_response, client_error_payload, DEFAULT_CLIENT_ERROR
+from app.utils.error_handling import DEFAULT_CLIENT_ERROR, client_error_payload, client_error_response
 
 logger = logging.getLogger(__name__)
 
@@ -384,13 +384,13 @@ def slack_status():
 @integrations_webhooks_bp.route("/api/integrations/teams/bot/messages", methods=["POST"])
 @csrf.exempt
 def teams_bot_messages():
-    """Receive Bot Framework activities (stub; JWT validation in a later phase)."""
+    """Receive Bot Framework activities; JWT validated in MicrosoftTeamsConnector."""
     payload = request.get_json(silent=True) or {}
     from app.integrations.microsoft_teams import MicrosoftTeamsConnector
 
     connector = MicrosoftTeamsConnector(integration=None)
-    result = connector.handle_bot_command(payload)
-    status = int(result.get("status") or 501)
+    result = connector.handle_bot_command(payload, auth_header=request.headers.get("Authorization"))
+    status = int(result.get("status") or 200)
     body = result.get("body") or {}
     return jsonify(body), status
 

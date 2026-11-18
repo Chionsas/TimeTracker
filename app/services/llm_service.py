@@ -19,6 +19,7 @@ from app import db
 from app.models import Project, Settings, Task, TimeEntry, User
 from app.models.time_entry import local_now
 from app.services.ai_suggestion_service import AISuggestionService
+from app.services.task_service import task_assigned_to_user_clause
 from app.services.time_tracking_service import TimeTrackingService
 from app.utils.scope_filter import user_can_access_project
 
@@ -185,7 +186,7 @@ class LLMService:
 
         tasks = (
             Task.query.options(joinedload(Task.project))
-            .filter(Task.assigned_to == user.id, Task.status.in_(["todo", "in_progress", "review"]))
+            .filter(task_assigned_to_user_clause(user.id), Task.status.in_(["todo", "in_progress", "review"]))
             .order_by(Task.due_date.asc().nullslast(), Task.updated_at.desc())
             .limit(20)
             .all()
@@ -276,8 +277,7 @@ class LLMService:
             hours = round((entry.duration_seconds or 0) / 3600, 2)
             note = (entry.notes or "").strip()
             compact_lines.append(
-                f"- {entry.start_time.date().isoformat()}: {label}, {hours}h"
-                + (f" — {note[:120]}" if note else "")
+                f"- {entry.start_time.date().isoformat()}: {label}, {hours}h" + (f" — {note[:120]}" if note else "")
             )
 
         entries_text = "\n".join(compact_lines) if compact_lines else "(no completed entries in range)"

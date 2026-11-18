@@ -73,7 +73,9 @@ class TrelloConnector(BaseConnector):
         # Verify token by getting user info
         user_info = {}
         try:
-            response = requests.get(f"{self.BASE_URL}/members/me", params={"key": api_key, "token": token}, timeout=(5, 30))
+            response = requests.get(
+                f"{self.BASE_URL}/members/me", params={"key": api_key, "token": token}, timeout=(5, 30)
+            )
             if response.status_code == 200:
                 user_data = response.json()
                 user_info = {
@@ -109,7 +111,8 @@ class TrelloConnector(BaseConnector):
 
             headers = {"Authorization": f"Bearer {self.get_access_token()}"}
             response = requests.get(
-                f"{self.BASE_URL}/members/me", params={"key": api_key, "token": self.get_access_token()},
+                f"{self.BASE_URL}/members/me",
+                params={"key": api_key, "token": self.get_access_token()},
                 timeout=(5, 30),
             )
 
@@ -209,7 +212,8 @@ class TrelloConnector(BaseConnector):
 
         # Get boards
         boards_response = requests.get(
-            f"{self.BASE_URL}/members/me/boards", params={"key": api_key, "token": token, "filter": "open"},
+            f"{self.BASE_URL}/members/me/boards",
+            params={"key": api_key, "token": token, "filter": "open"},
             timeout=(5, 30),
         )
 
@@ -317,7 +321,8 @@ class TrelloConnector(BaseConnector):
                 # Try to find or create board
                 board_name = project.name
                 boards_response = requests.get(
-                    f"{self.BASE_URL}/members/me/boards", params={"key": api_key, "token": token, "filter": "open"},
+                    f"{self.BASE_URL}/members/me/boards",
+                    params={"key": api_key, "token": token, "filter": "open"},
                     timeout=(5, 30),
                 )
 
@@ -331,7 +336,8 @@ class TrelloConnector(BaseConnector):
                         # Create new board (optional - might require additional permissions)
                         try:
                             create_response = requests.post(
-                                f"{self.BASE_URL}/boards", params={"key": api_key, "token": token, "name": board_name},
+                                f"{self.BASE_URL}/boards",
+                                params={"key": api_key, "token": token, "name": board_name},
                                 timeout=(5, 30),
                             )
                             if create_response.status_code == 200:
@@ -423,7 +429,9 @@ class TrelloConnector(BaseConnector):
                             "idList": target_list_id,
                         }
                         create_response = requests.post(
-                            f"{self.BASE_URL}/cards", params={"key": api_key, "token": token}, json=create_data,
+                            f"{self.BASE_URL}/cards",
+                            params={"key": api_key, "token": token},
+                            json=create_data,
                             timeout=(5, 30),
                         )
                         if create_response.status_code == 200:
@@ -464,7 +472,9 @@ class TrelloConnector(BaseConnector):
 
         try:
             # Fetch list name
-            list_response = requests.get(f"{self.BASE_URL}/lists/{list_id}", params={"key": api_key, "token": token}, timeout=(5, 30))
+            list_response = requests.get(
+                f"{self.BASE_URL}/lists/{list_id}", params={"key": api_key, "token": token}, timeout=(5, 30)
+            )
 
             if list_response.status_code == 200:
                 list_data = list_response.json()

@@ -9,6 +9,9 @@ TimeTracker generates **Peppol BIS Billing 3.0 UBL 2.1 XML** and sends it to thi
 - `GET /health` — basic health check
 - `POST /test` — verify provider credentials/config
 - `POST /send` — receive TimeTracker contract and forward the UBL
+- `GET /message/<id>/status` — AP-side delivery status
+- `GET /inbox` — poll inbound documents (Let’s Peppol)
+- `POST /inbox/ack` — acknowledge downloaded inbound ids
 
 ## Auth (bridge endpoint)
 
@@ -38,6 +41,28 @@ Environment:
 
 Peppyrus authenticates API requests with the `X-Api-Key` header (not `Authorization: Bearer`).
 
+### getpeppr
+
+Environment:
+
+- `PEPPOL_BRIDGE_PROVIDER=getpeppr`
+- `GETPEPPR_API_KEY=...` (`sk_sandbox_…` or `sk_live_…`; the key decides the environment)
+- `GETPEPPR_BASE_URL=https://api.getpeppr.dev/v1` (optional)
+
+getpeppr takes the sender from the API key and routes to the recipient's `scheme:id`; see [PEPPOL_BRIDGE.md](../docs/admin/configuration/PEPPOL_BRIDGE.md#getpeppr) for status mapping and idempotency.
+
+### Let’s Peppol (Belgium, hosted)
+
+Environment:
+
+- `PEPPOL_BRIDGE_PROVIDER=letspeppol`
+- `LETSPEPPOL_BASE_URL=https://be.letspeppol.org` (optional)
+- `LETSPEPPOL_CLIENT_ID=...`
+- `LETSPEPPOL_CLIENT_SECRET=...`
+- `LETSPEPPOL_PEPPOL_ID=0208:…` (your company Peppol ID)
+
+Requires prior KYC on [be.letspeppol.org](https://be.letspeppol.org). Uses OAuth2 client credentials (`service` scope) against the Let’s Peppol KYC token endpoint, then Proxy document APIs for send, status, and inbox. See [PEPPOL_BRIDGE.md](../docs/admin/configuration/PEPPOL_BRIDGE.md).
+
 ### generic_custom (passthrough)
 
 Environment:
@@ -63,4 +88,3 @@ docker run --rm -p 8088:8088 \
   -e PEPPOL_BRIDGE_AUTH_TOKEN=CHANGE_ME \
   timetracker-peppol-bridge:latest
 ```
-

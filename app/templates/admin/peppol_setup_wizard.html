@@ -20,7 +20,7 @@
   <div class="bg-card-light dark:bg-card-dark p-6 rounded-xl border border-border-light dark:border-border-dark shadow-sm">
     <h2 class="text-lg font-semibold mb-2">{{ _('1) Deploy the Peppol Bridge') }}</h2>
     <p class="text-sm text-text-muted-light dark:text-text-muted-dark mb-4">
-      {{ _('TimeTracker sends UBL XML to a local bridge. The bridge forwards it to your Access Point provider (e.g. Peppyrus or e-invoice.be).') }}
+      {{ _('TimeTracker sends UBL XML to a local bridge. The bridge forwards it to your Access Point provider (e.g. Peppyrus, e-invoice.be or getpeppr).') }}
     </p>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -29,6 +29,8 @@
         <select id="wizardProviderPreset" class="form-input">
           <option value="einvoice">e-invoice.be</option>
           <option value="peppyrus">Peppyrus</option>
+          <option value="getpeppr">getpeppr</option>
+          <option value="letspeppol">Let’s Peppol (Belgium)</option>
           <option value="generic_custom">generic_custom ({{ _('forward URL') }})</option>
         </select>
         <p class="mt-1 text-xs text-text-muted-light dark:text-text-muted-dark">
@@ -150,6 +152,20 @@ function buildComposeSnippet() {
       '      - PEPPYRUS_BASE_URL=${PEPPYRUS_BASE_URL:-https://api.peppyrus.be/v1}',
       '      - PEPPYRUS_API_KEY=${PEPPYRUS_API_KEY:?Set PEPPYRUS_API_KEY}',
     ].join('\\n');
+  } else if (preset === 'getpeppr') {
+    providerEnv = [
+      '      - PEPPOL_BRIDGE_PROVIDER=getpeppr',
+      '      - GETPEPPR_BASE_URL=${GETPEPPR_BASE_URL:-https://api.getpeppr.dev/v1}',
+      '      - GETPEPPR_API_KEY=${GETPEPPR_API_KEY:?Set GETPEPPR_API_KEY}',
+    ].join('\\n');
+  } else if (preset === 'letspeppol') {
+    providerEnv = [
+      '      - PEPPOL_BRIDGE_PROVIDER=letspeppol',
+      '      - LETSPEPPOL_BASE_URL=${LETSPEPPOL_BASE_URL:-https://be.letspeppol.org}',
+      '      - LETSPEPPOL_CLIENT_ID=${LETSPEPPOL_CLIENT_ID:?Set LETSPEPPOL_CLIENT_ID}',
+      '      - LETSPEPPOL_CLIENT_SECRET=${LETSPEPPOL_CLIENT_SECRET:?Set LETSPEPPOL_CLIENT_SECRET}',
+      '      - LETSPEPPOL_PEPPOL_ID=${LETSPEPPOL_PEPPOL_ID:?Set LETSPEPPOL_PEPPOL_ID}',
+    ].join('\\n');
   } else {
     providerEnv = [
       '      - PEPPOL_BRIDGE_PROVIDER=generic_custom',
@@ -191,9 +207,21 @@ async function postJson(url, body) {
 document.addEventListener('DOMContentLoaded', function() {
   const presetEl = document.getElementById('wizardProviderPreset');
   const tokenEl = document.getElementById('wizardBridgeAuthToken');
-  if (presetEl) presetEl.addEventListener('change', buildComposeSnippet);
+  const labelEl = document.getElementById('wizardProviderLabel');
+  function onPresetChange() {
+    buildComposeSnippet();
+    if (labelEl && presetEl) {
+      const preset = presetEl.value || 'einvoice';
+      if (preset === 'letspeppol') labelEl.value = 'letspeppol';
+      else if (preset === 'getpeppr') labelEl.value = 'getpeppr';
+      else if (preset === 'peppyrus') labelEl.value = 'peppyrus';
+      else if (preset === 'einvoice') labelEl.value = 'e-invoice.be';
+      else if (preset === 'generic_custom') labelEl.value = 'generic';
+    }
+  }
+  if (presetEl) presetEl.addEventListener('change', onPresetChange);
   if (tokenEl) tokenEl.addEventListener('input', buildComposeSnippet);
-  buildComposeSnippet();
+  onPresetChange();
 
   const checkBtn = document.getElementById('wizardCheckBridgeBtn');
   const applyBtn = document.getElementById('wizardApplyBtn');
@@ -267,4 +295,3 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 {% endblock %}
-

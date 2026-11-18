@@ -146,8 +146,9 @@ Supported payment methods include:
 - Check
 - Credit Card
 - Debit Card
-- PayPal
-- Stripe
+- PayPal (hosted checkout + refunds)
+- Stripe (hosted checkout + refunds)
+- Mollie (hosted checkout + refunds)
 - Wire Transfer
 - Other
 
@@ -163,7 +164,7 @@ Payment is awaiting confirmation or processing.
 Payment attempt failed or was declined.
 
 ### Refunded
-Payment was refunded to the customer.
+Payment was refunded to the customer. Stripe, Mollie, and PayPal checkout flows support gateway refunds that update payment status and invoice amounts paid; the `payment.refunded` webhook is emitted when a refund completes.
 
 ## API Endpoints
 
@@ -289,7 +290,7 @@ flask db upgrade
 
 1. **Pending payments**: Use for payments awaiting clearance
 2. **Failed payments**: Record failed attempts for tracking
-3. **Refunds**: Use refunded status and create negative payments if needed
+3. **Refunds**: Prefer the gateway refund action (Stripe/Mollie/PayPal) so status and invoice balances stay consistent; for manual refunds, set status to refunded
 4. **Partial payments**: Record each payment separately for clear audit trail
 
 ### Security and Permissions
@@ -359,11 +360,17 @@ pytest tests/test_payment_model.py -v
 pytest tests/test_payment_smoke.py -v
 ```
 
+## Overdue invoices vs payment reminders
+
+Past-due **invoice status and notifications** (daily job → mark `overdue`, staff email, client portal ping) are implemented. That is **not** multi-step dunning or payment-collection reminders. Details: [Invoice reminders and recurring](features/INVOICE_REMINDERS_AND_RECURRING.md).
+
+**Recurring invoices** (generate draft invoices on a schedule) are separate from **recurring payments** (automatic charge processing), which is not implemented here.
+
 ## Future Enhancements
 
 Potential improvements for future versions:
 
-1. **Payment Reminders**: Automated reminders for overdue invoices
+1. **Multi-step payment reminders / dunning**: Offset-based schedules (`InvoiceReminderSchedule` exists unused)
 2. **Payment Plans**: Support for installment payment schedules
 3. **Recurring Payments**: Automatic payment processing for recurring invoices
 4. **Payment Export**: Export payment history to CSV/Excel
@@ -377,6 +384,7 @@ Potential improvements for future versions:
 ## Related Features
 
 - **Invoices**: Core invoicing functionality
+- **Overdue & recurring**: [Invoice reminders and recurring](features/INVOICE_REMINDERS_AND_RECURRING.md)
 - **Clients**: Client management and billing
 - **Reports**: Financial reporting including payment analytics
 - **Analytics**: Payment trends and statistics
@@ -404,4 +412,3 @@ Initial release of Payment Tracking feature:
 - Invoice integration
 - Comprehensive test coverage
 - Full documentation
-

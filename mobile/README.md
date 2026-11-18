@@ -101,6 +101,14 @@ The app integrates with the TimeTracker REST API (`/api/v1/`):
 
 See the main project's API documentation for details.
 
+## Out of scope
+
+The mobile app focuses on day-to-day time tracking, finance hubs, CRM, and sync. The following remain **web-only** (not planned for mobile):
+
+- **Admin** console and organization administration
+- **Peppol** e-invoicing transport and related admin settings
+- Advanced PDF layout design (invoice PDF download/share from invoice detail is supported)
+
 ## Building
 
 ### Android

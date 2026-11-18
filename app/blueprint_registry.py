@@ -60,25 +60,32 @@ def register_all_blueprints(app, logger=None):
     import_module("app.routes.api_v1_geofences")
     import_module("app.routes.api_v1_attendance")
     import_module("app.routes.api_v1_audit_logs")
+    import_module("app.routes.api_v1_exports")
+
     from app.routes.api_v1_ai import api_v1_ai_bp
+    from app.routes.api_v1_client_portal import api_v1_client_portal_bp
     from app.routes.api_v1_clients import api_v1_clients_bp
     from app.routes.api_v1_contacts import api_v1_contacts_bp
     from app.routes.api_v1_deals import api_v1_deals_bp
     from app.routes.api_v1_expenses import api_v1_expenses_bp
+    from app.routes.api_v1_gantt import api_v1_gantt_bp
     from app.routes.api_v1_invoices import api_v1_invoices_bp
     from app.routes.api_v1_issues import api_v1_issues_bp
     from app.routes.api_v1_leads import api_v1_leads_bp
     from app.routes.api_v1_mileage import api_v1_mileage_bp
     from app.routes.api_v1_payments import api_v1_payments_bp
+    from app.routes.api_v1_project_templates import api_v1_project_templates_bp
     from app.routes.api_v1_projects import api_v1_projects_bp
+    from app.routes.api_v1_recurring_tasks import api_v1_recurring_tasks_bp
+    from app.routes.api_v1_resource_scheduling import api_v1_resource_scheduling_bp
     from app.routes.api_v1_tasks import api_v1_tasks_bp
+    from app.routes.api_v1_team_chat import api_v1_team_chat_bp
     from app.routes.api_v1_time_entries import api_v1_time_entries_bp
     from app.routes.i18n import i18n_bp
     from app.routes.api_v1_weekly_goals import api_v1_weekly_goals_bp
-    from app.routes.api_v1_recurring_tasks import api_v1_recurring_tasks_bp
-    from app.routes.api_v1_project_templates import api_v1_project_templates_bp
-    from app.routes.api_v1_client_portal import api_v1_client_portal_bp
+    from app.routes.api_v1_workflows import api_v1_workflows_bp
     from app.routes.auth import auth_bp
+    from app.routes.bank_reconciliation import bank_reconciliation_bp
     from app.routes.budget_alerts import budget_alerts_bp
     from app.routes.calendar import calendar_bp
     from app.routes.client_notes import client_notes_bp
@@ -91,6 +98,7 @@ def register_all_blueprints(app, logger=None):
     from app.routes.deals import deals_bp
     from app.routes.expense_categories import expense_categories_bp
     from app.routes.expenses import expenses_bp
+    from app.routes.gamification import gamification_bp
     from app.routes.import_export import import_export_bp
     from app.routes.inventory import inventory_bp
     from app.routes.invoices import invoices_bp
@@ -101,15 +109,15 @@ def register_all_blueprints(app, logger=None):
     from app.routes.link_templates import link_templates_bp
     from app.routes.main import main_bp
     from app.routes.mileage import mileage_bp
+    from app.routes.milestones import milestones_bp
     from app.routes.payments import payments_bp
     from app.routes.per_diem import per_diem_bp
     from app.routes.permissions import permissions_bp
     from app.routes.projects import projects_bp
     from app.routes.quotes import quotes_bp
-    from app.routes.milestones import milestones_bp
-    from app.routes.resource_scheduling import resource_scheduling_bp
     from app.routes.recurring_invoices import recurring_invoices_bp
     from app.routes.reports import reports_bp
+    from app.routes.resource_scheduling import resource_scheduling_bp
     from app.routes.salesman_reports import salesman_reports_bp
     from app.routes.saved_filters import saved_filters_bp
     from app.routes.settings import settings_bp
@@ -121,7 +129,6 @@ def register_all_blueprints(app, logger=None):
     from app.routes.webhooks import webhooks_bp
     from app.routes.weekly_goals import weekly_goals_bp
     from app.routes.workday import workday_bp
-    from app.routes.gamification import gamification_bp
 
     try:
         from app.routes.audit_logs import audit_logs_bp
@@ -165,6 +172,60 @@ def register_all_blueprints(app, logger=None):
             raise
 
     app.register_blueprint(auth_bp)
+    try:
+        from app.routes.auth_saml import auth_saml_bp
+
+        app.register_blueprint(auth_saml_bp)
+        _record_blueprint_status(
+            app,
+            kind="special",
+            module_path="app.routes.auth_saml",
+            blueprint_attr="auth_saml_bp",
+            ok=True,
+        )
+    except Exception:
+        _log.exception(
+            "Could not register auth_saml blueprint",
+            extra={"event": "blueprint_register_failed", "blueprint": "auth_saml"},
+        )
+        _record_blueprint_status(
+            app,
+            kind="special",
+            module_path="app.routes.auth_saml",
+            blueprint_attr="auth_saml_bp",
+            ok=False,
+            error="auth_saml blueprint failed to register (see server logs)",
+        )
+        if _is_dev_fail_fast(app):
+            raise
+
+    try:
+        from app.routes.oauth_server import oauth_server_bp
+
+        app.register_blueprint(oauth_server_bp)
+        _record_blueprint_status(
+            app,
+            kind="special",
+            module_path="app.routes.oauth_server",
+            blueprint_attr="oauth_server_bp",
+            ok=True,
+        )
+    except Exception:
+        _log.exception(
+            "Could not register oauth_server blueprint",
+            extra={"event": "blueprint_register_failed", "blueprint": "oauth_server"},
+        )
+        _record_blueprint_status(
+            app,
+            kind="special",
+            module_path="app.routes.oauth_server",
+            blueprint_attr="oauth_server_bp",
+            ok=False,
+            error="oauth_server blueprint failed to register (see server logs)",
+        )
+        if _is_dev_fail_fast(app):
+            raise
+
     app.register_blueprint(main_bp)
     app.register_blueprint(i18n_bp)
     app.register_blueprint(projects_bp)
@@ -191,6 +252,10 @@ def register_all_blueprints(app, logger=None):
     app.register_blueprint(api_v1_time_entries_bp)
     app.register_blueprint(api_v1_projects_bp)
     app.register_blueprint(api_v1_tasks_bp)
+    app.register_blueprint(api_v1_gantt_bp)
+    app.register_blueprint(api_v1_workflows_bp)
+    app.register_blueprint(api_v1_resource_scheduling_bp)
+    app.register_blueprint(api_v1_team_chat_bp)
     app.register_blueprint(api_v1_weekly_goals_bp)
     app.register_blueprint(api_v1_recurring_tasks_bp)
     app.register_blueprint(api_v1_project_templates_bp)
@@ -212,6 +277,7 @@ def register_all_blueprints(app, logger=None):
     app.register_blueprint(invoices_bp)
     app.register_blueprint(recurring_invoices_bp)
     app.register_blueprint(payments_bp)
+    app.register_blueprint(bank_reconciliation_bp)
     app.register_blueprint(clients_bp)
     app.register_blueprint(client_notes_bp)
     app.register_blueprint(client_portal_bp)
@@ -243,6 +309,22 @@ def register_all_blueprints(app, logger=None):
     app.register_blueprint(custom_field_definitions_bp)
     app.register_blueprint(custom_reports_bp)
     app.register_blueprint(salesman_reports_bp)
+
+    # Phase 4 – invoice reminder policies
+    try:
+        from app.routes.reminder_policies import reminder_policies_bp
+
+        app.register_blueprint(reminder_policies_bp)
+    except Exception:
+        _log.exception("Could not register reminder_policies blueprint")
+
+    # Phase 3 – credit notes
+    try:
+        from app.routes.credit_notes import credit_notes_bp
+
+        app.register_blueprint(credit_notes_bp)
+    except Exception:
+        _log.exception("Could not register credit_notes blueprint")
 
     _register_optional_blueprints(app, _log)
 

@@ -1025,7 +1025,9 @@ def send_invoice_template_test_email(template_id, recipient_email, invoice_id=No
 
 
 @in_client_locale(lambda invoice, *a, **k: invoice.client)
-def send_invoice_email(invoice, recipient_email, sender_user=None, custom_message=None, email_template_id=None):
+def send_invoice_email(
+    invoice, recipient_email, sender_user=None, custom_message=None, email_template_id=None, subject=None
+):
     """Send an invoice via email with PDF attachment
 
     Args:
@@ -1034,6 +1036,7 @@ def send_invoice_email(invoice, recipient_email, sender_user=None, custom_messag
         sender_user: User object who is sending (for tracking)
         custom_message: Optional custom message to include in email
         email_template_id: Optional email template ID to use
+        subject: Optional subject override (defaults to built template subject)
 
     Returns:
         tuple: (success: bool, invoice_email: InvoiceEmail or None, message: str)
@@ -1044,9 +1047,10 @@ def send_invoice_email(invoice, recipient_email, sender_user=None, custom_messag
         current_app.logger.info(f"[INVOICE EMAIL] Sending invoice {invoice.invoice_number} to {recipient_email}")
 
         try:
-            pdf_bytes, html_body, text_body, subject = _build_invoice_email_payload(
+            pdf_bytes, html_body, text_body, built_subject = _build_invoice_email_payload(
                 invoice, email_template_id=email_template_id, custom_message=custom_message
             )
+            subject = (subject or "").strip() or built_subject
         except ValueError:
             return False, None, _("Failed to build invoice email")
 
@@ -1094,10 +1098,22 @@ def send_invoice_email(invoice, recipient_email, sender_user=None, custom_messag
         )
         db.session.add(invoice_email)
 
-        # Update invoice status to 'sent' if it's still 'draft'
-        was_first_send = invoice.status == "draft"
-        if was_first_send:
-            invoice.status = "sent"
+        # Re-attach invoice in case the caller passed a detached instance (common in tests
+        # and after PDF generation commits). Use no_autoflush so the pending
+        # InvoiceEmail insert does not flush while we load the invoice row.
+        from app.models import Invoice as InvoiceModel
+
+        with db.session.no_autoflush:
+            invoice_row = db.session.get(InvoiceModel, invoice.id)
+            if invoice_row is None:
+                invoice_row = db.session.merge(invoice)
+            was_first_send = invoice_row.status == "draft"
+            if was_first_send:
+                invoice_row.status = "sent"
+                try:
+                    invoice.status = "sent"
+                except Exception:
+                    pass
 
         db.session.commit()
 
@@ -1106,14 +1122,23 @@ def send_invoice_email(invoice, recipient_email, sender_user=None, custom_messag
                 from app.models import Invoice
 
                 sent_statuses = ("sent", "paid", "overdue", "issued")
-                sent_count = (
-                    Invoice.query.filter(
-                        Invoice.created_by == sender_id, Invoice.status.in_(sent_statuses)
-                    ).count()
-                )
+                sent_count = Invoice.query.filter(
+                    Invoice.created_by == sender_id, Invoice.status.in_(sent_statuses)
+                ).count()
                 from app.utils.support_invoice_sent import queue_first_invoice_support_prompt
 
                 queue_first_invoice_support_prompt(sender_id, first_send=sent_count == 1)
+            except Exception:
+                pass
+            try:
+                from app.constants import WebhookEvent
+                from app.utils.invoice_events import emit_invoice_event
+
+                emit_invoice_event(
+                    WebhookEvent.INVOICE_SENT.value,
+                    invoice_row or invoice,
+                    recipient_email=recipient_email,
+                )
             except Exception:
                 pass
 

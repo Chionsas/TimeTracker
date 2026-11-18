@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
 
 
 @dataclass(frozen=True)
@@ -42,3 +42,10 @@ class ProviderBase:
         """
         raise ProviderError(f"Status lookup not supported by provider '{self.name}'")
 
+    def list_inbox(self, *, size: int = 100) -> List[Dict[str, Any]]:
+        """Return newly available inbound documents from the access point."""
+        raise ProviderError(f"Inbox polling not supported by provider '{self.name}'")
+
+    def ack_downloaded(self, document_ids: List[str], *, no_archive: bool = False) -> None:
+        """Acknowledge inbound documents as downloaded by the local app."""
+        raise ProviderError(f"Inbox acknowledgement not supported by provider '{self.name}'")

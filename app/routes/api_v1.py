@@ -71,7 +71,7 @@ from app.utils.api_responses import (
     success_response,
     validation_error_response,
 )
-from app.utils.error_handling import client_error_response, client_error_payload, DEFAULT_CLIENT_ERROR, safe_log
+from app.utils.error_handling import DEFAULT_CLIENT_ERROR, client_error_payload, client_error_response, safe_log
 from app.utils.quote_access import quote_list_scope_user_id
 from app.utils.scope_filter import apply_client_scope, apply_project_scope
 from app.utils.timezone import get_app_timezone, parse_local_datetime, utc_to_local
@@ -152,8 +152,16 @@ def api_info():
                 "payments": "/api/v1/payments",
                 "mileage": "/api/v1/mileage",
                 "deals": "/api/v1/deals",
+                "deal_activities": "/api/v1/deals/<deal_id>/activities",
+                "deal_stage": "/api/v1/deals/<deal_id>/stage",
+                "deals_forecast": "/api/v1/deals/forecast",
                 "leads": "/api/v1/leads",
+                "lead_activities": "/api/v1/leads/<lead_id>/activities",
+                "lead_convert_client": "/api/v1/leads/<lead_id>/convert-to-client",
+                "lead_convert_deal": "/api/v1/leads/<lead_id>/convert-to-deal",
+                "lead_source_analytics": "/api/v1/leads/analytics/sources",
                 "contacts": "/api/v1/clients/<client_id>/contacts",
+                "contact_communications": "/api/v1/contacts/<contact_id>/communications",
                 "issues": "/api/v1/issues",
                 "time_entry_approvals": "/api/v1/time-entry-approvals",
                 "per_diems": "/api/v1/per-diems",
@@ -1572,8 +1580,7 @@ def update_quote(quote_id):
         update_kwargs["tax_rate"] = Decimal(str(data["tax_rate"]))
     if "currency_code" in data:
         update_kwargs["currency_code"] = data["currency_code"]
-    if "status" in data:
-        update_kwargs["status"] = data["status"]
+    # status is not mass-assignable via generic update (use dedicated quote workflow routes).
     if "payment_terms" in data:
         update_kwargs["payment_terms"] = data["payment_terms"]
     if "valid_until" in data:
@@ -2052,7 +2059,10 @@ def create_recurring_project_cost(project_id):
     )
     db.session.add(recurring)
     db.session.commit()
-    return jsonify({"message": "Recurring project cost created successfully", "recurring_cost": recurring.to_dict()}), 201
+    return (
+        jsonify({"message": "Recurring project cost created successfully", "recurring_cost": recurring.to_dict()}),
+        201,
+    )
 
 
 @api_v1_bp.route("/projects/<int:project_id>/recurring-costs/<int:rid>", methods=["GET"])
@@ -2151,13 +2161,16 @@ def create_shared_report_link(view_id):
     )
     db.session.commit()
     url = service.get_public_url(link)
-    return jsonify(
-        {
-            "message": "Share link created successfully",
-            "link": link.to_dict(include_url=True),
-            "url": url,
-        }
-    ), 201
+    return (
+        jsonify(
+            {
+                "message": "Share link created successfully",
+                "link": link.to_dict(include_url=True),
+                "url": url,
+            }
+        ),
+        201,
+    )
 
 
 @api_v1_bp.route("/reports/saved/<int:view_id>/share/<token>", methods=["DELETE"])
@@ -2881,17 +2894,16 @@ def create_credit_note():
         amt = Decimal(str(data["amount"]))
     except Exception:
         return jsonify({"error": "Invalid amount"}), 400
-    # Generate credit number (simple: CN-<invoice_id>-<timestamp>)
-    credit_number = f"CN-{inv.id}-{int(datetime.utcnow().timestamp())}"
-    cn = CreditNote(
-        invoice_id=inv.id,
-        credit_number=credit_number,
-        amount=amt,
+    from app.services.credit_note_service import CreditNoteService
+
+    cn = CreditNoteService.create_amount_credit(
+        inv,
+        g.api_user.id,
+        amt,
         reason=data.get("reason"),
-        created_by=g.api_user.id,
+        description=data.get("reason") or "Credit",
+        auto_issue=False,
     )
-    db.session.add(cn)
-    db.session.commit()
     return (
         jsonify(
             {
@@ -2944,6 +2956,61 @@ def delete_credit_note(cn_id):
     db.session.delete(cn)
     db.session.commit()
     return jsonify({"message": "Credit note deleted successfully"})
+
+
+@api_v1_bp.route("/credit-notes/<int:cn_id>/pdf", methods=["GET"])
+@require_api_token("read:invoices")
+def download_credit_note_pdf_api(cn_id):
+    """Download credit note as PDF."""
+    from app.utils.credit_note_pdf import generate_credit_note_pdf
+
+    cn = CreditNote.query.get_or_404(cn_id)
+    try:
+        pdf_bytes = generate_credit_note_pdf(cn)
+    except Exception as e:
+        current_app.logger.error("Credit note PDF failed for cn=%s: %s", cn_id, e, exc_info=True)
+        return error_response("Failed to generate credit note PDF", status_code=500)
+    filename = f"credit-note-{cn.credit_number}.pdf"
+    return send_file(
+        io.BytesIO(pdf_bytes),
+        mimetype="application/pdf",
+        as_attachment=True,
+        download_name=filename,
+    )
+
+
+@api_v1_bp.route("/credit-notes/<int:cn_id>/ubl", methods=["GET"])
+@require_api_token("read:invoices")
+def download_credit_note_ubl_api(cn_id):
+    """Download credit note as Peppol UBL CreditNote XML."""
+    from app.integrations.peppol import PeppolParty, build_peppol_ubl_credit_note_xml
+    from app.models import Settings
+
+    cn = CreditNote.query.get_or_404(cn_id)
+    invoice = Invoice.query.get_or_404(cn.invoice_id)
+    try:
+        settings = Settings.get_settings()
+        supplier = PeppolParty(
+            endpoint_id=getattr(settings, "peppol_sender_id", "") or "",
+            endpoint_scheme_id=getattr(settings, "peppol_sender_scheme", "0088") or "0088",
+            name=getattr(settings, "company_name", "Supplier") or "Supplier",
+            tax_id=getattr(settings, "company_tax_id", None),
+        )
+        customer = PeppolParty(
+            endpoint_id=getattr(invoice, "buyer_reference", "") or "",
+            endpoint_scheme_id="0088",
+            name=invoice.client_name or "Customer",
+        )
+        xml_str, _ = build_peppol_ubl_credit_note_xml(cn, invoice, supplier, customer)
+    except Exception as e:
+        current_app.logger.error("Credit note UBL failed for cn=%s: %s", cn_id, e, exc_info=True)
+        return error_response("Failed to generate credit note UBL", status_code=500)
+    filename = f"credit-note-{cn.credit_number}-ubl.xml"
+    return Response(
+        xml_str,
+        mimetype="application/xml",
+        headers={"Content-Disposition": f'attachment; filename="{filename}"'},
+    )
 
 
 # ==================== Reports ====================
@@ -5309,72 +5376,7 @@ def delete_holiday_api(holiday_id):
 
 
 # ==================== Payroll Export ====================
-
-
-@api_v1_bp.route("/exports/payroll", methods=["GET"])
-@require_api_token("read:reports")
-def export_payroll_csv():
-    import csv
-    import io
-
-    from app.services.workforce_governance_service import WorkforceGovernanceService
-
-    start = _parse_date(request.args.get("start_date"))
-    end = _parse_date(request.args.get("end_date"))
-    if not start or not end:
-        return jsonify({"error": "start_date and end_date are required (YYYY-MM-DD)"}), 400
-
-    user_id = request.args.get("user_id", type=int)
-    if not g.api_user.is_admin:
-        user_id = g.api_user.id
-
-    approved_only = request.args.get("approved_only", "false").lower() == "true"
-    closed_only = request.args.get("closed_only", "false").lower() == "true"
-
-    rows = WorkforceGovernanceService().payroll_rows(
-        start_date=start,
-        end_date=end,
-        user_id=user_id,
-        approved_only=approved_only,
-        closed_only=closed_only,
-    )
-
-    output = io.StringIO()
-    writer = csv.writer(output)
-    writer.writerow(
-        [
-            "user_id",
-            "username",
-            "week_year",
-            "week_number",
-            "period_start",
-            "period_end",
-            "hours",
-            "billable_hours",
-            "non_billable_hours",
-        ]
-    )
-    for row in rows:
-        writer.writerow(
-            [
-                row.get("user_id"),
-                row.get("username"),
-                row.get("week_year"),
-                row.get("week_number"),
-                row.get("period_start"),
-                row.get("period_end"),
-                row.get("hours"),
-                row.get("billable_hours"),
-                row.get("non_billable_hours"),
-            ]
-        )
-
-    filename = f"payroll_export_{start.isoformat()}_{end.isoformat()}.csv"
-    return Response(
-        output.getvalue(),
-        mimetype="text/csv",
-        headers={"Content-Disposition": f"attachment; filename={filename}"},
-    )
+# Handler lives in app.routes.api_v1_exports (imported via blueprint_registry).
 
 
 # ==================== Capacity and Compliance ====================

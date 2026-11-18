@@ -172,7 +172,11 @@ class OutlookEmailConnector(BaseConnector):
                 "to": to_list,
                 "subject": msg.get("subject"),
                 "snippet": msg.get("bodyPreview"),
-                "body_text": (msg.get("body") or {}).get("content") if (msg.get("body") or {}).get("contentType") == "text" else None,
+                "body_text": (
+                    (msg.get("body") or {}).get("content")
+                    if (msg.get("body") or {}).get("contentType") == "text"
+                    else None
+                ),
                 "sent_at": sent_at,
             }
             if conv not in by_conv:

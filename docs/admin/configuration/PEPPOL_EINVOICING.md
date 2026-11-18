@@ -12,9 +12,10 @@ TimeTracker supports **both**:
 | Peppol BIS Billing 3.0 | UBL 2.1 | Supported (transport + export) |
 | Factur-X / ZUGFeRD 2.x | CII (EN 16931 profile) | Supported (embedded in PDF) |
 | PDF/A-3b | PDF archival | Supported (with ICC profile) |
-| XRechnung | CII / UBL (German CIUS) | Not supported |
+| XRechnung 3.0 | UBL (CIUS-DE) | Supported (XML export) |
+| FatturaPA 1.2 | Italian XML (FPR12 / FPA12) | Supported (XML export + SDI send) — see [FATTURAPA_SDI.md](FATTURAPA_SDI.md) |
 
-Peppol is the **transport**; Factur-X / ZUGFeRD is a **format** (PDF + embedded CII XML). Each uses its own XML payload — UBL for Peppol, CII for Factur-X.
+Peppol is the **transport**; Factur-X / ZUGFeRD is a **format** (PDF + embedded CII XML). Each uses its own XML payload — UBL for Peppol, CII for Factur-X. FatturaPA uses a separate Italian schema and SDI transport.
 
 ## What you need
 
@@ -63,6 +64,10 @@ Add the bridge service to your compose file:
       # - PEPPOL_BRIDGE_PROVIDER=peppyrus
       # - PEPPYRUS_BASE_URL=${PEPPYRUS_BASE_URL:-https://api.peppyrus.be/v1}
       # - PEPPYRUS_API_KEY=${PEPPYRUS_API_KEY:?Set PEPPYRUS_API_KEY}
+      # Alternative provider: getpeppr
+      # - PEPPOL_BRIDGE_PROVIDER=getpeppr
+      # - GETPEPPR_BASE_URL=${GETPEPPR_BASE_URL:-https://api.getpeppr.dev/v1}
+      # - GETPEPPR_API_KEY=${GETPEPPR_API_KEY:?Set GETPEPPR_API_KEY}
     ports: []
     restart: unless-stopped
 ```

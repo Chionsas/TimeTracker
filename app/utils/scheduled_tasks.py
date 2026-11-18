@@ -89,7 +89,9 @@ def check_overdue_invoices():
         # Calendar "today" in app timezone (not UTC / host local)
         today = now_in_app_timezone().date()
         overdue_invoices = Invoice.query.filter(
-            Invoice.due_date < today, Invoice.status.in_(["draft", "sent"])
+            Invoice.due_date < today,
+            Invoice.status.in_(["sent", "issued"]),
+            Invoice.payment_status != "fully_paid",
         ).all()
 
         logger.info(f"Found {len(overdue_invoices)} overdue invoices")
@@ -100,6 +102,17 @@ def check_overdue_invoices():
             if invoice.status != "overdue":
                 invoice.status = "overdue"
                 db.session.commit()
+                try:
+                    from app.constants import WebhookEvent
+                    from app.utils.invoice_events import emit_invoice_event
+
+                    emit_invoice_event(WebhookEvent.INVOICE_OVERDUE.value, invoice)
+                except Exception as emit_exc:
+                    logger.debug(
+                        "Failed to emit invoice.overdue for %s: %s",
+                        invoice.invoice_number,
+                        emit_exc,
+                    )
 
             # Get users to notify (creator and admins)
             users_to_notify = set()
@@ -141,6 +154,17 @@ def check_overdue_invoices():
                     )
 
         logger.info(f"Sent {notifications_sent} overdue invoice notifications")
+
+        # --- Phase 4: multi-level reminder sends & late fees ---
+        try:
+            from app.services.invoice_reminder_service import process_due_reminders
+
+            reminders_sent = process_due_reminders(today=today)
+            if reminders_sent:
+                logger.info("Invoice reminder service sent %d reminder(s)", reminders_sent)
+        except Exception as reminder_exc:
+            logger.error("Invoice reminder service failed: %s", reminder_exc, exc_info=True)
+
         return notifications_sent
 
     except Exception as e:
@@ -160,9 +184,7 @@ def send_weekly_summaries():
         logger.info("Sending weekly summaries...")
 
         # Get users who want weekly summaries
-        users = User.query.filter_by(
-            is_active=True, email_notifications=True, notification_weekly_summary=True
-        ).all()
+        users = User.query.filter_by(is_active=True, email_notifications=True, notification_weekly_summary=True).all()
 
         from app.utils.timezone import now_in_app_timezone
 
@@ -297,8 +319,7 @@ def check_task_deadline_approaching():
             Task.status.notin_(["done", "cancelled"]),
         ).all()
         for task in tasks:
-            user_id = task.assigned_to or task.created_by
-            if user_id:
+            for user_id in task.assignee_ids or ([task.created_by] if task.created_by else []):
                 fire_deadline_approaching_workflow(task, user_id)
         return len(tasks)
     except Exception as e:
@@ -529,7 +550,8 @@ def register_scheduled_tasks(scheduler, app=None):
             with external_url_context(app_instance):
                 return check_overdue_invoices()
 
-        _add_job(scheduler,
+        _add_job(
+            scheduler,
             func=check_overdue_invoices_with_app,
             trigger="cron",
             hour=9,
@@ -552,7 +574,8 @@ def register_scheduled_tasks(scheduler, app=None):
             with external_url_context(app_instance):
                 return send_weekly_summaries()
 
-        _add_job(scheduler,
+        _add_job(
+            scheduler,
             func=send_weekly_summaries_with_app,
             trigger="cron",
             day_of_week="mon",
@@ -578,7 +601,8 @@ def register_scheduled_tasks(scheduler, app=None):
             with external_url_context(app_instance):
                 return check_project_budget_alerts()
 
-        _add_job(scheduler,
+        _add_job(
+            scheduler,
             func=check_project_budget_alerts_with_app,
             trigger="cron",
             hour="*/6",
@@ -600,7 +624,8 @@ def register_scheduled_tasks(scheduler, app=None):
             with external_url_context(app_instance):
                 return check_task_deadline_approaching()
 
-        _add_job(scheduler,
+        _add_job(
+            scheduler,
             func=check_task_deadline_approaching_with_app,
             trigger="cron",
             hour=8,
@@ -626,7 +651,8 @@ def register_scheduled_tasks(scheduler, app=None):
             with external_url_context(app_instance):
                 generate_recurring_invoices()
 
-        _add_job(scheduler,
+        _add_job(
+            scheduler,
             func=generate_recurring_invoices_with_app,
             trigger="cron",
             hour=8,
@@ -648,7 +674,8 @@ def register_scheduled_tasks(scheduler, app=None):
             with external_url_context(app_instance):
                 generate_recurring_project_costs()
 
-        _add_job(scheduler,
+        _add_job(
+            scheduler,
             func=generate_recurring_project_costs_with_app,
             trigger="cron",
             hour=8,
@@ -672,7 +699,8 @@ def register_scheduled_tasks(scheduler, app=None):
             with external_url_context(app_instance):
                 send_monthly_unpaid_hours_reports()
 
-        _add_job(scheduler,
+        _add_job(
+            scheduler,
             func=send_monthly_unpaid_hours_reports_with_app,
             trigger="cron",
             day=1,
@@ -706,7 +734,8 @@ def register_scheduled_tasks(scheduler, app=None):
             with external_url_context(app_instance):
                 retry_failed_webhooks()
 
-        _add_job(scheduler,
+        _add_job(
+            scheduler,
             func=retry_failed_webhooks_with_app,
             trigger="cron",
             minute="*/5",
@@ -715,6 +744,50 @@ def register_scheduled_tasks(scheduler, app=None):
             replace_existing=True,
         )
         logger.info("Registered webhook retry task")
+
+        def poll_peppol_inbox_with_app():
+            app_instance = app
+            if app_instance is None:
+                try:
+                    app_instance = current_app._get_current_object()
+                except RuntimeError:
+                    logger.error("No app instance available for Peppol inbox poll")
+                    return
+            with external_url_context(app_instance):
+                poll_peppol_inbox()
+
+        _add_job(
+            scheduler,
+            func=poll_peppol_inbox_with_app,
+            trigger="cron",
+            minute="*/10",
+            id="poll_peppol_inbox",
+            name="Poll Peppol bridge inbox",
+            replace_existing=True,
+        )
+        logger.info("Registered Peppol inbox poll task")
+
+        def poll_sdi_status_with_app():
+            app_instance = app
+            if app_instance is None:
+                try:
+                    app_instance = current_app._get_current_object()
+                except RuntimeError:
+                    logger.error("No app instance available for SDI status poll")
+                    return
+            with external_url_context(app_instance):
+                poll_sdi_status()
+
+        _add_job(
+            scheduler,
+            func=poll_sdi_status_with_app,
+            trigger="cron",
+            minute="*/15",
+            id="poll_sdi_status",
+            name="Poll SDI transmission statuses",
+            replace_existing=True,
+        )
+        logger.info("Registered SDI status poll task")
 
         # Check for expiring quotes daily at 9:30 AM
         # Create a closure that captures the app instance
@@ -731,7 +804,8 @@ def register_scheduled_tasks(scheduler, app=None):
             with external_url_context(app_instance):
                 check_expiring_quotes()
 
-        _add_job(scheduler,
+        _add_job(
+            scheduler,
             func=check_expiring_quotes_with_app,
             trigger="cron",
             hour=9,
@@ -756,7 +830,8 @@ def register_scheduled_tasks(scheduler, app=None):
             with external_url_context(app_instance):
                 sync_integrations()
 
-        _add_job(scheduler,
+        _add_job(
+            scheduler,
             func=sync_integrations_with_app,
             trigger="cron",
             minute=0,  # Every hour at minute 0
@@ -781,7 +856,8 @@ def register_scheduled_tasks(scheduler, app=None):
             with external_url_context(app_instance):
                 process_scheduled_reports()
 
-        _add_job(scheduler,
+        _add_job(
+            scheduler,
             func=process_scheduled_reports_with_app,
             trigger="cron",
             minute=0,
@@ -803,7 +879,8 @@ def register_scheduled_tasks(scheduler, app=None):
             with external_url_context(app_instance):
                 process_remind_to_log()
 
-        _add_job(scheduler,
+        _add_job(
+            scheduler,
             func=process_remind_to_log_with_app,
             trigger="cron",
             minute=0,
@@ -824,7 +901,8 @@ def register_scheduled_tasks(scheduler, app=None):
             with external_url_context(app_instance):
                 process_missed_clock_in()
 
-        _add_job(scheduler,
+        _add_job(
+            scheduler,
             func=process_missed_clock_in_with_app,
             trigger="cron",
             minute=0,
@@ -849,7 +927,8 @@ def register_scheduled_tasks(scheduler, app=None):
                 except Exception as e:
                     logger.warning("Smart reminder push job failed: %s", e)
 
-        _add_job(scheduler,
+        _add_job(
+            scheduler,
             func=send_smart_reminder_push_with_app,
             trigger="interval",
             minutes=15,
@@ -874,7 +953,8 @@ def register_scheduled_tasks(scheduler, app=None):
                 except Exception as e:
                     logger.warning("Idle timer check job failed: %s", e)
 
-        _add_job(scheduler,
+        _add_job(
+            scheduler,
             func=check_idle_timers_with_app,
             trigger="interval",
             minutes=5,
@@ -895,7 +975,8 @@ def register_scheduled_tasks(scheduler, app=None):
             with external_url_context(app_instance):
                 check_working_time_limits()
 
-        _add_job(scheduler,
+        _add_job(
+            scheduler,
             func=check_working_time_limits_with_app,
             trigger="interval",
             minutes=15,
@@ -921,7 +1002,8 @@ def register_scheduled_tasks(scheduler, app=None):
                 except Exception:
                     logger.debug("Base telemetry heartbeat failed", exc_info=True)
 
-        _add_job(scheduler,
+        _add_job(
+            scheduler,
             func=send_base_telemetry_heartbeat_with_app,
             trigger="cron",
             hour=3,
@@ -945,7 +1027,8 @@ def register_scheduled_tasks(scheduler, app=None):
             with external_url_context(app_instance):
                 sync_google_calendar_for_all_users()
 
-        _add_job(scheduler,
+        _add_job(
+            scheduler,
             func=sync_google_calendar_for_all_users_with_app,
             trigger="interval",
             minutes=30,
@@ -966,7 +1049,8 @@ def register_scheduled_tasks(scheduler, app=None):
             with external_url_context(app_instance):
                 sync_email_threads()
 
-        _add_job(scheduler,
+        _add_job(
+            scheduler,
             func=sync_email_threads_with_app,
             trigger="interval",
             minutes=30,
@@ -989,7 +1073,8 @@ def register_scheduled_tasks(scheduler, app=None):
             with external_url_context(app_instance):
                 post_slack_daily_summaries()
 
-        _add_job(scheduler,
+        _add_job(
+            scheduler,
             func=post_slack_daily_summaries_with_app,
             trigger="interval",
             minutes=30,
@@ -1021,7 +1106,8 @@ def register_scheduled_tasks(scheduler, app=None):
                 except Exception:
                     logger.debug("Gamification leaderboard job failed", exc_info=True)
 
-        _add_job(scheduler,
+        _add_job(
+            scheduler,
             func=recalculate_gamification_leaderboards_with_app,
             trigger="cron",
             hour=3,
@@ -1137,23 +1223,20 @@ def check_idle_timers():
         now = local_now()
         cutoff = now - threshold
 
-        stale = (
-            TimeEntry.query.filter(
-                TimeEntry.end_time.is_(None),
-                # A paused timer is intentionally accumulating no time, so the idle
-                # sweep must never notify or auto-stop it. ``paused_at`` was added
-                # with the pause/resume feature but not wired into this query.
-                TimeEntry.paused_at.is_(None),
-                db.or_(
-                    TimeEntry.last_heartbeat_at < cutoff,
-                    db.and_(
-                        TimeEntry.last_heartbeat_at.is_(None),
-                        TimeEntry.start_time < cutoff,
-                    ),
+        stale = TimeEntry.query.filter(
+            TimeEntry.end_time.is_(None),
+            # A paused timer is intentionally accumulating no time, so the idle
+            # sweep must never notify or auto-stop it. ``paused_at`` was added
+            # with the pause/resume feature but not wired into this query.
+            TimeEntry.paused_at.is_(None),
+            db.or_(
+                TimeEntry.last_heartbeat_at < cutoff,
+                db.and_(
+                    TimeEntry.last_heartbeat_at.is_(None),
+                    TimeEntry.start_time < cutoff,
                 ),
-            )
-            .all()
-        )
+            ),
+        ).all()
 
         if not stale:
             return 0
@@ -1249,9 +1332,7 @@ def check_idle_timers():
                             {
                                 "user_id": entry.user_id,
                                 "timer_id": entry.id,
-                                "notified_at": (
-                                    entry.idle_notified_at.isoformat() if entry.idle_notified_at else None
-                                ),
+                                "notified_at": (entry.idle_notified_at.isoformat() if entry.idle_notified_at else None),
                                 "answer": "timeout",
                                 "stopped": False,
                             },
@@ -1738,7 +1819,6 @@ def check_working_time_limits():
 
         if getattr(settings, "compliance_enabled", False):
             from app.services.attendance_compliance_service import AttendanceComplianceService
-
             from app.utils.timezone import now_in_app_timezone
 
             svc = AttendanceComplianceService()
@@ -1810,6 +1890,47 @@ def retry_failed_webhooks():
             logger.info(f"Retried {retried_count} failed webhook deliveries")
     except Exception as e:
         logger.error(f"Error retrying failed webhooks: {e}")
+
+
+def poll_peppol_inbox():
+    """Poll peppol-bridge /inbox and store inbound UBL documents.
+
+    Note: This function should be called within an app context.
+    """
+    try:
+        from app.services.peppol_inbound_service import PeppolInboundService
+
+        result = PeppolInboundService().poll_and_import()
+        if result.get("skipped"):
+            return
+        if result.get("fetched"):
+            logger.info(
+                "Peppol inbox poll: fetched=%s created=%s updated=%s acked=%s errors=%s",
+                result.get("fetched"),
+                result.get("created"),
+                result.get("updated"),
+                result.get("acked"),
+                len(result.get("errors") or []),
+            )
+        elif not result.get("ok"):
+            logger.warning("Peppol inbox poll failed: %s", result.get("error") or result.get("errors"))
+    except Exception as e:
+        logger.error(f"Error polling Peppol inbox: {e}")
+
+
+def poll_sdi_status():
+    """Refresh non-final SDI (FatturaPA) transmission statuses via the intermediary.
+
+    Note: This function should be called within an app context.
+    """
+    try:
+        from app.services.sdi_service import SdiService
+
+        count = SdiService().poll_pending(max_age_days=30)
+        if count:
+            logger.info("SDI status poll refreshed %s transmission(s)", count)
+    except Exception as e:
+        logger.error(f"Error polling SDI statuses: {e}")
 
 
 def check_expiring_quotes():

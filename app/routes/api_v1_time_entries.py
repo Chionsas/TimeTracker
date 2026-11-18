@@ -15,7 +15,7 @@ from app.utils.api_responses import (
     handle_validation_error,
     validation_error_response,
 )
-from app.utils.error_handling import client_error_response, client_error_payload, DEFAULT_CLIENT_ERROR
+from app.utils.error_handling import DEFAULT_CLIENT_ERROR, client_error_payload, client_error_response
 
 api_v1_time_entries_bp = Blueprint("api_v1_time_entries", __name__, url_prefix="/api/v1")
 
@@ -205,6 +205,7 @@ def create_time_entry():
         billable=validated.get("billable", True),
         paid=validated.get("paid", False),
         invoice_number=validated.get("invoice_number"),
+        custom_fields=validated.get("custom_fields"),
     )
 
     if not result.get("success"):
@@ -296,6 +297,7 @@ def update_time_entry(entry_id):
         invoice_number=validated.get("invoice_number"),
         reason=data.get("reason"),
         expected_updated_at=validated.get("if_updated_at"),
+        custom_fields=validated.get("custom_fields"),
     )
 
     if not result.get("success"):

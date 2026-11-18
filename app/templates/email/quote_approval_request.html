@@ -69,7 +69,7 @@
         <div class="content">
             <p>{{ _('Hello %(name)s,', name=user.display_name or user.username) }}</p>
             <p>{{ _('A quote requires your approval.') }}</p>
-            
+
             <div class="quote-details">
                 <p><strong>{{ _('Quote Number:') }}</strong> {{ quote.quote_number }}</p>
                 <p><strong>{{ _('Title:') }}</strong> {{ quote.title }}</p>
@@ -77,9 +77,9 @@
                 <p><strong>{{ _('Total Amount:') }}</strong> {{ quote.total_amount|format_currency(quote.currency_code) }}</p>
                 <p><strong>{{ _('Requested By:') }}</strong> {{ quote.creator.full_name or quote.creator.username if quote.creator else _('N/A') }}</p>
             </div>
-            
+
             <p>{{ _('Please review and approve or reject this quote.') }}</p>
-            
+
             {% if quote_url %}
             <a href="{{ quote_url }}" class="button">{{ _('Review Quote') }}</a>
             {% endif %}
@@ -90,4 +90,3 @@
     </div>
 </body>
 </html>
-

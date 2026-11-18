@@ -7,7 +7,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="description" content="Professional time tracking and project management">
     <meta name="theme-color" content="#4F46E5">
-    
+
     <!-- Open Graph / Social Media -->
     <meta property="og:type" content="website">
     <meta property="og:title" content="{% block og_title %}{{ app_name }} - Professional Time Tracking{% endblock %}">
@@ -15,7 +15,7 @@
     <meta property="og:image" content="{% block og_image %}{{ url_for('static', filename='images/og-image.png', _external=True) }}{% endblock %}">
     <meta property="og:url" content="{{ request.url }}">
     <meta property="og:site_name" content="{{ app_name }}">
-    
+
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="{% block twitter_title %}{{ app_name }} - Professional Time Tracking{% endblock %}">
@@ -59,58 +59,7 @@
                 {% endwith %}
             </div>
 
-            {% if current_user.is_authenticated and current_user.ui_show_donate and not is_license_activated %}
-            <!-- Dismissible Support Banner -->
-            <div id="supportBanner" class="bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 border-b border-amber-200 dark:border-amber-800 px-4 py-3 opacity-0 invisible max-h-0 overflow-hidden transition-all duration-300 ease-in-out">
-                <div class="w-full flex items-center justify-between gap-4">
-                    <div class="flex items-center gap-3 flex-1">
-                        <i class="fas fa-mug-saucer text-amber-600 dark:text-amber-400 text-lg"></i>
-                        <div class="flex-1">
-                            <p class="text-sm font-medium text-amber-900 dark:text-amber-100" id="bannerTitle">
-                                {{ _('Enjoying TimeTracker?') }}
-                            </p>
-                            <p class="text-xs text-amber-700 dark:text-amber-300" id="bannerMessage">
-                                {{ _('Become a Supporter or buy a coffee — every contribution helps keep TimeTracker free for everyone.') }}
-                            </p>
-                            <p class="text-xs text-amber-600/80 dark:text-amber-400/80 mt-0.5" id="bannerSubtitle">
-                                {{ _('One-time key — pay once, never see this again.') }}
-                            </p>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-2 flex-wrap">
-                        <a href="{{ support_purchase_url }}"
-                           target="_blank"
-                           rel="noopener noreferrer"
-                           onclick="trackDonationClick('banner_key')"
-                           class="px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white text-sm font-medium rounded-lg transition-colors">
-                            {{ _('Remove prompts forever (€25)') }}
-                        </a>
-                        <a href="https://buymeacoffee.com/DryTrix?utm_source=timetracker&utm_medium=banner&utm_campaign=support" 
-                           target="_blank" 
-                           rel="noopener noreferrer"
-                           onclick="trackDonationClick('banner_bmc')"
-                           class="px-3 py-1.5 bg-white hover:bg-amber-50 text-amber-600 text-sm font-semibold rounded-lg transition-colors border-2 border-amber-600 shadow-sm">
-                            <i class="fas fa-mug-saucer mr-1"></i>{{ _('Buy me a coffee') }}
-                        </a>
-                        <a href="https://www.paypal.com/donate/?hosted_button_id=KZB27X5LNGU3J" 
-                           target="_blank" 
-                           rel="noopener noreferrer"
-                           onclick="trackDonationClick('banner_paypal')"
-                           class="px-3 py-1.5 text-white text-sm font-medium rounded-lg transition-colors border border-blue-600 hover:opacity-90" style="background: linear-gradient(to right, #0070ba, #003087);">
-                            <i class="fab fa-paypal mr-1"></i>{{ _('PayPal') }}
-                        </a>
-                        <button type="button" class="text-xs text-amber-700 dark:text-amber-300 hover:underline self-center js-open-support-modal">
-                            {{ _('Support options') }}
-                        </button>
-                        <button onclick="dismissSupportBanner()" 
-                                class="p-1.5 text-amber-600 dark:text-amber-400 hover:bg-amber-100 dark:hover:bg-amber-900/30 rounded transition-colors"
-                                aria-label="{{ _('Dismiss') }}">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-            {% endif %}
+            {# Support monetization: single channel via user menu → support modal (banner removed). #}
 
             <!-- Main page content: full width of column; inner pages may use their own max-w-* -->
             <div class="flex-1 flex flex-col min-w-0 w-full">
@@ -152,15 +101,22 @@
         </div>
         {% endif %}
 
+        {% if current_user.is_authenticated %}
+        <script nonce="{{ csp_nonce() }}">
+            window.__TT_SYSTEM_INSTANCE_ID = {{ (system_instance_id or '')|tojson }};
+            window.__TT_SUPPORT_PURCHASE_URL = {{ (support_purchase_url or '')|tojson }};
+        </script>
+        {% endif %}
         {% if current_user.is_authenticated and support_ui_json %}
         <script nonce="{{ csp_nonce() }}" type="application/json" id="support-ui-bootstrap">{{ support_ui_json|safe }}</script>
         {% include 'components/support_modal.html' %}
         {% endif %}
 
         {% if current_user.is_authenticated %}
-        {# Floating hub: Actions, Chat, AI. Admin: whole dock lifted to clear #adminVersionUpdateRoot. #}
+        {# Actions FAB on mobile only (CSS). Desktop: topbar timer + Ctrl+K. Chat/AI via tools overflow. #}
         <div id="fabDock"
              class="{% if is_admin_user %}fab-dock--admin{% endif %}"
+             role="region"
              aria-label="{{ _('Quick actions dock') }}"
              data-dashboard-url="{{ url_for('main.dashboard') }}"
              data-manual-entry-url="{{ url_for('timer.manual_entry') }}"
@@ -250,7 +206,7 @@
     <script src="{{ static_url('js/confirm-dialog.js') }}"></script>
     <script src="{{ static_url('js/unsaved-changes.js') }}"></script>
     {% if current_user.is_authenticated and support_ui_json %}
-    <script src="{{ asset_url('core-support') }}"></script>
+    <script src="{{ asset_url('core-support', fallback='support-ui.js') }}"></script>
     {% endif %}
     <script src="{{ asset_url('core-a2') }}"></script>
     <!-- Floating timer bar, idle tracking: authenticated users only -->
@@ -402,7 +358,7 @@
 
             // Mobile toggle with backdrop and proper close handlers
             let backdrop = null;
-            
+
             function createBackdrop() {
                 if (!backdrop) {
                     backdrop = document.createElement('div');
@@ -410,37 +366,37 @@
                     backdrop.className = 'fixed inset-0 bg-black/50 z-40 md:hidden';
                     backdrop.style.display = 'none';
                     document.body.appendChild(backdrop);
-                    
+
                     // Close sidebar when clicking backdrop
                     backdrop.addEventListener('click', closeMobileSidebar);
                 }
                 return backdrop;
             }
-            
+
             function openMobileSidebar() {
                 const isSmallScreen = window.innerWidth < 768; // md breakpoint
                 if (!isSmallScreen) return;
-                
+
                 sidebar.classList.remove('hidden');
                 sidebar.style.zIndex = '50';
-                
+
                 const bd = createBackdrop();
                 bd.style.display = 'block';
             }
-            
+
             function closeMobileSidebar() {
                 sidebar.classList.add('hidden');
                 sidebar.style.zIndex = '10';
-                
+
                 if (backdrop) {
                     backdrop.style.display = 'none';
                 }
             }
-            
+
             function isSmallScreen() {
                 return window.innerWidth < 768; // md breakpoint
             }
-            
+
             // Mobile toggle button
             mobileBtn && mobileBtn.addEventListener('click', function(e){
                 e.stopPropagation();
@@ -450,21 +406,21 @@
                     closeMobileSidebar();
                 }
             });
-            
+
             // Close sidebar when clicking outside (on small screens)
             document.addEventListener('click', function(e) {
                 if (!isSmallScreen()) return;
                 if (sidebar.classList.contains('hidden')) return;
-                
+
                 // Don't close if clicking inside sidebar or on mobile button
                 const clickedInside = sidebar.contains(e.target);
                 const clickedMobileBtn = mobileBtn && mobileBtn.contains(e.target);
-                
+
                 if (!clickedInside && !clickedMobileBtn) {
                     closeMobileSidebar();
                 }
             });
-            
+
             // Close sidebar when clicking on navigation links only (on small screens).
             // Do not close when clicking dropdown toggles (section headings) so the user can expand and then select a sub-item.
             if (sidebar) {
@@ -481,7 +437,7 @@
                     });
                 });
             }
-            
+
             // Handle window resize - close sidebar if window becomes large
             let resizeTimeout;
             window.addEventListener('resize', function() {
@@ -507,7 +463,7 @@
             (function() {
                 const SIDEBAR_SCROLL_KEY = 'sidebar-scroll-position';
                 const LAST_URL_KEY = 'last-navigation-url';
-                
+
                 // Save sidebar scroll position before navigation
                 function saveSidebarScroll() {
                     if (sidebar && !isSmallScreen()) {
@@ -520,7 +476,7 @@
                         }
                     }
                 }
-                
+
                 // Restore sidebar scroll position after page load
                 function restoreSidebarScroll() {
                     if (sidebar && !isSmallScreen()) {
@@ -528,7 +484,7 @@
                             const savedScroll = localStorage.getItem(SIDEBAR_SCROLL_KEY);
                             const lastUrl = localStorage.getItem(LAST_URL_KEY);
                             const currentUrl = window.location.pathname;
-                            
+
                             // Only restore if we're on the same section (admin pages, etc.)
                             // This prevents restoring scroll when navigating to completely different sections
                             if (savedScroll && lastUrl && currentUrl) {
@@ -539,7 +495,7 @@
                                     (lastUrl.startsWith('/timer') && currentUrl.startsWith('/timer')) ||
                                     (lastUrl.startsWith('/reports') && currentUrl.startsWith('/reports'))
                                 );
-                                
+
                                 if (sameSection) {
                                     // Small delay to ensure DOM is ready
                                     setTimeout(() => {
@@ -552,7 +508,7 @@
                         }
                     }
                 }
-                
+
                 // Save scroll position when clicking navigation links
                 if (sidebar) {
                     const navLinks = sidebar.querySelectorAll('a[href]');
@@ -562,7 +518,7 @@
                         });
                     });
                 }
-                
+
                 // Restore scroll position on page load
                 if (document.readyState === 'loading') {
                     document.addEventListener('DOMContentLoaded', restoreSidebarScroll);
@@ -575,12 +531,12 @@
             (function() {
                 const MAIN_SCROLL_KEY = 'main-content-scroll-position';
                 const NAVIGATION_TYPE_KEY = 'navigation-type';
-                
+
                 // Use browser's scroll restoration if available
                 if ('scrollRestoration' in history) {
                     history.scrollRestoration = 'manual';
                 }
-                
+
                 // Save main content scroll position before navigation
                 function saveMainScroll() {
                     try {
@@ -592,13 +548,13 @@
                         // Ignore storage errors
                     }
                 }
-                
+
                 // Restore main content scroll position after page load
                 function restoreMainScroll() {
                     try {
                         const navType = sessionStorage.getItem(NAVIGATION_TYPE_KEY);
                         const savedScroll = localStorage.getItem(MAIN_SCROLL_KEY);
-                        
+
                         // Only restore scroll for back/forward navigation or same-section navigation
                         // For fresh navigations, let browser handle it naturally
                         if (navType === 'back-forward' && savedScroll) {
@@ -610,7 +566,7 @@
                             // For same-section navigation, restore scroll
                             const lastUrl = localStorage.getItem('last-navigation-url');
                             const currentUrl = window.location.pathname;
-                            
+
                             if (lastUrl && currentUrl) {
                                 const sameSection = (
                                     (lastUrl.startsWith('/admin') && currentUrl.startsWith('/admin')) ||
@@ -618,7 +574,7 @@
                                     (lastUrl.startsWith('/timer') && currentUrl.startsWith('/timer')) ||
                                     (lastUrl.startsWith('/reports') && currentUrl.startsWith('/reports'))
                                 );
-                                
+
                                 if (sameSection) {
                                     setTimeout(() => {
                                         window.scrollTo(0, parseInt(savedScroll, 10) || 0);
@@ -626,14 +582,14 @@
                                 }
                             }
                         }
-                        
+
                         // Clear navigation type after processing
                         sessionStorage.removeItem(NAVIGATION_TYPE_KEY);
                     } catch(e) {
                         // Ignore storage errors
                     }
                 }
-                
+
                 // Detect back/forward navigation
                 window.addEventListener('popstate', function() {
                     try {
@@ -642,7 +598,7 @@
                         // Ignore storage errors
                     }
                 });
-                
+
                 // Save scroll position when clicking navigation links
                 document.addEventListener('click', function(e) {
                     const link = e.target.closest('a[href]');
@@ -665,7 +621,7 @@
                         }
                     }
                 });
-                
+
                 // Restore scroll position on page load
                 if (document.readyState === 'loading') {
                     document.addEventListener('DOMContentLoaded', restoreMainScroll);
@@ -832,7 +788,7 @@
             }
             const dropdown = document.getElementById(id);
             const isCurrentlyHidden = dropdown.classList.contains('hidden');
-            
+
             // Define nested dropdowns and their parent dropdowns
             // All admin submenus should keep the parent adminDropdown open
             // pdfDropdown is directly under adminDropdown so it opens without needing System Settings open
@@ -846,7 +802,7 @@
                 'adminMaintenanceDropdown': 'adminDropdown',
                 'reportsDropdown': 'financeDropdown'  // Reports is nested under Finance
             };
-            
+
             // Prevent parent dropdowns from closing when clicking inside nested dropdowns
             // Add click handlers to nested dropdowns to stop propagation
             if (id in nestedDropdowns) {
@@ -861,10 +817,10 @@
                     nestedDropdown.addEventListener('click', nestedDropdown._stopPropagationHandler);
                 }
             }
-            
+
             // If this is a nested dropdown, don't close its parent
             const parentDropdown = nestedDropdowns[id];
-            
+
             // Special handling for reportsDropdown: keep it open if already open and on a reports page
             if (id === 'reportsDropdown' && !isCurrentlyHidden) {
                 // Check if we're on a reports page by checking the current URL
@@ -875,11 +831,11 @@
                     return;
                 }
             }
-            
+
             // Close all other top-level dropdowns in the sidebar (accordion behavior)
             // Note: Nested dropdowns (like pdfDropdown) are not in this list, so they work independently
             const allSidebarDropdowns = ['workDropdown', 'financeDropdown', 'adminDropdown', 'crmDropdown', 'toolsDropdown'];
-            
+
             // Build a list of all ancestor dropdowns that should stay open
             const ancestorsToKeepOpen = [];
             if (parentDropdown) {
@@ -890,7 +846,7 @@
                     ancestorsToKeepOpen.push(grandparent);
                 }
             }
-            
+
             allSidebarDropdowns.forEach(dropdownId => {
                 // Don't close if this dropdown is an ancestor of the nested dropdown being opened
                 if (ancestorsToKeepOpen.includes(dropdownId)) {
@@ -919,7 +875,7 @@
                     }
                 }
             });
-            
+
             // Toggle the clicked dropdown
             if (isCurrentlyHidden) {
                 dropdown.classList.remove('hidden');
@@ -942,7 +898,7 @@
             } else {
                 dropdown.classList.add('hidden');
             }
-            
+
             // Rotate chevron icon for visual feedback
             const btn = document.querySelector(`[data-dropdown="${id}"]`);
             if (btn) {
@@ -968,19 +924,19 @@
                 e.stopPropagation();
             }
         });
-        
+
         // Prevent parent dropdowns from closing when clicking inside nested dropdowns
         // This handles clicks on links and other elements inside nested dropdowns
         document.addEventListener('click', function(e) {
             // Check if the click is inside a nested dropdown
-            const clickedInsideNested = e.target.closest('#pdfDropdown') || 
+            const clickedInsideNested = e.target.closest('#pdfDropdown') ||
                                        e.target.closest('#reportsDropdown') ||
                                        e.target.closest('#adminUserMgmtDropdown') ||
                                        e.target.closest('#adminSecurityDropdown') ||
                                        e.target.closest('#adminIntegrationsDropdown') ||
                                        e.target.closest('#adminDataDropdown') ||
                                        e.target.closest('#adminMaintenanceDropdown');
-            
+
             if (clickedInsideNested) {
                 // Find the parent dropdown and keep it open
                 const nestedDropdowns = {
@@ -993,7 +949,7 @@
                     'adminMaintenanceDropdown': 'adminDropdown',
                     'reportsDropdown': 'financeDropdown'
                 };
-                
+
                 // Find which nested dropdown was clicked
                 let clickedDropdownId = null;
                 for (const [nestedId, parentId] of Object.entries(nestedDropdowns)) {
@@ -1002,7 +958,7 @@
                         break;
                     }
                 }
-                
+
                 if (clickedDropdownId && nestedDropdowns[clickedDropdownId]) {
                     const parentId = nestedDropdowns[clickedDropdownId];
                     const parentDropdown = document.getElementById(parentId);
@@ -1020,19 +976,19 @@
             }
         }, true); // Use capture phase to catch events early
     </script>
-    
+
     <!-- Enhanced UI Scripts -->
     <script src="{{ url_for('static', filename='vendor/chartjs/chart.umd.js') }}"></script>
     <script src="{{ asset_url('core-d') }}"></script>
     <!-- Onboarding: onboarding.js = core tour runner + restartTour(); onboarding-enhanced.js = enhanced steps/tooltips. Use restartTour() or window.onboardingManager to restart tour. -->
-    
+
     <!-- Shared utilities (must load before keyboard shortcuts) -->
     {% if keyboard_shortcuts_config %}
     <script nonce="{{ csp_nonce() }}">window.__KEYBOARD_SHORTCUTS_CONFIG__ = {{ keyboard_shortcuts_config | tojson }};</script>
     {% endif %}
     <!-- Advanced Features -->
     <script src="{{ asset_url('core-e') }}"></script>
-    
+
     <script nonce="{{ csp_nonce() }}">
         // ttConfirm / ttAlert loaded from confirm-dialog.js (core-a1 bundle).
         function closeAllMenus(){
@@ -1074,197 +1030,12 @@
         });
         // Close on Escape
         document.addEventListener('keydown', function(e){ if (e.key === 'Escape') closeAllMenus(); });
-        
-        // Support Banner Logic with Smart Prompts
-        function dismissSupportBanner() {
-            const banner = document.getElementById('supportBanner');
-            if (banner) {
-                banner.classList.add('opacity-0', 'invisible', 'max-h-0', 'overflow-hidden');
-                banner.classList.remove('opacity-100', 'visible', 'max-h-[100px]');
-                // Store dismissal timestamp (show again after 14 days)
-                try {
-                    localStorage.setItem('supportBannerDismissed', Date.now().toString());
-                    // Track dismissal
-                    trackBannerDismissal();
-                } catch(e) {}
-            }
-        }
-        
-function trackBannerImpression(source) {
-            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content || '';
-            fetch('{{ url_for("main.track_support_impression") }}', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrfToken },
-                credentials: 'same-origin',
-                body: JSON.stringify({ source: source || 'banner', variant: window.supportAbVariant || 'control' })
-            }).catch(function() {});
-        }
 
-        function trackBannerDismissal() {
-            // Get CSRF token from meta tag
-            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content || '';
-
-            fetch('{{ url_for("main.track_banner_dismissal") }}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': csrfToken
-                },
-                credentials: 'same-origin',
-                body: JSON.stringify({ variant: window.supportAbVariant || 'control' })
-            }).catch(() => {
-                // Silently fail if tracking doesn't work
-            });
-        }
-        
-        function trackDonationClick(source) {
-            // Get CSRF token from meta tag
-            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content || '';
-            
-            fetch('{{ url_for("main.track_donation_click") }}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': csrfToken
-                },
-                credentials: 'same-origin',
-                body: JSON.stringify({
-                    source: source
-                })
-            }).catch(() => {
-                // Silently fail if tracking doesn't work
-            });
-        }
-        
-        function shouldShowSupportBanner() {
-            try {
-                // Check if dismissed recently (14 days)
-                const dismissed = localStorage.getItem('supportBannerDismissed');
-                if (dismissed) {
-                    const dismissedTime = parseInt(dismissed);
-                    const fourteenDays = 14 * 24 * 60 * 60 * 1000;
-                    if ((Date.now() - dismissedTime) < fourteenDays) {
-                        return false;
-                    }
-                }
-                
-                // Check if user clicked donation link recently (14 days)
-                const lastClick = localStorage.getItem('donationLinkClicked');
-                if (lastClick) {
-                    const clickTime = parseInt(lastClick);
-                    const fourteenDays = 14 * 24 * 60 * 60 * 1000;
-                    if ((Date.now() - clickTime) < fourteenDays) {
-                        return false;
-                    }
-                }
-                
-                return true;
-            } catch(e) {
-                return true; // Show by default if localStorage fails
-            }
-        }
-
-        function getSupportBannerSeenCount() {
-            try {
-                return parseInt(localStorage.getItem('supportBannerSeenCount') || '0', 10) || 0;
-            } catch (e) {
-                return 0;
-            }
-        }
-
-        function incrementSupportBannerSeenCount() {
-            try {
-                const next = getSupportBannerSeenCount() + 1;
-                localStorage.setItem('supportBannerSeenCount', String(next));
-                return next;
-            } catch (e) {
-                return 1;
-            }
-        }
-        
-        function updateBannerMessage(seenCount) {
-            const bannerTitle = document.getElementById('bannerTitle');
-            const bannerMessage = document.getElementById('bannerMessage');
-            
-            if (!bannerTitle || !bannerMessage) return;
-
-            const count = typeof seenCount === 'number' ? seenCount : getSupportBannerSeenCount();
-            const userStats = window.userStats || {};
-            const daysSinceSignup = userStats.days_since_signup || 0;
-            const timeEntriesCount = userStats.time_entries_count || 0;
-            const totalHours = userStats.total_hours || 0;
-
-            // Escalating copy based on how often the banner has been shown
-            if (count >= 5) {
-                bannerTitle.textContent = '{{ _("Still here?") }}';
-                bannerMessage.textContent = '{{ _("Buy a key — it removes all prompts permanently.") }}';
-                return;
-            }
-            if (count >= 3) {
-                bannerTitle.textContent = {{ _("You've seen this %(n)s times.")|tojson }}.replace('%(n)s', String(count));
-                bannerMessage.textContent = '{{ _("A one-time key removes it forever.") }}';
-                return;
-            }
-
-            // Smart messaging based on milestones (first 1–2 impressions)
-            if (totalHours >= 100) {
-                bannerTitle.textContent = '{{ _("Amazing! You\'ve tracked over 100 hours") }}';
-            } else if (timeEntriesCount >= 50) {
-                bannerTitle.textContent = '{{ _("Great progress! You\'ve logged 50+ entries") }}';
-            } else if (daysSinceSignup >= 7) {
-                bannerTitle.textContent = '{{ _("Thanks for using TimeTracker!") }}';
-            } else {
-                bannerTitle.textContent = '{{ _("Enjoying TimeTracker?") }}';
-            }
-            bannerMessage.textContent = '{{ _("Support its development — or remove prompts forever with a key.") }}';
-        }
-        
-// Show support banner if conditions are met
-        // Check immediately to reserve space and prevent layout shift
-        (function() {
-            const banner = document.getElementById('supportBanner');
-            if (!banner) return;
-            // Server-side suppression: don't show if user clicked a support CTA recently
-            if ({{ 'true' if support_banner_suppressed else 'false' }}) { return; }
-
-            if (shouldShowSupportBanner()) {
-                const seenCount = incrementSupportBannerSeenCount();
-                updateBannerMessage(seenCount);
-                
-                // Reserve space immediately by removing height constraints
-                // This prevents layout shift when banner becomes visible
-                banner.classList.remove('max-h-0', 'overflow-hidden');
-                // Space is now reserved, content just invisible
-                
-                // Show banner with a slight delay for better UX, but space is already reserved
-                setTimeout(() => {
-                    banner.classList.remove('opacity-0', 'invisible');
-                    banner.classList.add('opacity-100', 'visible');
-                    // Track banner impression once per page load (for funnel metrics)
-                    if (!window._supportBannerImpressionTracked) {
-                        window._supportBannerImpressionTracked = true;
-                        trackBannerImpression('banner');
-                    }
-                }, 2000); // Show after 2 seconds
-            } else {
-                // Keep it hidden and collapsed - no space reserved
-                banner.classList.add('max-h-0', 'overflow-hidden');
-            }
-        })();
-        
-        // Track donation link clicks
-        document.addEventListener('click', function(e) {
-            const link = e.target.closest('a[href*="buymeacoffee.com"], a[href*="paypal.com/donate"]');
-            if (link) {
-                try {
-                    localStorage.setItem('donationLinkClicked', Date.now().toString());
-                } catch(e) {}
-            }
-        });
+        // Orphaned #supportBanner markup was removed; soft prompts use modal + dashboard + milestones.
     </script>
-    
+
     <script src="{{ asset_url('core-f') }}"></script>
-    
+
     <!-- User Stats for Smart Banner -->
     {% if current_user.is_authenticated %}
     <script nonce="{{ csp_nonce() }}">
@@ -1275,11 +1046,11 @@ function trackBannerImpression(source) {
         };
     </script>
     {% endif %}
-    
-    
+
+
 <!-- Global donation tracking and A/B variant -->
     <script nonce="{{ csp_nonce() }}">
-        window.supportAbVariant = {{ (support_ab_variant or 'control')|tojson }};
+        window.supportAbVariant = {{ (support_ab_variant or 'key_first')|tojson }};
         function trackDonationClick(source) {
             {% if current_user.is_authenticated %}
             const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content || '';
@@ -1287,12 +1058,12 @@ function trackBannerImpression(source) {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrfToken },
                 credentials: 'same-origin',
-                body: JSON.stringify({ source: source, variant: window.supportAbVariant || 'control' })
+                body: JSON.stringify({ source: source, variant: window.supportAbVariant || 'key_first' })
             }).catch(function() {});
             {% endif %}
         }
     </script>
-    
+
     {# Issue #728: searchable combobox + inline create (available on all authenticated pages) #}
     <script nonce="{{ csp_nonce() }}">
         window.ttCreateLabels = {
@@ -1316,4 +1087,3 @@ function trackBannerImpression(source) {
     {% endif %}
 </body>
 </html>
-

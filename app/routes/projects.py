@@ -35,8 +35,7 @@ from app.models import (
 )
 from app.services import ProjectService
 from app.utils.db import safe_commit
-from app.utils.error_handling import client_error_response, client_error_payload, DEFAULT_CLIENT_ERROR, safe_log
-from app.utils.safe_redirect import safe_redirect, safe_redirect_target
+from app.utils.error_handling import DEFAULT_CLIENT_ERROR, client_error_payload, client_error_response, safe_log
 from app.utils.permissions import admin_or_permission_required, permission_required
 from app.utils.posthog_funnels import (
     track_onboarding_first_project,
@@ -45,6 +44,7 @@ from app.utils.posthog_funnels import (
     track_project_setup_completed,
     track_project_setup_started,
 )
+from app.utils.safe_redirect import safe_redirect, safe_redirect_target
 from app.utils.timezone import convert_app_datetime_to_user
 
 _project_service = ProjectService()
@@ -88,9 +88,9 @@ def list_projects():
     # Get custom field filters
     # Format: custom_field_<field_key>=value
     client_custom_field = {}
-    from app.models import CustomFieldDefinition
+    from app.services.custom_field_service import CustomFieldService
 
-    active_definitions = CustomFieldDefinition.get_active_definitions()
+    active_definitions = CustomFieldService().get_definitions("project")
     for definition in active_definitions:
         field_value = request.args.get(f"custom_field_{definition.field_key}", "").strip()
         if field_value:
@@ -140,9 +140,9 @@ def list_projects():
     client_list = [c.name for c in clients]
 
     # Get custom field definitions for filter UI
-    from app.models import CustomFieldDefinition
+    from app.services.custom_field_service import CustomFieldService
 
-    custom_field_definitions = CustomFieldDefinition.get_active_definitions()
+    custom_field_definitions = CustomFieldService().get_definitions("project")
 
     # Check if this is an AJAX request
     if request.headers.get("X-Requested-With") == "XMLHttpRequest":
@@ -426,33 +426,19 @@ def create_project():
         elif color_val == "":
             project.color = None
 
-        # Parse custom fields from global definitions
-        # Format: custom_field_<field_key> = value
-        from app.models import CustomFieldDefinition
+        from app.services.custom_field_service import CustomFieldService
 
-        custom_fields = {}
-        active_definitions = CustomFieldDefinition.get_active_definitions()
-
-        for definition in active_definitions:
-            field_value = request.form.get(f"custom_field_{definition.field_key}", "").strip()
-            if field_value:
-                custom_fields[definition.field_key] = field_value
-            elif definition.is_mandatory:
-                # Validate mandatory fields — skip for minimal AJAX creates (Issue #728)
-                if not wants_json:
-                    flash(_("Custom field '%(field)s' is required", field=definition.label), "error")
-                    custom_field_definitions = CustomFieldDefinition.get_active_definitions()
-                    return render_template(
-                        "projects/create.html",
-                        clients=clients,
-                        only_one_client=only_one_client,
-                        single_client=single_client,
-                        custom_field_definitions=custom_field_definitions,
-                    )
-
-        # Set custom fields if any
-        if custom_fields:
-            project.custom_fields = custom_fields
+        cf_service = CustomFieldService()
+        missing_label = cf_service.apply_from_form(project, "project", request.form)
+        if missing_label and not wants_json:
+            flash(_("Custom field '%(field)s' is required", field=missing_label), "error")
+            return render_template(
+                "projects/create.html",
+                clients=clients,
+                only_one_client=only_one_client,
+                single_client=single_client,
+                custom_field_definitions=cf_service.get_definitions("project"),
+            )
 
         # Persist color and/or custom fields
         if not safe_commit("create_project_custom_fields_and_color", {"project_id": project.id}):
@@ -467,13 +453,12 @@ def create_project():
                     500,
                 )
             flash(_("Could not save project due to a database error"), "error")
-            custom_field_definitions = CustomFieldDefinition.get_active_definitions()
             return render_template(
                 "projects/create.html",
                 clients=clients,
                 only_one_client=only_one_client,
                 single_client=single_client,
-                custom_field_definitions=custom_field_definitions,
+                custom_field_definitions=CustomFieldService().get_definitions("project"),
             )
 
         # Track project created event
@@ -565,9 +550,9 @@ def create_project():
         flash(_('Project "%(name)s" created successfully', name=name), "success")
         return redirect(url_for("projects.view_project", project_id=project.id))
 
-    from app.models import CustomFieldDefinition
+    from app.services.custom_field_service import CustomFieldService
 
-    custom_field_definitions = CustomFieldDefinition.get_active_definitions()
+    custom_field_definitions = CustomFieldService().get_definitions("project")
     return render_template(
         "projects/create.html",
         clients=clients,
@@ -605,18 +590,11 @@ def view_project(project_id):
     # Get custom field definitions and link templates
     from sqlalchemy.exc import ProgrammingError
 
-    from app.models import CustomFieldDefinition, LinkTemplate, Milestone
+    from app.models import LinkTemplate, Milestone
+    from app.services.custom_field_service import CustomFieldService
 
-    custom_field_definitions_by_key = {}
-    try:
-        for definition in CustomFieldDefinition.get_active_definitions():
-            custom_field_definitions_by_key[definition.field_key] = definition
-    except ProgrammingError as e:
-        if "does not exist" in str(e.orig) or "relation" in str(e.orig).lower():
-            current_app.logger.warning("custom_field_definitions table does not exist. Run migration: flask db upgrade")
-            custom_field_definitions_by_key = {}
-        else:
-            raise
+    cf_service = CustomFieldService()
+    custom_field_definitions_by_key = CustomFieldService.definitions_by_key(cf_service.get_definitions("project"))
 
     link_templates_by_field = {}
     try:
@@ -678,7 +656,9 @@ def view_project(project_id):
         link_templates_by_field=link_templates_by_field,
         attachments=attachments,
         budget_status=budget_status,
-        milestones=Milestone.query.filter_by(project_id=project.id).order_by(Milestone.due_date.asc().nullslast(), Milestone.name).all(),
+        milestones=Milestone.query.filter_by(project_id=project.id)
+        .order_by(Milestone.due_date.asc().nullslast(), Milestone.name)
+        .all(),
     )
     resp = make_response(response)
     resp.headers["Cache-Control"] = "no-cache, no-store, must-revalidate, max-age=0"
@@ -784,8 +764,13 @@ def project_dashboard(project_id):
             entry_count = entry_count.count()
 
             # Count tasks assigned to this user
-            task_count = project.tasks.filter_by(assigned_to=user.id).count()
+            from app.models import TaskAssignee
 
+            task_count = (
+                project.tasks.join(TaskAssignee, TaskAssignee.task_id == Task.id)
+                .filter(TaskAssignee.user_id == user.id)
+                .count()
+            )
             team_contributions.append(
                 {
                     "username": username,
@@ -1069,46 +1054,29 @@ def edit_project(project_id):
         elif color_val == "":
             project.color = None
 
-        # Parse custom fields from global definitions
-        # Format: custom_field_<field_key> = value
-        from app.models import CustomFieldDefinition
+        from app.services.custom_field_service import CustomFieldService
 
-        custom_fields = {}
-        active_definitions = CustomFieldDefinition.get_active_definitions()
-
-        for definition in active_definitions:
-            field_value = request.form.get(f"custom_field_{definition.field_key}", "").strip()
-            if field_value:
-                custom_fields[definition.field_key] = field_value
-            elif definition.is_mandatory:
-                # Validate mandatory fields
-                flash(_("Custom field '%(field)s' is required", field=definition.label), "error")
-                custom_field_definitions = CustomFieldDefinition.get_active_definitions()
-                return render_template(
-                    "projects/edit.html",
-                    project=project,
-                    clients=clients,
-                    only_one_client=only_one_client,
-                    single_client=single_client,
-                    custom_field_definitions=custom_field_definitions,
-                )
-
-        # Update custom fields
-        if custom_fields:
-            project.custom_fields = custom_fields
-        else:
-            # Clear custom fields when all are empty
-            project.custom_fields = {}
-
-        # Commit custom fields and color changes
-        if not safe_commit("update_project_custom_fields_and_color", {"project_id": project.id}):
-            flash(_("Could not update project due to a database error"), "error")
-            custom_field_definitions = CustomFieldDefinition.get_active_definitions()
+        cf_service = CustomFieldService()
+        missing_label = cf_service.apply_from_form(project, "project", request.form)
+        if missing_label:
+            flash(_("Custom field '%(field)s' is required", field=missing_label), "error")
             return render_template(
                 "projects/edit.html",
                 project=project,
                 clients=clients,
-                custom_field_definitions=custom_field_definitions,
+                only_one_client=only_one_client,
+                single_client=single_client,
+                custom_field_definitions=cf_service.get_definitions("project"),
+            )
+
+        # Commit custom fields and color changes
+        if not safe_commit("update_project_custom_fields_and_color", {"project_id": project.id}):
+            flash(_("Could not update project due to a database error"), "error")
+            return render_template(
+                "projects/edit.html",
+                project=project,
+                clients=clients,
+                custom_field_definitions=cf_service.get_definitions("project"),
             )
 
         # Log activity
@@ -1126,9 +1094,9 @@ def edit_project(project_id):
         flash(_('Project "%(name)s" updated successfully', name=name), "success")
         return redirect(url_for("projects.view_project", project_id=project.id))
 
-    from app.models import CustomFieldDefinition
+    from app.services.custom_field_service import CustomFieldService
 
-    custom_field_definitions = CustomFieldDefinition.get_active_definitions()
+    custom_field_definitions = CustomFieldService().get_definitions("project")
     return render_template(
         "projects/edit.html",
         project=project,
@@ -2328,7 +2296,7 @@ def upload_project_attachment(project_id):
 
     # File upload configuration
     ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif", "pdf", "doc", "docx", "txt", "xls", "xlsx", "zip", "rar"}
-    UPLOAD_FOLDER = "uploads/project_attachments"
+    UPLOAD_FOLDER = "app/static/uploads/project_attachments"
     MAX_FILE_SIZE = 10 * 1024 * 1024  # 10 MB
 
     def allowed_file(filename):
@@ -2456,8 +2424,13 @@ def download_project_attachment(attachment_id):
     if not user_can_access_project(current_user, attachment.project_id):
         abort(403)
 
-    # Build file path
-    file_path = os.path.join(current_app.root_path, "..", attachment.file_path)
+    from app.utils.paths import PathEscapeError, resolve_stored_upload_path
+
+    try:
+        file_path = resolve_stored_upload_path(current_app.root_path, attachment.file_path)
+    except PathEscapeError:
+        flash(_("File not found"), "error")
+        return redirect(url_for("projects.view_project", project_id=project.id))
 
     if not os.path.exists(file_path):
         flash(_("File not found"), "error")
@@ -2480,13 +2453,14 @@ def delete_project_attachment(attachment_id):
     attachment = ProjectAttachment.query.get_or_404(attachment_id)
     project = attachment.project
 
-    # Delete file
-    file_path = os.path.join(current_app.root_path, "..", attachment.file_path)
-    if os.path.exists(file_path):
-        try:
+    from app.utils.paths import PathEscapeError, resolve_stored_upload_path
+
+    try:
+        file_path = resolve_stored_upload_path(current_app.root_path, attachment.file_path)
+        if os.path.exists(file_path):
             os.remove(file_path)
-        except Exception as e:
-            current_app.logger.error(f"Failed to delete attachment file: {e}")
+    except (PathEscapeError, OSError) as e:
+        current_app.logger.error(f"Failed to delete attachment file: {e}")
 
     # Delete database record
     attachment_id_for_log = attachment.id

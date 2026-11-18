@@ -44,7 +44,7 @@
         .button {
             display: inline-block;
             padding: 12px 24px;
-            background-color: #3b82f6;
+            background-color: #4F46E5;
             color: white;
             text-decoration: none;
             border-radius: 5px;
@@ -64,14 +64,14 @@
     <div class="header">
         <h1>⚠️ {{ _('Invoice Overdue') }}</h1>
     </div>
-    
+
     <div class="content">
         <p>{{ _('Hello %(name)s,', name=user.display_name) }}</p>
-        
+
         {% set invoice_label %}<strong>{{ _('Invoice %(number)s', number=invoice.invoice_number) }}</strong>{% endset %}
         {% set overdue_label %}<strong>{{ ngettext('%(num)s day overdue', '%(num)s days overdue', days_overdue) }}</strong>{% endset %}
         <p>{{ _('This is a notification that %(invoice)s is now %(overdue)s.', invoice=invoice_label, overdue=overdue_label)|safe }}</p>
-        
+
         <div class="invoice-details">
             <table>
                 <tr>
@@ -100,9 +100,9 @@
                 </tr>
             </table>
         </div>
-        
+
         <p><strong>{{ _('Recommended Action:') }}</strong> {{ _('Please follow up with the client or update the invoice status if payment has been received.') }}</p>
-        
+
         {% if invoice_url %}
         <center>
             <a href="{{ invoice_url }}" class="button">
@@ -111,11 +111,10 @@
         </center>
         {% endif %}
     </div>
-    
+
     <div class="footer">
         <p>{{ _('TimeTracker - Time Tracking & Project Management') }}</p>
         <p>{{ _('This is an automated notification. To manage your notification preferences, visit your user settings.') }}</p>
     </div>
 </body>
 </html>
-

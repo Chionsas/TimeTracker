@@ -7,6 +7,185 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.21.0] - 2026-11-18
+### Added
+
+- **FatturaPA / SDI (Italy)** — FatturaPA 1.2 XML export (`FPR12` / `FPA12`), configurable SDI intermediary HTTP adapter, transmission history, notification handling (`RC`/`NS`/`MC`/`NE`/`DT`/`AT`), and `poll_sdi_status` every 15 minutes. API: `GET /api/v1/invoices/{id}/fatturapa`, `POST .../send-sdi`. See [FATTURAPA_SDI.md](docs/admin/configuration/FATTURAPA_SDI.md).
+- **Credit notes** — End-to-end credit notes (web UI, PDF, UBL, FatturaPA for Italian workflows) and `/api/v1/credit-notes` CRUD + downloads.
+- **Invoice reminders & dunning** — Configurable reminder policies with multi-step offsets, client email templates, optional late fees (fixed or annual %), and `InvoiceReminderSchedule` tracking. Admin → Reminder policies.
+- **Invoicing lines** — Per-line tax rates, discounts, and explicit line ordering on invoices.
+- **Payment gateways** — Mollie and PayPal checkout flows completed with gateway refunds and receipt handling.
+- **Invoice lifecycle webhooks** — `invoice.sent`, `invoice.paid`, `invoice.overdue`, `credit_note.created`, and payment events (`payment.processed`, `payment.failed`, `payment.refunded`) emitted from invoice, checkout, and scheduled jobs.
+- **CRM** — Remaining CRM gaps: API coverage, pipeline drag-and-drop, deal forecast, lead-source analytics, communication templates, activity calendar reminders, and module guards.
+- **Time tracking** — Autotracker, Focus session, and Belgium compliance/reporting gap closure across web and clients.
+- **GDPR erase UI** — Admin users list **Erase (GDPR)** action; Import/Export self-service account erasure.
+- **Client parity** — Mobile CRM deal/lead detail/edit/convert and client notes; reports by-project breakdown; desktop CRM edit/convert + German locale catalog; browser extension manual theme preference.
+- **Teams bot** — Per-conversation sliding-window rate limit on bot commands (~20/min per conversation).
+- **CI** — Duration-balanced 8-shard pytest split for faster PR feedback.
+
+### Changed
+
+- Client (and related) custom field forms load definitions filtered by `entity_type`.
+- Migrated additional native `alert()`/`confirm()` call sites (API tokens, report builder, invoices/expenses/projects lists, import/export) to `ttAlert`/`ttConfirm`.
+- Support conversion defaults to **key_first** Supporter CTA; tips route via Buy Me a Coffee and `/support` checkout.
+- README roadmap marks push notifications, workflows, base forecasting, and FatturaPA/SDI as shipped.
+- **Dependencies** — Pip, npm (root + desktop), and Flutter `flutter_local_notifications` bumps (Dependabot #880–#883).
+
+### Fixed
+
+- **Time rounding** — `nearest` rounding now rounds exact halves up (#874).
+- **Import** — Accept CSV files saved with a UTF-8 BOM (#877).
+- **Backups & uploads** — Full backups include receipt/avatar files under `UPLOAD_FOLDER` (#885); project attachments persist in the uploads volume (#884).
+- **Invoicing** — Payment accounting locked; invoice status transitions clarified.
+- **Webhooks** — Delivery statistics work when Settings would otherwise autoflush.
+- **Mobile CI** — Unblock Android AGP and iOS CocoaPods release builds.
+- **Support** — CodeQL/black fixes for support conversion PR CI.
+- **Lint** — Format `tests/test_push_notifications_routes.py` so develop `ci-pass` stays green.
+
+### Security
+
+- Clear CodeQL log-injection findings on credit-note code paths.
+- Ignore APScheduler Safety advisory with no 3.x remediation path.
+
+### Documentation
+
+- New [FATTURAPA_SDI.md](docs/admin/configuration/FATTURAPA_SDI.md); Peppol/e-invoicing matrix updated in [PEPPOL_EINVOICING.md](docs/admin/configuration/PEPPOL_EINVOICING.md).
+- REST API invoice/credit-note/webhook sections; [webhooks.md](docs/features/webhooks.md); [API_TOKEN_SCOPES.md](docs/api/API_TOKEN_SCOPES.md).
+- Refreshed invoice reminder/dunning docs, FEATURES_COMPLETE invoicing notes, payment gateway refund notes, docs indexes, and gap roadmap status.
+
+## [5.20.0] - 2026-11-10
+### Added
+
+- **Enterprise identity** — OAuth 2.0 API apps (authorization code + PKCE, admin CRUD), SAML 2.0 login, SCIM Users provisioning, and shared Slack/Teams timer bot commands.
+- **Bank reconciliation & payroll** — Bank reconciliation workflows plus payroll/labor export APIs and UI.
+- **Inventory** — Stock locations, purchase-order email, and stock-levels CSV export.
+- **Invoicing** — XRechnung export and PDF QR/barcode elements on invoice/quote layouts.
+- **Peppol bridge: Let’s Peppol + inbox** — `PEPPOL_BRIDGE_PROVIDER=letspeppol` for Belgian access-point delivery, plus inbound Peppol inbox poll/ack in the bridge and admin UI.
+- **Kanban & custom fields** — Enforce kanban WIP limits; extend custom fields coverage.
+- **Clients** — Mobile sync retry backoff and failed-sync screen; desktop failed offline-sync surfacing and broader i18n; browser extension 2FA login, Firefox packaging, and tab URL suggestions.
+- **DigitalOcean one-click** — `.do/deploy.template.yaml` (Docker Hub image + Dev Database) and Deploy to DigitalOcean button in the README / Distribution guide.
+- **Unraid CA profile** — Root `ca_profile.xml` (`CommunityApplications` + `<Profile>`) required for Community Applications submission.
+
+### Security
+
+- **CodeQL** — Clear open redirect, stack-trace, weak-hashing, and XML-related alerts on develop paths used by auth/OAuth and related utilities.
+
+### Fixed
+
+- **Invoices** — Generating an invoice from many time entries no longer fails on PostgreSQL: `invoice_items.time_entry_ids` is now `TEXT` (was `VARCHAR(500)`).
+- **Report export** — CSV and Excel exports from the report form now apply the client, task, billable, source and tags filters.
+- **Payments** — Stripe checkout now sends JPY and other zero-decimal currencies (and three-decimal ones such as KWD) in the unit Stripe expects; before, every amount was multiplied by 100, so a JPY invoice was charged 100 times its balance, and the webhook amount was divided by 100 the same way.
+- **Peppol** — The UBL invoice now reports payments already recorded on the invoice as `PrepaidAmount` and sets `PayableAmount` to the total minus those payments (BR-CO-16), never below zero, as the Factur-X/ZUGFeRD export already does; before, a partly paid invoice sent or exported as UBL asked the buyer for the full total.
+- **CI / Docker** — Restore gunicorn 25.x (eventlet worker) after a major bump broke image boot; isolate setup-wizard fixture state; use push `before` SHA for migration drift; keep mobile on Riverpod 2.x.
+
+### Changed
+
+- **Mobile Android** — Bump Gradle wrapper to 8.14 so Flutter 3.47 release builds satisfy the minimum Gradle version.
+- **Dependencies** — Pip, Actions, npm (root + desktop), and Flutter mobile dependency bumps (with Dependabot major ignores for gunicorn and flutter_riverpod).
+
+### Documentation
+
+- **OrcaRouter** — AI Helper docs and Admin settings include a signup link for an OrcaRouter API key (`https://www.orcarouter.ai/ref/ref_984e584cb4cd86485a8c`).
+- **Deploy & discovery** — DigitalOcean and Railway deploy guides; Unraid CA + directory listing submission packages; publishing checklist (`docs/deploy/*`, `docs/marketing/*`).
+- **Gap roadmap** — Archive stale gap analyses; Phase 6 marked done for the implementation pass.
+
+## [5.19.1] - 2026-11-07
+### Added
+
+- **Peppol bridge: getpeppr preset** — `PEPPOL_BRIDGE_PROVIDER=getpeppr` sends the UBL through getpeppr (`GETPEPPR_API_KEY`), with delivery status for the post-send check and an idempotency key so sending the same invoice twice the same day does not deliver a second copy (#840). See [PEPPOL_BRIDGE.md](docs/admin/configuration/PEPPOL_BRIDGE.md).
+
+### Changed
+
+- **CI / develop image** — **CD - Development Build** no longer runs on every merge into `develop`. Publish `:develop` only via **Actions → CD - Development Build → Run workflow**.
+
+### Fixed
+
+- **Admin** — The sidebar links the Quote PDF designer again, next to Invoice PDF; 5.19.0 left only one PDF Templates link, to the invoice designer (#850).
+- **Invoices** — Deleting a draft invoice (single or bulk) now gives back the prepaid hours it used; before, fully prepaid time entries stayed non-billable and invoicing the same entries again failed on a unique constraint (#829).
+- **Invoices** — A second generate-from-time pass keeps existing invoice lines instead of replacing them (#851).
+- **Payments** — Changing a completed payment to refunded, failed or pending through the API now takes it out of the invoice's amount paid; before, the invoice kept the old amount and could stay fully paid (#830).
+- **Socket.IO** — Pass the Flask app into the Socket.IO origin check so CORS validation runs with app context (#849).
+- **Security / CodeQL** — Make `sanitize_log_value` visible to the log-injection query so findings clear correctly.
+- **Release CD** — Stop the no-op `cp` of `docker-compose.nas.yml` when preparing release artifacts.
+- **CI** — Migration drift gate ignores constraint/index rename noise and compares against a models-only base checkout more reliably.
+
+### Documentation
+
+- Peppol Bridge / e-invoicing docs and compose examples cover the getpeppr provider preset.
+- Release process docs: `:develop` image is manual-only (no per-merge publish).
+
+## [5.19.0] - 2026-11-05
+### Added
+
+- **Public demo (`DEMO_MODE`)** — Skip the setup wizard and seed browseable sample data for public demos; README/demo assets aligned with the live demo.
+- **App shell UX** — Improved UI look, information architecture, and brand consistency across the app shell.
+- **First-run / contributor UX** — Onboarding, empty states, and i18n improvements for new installs and contributors.
+
+### Security
+
+- **SSRF / XSS / mass-assignment / deploy defaults** — Harden outbound URL validation, CORS/Socket.IO, DOM escaping, attachment path jailing, and compose/env credential defaults.
+- **Render health checks** — Tolerate transient connection-refused blips during deploys.
+- **CodeQL follow-ups** — Clear property-injection, stack-trace, and log-injection findings; run helper images as non-root; Dependabot overrides for `follow-redirects` and `minimatch`.
+
+### Fixed
+
+- **Timer** — Bulk entry can add a slot that starts when another entry ends (adjacent slots).
+- **Projects** — Show the new-install empty state when no status filter is set; wrap filter labels/options in gettext.
+- **Web** — Restore `#746` reconnect guards; harden entry/invoice paths; restore curated timezones and template script blocks.
+- **Migrations** — Make late SQLite upgrades batch-safe.
+- **Mobile** — Use named `flutter_local_notifications` APIs after dependency updates.
+- **Docker** — Fix local-test compose build context for the root Dockerfile (#818); restore app boot after Dependabot major bumps.
+- **CI / develop image** — Broaden CD-Development path filters for image-affecting trees and stop cancelling in-flight publishes so `:develop` reaches GHCR/Docker Hub more reliably.
+
+### Changed
+
+- **CI / releases** — Consolidated PR checks into a single path-aware `ci.yml` with a required `ci-pass` aggregator; Dependabot + nightly dependency audit; automated Prepare/Finalize release workflows (`rc/v*` → tag → publish) and `scripts/bump_version.py` as the version source of truth.
+- **Dependencies** — Large pip, GitHub Actions, npm (root + desktop), and Flutter mobile dependency bumps.
+
+### Documentation
+
+- First-five-minutes checklist after Docker quick start; demo credentials beside the live demo link; refreshed dashboard screenshot; community/discovery funnel tweaks.
+- Release and version docs aligned with Prepare/Finalize + `bump_version.py` (superseding manual GitHub Releases / `version-manager.sh` as the primary path).
+
+## [5.18.5] - 2026-10-30
+
+### Security
+
+- **Audit logs / 2FA secret (#801)** — Stop writing `two_factor_secret` (and other secret fields such as Settings API keys/client secrets and client portal credentials) into audit log `old_value`/`new_value`. Existing leaked values are scrubbed by migration `200_scrub_sensitive_audit_log_values`. TOTP remains reversible via optional Fernet encryption at rest, not hashing.
+
+### Added
+
+- **Multi-assignee tasks** — Tasks (and recurring task templates) support multiple equal assignees via `task_assignees` / `recurring_task_assignees`. Create/edit/bulk-assign UI, filters, permissions, kanban, API (`assignee_ids`, legacy `assignee_id`), and workflows updated; existing `assigned_to` values are migrated.
+### Fixed
+
+- **Exchange rates** — When exchangerate.host returns no rate (it now requires an access key), try a keyless exchangerate.host-compatible ECB endpoint (AllRatesToday) for the same date before the latest-only fallback.
+- **Invoices** — Deleting a draft invoice (single or bulk) now makes its project costs and expenses billable again; before, they stayed marked as invoiced and never appeared on a later invoice.
+- **Payments** — Recording a completed payment through the API (and the desktop app) no longer counts it twice in the invoice's amount paid; before, a 1.00 payment showed 2.00 paid and an invoice could read as fully paid early.
+
+### Fixed
+
+- **Saved filter params / CodeQL** — Use a `Map` when applying saved filter query parameters so dynamic object writes cannot overwrite built-in properties (remote property injection).
+
+### Documentation
+
+- **Version** — Bumped `setup.py` to **5.18.5**; `VERSION` and desktop/browser-extension/mobile client versions aligned.
+
+## [5.18.4] - 2026-10-28
+
+### Fixed
+
+- **CSP PDF preview (#797)** — Allow `blob:` iframes via `frame-src 'self' blob:` so PDF template previews are not blocked by Content-Security-Policy.
+- **Saved filter params** — Prevent prototype pollution when applying saved filter query parameters.
+
+### Changed
+
+- **Dependencies** — Bump black and OpenTelemetry; desktop Electron and related npm packages; Pillow; follow-redirects.
+
+### Documentation
+
+- **Email configuration** — Added a Groundmail SMTP example to the common email providers in `docs/admin/configuration/EMAIL_CONFIGURATION.md`.
+- **Version** — Bumped `setup.py` to **5.18.4**; `VERSION` and desktop/browser-extension/mobile client versions aligned.
+
 ## [5.18.3] - 2026-10-22
 
 ### Fixed

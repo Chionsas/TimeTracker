@@ -85,7 +85,7 @@ def hours_by_day():
                 {
                     "label": "Hours Worked",
                     "data": list(date_data.values()),
-                    "borderColor": "#3b82f6",
+                    "borderColor": "#4F46E5",
                     "backgroundColor": "rgba(59, 130, 246, 0.1)",
                     "tension": 0.4,
                     "fill": True,
@@ -242,7 +242,7 @@ def hours_by_project():
 
     # Generate colors for each project
     colors = [
-        "#3b82f6",
+        "#4F46E5",
         "#10b981",
         "#f59e0b",
         "#ef4444",
@@ -307,7 +307,7 @@ def hours_by_user():
                     "label": "Hours",
                     "data": data,
                     "backgroundColor": "rgba(59, 130, 246, 0.8)",
-                    "borderColor": "#3b82f6",
+                    "borderColor": "#4F46E5",
                     "borderWidth": 2,
                 }
             ],
@@ -651,7 +651,7 @@ def project_efficiency():
                     "label": "Hours",
                     "data": hours_data,
                     "backgroundColor": "rgba(59, 130, 246, 0.8)",
-                    "borderColor": "#3b82f6",
+                    "borderColor": "#4F46E5",
                     "borderWidth": 2,
                     "yAxisID": "y",
                 },
@@ -839,7 +839,9 @@ def task_completion():
     )
 
     if not current_user.is_admin:
-        completed_query = completed_query.filter(Task.assigned_to == current_user.id)
+        from app.services.task_service import task_assigned_to_user_clause
+
+        completed_query = completed_query.filter(task_assigned_to_user_clause(current_user.id))
 
     completed_count = completed_query.scalar() or 0
 
@@ -849,7 +851,9 @@ def task_completion():
     )
 
     if not current_user.is_admin:
-        status_query = status_query.filter(Task.assigned_to == current_user.id)
+        from app.services.task_service import task_assigned_to_user_clause
+
+        status_query = status_query.filter(task_assigned_to_user_clause(current_user.id))
 
     status_results = status_query.group_by(Task.status).all()
 
@@ -871,7 +875,9 @@ def task_completion():
     )
 
     if not current_user.is_admin:
-        project_query = project_query.filter(Task.assigned_to == current_user.id)
+        from app.services.task_service import task_assigned_to_user_clause
+
+        project_query = project_query.filter(task_assigned_to_user_clause(current_user.id))
 
     project_results = project_query.group_by(Project.name).order_by(func.count(Task.id).desc()).limit(10).all()
 
@@ -1211,7 +1217,7 @@ def payments_by_status():
         labels.append(status.title() if status else "Unknown")
         counts.append(count)
         amounts.append(float(amount or 0))
-        background_colors.append(colors.get(status, "#3b82f6"))
+        background_colors.append(colors.get(status, "#4F46E5"))
 
     return jsonify(
         {
@@ -1245,7 +1251,7 @@ def payments_by_method():
     labels = []
     amounts = []
     colors = [
-        "#3b82f6",
+        "#4F46E5",
         "#10b981",
         "#f59e0b",
         "#ef4444",

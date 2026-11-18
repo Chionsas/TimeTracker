@@ -47,11 +47,11 @@
             </button>
         </div>
     </form>
-    
+
     <!-- Export Buttons -->
     <div class="mt-4 flex flex-col gap-3">
         <div class="flex gap-2">
-        <a href="{{ url_for('reports.export_user_excel', user_id=selected_user or '', project_id=selected_project or '', start_date=start_date, end_date=end_date) }}" 
+        <a href="{{ url_for('reports.export_user_excel', user_id=selected_user or '', project_id=selected_project or '', start_date=start_date, end_date=end_date) }}"
            class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 inline-flex items-center">
             <i class="fas fa-file-excel mr-2"></i>{{ _('Export to Excel') }}
         </a>
@@ -162,7 +162,7 @@
             {% endfor %}
         </tbody>
     </table>
-    
+
     <!-- Overtime Summary -->
     {% if user_totals %}
     <div class="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-md">

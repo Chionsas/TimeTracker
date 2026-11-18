@@ -38,7 +38,7 @@
                     {% if user.roles %}
                     <div class="flex flex-wrap gap-1">
                         {% for role in user.roles %}
-                        <span class="px-2 py-0.5 inline-flex text-xs leading-5 font-semibold rounded-full 
+                        <span class="px-2 py-0.5 inline-flex text-xs leading-5 font-semibold rounded-full
                             {% if role.is_system_role %}bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200
                             {% else %}bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200{% endif %}">
                             {{ role.name }}
@@ -51,7 +51,7 @@
                         <span class="px-2 py-0.5 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-200">
                             {{ user.role | capitalize }} ({{ _('legacy') }})
                         </span>
-                        <a href="{{ url_for('permissions.manage_user_roles', user_id=user.id) }}" 
+                        <a href="{{ url_for('permissions.manage_user_roles', user_id=user.id) }}"
                            class="text-xs text-primary hover:underline"
                            title="{{ _('Migrate to new role system') }}">
                             {{ _('Migrate') }} →
@@ -80,6 +80,15 @@
                         <a href="{{ url_for('permissions.manage_user_roles', user_id=user.id) }}" class="text-primary hover:underline text-sm">{{ _('Roles') }}</a>
                         {% endif %}
                         {% if user.id != current_user.id and (current_user.is_admin or has_permission('delete_users')) %}
+                        {% if not user.anonymized_at %}
+                        <button type="button" onclick="confirmEraseUser('{{ user.id }}', '{{ user.username }}')" class="text-amber-600 hover:text-amber-800 dark:text-amber-400 dark:hover:text-amber-300 text-sm" title="{{ _('GDPR anonymize — keeps historical time entries') }}">{{ _('Erase (GDPR)') }}</button>
+                        <form id="eraseUserForm-{{ user.id }}" method="POST" action="{{ url_for('admin.erase_user_gdpr', user_id=user.id) }}" class="hidden">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                            <input type="hidden" name="reason" value="admin_gdpr_erase"/>
+                        </form>
+                        {% else %}
+                        <span class="text-xs text-text-muted-light dark:text-text-muted-dark" title="{{ user.anonymized_at }}">{{ _('Anonymized') }}</span>
+                        {% endif %}
                         <button type="button" onclick="confirmDeleteUser('{{ user.id }}', '{{ user.username }}', {{ user.time_entries.count() }})" class="text-red-600 hover:text-red-800 text-sm">{{ _('Delete') }}</button>
                         <form id="deleteUserForm-{{ user.id }}" method="POST" action="{{ url_for('admin.delete_user', user_id=user.id) }}" class="hidden">
                             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
@@ -98,36 +107,60 @@
 </div>
 
 <script nonce="{{ csp_nonce() }}">
+function confirmEraseUser(userId, username) {
+    const msg = {{ _('Anonymize user "{name}" for GDPR erasure? Personal data is removed; historical time entries are retained under an anonymized identity. This cannot be undone.')|tojson }}.replace('{name}', username);
+    const run = function(ok) {
+        if (ok) {
+            document.getElementById('eraseUserForm-' + userId).submit();
+        }
+    };
+    if (window.ttConfirm || window.showConfirm) {
+        (window.ttConfirm || window.showConfirm)(msg, {
+            title: {{ _('Erase User (GDPR)')|tojson }},
+            confirmText: {{ _('Erase')|tojson }},
+            cancelText: {{ _('Cancel')|tojson }},
+            variant: 'warning'
+        }).then(run);
+    } else if (window.confirm(msg)) {
+        run(true);
+    }
+}
+
 function confirmDeleteUser(userId, username, timeEntriesCount) {
     // Check if user has time entries
     if (timeEntriesCount > 0) {
-        const msg = {{ _('Cannot delete user "{name}" because they have {count} time entries. Users with existing time entries cannot be deleted.')|tojson }}.replace('{name}', username).replace('{count}', timeEntriesCount);
-        if (window.showConfirm) {
-            window.showConfirm(msg, { 
-                title: {{ _('Cannot Delete User')|tojson }}, 
-                confirmText: {{ _('OK')|tojson }}, 
+        const msg = {{ _('Cannot delete user "{name}" because they have {count} time entries. Users with existing time entries cannot be deleted. Use Erase (GDPR) to anonymize instead.')|tojson }}.replace('{name}', username).replace('{count}', timeEntriesCount);
+        if (window.ttConfirm || window.showConfirm) {
+            (window.ttConfirm || window.showConfirm)(msg, {
+                title: {{ _('Cannot Delete User')|tojson }},
+                confirmText: {{ _('OK')|tojson }},
                 variant: 'warning',
                 showCancel: false
             });
         } else {
-            alert(msg);
+            window.ttAlert ? window.ttAlert(msg) : window.alert(msg);
         }
         return false;
     }
-    
+
     // Show delete confirmation
     const msg = {{ _('Are you sure you want to delete user "{name}"? This action cannot be undone.')|tojson }}.replace('{name}', username);
-    
-    window.showConfirm(msg, { 
-        title: {{ _('Delete User')|tojson }}, 
-        confirmText: {{ _('Delete')|tojson }},
-        cancelText: {{ _('Cancel')|tojson }},
-        variant: 'danger' 
-    }).then(function(ok) {
-        if (ok) {
-            document.getElementById('deleteUserForm-' + userId).submit();
-        }
-    });
+
+    const askDelete = window.ttConfirm || window.showConfirm;
+    if (askDelete) {
+        askDelete(msg, {
+            title: {{ _('Delete User')|tojson }},
+            confirmText: {{ _('Delete')|tojson }},
+            cancelText: {{ _('Cancel')|tojson }},
+            variant: 'danger'
+        }).then(function(ok) {
+            if (ok) {
+                document.getElementById('deleteUserForm-' + userId).submit();
+            }
+        });
+    } else if (window.confirm(msg)) {
+        document.getElementById('deleteUserForm-' + userId).submit();
+    }
 }
 </script>
 {% endblock %}

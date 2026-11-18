@@ -127,12 +127,15 @@ curl -X POST https://your-domain.com/api/v1/timer/start \
 **Endpoints**:
 - `GET /api/v1/tasks` - List tasks
 - `GET /api/v1/tasks/{id}` - Get task details
+- `GET /api/v1/gantt` - Gantt chart data (`read:projects` or `read:tasks`)
+- `GET /api/v1/resource-scheduling` - Team schedule / allocations (`read:projects` or `read:tasks`)
 
 **Use Cases**:
 - Task management integrations
 - Kanban board displays
 - Progress tracking
 - Task reporting
+- Gantt / capacity planning clients
 
 **Example**:
 ```bash
@@ -146,12 +149,14 @@ curl -H "Authorization: Bearer YOUR_TOKEN" \
 - `POST /api/v1/tasks` - Create task
 - `PUT /api/v1/tasks/{id}` - Update task
 - `DELETE /api/v1/tasks/{id}` - Delete task
+- `POST /api/v1/resource-scheduling/allocations` - Assign a task to a user/date (`write:tasks` or `write:projects`)
 
 **Use Cases**:
 - Task synchronization
 - Automated task creation
 - Task status updates
 - Project planning automation
+- Capacity schedule updates
 
 **Example**:
 ```bash
@@ -206,6 +211,36 @@ curl -X POST https://your-domain.com/api/v1/clients \
 
 ---
 
+### CRM — Deals, Leads, Contacts
+
+#### `read:deals` / `write:deals`
+**Grants**: List, view, create, update, and delete deals; list/create deal activities; move pipeline stage; forecast  
+**Endpoints**:
+- `GET/POST /api/v1/deals`
+- `GET/PUT/PATCH/DELETE /api/v1/deals/{id}`
+- `GET/POST /api/v1/deals/{id}/activities`
+- `PUT/PATCH /api/v1/deals/{id}/stage`
+- `GET /api/v1/deals/forecast`
+- `GET /api/v1/deals/{id}/email-threads`
+
+#### `read:leads` / `write:leads`
+**Grants**: List, view, create, update, and delete leads; activities; convert to client/deal; source analytics  
+**Endpoints**:
+- `GET/POST /api/v1/leads`
+- `GET/PUT/PATCH/DELETE /api/v1/leads/{id}`
+- `GET/POST /api/v1/leads/{id}/activities`
+- `POST /api/v1/leads/{id}/convert-to-client`
+- `POST /api/v1/leads/{id}/convert-to-deal`
+- `GET /api/v1/leads/analytics/sources`
+- `GET /api/v1/leads/{id}/email-threads`
+
+#### `read:contacts` / `write:contacts`
+**Grants**: List, view, create, update, and soft-delete contacts; communication history  
+**Endpoints**:
+- `GET/POST /api/v1/clients/{client_id}/contacts`
+- `GET/PUT/PATCH/DELETE /api/v1/contacts/{id}`
+- `GET/POST /api/v1/contacts/{id}/communications`
+
 ### Quotes
 
 #### `read:quotes`
@@ -240,6 +275,11 @@ curl -X POST https://your-domain.com/api/v1/clients \
 **Endpoints** (non-exhaustive; see OpenAPI at `/api/docs` when enabled):
 - `GET /api/v1/invoices` — List invoices
 - `GET /api/v1/invoices/{id}` — Get invoice by id
+- `GET /api/v1/invoices/{id}/pdf` — PDF download
+- `GET /api/v1/invoices/{id}/ubl` — PEPPOL UBL XML
+- `GET /api/v1/invoices/{id}/xrechnung` — XRechnung XML
+- `GET /api/v1/invoices/{id}/fatturapa` — FatturaPA XML
+- `GET /api/v1/credit-notes` / `{id}` / `{id}/pdf` / `{id}/ubl` — Credit notes and downloads
 
 **Use Cases**:
 - Billing dashboards and exports
@@ -251,6 +291,9 @@ curl -X POST https://your-domain.com/api/v1/clients \
 - `POST /api/v1/invoices` — Create invoice (JSON body)
 - `PUT` / `PATCH /api/v1/invoices/{id}` — Update invoice
 - `DELETE /api/v1/invoices/{id}` — Cancel invoice
+- `POST /api/v1/invoices/{id}/send-email` — Email invoice (optional `recipient_email`, `subject`)
+- `POST /api/v1/invoices/{id}/send-peppol` / `send-sdi` — E-invoicing send
+- `POST` / `PATCH` / `DELETE /api/v1/credit-notes` — Credit note mutations
 - `POST /api/v1/clients/{client_id}/invoice-unbilled` — Create a **draft** invoice from all **unbilled** billable time for that client (line items grouped by project). Requires `write:invoices` when using an API token; the browser UI uses a logged-in session with **Create invoices** permission instead. Successful response JSON: `invoice_id`, `invoice_number`, `total`, `item_count`. Returns **400** when there is no unbilled time, or when any unbilled entry has no `project_id` (assign entries to a project first).
 
 **Use Cases**:
@@ -557,7 +600,7 @@ curl -X POST https://your-domain.com/api/v1/projects \
 ### "Insufficient permissions" Error
 
 **Cause**: Token lacks required scope  
-**Solution**: 
+**Solution**:
 1. Check error message for `required_scope`
 2. Create new token with needed scope
 3. Update integration to use new token
@@ -600,10 +643,20 @@ curl -X POST https://your-domain.com/api/v1/projects \
 | `read:users` | ✅ | ❌ | Partial | `/users/me` for all, `/users` admin only |
 | `admin:all` | ✅ | ✅ | ✅ | Full access |
 
+## Additional API coverage notes
+
+### Workflows & team chat
+- `GET /api/v1/workflows/templates` and `GET /api/v1/workflows/templates/{id}` — workflow template library (`read:projects`)
+- `GET /api/v1/workflows/executions` — workflow run history (`read:projects`)
+- `GET|POST /api/v1/team-chat/channels` — list/create channels (`read:projects` / `write:projects`)
+- `GET|POST /api/v1/team-chat/channels/{id}/messages` — list/post messages (`read:projects` / `write:projects`)
+
+### Kiosk (web-only)
+Time clock **kiosk** mode is intentionally **web-only**. There is no public API v1 surface for kiosk PIN/session flows; use the browser kiosk UI. Do not grant or expect dedicated `kiosk:*` API scopes.
+
 ## Need Help?
 
 - 📖 **API Documentation**: `docs/REST_API.md`
 - 🚀 **Quick Start**: `docs/REST_API_QUICKSTART.md`
 - 🔍 **Interactive Docs**: `/api/docs`
 - 📋 **Implementation Summary**: `REST_API_IMPLEMENTATION_SUMMARY.md`
-

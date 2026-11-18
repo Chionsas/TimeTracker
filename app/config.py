@@ -2,6 +2,20 @@ import os
 from datetime import timedelta
 
 
+def normalize_database_url(url: str | None) -> str | None:
+    """Rewrite bare postgresql:// to postgresql+psycopg2:// for SQLAlchemy 2.1+.
+
+    SQLAlchemy 2.1 maps bare ``postgresql://`` to the psycopg (v3) dialect.
+    This project installs ``psycopg2-binary`` only, so force the psycopg2 dialect
+    while leaving ``postgresql+psycopg2://``, ``sqlite://``, etc. unchanged.
+    """
+    if not url:
+        return url
+    if url.startswith("postgresql://"):
+        return "postgresql+psycopg2://" + url[len("postgresql://") :]
+    return url
+
+
 class Config:
     """Base configuration class"""
 
@@ -18,8 +32,8 @@ class Config:
     _secure_cookie_default = "false" if _is_dev_like else "true"
 
     # Database settings (default to PostgreSQL)
-    SQLALCHEMY_DATABASE_URI = os.getenv(
-        "DATABASE_URL", "postgresql+psycopg2://timetracker:timetracker@localhost:5432/timetracker"
+    SQLALCHEMY_DATABASE_URI = normalize_database_url(
+        os.getenv("DATABASE_URL", "postgresql+psycopg2://timetracker:timetracker@localhost:5432/timetracker")
     )
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_ENGINE_OPTIONS = {
@@ -84,15 +98,16 @@ class Config:
     API_TOKEN_RATE_LIMIT_PER_MINUTE = int(os.getenv("API_TOKEN_RATE_LIMIT_PER_MINUTE", "100"))
     API_TOKEN_RATE_LIMIT_PER_HOUR = int(os.getenv("API_TOKEN_RATE_LIMIT_PER_HOUR", "1000"))
 
-    # Authentication method: 'none' | 'local' | 'oidc' | 'ldap' | 'both' | 'all'
+    # Authentication method: 'none' | 'local' | 'oidc' | 'ldap' | 'saml' | 'both' | 'all'
     # 'none' = no password authentication (username only)
     # 'local' = password authentication required
     # 'oidc' = OIDC/Single Sign-On only
     # 'ldap' = LDAP bind only
+    # 'saml' = SAML 2.0 SSO only
     # 'both' = OIDC + local password (backwards compatible)
-    # 'all' = local + OIDC + LDAP
+    # 'all' = local + OIDC + LDAP + SAML
     _auth_method_raw = os.getenv("AUTH_METHOD", "local").strip().lower()
-    _auth_method_valid = frozenset({"none", "local", "oidc", "ldap", "both", "all"})
+    _auth_method_valid = frozenset({"none", "local", "oidc", "ldap", "saml", "both", "all"})
     AUTH_METHOD = _auth_method_raw if _auth_method_raw in _auth_method_valid else "local"
 
     # LDAP settings (used when AUTH_METHOD is 'ldap' or 'all')
@@ -226,7 +241,7 @@ class Config:
     DONATE_HIDE_UNLOCK_SECRET = _donate_secret
 
     # Support & Purchase Key page URL (for links to purchase a key to hide donate UI)
-    SUPPORT_PURCHASE_URL = os.getenv("SUPPORT_PURCHASE_URL", "https://timetracker.drytrix.com/support.html").strip()
+    SUPPORT_PURCHASE_URL = os.getenv("SUPPORT_PURCHASE_URL", "https://timetracker.drytrix.com/support").strip()
     SUPPORT_PORTAL_BASE = os.getenv("SUPPORT_PORTAL_BASE", "https://timetracker.drytrix.com").strip()
     # Optional one-line social proof for support modal (empty = omit block)
     SUPPORT_SOCIAL_PROOF_TEXT = os.getenv("SUPPORT_SOCIAL_PROOF_TEXT", "").strip()
@@ -296,6 +311,16 @@ class Config:
     # When set, scrapers must send X-Metrics-Token header or ?token= query param.
     # Production should set METRICS_TOKEN; when unset the endpoint stays open but a startup warning is logged.
     METRICS_TOKEN = (os.getenv("METRICS_TOKEN") or "").strip()
+
+    # Allow CalDAV / ActivityWatch integrations to target private/LAN hosts.
+    # Cloud metadata hostnames remain blocked. Set false to require public URLs only.
+    INTEGRATIONS_ALLOW_PRIVATE_URLS = os.getenv("INTEGRATIONS_ALLOW_PRIVATE_URLS", "true").lower() == "true"
+
+    # Comma-separated browser origins allowed for /api/v1 CORS and Socket.IO.
+    # Empty = derive from APP_BASE_URL / SERVER_NAME only (no wildcard reflection).
+    CORS_ALLOWED_ORIGINS = [
+        o.strip().rstrip("/") for o in os.getenv("CORS_ALLOWED_ORIGINS", "").split(",") if o.strip()
+    ]
 
     # Redis configuration
     REDIS_ENABLED = os.getenv("REDIS_ENABLED", "true").lower() == "true"
@@ -372,9 +397,24 @@ class Config:
         "You are TimeTracker's AI helper. Be concise, explain assumptions, and return suggested actions only when the user asks for changes.",
     ).strip()
 
-    # SCIM 2.0 user provisioning (stub routes; see docs/design/SAML_SCIM.md)
+    # SCIM 2.0 user provisioning (see docs/design/SAML_SCIM.md)
     SCIM_ENABLED = os.getenv("SCIM_ENABLED", "false").lower() == "true"
     SCIM_BEARER_TOKEN = os.getenv("SCIM_BEARER_TOKEN", "").strip()
+
+    # SAML 2.0 SSO (see docs/design/SAML_SCIM.md)
+    SAML_ENABLED = os.getenv("SAML_ENABLED", "false").lower() == "true" or AUTH_METHOD in ("saml", "all")
+    SAML_SP_ENTITY_ID = os.getenv("SAML_SP_ENTITY_ID", "").strip()
+    SAML_SP_ACS_URL = os.getenv("SAML_SP_ACS_URL", "").strip()
+    SAML_SP_X509_CERT = os.getenv("SAML_SP_X509_CERT", "").strip()
+    SAML_SP_PRIVATE_KEY = os.getenv("SAML_SP_PRIVATE_KEY", "").strip()
+    SAML_IDP_ENTITY_ID = os.getenv("SAML_IDP_ENTITY_ID", "").strip()
+    SAML_IDP_SSO_URL = os.getenv("SAML_IDP_SSO_URL", "").strip()
+    SAML_IDP_X509_CERT = os.getenv("SAML_IDP_X509_CERT", "").strip()
+    SAML_IDP_METADATA_URL = os.getenv("SAML_IDP_METADATA_URL", "").strip()
+    SAML_WANT_ASSERTIONS_SIGNED = os.getenv("SAML_WANT_ASSERTIONS_SIGNED", "true").lower() == "true"
+    SAML_CLOCK_SKEW_SECONDS = int(os.getenv("SAML_CLOCK_SKEW_SECONDS", "120"))
+    SAML_ADMIN_GROUP = os.getenv("SAML_ADMIN_GROUP", "").strip() or None
+    SAML_ADMIN_EMAILS = [e.strip().lower() for e in os.getenv("SAML_ADMIN_EMAILS", "").split(",") if e.strip()]
 
     # Password reset
     PASSWORD_RESET_TOKEN_MAX_AGE_SECONDS = max(300, int(os.getenv("PASSWORD_RESET_TOKEN_MAX_AGE_SECONDS", "3600")))
@@ -387,8 +427,8 @@ class DevelopmentConfig(Config):
     """Development configuration"""
 
     FLASK_DEBUG = True
-    SQLALCHEMY_DATABASE_URI = os.getenv(
-        "DATABASE_URL", "postgresql+psycopg2://timetracker:timetracker@localhost:5432/timetracker"
+    SQLALCHEMY_DATABASE_URI = normalize_database_url(
+        os.getenv("DATABASE_URL", "postgresql+psycopg2://timetracker:timetracker@localhost:5432/timetracker")
     )
     # CSRF can be overridden via env var, defaults to False for dev convenience
     WTF_CSRF_ENABLED = os.getenv("WTF_CSRF_ENABLED", "false").lower() == "true"
@@ -402,7 +442,7 @@ class TestingConfig(Config):
     TESTING = True
     # Allow DATABASE_URL override for CI/CD PostgreSQL testing
     # Default to in-memory SQLite for local unit tests
-    SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL", "sqlite:///:memory:")
+    SQLALCHEMY_DATABASE_URI = normalize_database_url(os.getenv("DATABASE_URL", "sqlite:///:memory:"))
     WTF_CSRF_ENABLED = False
     SECRET_KEY = "test-secret-key"
     WTF_CSRF_SSL_STRICT = False
@@ -410,7 +450,7 @@ class TestingConfig(Config):
     def __init__(self):
         # Ensure SQLALCHEMY_DATABASE_URI reflects the current environment at instantiation time,
         # not only at module import time. This keeps parity with tests that mutate env vars.
-        self.SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL", "sqlite:///:memory:")
+        self.SQLALCHEMY_DATABASE_URI = normalize_database_url(os.getenv("DATABASE_URL", "sqlite:///:memory:"))
 
 
 class ProductionConfig(Config):

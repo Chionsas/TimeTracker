@@ -68,7 +68,7 @@
         .button {
             display: inline-block;
             padding: 12px 24px;
-            background-color: #3b82f6;
+            background-color: #4F46E5;
             color: white;
             text-decoration: none;
             border-radius: 5px;
@@ -89,20 +89,20 @@
         <h1>📊 {{ _('Your Weekly Summary') }}</h1>
         <p>{{ _('%(start)s to %(end)s', start=start_date, end=end_date) }}</p>
     </div>
-    
+
     <div class="content">
         <p>{{ _('Hello %(name)s,', name=user.display_name) }}</p>
-        
+
         <p>{{ _("Here's your time tracking summary for the past week:") }}</p>
-        
+
         <div class="summary-box">
             <p>{{ _('Total Hours Worked') }}</p>
             <h2>{{ "%.1f"|format(hours_worked) }}</h2>
             <p>{{ _('hours') }}</p>
         </div>
-        
+
         <h3 style="margin-top: 30px;">{{ _('Hours by Project') }}</h3>
-        
+
         <div class="projects-table">
             <table>
                 <thead>
@@ -121,9 +121,9 @@
                 </tbody>
             </table>
         </div>
-        
+
         <p style="margin-top: 20px;">{{ _('Keep up the great work!') }} 🎉</p>
-        
+
         {% if reports_url %}
         <center>
             <a href="{{ reports_url }}" class="button">
@@ -132,11 +132,10 @@
         </center>
         {% endif %}
     </div>
-    
+
     <div class="footer">
         <p>{{ _('TimeTracker - Time Tracking & Project Management') }}</p>
         <p>{{ _('To manage your notification preferences, visit your user settings.') }}</p>
     </div>
 </body>
 </html>
-

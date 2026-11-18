@@ -150,6 +150,7 @@ def _edit_timer_form_projects_tasks(timer, can_edit_schedule):
 
 
 def _edit_timer_render_kwargs(timer, can_edit_schedule, show_source_dropdown):
+    from app.services.custom_field_service import CustomFieldService
     from app.utils.scope_filter import get_active_clients_for_user
 
     projects, tasks = _edit_timer_form_projects_tasks(timer, can_edit_schedule)
@@ -163,6 +164,7 @@ def _edit_timer_render_kwargs(timer, can_edit_schedule, show_source_dropdown):
         "show_source_dropdown": show_source_dropdown,
         "can_create_clients": current_user.is_admin or current_user.has_permission("create_clients"),
         "can_create_projects": current_user.is_admin or current_user.has_permission("create_projects"),
+        "custom_field_definitions": CustomFieldService().get_definitions("time_entry"),
     }
 
 
@@ -905,11 +907,7 @@ def set_timer_start():
         flash(_("No active timer to adjust"), "error")
         return redirect(url_for("main.dashboard"))
 
-    raw = (
-        request.form.get("start_time")
-        or (request.get_json(silent=True) or {}).get("start_time")
-        or ""
-    )
+    raw = request.form.get("start_time") or (request.get_json(silent=True) or {}).get("start_time") or ""
     from app.models.time_entry import local_now
 
     now_local = local_now()
@@ -1249,6 +1247,21 @@ def edit_timer(timer_id):
             else:
                 update_params["break_seconds"] = 0
 
+        from types import SimpleNamespace
+
+        from app.services.custom_field_service import CustomFieldService
+
+        cf_service = CustomFieldService()
+        custom_fields_holder = SimpleNamespace(custom_fields={})
+        missing_label = cf_service.apply_from_form(custom_fields_holder, "time_entry", request.form)
+        if missing_label:
+            flash(_("Custom field '%(field)s' is required", field=missing_label), "error")
+            return render_template(
+                "timer/edit_timer.html",
+                **_edit_timer_render_kwargs(timer, can_edit_schedule, show_source_dropdown),
+            )
+        update_params["custom_fields"] = custom_fields_holder.custom_fields
+
         # Call service layer to update
         result = service.update_entry(**update_params)
 
@@ -1581,6 +1594,10 @@ def manual_entry():
     users = _active_users_for_admin()
     selected_user_id = current_user.id
 
+    from app.services.custom_field_service import CustomFieldService
+
+    time_entry_custom_defs = CustomFieldService().get_definitions("time_entry")
+
     def _manual_ctx(**extra):
         ctx = {
             "projects": active_projects,
@@ -1595,6 +1612,7 @@ def manual_entry():
             "template_data": template_data,
             "can_create_clients": current_user.is_admin or current_user.has_permission("create_clients"),
             "can_create_projects": current_user.is_admin or current_user.has_permission("create_projects"),
+            "custom_field_definitions": time_entry_custom_defs,
         }
         ctx.update(extra)
         return ctx
@@ -1760,6 +1778,17 @@ def manual_entry():
 
         # Use service to create entry (handles validation)
         time_tracking_service = TimeTrackingService()
+        from types import SimpleNamespace
+
+        from app.services.custom_field_service import CustomFieldService
+
+        cf_service = CustomFieldService()
+        custom_fields_holder = SimpleNamespace(custom_fields={})
+        missing_label = cf_service.apply_from_form(custom_fields_holder, "time_entry", request.form)
+        if missing_label:
+            flash(_("Custom field '%(field)s' is required", field=missing_label), "error")
+            return render_template("timer/manual_entry.html", **_manual_ctx(**prefill_kwargs))
+
         result = time_tracking_service.create_manual_entry(
             user_id=target_user_id,
             project_id=project_id,
@@ -1772,6 +1801,7 @@ def manual_entry():
             notes=notes if notes else None,
             tags=tags if tags else None,
             billable=billable,
+            custom_fields=custom_fields_holder.custom_fields or None,
         )
 
         if not result.get("success"):
@@ -2057,8 +2087,8 @@ def bulk_entry():
             # Check for overlapping entries
             overlapping = TimeEntry.query.filter(
                 TimeEntry.user_id == target_user_id,
-                TimeEntry.start_time <= end_datetime,
-                TimeEntry.end_time >= start_datetime,
+                TimeEntry.start_time < end_datetime,
+                TimeEntry.end_time > start_datetime,
                 TimeEntry.end_time.isnot(None),
             ).first()
 
@@ -2867,9 +2897,7 @@ def time_entries_overview():
             ).all()
             entry_ids_with_pending_approval = {a.time_entry_id for a in pending}
         except Exception:
-            current_app.logger.warning(
-                "Failed to load pending time-entry approvals for list view", exc_info=True
-            )
+            current_app.logger.warning("Failed to load pending time-entry approvals for list view", exc_info=True)
             try:
                 db.session.rollback()
             except Exception:

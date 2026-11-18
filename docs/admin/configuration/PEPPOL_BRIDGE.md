@@ -60,6 +60,41 @@ Environment variables:
 
 Peppyrus authenticates API requests with the `X-Api-Key` header (not `Authorization: Bearer`).
 
+### Let’s Peppol (Belgium, hosted)
+
+Environment variables:
+
+- `PEPPOL_BRIDGE_PROVIDER=letspeppol`
+- `LETSPEPPOL_BASE_URL=https://be.letspeppol.org` (optional)
+- `LETSPEPPOL_CLIENT_ID=...` (OAuth2 client credentials with `service` scope)
+- `LETSPEPPOL_CLIENT_SECRET=...`
+- `LETSPEPPOL_PEPPOL_ID=...` (your company Peppol ID, e.g. `0208:0123456789`)
+- `LETSPEPPOL_TOKEN_URL=...` (optional override; default `{LETSPEPPOL_BASE_URL}/kyc/auth/oauth2/token`)
+
+Complete KYC registration at [be.letspeppol.org](https://be.letspeppol.org) first (Belgian companies). The bridge:
+
+- `POST /test` fetches an OAuth token and reads `/proxy/sapi/registry`
+- `POST /send` creates an outbound document (`POST /proxy/sapi/document`) then queues it (`PUT …/reschedule`)
+- `GET /message/<id>/status` polls `POST /proxy/sapi/document/status` and maps `processedStatus` to bridge folders (`outbox` / `sent` / `failed`)
+- `GET /inbox` and `POST /inbox/ack` poll and acknowledge inbound documents for TimeTracker’s Peppol Inbox
+
+### getpeppr
+
+Environment variables:
+
+- `PEPPOL_BRIDGE_PROVIDER=getpeppr`
+- `GETPEPPR_API_KEY=...` (`sk_sandbox_…` sends on the Peppol test network, `sk_live_…` in production; the key decides the environment)
+- `GETPEPPR_BASE_URL=https://api.getpeppr.dev/v1` (optional)
+
+getpeppr authenticates with `Authorization: Bearer <key>`. Create an account and a sandbox key at [console.getpeppr.dev](https://console.getpeppr.dev).
+
+How the bridge uses it:
+
+- `POST /test` calls `GET /v1/identity` (read-only) and returns the key's environment and its Peppol identity, so you can check which company and network you are about to send from.
+- `POST /send` calls `POST /v1/invoices/import` with the UBL exactly as TimeTracker generated it and the recipient's `scheme:id` as routing. getpeppr takes the sender from the API key's company and refuses a UBL whose supplier is another company; the document type comes from the UBL. The sender and document/process identifiers in TimeTracker's contract are therefore not forwarded.
+- Every send carries an `Idempotency-Key` built from the invoice's UBL, its recipient and the UTC date. Embedded attachments (the invoice PDF) are left out of the key, because TimeTracker regenerates the PDF on every attempt and sends without it when generation fails or embedding is turned off. Sending the same invoice again the same day never delivers a second copy: getpeppr returns the original document when the request is byte-identical, and otherwise refuses it (`422 idempotency_key_reuse`), which TimeTracker shows as a failed send even though the first attempt went out. Check the document in the getpeppr console before sending it again. A corrected invoice is a new key. getpeppr also refuses the same invoice number to the same recipient within 15 minutes (`409 duplicate_document`). A resend on a later UTC day goes out, and getpeppr flags it with `duplicateOf`.
+- `GET /message/<id>/status` reads `GET /v1/invoices/<id>` and maps getpeppr's status to the bridge folder: `submitted` → `outbox`; `delivered` and the buyer's responses (`acknowledged`, `in_process`, `under_query`, `conditionally_accepted`, `accepted`, `rejected`, `paid`, `partially_paid`) → `sent`; `failed` → `failed`; `no_action` (recipient not found on the network) → `failed`; `cleared` and any other status → no folder (still pending). A failed folder carries a `fatal_rules` entry (`getpeppr:failed` or `getpeppr:no_recipient`). getpeppr's own status is returned beside it in `status`. A buyer's `rejected` is a business answer after delivery, not a failed transmission, so it reads `sent` with `status: "rejected"`.
+
 ### generic_custom (passthrough)
 
 Environment variables:
@@ -75,8 +110,10 @@ The bridge exposes:
 - `GET /health`
 - `POST /test` (validates provider credentials)
 - `POST /send` (TimeTracker adapter contract)
+- `GET /message/<id>/status` (AP-side delivery status)
+- `GET /inbox` (inbound documents; provider must support inbox)
+- `POST /inbox/ack` (acknowledge downloaded inbound ids)
 
-If `PEPPOL_BRIDGE_AUTH_TOKEN` is set, `/test` and `/send` require:
+If `PEPPOL_BRIDGE_AUTH_TOKEN` is set, `/test`, `/send`, `/message/.../status`, `/inbox`, and `/inbox/ack` require:
 
 - `Authorization: Bearer <token>`
-

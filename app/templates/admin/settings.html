@@ -36,6 +36,7 @@
         <a href="#section-invoices" class="px-3 py-1.5 text-xs font-medium rounded-full bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark whitespace-nowrap">{{ _('Invoices') }}</a>
         <a href="#section-quotes" class="px-3 py-1.5 text-xs font-medium rounded-full bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark whitespace-nowrap">{{ _('Quotes') }}</a>
         <a href="#section-peppol" class="px-3 py-1.5 text-xs font-medium rounded-full bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark whitespace-nowrap">Peppol</a>
+        <a href="#section-sdi" class="px-3 py-1.5 text-xs font-medium rounded-full bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark whitespace-nowrap">SDI / FatturaPA</a>
         <a href="#section-backup" class="px-3 py-1.5 text-xs font-medium rounded-full bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark whitespace-nowrap">{{ _('Backup') }}</a>
         <a href="#section-ldap" class="px-3 py-1.5 text-xs font-medium rounded-full bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark whitespace-nowrap">{{ _('LDAP') }}</a>
         <a href="#section-kiosk" class="px-3 py-1.5 text-xs font-medium rounded-full bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark whitespace-nowrap">{{ _('Kiosk') }}</a>
@@ -48,7 +49,7 @@
 <div class="bg-card-light dark:bg-card-dark p-6 rounded-xl border border-border-light dark:border-border-dark shadow-sm mb-6">
     <form method="POST">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-        
+
         <div class="space-y-8">
             <!-- General Settings -->
             <div id="section-general" class="border-b border-border-light dark:border-border-dark pb-6">
@@ -306,16 +307,16 @@
             <div class="border-b border-border-light dark:border-border-dark pb-6" id="donateVisibilitySection">
                 <h2 class="text-lg font-semibold mb-4"><i class="fas fa-eye-slash mr-2"></i>{{ _('Support visibility') }}</h2>
                 <p class="text-sm text-text-muted-light dark:text-text-muted-dark mb-4">
-                    {{ _('Remove donate and support prompts for all users with a one-time key (€25, one key per instance).') }}
+                    {{ _('Become a Supporter with a one-time €25 key (one per instance): fund development, show the badge, use client PDFs without the TimeTracker footer, and minimize prompts for everyone.') }}
                 </p>
                 <ol class="list-decimal list-inside space-y-2 mb-4 text-sm text-text-light dark:text-text-dark">
-                    <li>{{ _('Copy your System ID below and use it when buying the key.') }}</li>
-                    <li><a href="{{ support_purchase_url }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-blue-600 dark:text-blue-400 hover:underline">{{ _('Buy key') }} <i class="fas fa-external-link-alt text-xs"></i></a> {{ _('— key sent by email.') }}</li>
+                    <li>{{ _('Copy your System ID below (checkout prefills it automatically).') }}</li>
+                    <li><a href="{{ support_purchase_url }}" target="_blank" rel="noopener noreferrer" data-license-checkout onclick="typeof trackDonationClick === 'function' && trackDonationClick('admin_settings_key')" class="inline-flex items-center gap-1 text-blue-600 dark:text-blue-400 hover:underline">{{ _('Buy Supporter key') }} <i class="fas fa-external-link-alt text-xs"></i></a> {{ _('— key sent by email.') }}</li>
                     <li>{{ _('Paste the code below and click Verify.') }}</li>
                 </ol>
                 <p class="mb-4">
-                    <a href="{{ support_purchase_url }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md transition">
-                        <i class="fas fa-key mr-1"></i>{{ _('Get key') }}
+                    <a href="{{ support_purchase_url }}" target="_blank" rel="noopener noreferrer" data-license-checkout onclick="typeof trackDonationClick === 'function' && trackDonationClick('admin_settings_key')" class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md transition">
+                        <i class="fas fa-star mr-1"></i>{{ _('Open checkout with this ID (€25)') }}
                         <i class="fas fa-external-link-alt text-xs"></i>
                     </a>
                 </p>
@@ -395,6 +396,27 @@
                     <div>
                         <label for="company_tax_id" class="form-label">{{ _('Tax ID (optional)') }}</label>
                         <input type="text" name="company_tax_id" id="company_tax_id" value="{{ settings.company_tax_id }}" class="form-input">
+                        <p class="mt-1 text-xs text-text-muted-light dark:text-text-muted-dark">{{ _('Italian sellers: Partita IVA, e.g. IT01234567890.') }}</p>
+                    </div>
+                    <div>
+                        <label for="company_codice_fiscale" class="form-label">{{ _('Codice Fiscale (IT)') }}</label>
+                        <input type="text" name="company_codice_fiscale" id="company_codice_fiscale" value="{{ getattr(settings, 'company_codice_fiscale', '') or '' }}" class="form-input" maxlength="16">
+                    </div>
+                    <div>
+                        <label for="company_regime_fiscale" class="form-label">{{ _('Regime Fiscale (FatturaPA)') }}</label>
+                        <select name="company_regime_fiscale" id="company_regime_fiscale" class="form-input">
+                            {% set rf = getattr(settings, 'company_regime_fiscale', 'RF01') or 'RF01' %}
+                            <option value="RF01" {% if rf == 'RF01' %}selected{% endif %}>RF01 — Ordinario</option>
+                            <option value="RF02" {% if rf == 'RF02' %}selected{% endif %}>RF02 — Contribuenti minimi</option>
+                            <option value="RF04" {% if rf == 'RF04' %}selected{% endif %}>RF04 — Agricoltura</option>
+                            <option value="RF05" {% if rf == 'RF05' %}selected{% endif %}>RF05 — Pesca</option>
+                            <option value="RF15" {% if rf == 'RF15' %}selected{% endif %}>RF15 — Regime forfettario</option>
+                            <option value="RF19" {% if rf == 'RF19' %}selected{% endif %}>RF19 — Forfettario (L. 190/2014)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="company_provincia" class="form-label">{{ _('Provincia (IT)') }}</label>
+                        <input type="text" name="company_provincia" id="company_provincia" value="{{ getattr(settings, 'company_provincia', '') or '' }}" class="form-input" maxlength="2" placeholder="MI">
                     </div>
                     <div>
                         <label for="company_iban" class="form-label">{{ _('IBAN') }}</label>
@@ -626,6 +648,44 @@
                 </div>
             </div>
 
+            <!-- SDI / FatturaPA -->
+            <div id="section-sdi" class="border-b border-border-light dark:border-border-dark pb-6">
+                <h2 class="text-lg font-semibold mb-4">{{ _('SDI / FatturaPA (Italy)') }}</h2>
+                <p class="text-sm text-text-muted-light dark:text-text-muted-dark mb-4">
+                    {{ _('Generate FatturaPA XML and send invoices to the Italian Sistema di Interscambio through your accredited intermediary. See docs/admin/configuration/FATTURAPA_SDI.md for the HTTP adapter contract.') }}
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="md:col-span-2 flex items-start">
+                        <input type="checkbox" name="sdi_enabled" id="sdi_enabled" {% if getattr(settings, 'sdi_enabled', false) %}checked{% endif %} class="h-4 w-4 rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 mt-1">
+                        <div class="ml-2">
+                            <label for="sdi_enabled" class="form-label">{{ _('Enable SDI sending') }}</label>
+                            <p class="mt-1 text-xs text-text-muted-light dark:text-text-muted-dark">
+                                {{ _('When enabled, invoices can be sent via SDI using your configured intermediary URL.') }}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="md:col-span-2">
+                        <label for="sdi_transport_url" class="form-label">{{ _('SDI intermediary URL') }}</label>
+                        <input type="text" name="sdi_transport_url" id="sdi_transport_url" value="{{ getattr(settings, 'sdi_transport_url', '') or '' }}" class="form-input" placeholder="https://your-sdi-adapter.example.com/send">
+                    </div>
+                    <div>
+                        <label for="sdi_transport_token" class="form-label">{{ _('SDI intermediary token (optional)') }}</label>
+                        <input type="password" name="sdi_transport_token" id="sdi_transport_token" value="" class="form-input" placeholder="{% if getattr(settings, 'sdi_transport_token', '') %}{{ _('Token is set (enter to replace)') }}{% else %}{{ _('Enter token (optional)') }}{% endif %}">
+                        <p class="mt-1 text-xs text-text-muted-light dark:text-text-muted-dark">
+                            {{ _('For security, the token is not shown. Leave blank to keep the current token.') }}
+                        </p>
+                    </div>
+                    <div>
+                        <label for="sdi_timeout" class="form-label">{{ _('SDI timeout (seconds)') }}</label>
+                        <input type="number" name="sdi_timeout" id="sdi_timeout" value="{{ getattr(settings, 'sdi_timeout', 30) or 30 }}" class="form-input" min="1" max="300">
+                    </div>
+                    <div>
+                        <label for="sdi_transmitter_id" class="form-label">{{ _('IdTrasmittente (optional)') }}</label>
+                        <input type="text" name="sdi_transmitter_id" id="sdi_transmitter_id" value="{{ getattr(settings, 'sdi_transmitter_id', '') or '' }}" class="form-input" maxlength="16" placeholder="{{ _('Defaults to company Codice Fiscale / VAT') }}">
+                    </div>
+                </div>
+            </div>
+
             <!-- Backup Settings -->
             <div id="section-backup" class="border-b border-border-light dark:border-border-dark pb-6">
                 <h2 class="text-lg font-semibold mb-4">{{ _('Backup Settings') }}</h2>
@@ -779,6 +839,9 @@
                             <option value="orcarouter" {% if ai_config.provider == 'orcarouter' %}selected{% endif %}>OrcaRouter</option>
                             <option value="openai_compatible" {% if ai_config.provider == 'openai_compatible' %}selected{% endif %}>{{ _('Custom OpenAI-compatible') }}</option>
                         </select>
+                        <p id="ai_orcarouter_signup_wrap" class="mt-1 text-xs text-text-muted-light dark:text-text-muted-dark {% if ai_config.provider != 'orcarouter' %}hidden{% endif %}">
+                            <a href="https://www.orcarouter.ai/ref/ref_984e584cb4cd86485a8c" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">{{ _('Get an OrcaRouter API key') }}</a>
+                        </p>
                     </div>
                     <div>
                         <label for="ai_base_url" class="form-label">{{ _('Base URL') }}</label>
@@ -882,7 +945,7 @@
 <!-- Company Logo Upload - Separate Section -->
 <div class="bg-card-light dark:bg-card-dark p-6 rounded-xl border border-border-light dark:border-border-dark shadow-sm">
     <h2 class="text-lg font-semibold mb-4">{{ _('Company Logo') }}</h2>
-    
+
     <!-- Current Logo Display -->
     {% if settings.has_logo() %}
     <div class="mb-6 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border-2 border-green-500 dark:border-green-600">
@@ -916,7 +979,7 @@
         </div>
     </div>
     {% endif %}
-    
+
     <!-- Upload Form -->
     <div class="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
         <h3 class="text-sm font-semibold text-blue-900 dark:text-blue-300 mb-3">{{ _('Upload New Logo') }}</h3>
@@ -928,7 +991,7 @@
                            class="block w-full text-sm text-gray-900 dark:text-gray-300 bg-card-light dark:bg-card-dark border border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500"
                            onchange="previewLogoBeforeUpload(this)">
                 </div>
-                
+
                 <!-- Preview of selected file before upload -->
                 <div id="logoPreview" class="hidden bg-white dark:bg-gray-900 p-4 rounded border border-gray-200 dark:border-gray-700">
                     <p class="text-xs text-gray-600 dark:text-gray-400 mb-2">{{ _('Preview:') }}</p>
@@ -936,7 +999,7 @@
                         <img id="logoPreviewImage" src="" alt="{{ _('Logo Preview') }}" class="max-h-24 max-w-full object-contain">
                     </div>
                 </div>
-                
+
                 <div class="flex items-center gap-3">
                     <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-colors">
                         <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -944,7 +1007,7 @@
                         </svg>
                         {{ _('Upload Logo') }}
                     </button>
-                    <button type="button" onclick="document.getElementById('logoFileInput').value = ''; document.getElementById('logoPreview').classList.add('hidden');" 
+                    <button type="button" onclick="document.getElementById('logoFileInput').value = ''; document.getElementById('logoPreview').classList.add('hidden');"
                             class="text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 px-4 py-2 text-sm">
                         {{ _('Clear') }}
                     </button>
@@ -965,15 +1028,15 @@
 function previewLogoBeforeUpload(input) {
     const preview = document.getElementById('logoPreview');
     const previewImage = document.getElementById('logoPreviewImage');
-    
+
     if (input.files && input.files[0]) {
         const reader = new FileReader();
-        
+
         reader.onload = function(e) {
             previewImage.src = e.target.result;
             preview.classList.remove('hidden');
         };
-        
+
         reader.readAsDataURL(input.files[0]);
     } else {
         preview.classList.add('hidden');
@@ -1177,6 +1240,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const aiModelInput = document.getElementById('ai_model');
     const aiModelList = document.getElementById('ai_model_suggestions');
     const aiRoutingWrap = document.getElementById('ai_routing_strategy_wrap');
+    const aiOrcaSignupWrap = document.getElementById('ai_orcarouter_signup_wrap');
     const aiPresets = {
         ollama: { base_url: 'http://127.0.0.1:11434', models: ['llama3.1', 'llama3.2', 'mistral', 'qwen2.5'], default_model: 'llama3.1' },
         openai: { base_url: 'https://api.openai.com', models: ['gpt-4o', 'gpt-4o-mini', 'gpt-4-turbo'], default_model: 'gpt-4o-mini' },
@@ -1190,6 +1254,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const preset = aiPresets[aiProviderSelect.value] || aiPresets.openai_compatible;
         if (aiRoutingWrap) {
             aiRoutingWrap.classList.toggle('hidden', aiProviderSelect.value !== 'orcarouter');
+        }
+        if (aiOrcaSignupWrap) {
+            aiOrcaSignupWrap.classList.toggle('hidden', aiProviderSelect.value !== 'orcarouter');
         }
         if (aiModelList) {
             aiModelList.innerHTML = '';

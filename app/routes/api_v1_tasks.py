@@ -94,12 +94,16 @@ def list_tasks():
 @require_api_token("read:tasks")
 def get_task(task_id):
     """Get a specific task."""
-    from sqlalchemy.orm import joinedload
+    from sqlalchemy.orm import joinedload, selectinload
 
-    from app.models import Task
+    from app.models import Task, TaskAssignee
 
     task = (
-        Task.query.options(joinedload(Task.project), joinedload(Task.assigned_user), joinedload(Task.creator))
+        Task.query.options(
+            joinedload(Task.project),
+            selectinload(Task.assignee_links).joinedload(TaskAssignee.user),
+            joinedload(Task.creator),
+        )
         .filter_by(id=task_id)
         .first_or_404()
     )
@@ -128,6 +132,7 @@ def create_task():
         created_by=g.api_user.id,
         description=data.get("description"),
         assignee_id=data.get("assignee_id"),
+        assignee_ids=data.get("assignee_ids"),
         priority=data.get("priority", "medium"),
         due_date=data.get("due_date"),
         estimated_hours=data.get("estimated_hours"),
@@ -155,7 +160,9 @@ def update_task(task_id):
         update_kwargs["status"] = data["status"]
     if "priority" in data:
         update_kwargs["priority"] = data["priority"]
-    if "assignee_id" in data:
+    if "assignee_ids" in data:
+        update_kwargs["assignee_ids"] = data["assignee_ids"]
+    elif "assignee_id" in data:
         update_kwargs["assignee_id"] = data["assignee_id"]
     if "due_date" in data:
         update_kwargs["due_date"] = data["due_date"]
@@ -164,9 +171,13 @@ def update_task(task_id):
     if "tags" in data:
         update_kwargs["tags"] = data["tags"]
 
+    if "custom_fields" in data:
+        update_kwargs["custom_fields"] = data["custom_fields"]
+
     result = task_service.update_task(task_id=task_id, user_id=g.api_user.id, **update_kwargs)
     if not result.get("success"):
-        return error_response(result.get("message", "Could not update task"), status_code=400)
+        status_code = 409 if result.get("code") == "WIP_LIMIT" or result.get("error") == "wip_limit" else 400
+        return error_response(result.get("message", "Could not update task"), status_code=status_code)
     return jsonify({"message": "Task updated successfully", "task": result["task"].to_dict()})
 
 

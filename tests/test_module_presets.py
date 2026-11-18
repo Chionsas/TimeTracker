@@ -6,8 +6,9 @@ presented all 41 of them at once. The setup wizard now offers a preset that writ
 Settings.disabled_module_ids so unused areas start switched off.
 """
 
-import pytest
 from unittest.mock import patch
+
+import pytest
 
 from app.models import Settings
 from app.utils.module_registry import ModuleCategory, ModulePreset, ModuleRegistry
@@ -48,7 +49,16 @@ class TestPresetMembership:
     def test_solo_preset_keeps_the_core_workflow(self):
         """Track time -> project/client -> invoice -> report must survive."""
         disabled = set(ModuleRegistry.get_disabled_ids_for_preset(ModulePreset.SOLO.value))
-        for essential in ("timer", "projects", "clients", "invoices", "reports", "tasks"):
+        for essential in (
+            "timer",
+            "projects",
+            "clients",
+            "invoices",
+            "reports",
+            "tasks",
+            "weekly_goals",
+            "time_entry_templates",
+        ):
             assert essential not in disabled, essential
 
 
@@ -87,9 +97,15 @@ class TestSetupWizardPreset:
                 assert f'value="{preset.value}"' in html
 
     def test_submitting_solo_preset_disables_modules(self, app, client, installation_config):
+        assert not installation_config.is_setup_complete()
         with patch("app.routes.setup.get_installation_config") as mock_config:
             mock_config.return_value = installation_config
-            client.post("/setup", data={"timezone": "UTC", "module_preset": ModulePreset.SOLO.value})
+            response = client.post(
+                "/setup",
+                data={"timezone": "UTC", "module_preset": ModulePreset.SOLO.value},
+                follow_redirects=False,
+            )
+            assert response.status_code in (302, 303)
 
         with app.app_context():
             settings = Settings.get_settings()
@@ -99,9 +115,11 @@ class TestSetupWizardPreset:
 
     def test_omitting_preset_keeps_everything_enabled(self, app, client, installation_config):
         """Backwards compatibility: an older form post must not disable modules."""
+        assert not installation_config.is_setup_complete()
         with patch("app.routes.setup.get_installation_config") as mock_config:
             mock_config.return_value = installation_config
-            client.post("/setup", data={"timezone": "UTC"})
+            response = client.post("/setup", data={"timezone": "UTC"}, follow_redirects=False)
+            assert response.status_code in (302, 303)
 
         with app.app_context():
             settings = Settings.get_settings()

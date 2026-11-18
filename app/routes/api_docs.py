@@ -239,8 +239,32 @@ Example: `2024-01-15T14:30:00Z`
                         "priority_class": {"type": "string", "description": "CSS class for priority styling"},
                         "estimated_hours": {"type": "number", "nullable": True},
                         "due_date": {"type": "string", "format": "date", "nullable": True},
-                        "assigned_to": {"type": "integer", "nullable": True, "description": "User ID of the assignee"},
-                        "assigned_user": {"type": "string", "nullable": True, "description": "Username of the assignee"},
+                        "assignee_ids": {
+                            "type": "array",
+                            "items": {"type": "integer"},
+                            "description": "User IDs of all assignees",
+                        },
+                        "assignees": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "id": {"type": "integer"},
+                                    "username": {"type": "string"},
+                                    "display_name": {"type": "string"},
+                                },
+                            },
+                        },
+                        "assigned_to": {
+                            "type": "integer",
+                            "nullable": True,
+                            "description": "Deprecated: first assignee user ID",
+                        },
+                        "assigned_user": {
+                            "type": "string",
+                            "nullable": True,
+                            "description": "Deprecated: first assignee username",
+                        },
                         "created_by": {"type": "integer", "description": "User ID of the creator"},
                         "creator": {"type": "string", "nullable": True, "description": "Username of the creator"},
                         "created_at": {"type": "string", "format": "date-time", "nullable": True},
@@ -249,7 +273,10 @@ Example: `2024-01-15T14:30:00Z`
                         "completed_at": {"type": "string", "format": "date-time", "nullable": True},
                         "total_hours": {"type": "number", "description": "Total hours tracked on this task"},
                         "total_billable_hours": {"type": "number", "description": "Total billable hours"},
-                        "progress_percentage": {"type": "number", "description": "Progress based on estimated vs actual hours"},
+                        "progress_percentage": {
+                            "type": "number",
+                            "description": "Progress based on estimated vs actual hours",
+                        },
                         "is_active": {"type": "boolean", "description": "True if task is not done or cancelled"},
                         "is_overdue": {"type": "boolean", "description": "True if past due date and not closed"},
                         "tags": {"type": "string", "nullable": True, "description": "Comma-separated tag string"},
@@ -672,7 +699,11 @@ Example: `2024-01-15T14:30:00Z`
                         {"name": "status", "in": "query", "schema": {"type": "string"}},
                         {"name": "tags", "in": "query", "schema": {"type": "string"}},
                         {"name": "page", "in": "query", "schema": {"type": "integer", "default": 1}},
-                        {"name": "per_page", "in": "query", "schema": {"type": "integer", "default": 50, "maximum": 100}},
+                        {
+                            "name": "per_page",
+                            "in": "query",
+                            "schema": {"type": "integer", "default": 50, "maximum": 100},
+                        },
                     ],
                     "responses": {"200": {"description": "List of tasks"}, "401": {"description": "Unauthorized"}},
                 },
@@ -691,8 +722,20 @@ Example: `2024-01-15T14:30:00Z`
                                         "name": {"type": "string"},
                                         "project_id": {"type": "integer"},
                                         "description": {"type": "string"},
-                                        "assignee_id": {"type": "integer"},
-                                        "priority": {"type": "string", "enum": ["low", "medium", "high", "urgent"], "default": "medium"},
+                                        "assignee_ids": {
+                                            "type": "array",
+                                            "items": {"type": "integer"},
+                                            "description": "User IDs to assign (replaces set)",
+                                        },
+                                        "assignee_id": {
+                                            "type": "integer",
+                                            "description": "Deprecated: single assignee (merged into assignee_ids)",
+                                        },
+                                        "priority": {
+                                            "type": "string",
+                                            "enum": ["low", "medium", "high", "urgent"],
+                                            "default": "medium",
+                                        },
                                         "due_date": {"type": "string", "format": "date"},
                                         "estimated_hours": {"type": "number"},
                                         "tags": {"type": "string"},
@@ -712,9 +755,7 @@ Example: `2024-01-15T14:30:00Z`
                     "tags": ["Tasks"],
                     "summary": "Get task",
                     "description": "Get details of a specific task",
-                    "parameters": [
-                        {"name": "task_id", "in": "path", "required": True, "schema": {"type": "integer"}}
-                    ],
+                    "parameters": [{"name": "task_id", "in": "path", "required": True, "schema": {"type": "integer"}}],
                     "responses": {
                         "200": {"description": "Task details"},
                         "404": {"description": "Task not found"},
@@ -724,9 +765,7 @@ Example: `2024-01-15T14:30:00Z`
                     "tags": ["Tasks"],
                     "summary": "Update task",
                     "description": "Update an existing task (full or partial update)",
-                    "parameters": [
-                        {"name": "task_id", "in": "path", "required": True, "schema": {"type": "integer"}}
-                    ],
+                    "parameters": [{"name": "task_id", "in": "path", "required": True, "schema": {"type": "integer"}}],
                     "requestBody": {
                         "required": True,
                         "content": {
@@ -736,9 +775,20 @@ Example: `2024-01-15T14:30:00Z`
                                     "properties": {
                                         "name": {"type": "string"},
                                         "description": {"type": "string"},
-                                        "status": {"type": "string", "enum": ["todo", "in_progress", "review", "done", "cancelled"]},
+                                        "status": {
+                                            "type": "string",
+                                            "enum": ["todo", "in_progress", "review", "done", "cancelled"],
+                                        },
                                         "priority": {"type": "string", "enum": ["low", "medium", "high", "urgent"]},
-                                        "assignee_id": {"type": "integer"},
+                                        "assignee_ids": {
+                                            "type": "array",
+                                            "items": {"type": "integer"},
+                                            "description": "User IDs to assign (replaces set)",
+                                        },
+                                        "assignee_id": {
+                                            "type": "integer",
+                                            "description": "Deprecated: single assignee (merged into assignee_ids)",
+                                        },
                                         "due_date": {"type": "string", "format": "date"},
                                         "estimated_hours": {"type": "number"},
                                         "tags": {"type": "string"},
@@ -757,9 +807,7 @@ Example: `2024-01-15T14:30:00Z`
                     "tags": ["Tasks"],
                     "summary": "Delete task",
                     "description": "Permanently delete a task",
-                    "parameters": [
-                        {"name": "task_id", "in": "path", "required": True, "schema": {"type": "integer"}}
-                    ],
+                    "parameters": [{"name": "task_id", "in": "path", "required": True, "schema": {"type": "integer"}}],
                     "responses": {
                         "200": {"description": "Task deleted"},
                         "404": {"description": "Task not found"},
@@ -773,7 +821,11 @@ Example: `2024-01-15T14:30:00Z`
                     "description": "Get a paginated list of clients",
                     "parameters": [
                         {"name": "page", "in": "query", "schema": {"type": "integer", "default": 1}},
-                        {"name": "per_page", "in": "query", "schema": {"type": "integer", "default": 50, "maximum": 100}},
+                        {
+                            "name": "per_page",
+                            "in": "query",
+                            "schema": {"type": "integer", "default": 50, "maximum": 100},
+                        },
                     ],
                     "responses": {"200": {"description": "List of clients"}, "401": {"description": "Unauthorized"}},
                 },
@@ -830,7 +882,10 @@ Example: `2024-01-15T14:30:00Z`
                     "parameters": [
                         {"name": "client_id", "in": "path", "required": True, "schema": {"type": "integer"}}
                     ],
-                    "responses": {"200": {"description": "List of contacts"}, "404": {"description": "Client not found"}},
+                    "responses": {
+                        "200": {"description": "List of contacts"},
+                        "404": {"description": "Client not found"},
+                    },
                 },
                 "post": {
                     "tags": ["Clients"],
@@ -879,7 +934,10 @@ Example: `2024-01-15T14:30:00Z`
                     "parameters": [
                         {"name": "contact_id", "in": "path", "required": True, "schema": {"type": "integer"}}
                     ],
-                    "responses": {"200": {"description": "Contact details"}, "404": {"description": "Contact not found"}},
+                    "responses": {
+                        "200": {"description": "Contact details"},
+                        "404": {"description": "Contact not found"},
+                    },
                 },
                 "put": {
                     "tags": ["Clients"],
@@ -888,8 +946,14 @@ Example: `2024-01-15T14:30:00Z`
                     "parameters": [
                         {"name": "contact_id", "in": "path", "required": True, "schema": {"type": "integer"}}
                     ],
-                    "requestBody": {"required": True, "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Contact"}}}},
-                    "responses": {"200": {"description": "Contact updated"}, "404": {"description": "Contact not found"}},
+                    "requestBody": {
+                        "required": True,
+                        "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Contact"}}},
+                    },
+                    "responses": {
+                        "200": {"description": "Contact updated"},
+                        "404": {"description": "Contact not found"},
+                    },
                 },
                 "delete": {
                     "tags": ["Clients"],
@@ -898,7 +962,10 @@ Example: `2024-01-15T14:30:00Z`
                     "parameters": [
                         {"name": "contact_id", "in": "path", "required": True, "schema": {"type": "integer"}}
                     ],
-                    "responses": {"200": {"description": "Contact deleted"}, "404": {"description": "Contact not found"}},
+                    "responses": {
+                        "200": {"description": "Contact deleted"},
+                        "404": {"description": "Contact not found"},
+                    },
                 },
             },
             "/clients/{client_id}/notes": {
@@ -909,7 +976,11 @@ Example: `2024-01-15T14:30:00Z`
                     "parameters": [
                         {"name": "client_id", "in": "path", "required": True, "schema": {"type": "integer"}},
                         {"name": "page", "in": "query", "schema": {"type": "integer", "default": 1}},
-                        {"name": "per_page", "in": "query", "schema": {"type": "integer", "default": 50, "maximum": 100}},
+                        {
+                            "name": "per_page",
+                            "in": "query",
+                            "schema": {"type": "integer", "default": 50, "maximum": 100},
+                        },
                     ],
                     "responses": {"200": {"description": "List of notes"}, "404": {"description": "Client not found"}},
                 },
@@ -917,12 +988,29 @@ Example: `2024-01-15T14:30:00Z`
                     "tags": ["Clients"],
                     "summary": "Create client note",
                     "description": "Create a new note for a client",
-                    "parameters": [{"name": "client_id", "in": "path", "required": True, "schema": {"type": "integer"}}],
+                    "parameters": [
+                        {"name": "client_id", "in": "path", "required": True, "schema": {"type": "integer"}}
+                    ],
                     "requestBody": {
                         "required": True,
-                        "content": {"application/json": {"schema": {"type": "object", "required": ["content"], "properties": {"content": {"type": "string"}, "is_important": {"type": "boolean", "default": False}}}}},
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "required": ["content"],
+                                    "properties": {
+                                        "content": {"type": "string"},
+                                        "is_important": {"type": "boolean", "default": False},
+                                    },
+                                }
+                            }
+                        },
                     },
-                    "responses": {"201": {"description": "Note created"}, "400": {"description": "content is required"}, "404": {"description": "Client not found"}},
+                    "responses": {
+                        "201": {"description": "Note created"},
+                        "400": {"description": "content is required"},
+                        "404": {"description": "Client not found"},
+                    },
                 },
             },
             "/client-notes/{note_id}": {
@@ -937,15 +1025,35 @@ Example: `2024-01-15T14:30:00Z`
                     "summary": "Update client note",
                     "description": "Update an existing client note (author or admin only)",
                     "parameters": [{"name": "note_id", "in": "path", "required": True, "schema": {"type": "integer"}}],
-                    "requestBody": {"required": True, "content": {"application/json": {"schema": {"type": "object", "required": ["content"], "properties": {"content": {"type": "string"}, "is_important": {"type": "boolean"}}}}}},
-                    "responses": {"200": {"description": "Note updated"}, "400": {"description": "content is required"}, "403": {"description": "Access denied"}, "404": {"description": "Note not found"}},
+                    "requestBody": {
+                        "required": True,
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "required": ["content"],
+                                    "properties": {"content": {"type": "string"}, "is_important": {"type": "boolean"}},
+                                }
+                            }
+                        },
+                    },
+                    "responses": {
+                        "200": {"description": "Note updated"},
+                        "400": {"description": "content is required"},
+                        "403": {"description": "Access denied"},
+                        "404": {"description": "Note not found"},
+                    },
                 },
                 "delete": {
                     "tags": ["Clients"],
                     "summary": "Delete client note",
                     "description": "Delete a client note (author or admin only)",
                     "parameters": [{"name": "note_id", "in": "path", "required": True, "schema": {"type": "integer"}}],
-                    "responses": {"200": {"description": "Note deleted"}, "403": {"description": "Access denied"}, "404": {"description": "Note not found"}},
+                    "responses": {
+                        "200": {"description": "Note deleted"},
+                        "403": {"description": "Access denied"},
+                        "404": {"description": "Note not found"},
+                    },
                 },
             },
             "/clients/{client_id}/invoice-unbilled": {
@@ -953,8 +1061,16 @@ Example: `2024-01-15T14:30:00Z`
                     "tags": ["Clients"],
                     "summary": "Create invoice from unbilled time",
                     "description": "Create a draft invoice from all unbilled billable time entries for this client (grouped by project)",
-                    "parameters": [{"name": "client_id", "in": "path", "required": True, "schema": {"type": "integer"}}],
-                    "responses": {"200": {"description": "Invoice created (returns invoice_id, invoice_number, total, item_count)"}, "400": {"description": "Cannot create invoice"}, "404": {"description": "Client not found"}},
+                    "parameters": [
+                        {"name": "client_id", "in": "path", "required": True, "schema": {"type": "integer"}}
+                    ],
+                    "responses": {
+                        "200": {
+                            "description": "Invoice created (returns invoice_id, invoice_number, total, item_count)"
+                        },
+                        "400": {"description": "Cannot create invoice"},
+                        "404": {"description": "Client not found"},
+                    },
                 },
             },
         },

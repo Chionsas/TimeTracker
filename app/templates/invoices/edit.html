@@ -12,6 +12,13 @@
 {% endset %}
 {{ page_header('fas fa-file-invoice', _('Edit Invoice') ~ ' ' ~ invoice.invoice_number, subtitle_text=_('Update invoice details, items, and terms'), actions_html=actions, breadcrumbs=[{'text': _('Invoices'), 'url': url_for('invoices.list_invoices')}, {'text': _('Edit Invoice')}]) }}
 
+{% if financial_locked %}
+<div class="mb-4 rounded-lg border border-amber-300 bg-amber-50 dark:bg-amber-900/20 dark:border-amber-700 px-4 py-3 text-sm text-amber-900 dark:text-amber-100">
+    <i class="fas fa-lock mr-2"></i>
+    {{ _('This invoice is no longer a draft. Only notes, terms and due date can be changed. Issue a credit note to correct amounts or line items.') }}
+</div>
+{% endif %}
+
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 pb-28 sm:pb-6">
     <div class="lg:col-span-2 min-w-0">
         <div class="bg-card-light dark:bg-card-dark p-4 sm:p-6 rounded-xl border border-border-light dark:border-border-dark shadow-sm">
@@ -20,11 +27,11 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 min-w-0">
                     <div class="min-w-0">
                         <label for="client_name" class="form-label">{{ _('Client Name') }} *</label>
-                        <input type="text" name="client_name" id="client_name" value="{{ invoice.client_name }}" required class="form-input text-base min-h-[44px]">
+                        <input type="text" name="client_name" id="client_name" value="{{ invoice.client_name }}" required class="form-input text-base min-h-[44px]" {% if financial_locked %}readonly{% endif %}>
                     </div>
                     <div class="min-w-0">
                         <label for="client_email" class="form-label">{{ _('Client Email') }}</label>
-                        <input type="email" name="client_email" id="client_email" value="{{ invoice.client_email }}" class="form-input text-base min-h-[44px]">
+                        <input type="email" name="client_email" id="client_email" value="{{ invoice.client_email }}" class="form-input text-base min-h-[44px]" {% if financial_locked %}readonly{% endif %}>
                     </div>
                     <div class="min-w-0">
                         <label for="due_date" class="form-label">{{ _('Due Date') }} *</label>
@@ -32,7 +39,15 @@
                     </div>
                     <div class="min-w-0">
                         <label for="tax_rate" class="form-label">{{ _('Tax Rate (%)') }}</label>
-                        <input type="number" name="tax_rate" id="tax_rate" value="{{ invoice.tax_rate }}" step="0.01" inputmode="decimal" class="form-input text-base min-h-[44px]">
+                        <input type="number" name="tax_rate" id="tax_rate" value="{{ invoice.tax_rate }}" step="0.01" inputmode="decimal" class="form-input text-base min-h-[44px]" {% if financial_locked %}readonly{% endif %}>
+                    </div>
+                    <div class="min-w-0">
+                        <label for="discount_percent" class="form-label">{{ _('Invoice Discount (%)') }}</label>
+                        <input type="number" name="discount_percent" id="discount_percent" value="{{ invoice.discount_percent or '' }}" step="0.01" min="0" max="100" inputmode="decimal" class="form-input text-base min-h-[44px]" placeholder="0" {% if financial_locked %}readonly{% endif %}>
+                    </div>
+                    <div class="min-w-0">
+                        <label for="discount_amount" class="form-label">{{ _('Invoice Discount (amount)') }}</label>
+                        <input type="number" name="discount_amount" id="discount_amount" value="{{ invoice.discount_amount or '' }}" step="0.01" min="0" inputmode="decimal" class="form-input text-base min-h-[44px]" placeholder="0.00" {% if financial_locked %}readonly{% endif %}>
                     </div>
                     <div class="md:col-span-2">
                         <label for="client_address" class="form-label">{{ _('Client Address') }}</label>
@@ -64,6 +79,14 @@
                         <label for="vat_exemption_reason" class="form-label">{{ _('VAT exemption reason') }}</label>
                         <input type="text" name="vat_exemption_reason" id="vat_exemption_reason" value="{{ invoice.vat_exemption_reason or '' }}" class="form-input">
                     </div>
+                    <div class="min-w-0">
+                        <label for="cig" class="form-label">{{ _('CIG (FatturaPA PA)') }}</label>
+                        <input type="text" name="cig" id="cig" value="{{ invoice.cig or '' }}" class="form-input" maxlength="15" placeholder="{{ _('Optional procurement code') }}">
+                    </div>
+                    <div class="min-w-0">
+                        <label for="cup" class="form-label">{{ _('CUP (FatturaPA PA)') }}</label>
+                        <input type="text" name="cup" id="cup" value="{{ invoice.cup or '' }}" class="form-input" maxlength="15" placeholder="{{ _('Optional project code') }}">
+                    </div>
                     <div class="md:col-span-2 min-w-0">
                         <label for="notes" class="form-label">{{ _('Notes') }}</label>
                         <textarea name="notes" id="notes" rows="3" class="form-input">{{ invoice.notes or '' }}</textarea>
@@ -88,7 +111,7 @@
                             <i class="fas fa-plus mr-2"></i>{{ _('Add Item') }}
                         </button>
                     </div>
-                    
+
                     <!-- Items header (desktop) -->
                     <div class="hidden md:grid md:grid-cols-12 gap-3 mb-2 px-3 text-xs font-semibold text-text-muted-light dark:text-text-muted-dark uppercase">
                         <div class="md:col-span-2">{{ _('Project / Stock Item') }}</div>
@@ -98,13 +121,15 @@
                         <div class="md:col-span-2">{{ _('Unit Price') }}</div>
                         <div class="md:col-span-1 text-center">{{ _('Action') }}</div>
                     </div>
-                    
+
                     <div id="invoice-items" class="space-y-2">
                         {% for item in invoice.items %}
-                        <div class="grid grid-cols-1 md:grid-cols-12 gap-3 p-4 md:p-3 rounded-xl md:rounded-lg bg-blue-50/50 dark:bg-blue-950/20 border border-blue-200/50 dark:border-blue-800/50 invoice-item-row min-w-0 hover:shadow-sm transition shadow-sm md:shadow-none" data-is-time-based="{{ 'true' if item.time_entry_ids else 'false' }}">
+                        <div class="rounded-xl md:rounded-lg bg-blue-50/50 dark:bg-blue-950/20 border border-blue-200/50 dark:border-blue-800/50 invoice-item-row min-w-0 hover:shadow-sm transition shadow-sm md:shadow-none" data-is-time-based="{{ 'true' if item.time_entry_ids else 'false' }}">
+                        <div class="grid grid-cols-1 md:grid-cols-12 gap-3 p-4 md:p-3">
                             <input type="hidden" name="item_stock_item_id[]" value="{{ item.stock_item_id if item.stock_item_id else '' }}">
                             <input type="hidden" name="item_warehouse_id[]" value="{{ item.warehouse_id if item.warehouse_id else '' }}">
                             <input type="hidden" name="item_time_entry_ids[]" value="{{ item.time_entry_ids or '' }}">
+                            <input type="hidden" name="item_position[]" value="{{ item.position or loop.index0 }}">
                             {% if item.time_entry_ids %}
                             {# Time-based item: show Project and Task #}
                             <div class="md:col-span-2 min-w-0 flex flex-col justify-center">
@@ -158,9 +183,44 @@
                                 </button>
                             </div>
                         </div>
+                        {# Per-line advanced: tax rate, discounts, reorder #}
+                        <div class="flex flex-wrap items-center gap-2 px-3 pb-2 text-xs">
+                            <span class="text-text-muted-light dark:text-text-muted-dark">{{ _('Line:') }}</span>
+                            <label class="flex items-center gap-1 text-text-muted-light dark:text-text-muted-dark">
+                                {{ _('Tax%') }}
+                                <input type="number" name="item_tax_rate[]" value="{{ item.tax_rate if item.tax_rate is not none else '' }}" step="0.01" min="0" max="100" class="form-input text-xs py-0.5 w-16" placeholder="{{ '%.2f'|format(invoice.tax_rate) }}" {% if financial_locked %}readonly{% endif %}>
+                            </label>
+                            <label class="flex items-center gap-1 text-text-muted-light dark:text-text-muted-dark">
+                                {{ _('Disc%') }}
+                                <input type="number" name="item_discount_percent[]" value="{{ item.discount_percent or '' }}" step="0.01" min="0" max="100" class="form-input text-xs py-0.5 w-16" placeholder="0" data-calc-trigger {% if financial_locked %}readonly{% endif %}>
+                            </label>
+                            <label class="flex items-center gap-1 text-text-muted-light dark:text-text-muted-dark">
+                                {{ _('Disc amt') }}
+                                <input type="number" name="item_discount_amount[]" value="{{ item.discount_amount or '' }}" step="0.01" min="0" class="form-input text-xs py-0.5 w-20" placeholder="0.00" data-calc-trigger {% if financial_locked %}readonly{% endif %}>
+                            </label>
+                            <label class="flex items-center gap-1 text-text-muted-light dark:text-text-muted-dark" title="{{ _('VAT category override') }}">
+                                {{ _('VAT') }}
+                                <select name="item_vat_category[]" class="form-input text-xs py-0.5" {% if financial_locked %}disabled{% endif %}>
+                                    <option value="">—</option>
+                                    {% set ivc = item.vat_category or '' %}
+                                    <option value="S" {% if ivc == 'S' %}selected{% endif %}>S</option>
+                                    <option value="Z" {% if ivc == 'Z' %}selected{% endif %}>Z</option>
+                                    <option value="E" {% if ivc == 'E' %}selected{% endif %}>E</option>
+                                    <option value="AE" {% if ivc == 'AE' %}selected{% endif %}>AE</option>
+                                    <option value="K" {% if ivc == 'K' %}selected{% endif %}>K</option>
+                                    <option value="G" {% if ivc == 'G' %}selected{% endif %}>G</option>
+                                    <option value="O" {% if ivc == 'O' %}selected{% endif %}>O</option>
+                                </select>
+                            </label>
+                            <span class="ml-auto flex gap-1">
+                                <button type="button" class="item-move-up text-text-muted-light hover:text-blue-600 px-1 py-0.5 rounded" title="{{ _('Move up') }}">▲</button>
+                                <button type="button" class="item-move-down text-text-muted-light hover:text-blue-600 px-1 py-0.5 rounded" title="{{ _('Move down') }}">▼</button>
+                            </span>
+                        </div>
+                        </div>{# /invoice-item-row outer #}
                         {% endfor %}
                     </div>
-                    
+
                     <div id="items-subtotal" class="mt-3 p-3 bg-blue-50/30 dark:bg-blue-950/10 rounded-lg border border-blue-200/30 dark:border-blue-800/30">
                         <div class="flex justify-between items-center text-sm font-medium">
                             <span class="text-text-muted-light dark:text-text-muted-dark">{{ _('Items Subtotal') }}:</span>
@@ -188,7 +248,7 @@
                         </button>
                         </div>
                     </div>
-                    
+
                     <!-- Expenses header (desktop) -->
                     <div class="hidden md:grid md:grid-cols-12 gap-3 mb-2 px-3 text-xs font-semibold text-text-muted-light dark:text-text-muted-dark uppercase">
                         <div class="md:col-span-3">{{ _('Title') }}</div>
@@ -198,7 +258,7 @@
                         <div class="md:col-span-1">{{ _('Date') }}</div>
                         <div class="md:col-span-1 text-center">{{ _('Action') }}</div>
                     </div>
-                    
+
                     <div id="invoice-expenses" class="space-y-2">
                         <input type="hidden" name="expenses_sync" value="1">
                         {% for expense in invoice.expenses.all() %}
@@ -238,7 +298,7 @@
                         </div>
                         {% endfor %}
                     </div>
-                    
+
                     <div id="expenses-subtotal" class="mt-3 p-3 bg-amber-50/30 dark:bg-amber-950/10 rounded-lg border border-amber-200/30 dark:border-amber-800/30">
                         <div class="flex justify-between items-center text-sm font-medium">
                             <span class="text-text-muted-light dark:text-text-muted-dark">{{ _('Expenses Subtotal') }}:</span>
@@ -261,7 +321,7 @@
                             <i class="fas fa-plus mr-2"></i>{{ _('Add Good') }}
                         </button>
                     </div>
-                    
+
                     <!-- Goods header (desktop) -->
                     <div class="hidden md:grid md:grid-cols-12 gap-3 mb-2 px-3 text-xs font-semibold text-text-muted-light dark:text-text-muted-dark uppercase">
                         <div class="md:col-span-2">{{ _('Name') }}</div>
@@ -272,7 +332,7 @@
                         <div class="md:col-span-1">{{ _('SKU') }}</div>
                         <div class="md:col-span-1 text-center">{{ _('Action') }}</div>
                     </div>
-                    
+
                     <div id="invoice-goods" class="space-y-2">
                         {% for good in invoice.extra_goods %}
                         <div class="grid grid-cols-1 md:grid-cols-12 gap-3 p-3 rounded-lg bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-200/50 dark:border-emerald-800/50 invoice-good-row min-w-0 hover:shadow-sm transition">
@@ -308,7 +368,7 @@
                         </div>
                         {% endfor %}
                     </div>
-                    
+
                     <div id="goods-subtotal" class="mt-3 p-3 bg-emerald-50/30 dark:bg-emerald-950/10 rounded-lg border border-emerald-200/30 dark:border-emerald-800/30">
                         <div class="flex justify-between items-center text-sm font-medium">
                             <span class="text-text-muted-light dark:text-text-muted-dark">{{ _('Goods Subtotal') }}:</span>
@@ -341,7 +401,7 @@
                 <i class="fas fa-calculator mr-2 text-primary"></i>
                 {{ _('Live Preview') }}
             </h3>
-            
+
             <div class="space-y-4">
                 <!-- Invoice Info -->
                 <div class="pb-4 border-b border-border-light dark:border-border-dark">
@@ -372,7 +432,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Calculation Preview -->
                 <div class="space-y-3">
                     <div class="flex justify-between text-sm">
@@ -402,7 +462,7 @@
                         <span class="text-2xl font-bold text-primary" id="preview-total">{{ 0|format_currency(invoice.currency_code) }}</span>
                     </div>
                 </div>
-                
+
                 <!-- Payment Info -->
                 <div class="pt-4 border-t border-border-light dark:border-border-dark space-y-2 text-sm">
                     <div class="flex justify-between">
@@ -439,7 +499,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const goodsContainer = document.getElementById('invoice-goods');
     const taxRateInput = document.getElementById('tax_rate');
     const invoiceCurrency = {{ invoice.currency_code|tojson }};
-    
+
     // Calculate totals function
     function calculateTotals() {
         // Calculate items
@@ -453,7 +513,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 itemsCount++;
             }
         });
-        
+
         // Calculate expenses
         let expensesTotal = 0;
         let expensesCount = 0;
@@ -464,7 +524,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 expensesCount++;
             }
         });
-        
+
         // Calculate goods
         let goodsTotal = 0;
         let goodsCount = 0;
@@ -476,17 +536,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 goodsCount++;
             }
         });
-        
+
         // Calculate subtotal and tax
         const subtotal = itemsTotal + expensesTotal + goodsTotal;
         const taxRate = parseFloat(taxRateInput?.value || 0);
         const taxAmount = subtotal * (taxRate / 100);
         const total = subtotal + taxAmount;
-        
+
         // Calculate outstanding
         const amountPaid = parseFloat('{{ invoice.amount_paid or 0 }}');
         const outstanding = Math.max(0, total - amountPaid);
-        
+
         // Update displays
         document.getElementById('items-count').textContent = itemsCount;
         document.getElementById('expenses-count').textContent = expensesCount;
@@ -494,7 +554,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('items-subtotal-amount').textContent = formatMoney(itemsTotal, invoiceCurrency);
         document.getElementById('expenses-subtotal-amount').textContent = formatMoney(expensesTotal, invoiceCurrency);
         document.getElementById('goods-subtotal-amount').textContent = formatMoney(goodsTotal, invoiceCurrency);
-        
+
         // Update preview panel
         document.getElementById('preview-items-count').textContent = itemsCount;
         document.getElementById('preview-expenses-count').textContent = expensesCount;
@@ -508,11 +568,11 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('preview-total').textContent = formatMoney(total, invoiceCurrency);
         document.getElementById('preview-outstanding').textContent = formatMoney(outstanding, invoiceCurrency);
     }
-    
+
     // Stock items and warehouses data
     const stockItems = {{ stock_items_json | safe if stock_items_json else '[]' }};
     const warehouses = {{ warehouses_json | safe if warehouses_json else '[]' }};
-    
+
     // Handle stock item selection
     function setupStockItemHandlers() {
         document.querySelectorAll('.item-stock-select').forEach(select => {
@@ -521,13 +581,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 const stockItemId = this.value;
                 const selectedOption = this.options[this.selectedIndex];
                 const hiddenStockInput = row.querySelector('input[name="item_stock_item_id[]"]');
-                
+
                 hiddenStockInput.value = stockItemId || '';
-                
+
                 if (stockItemId && selectedOption) {
                     const price = parseFloat(selectedOption.dataset.price || 0);
                     const description = selectedOption.dataset.description || '';
-                    
+
                     // Auto-populate fields
                     if (description && !row.querySelector('.item-description').value) {
                         row.querySelector('.item-description').value = description;
@@ -540,13 +600,13 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     }
-    
+
     // Add item button
     const addBtn = document.getElementById('add-item');
     addBtn && addBtn.addEventListener('click', function() {
         const row = document.createElement('div');
         row.className = 'grid grid-cols-1 md:grid-cols-12 gap-3 p-3 rounded-lg bg-blue-50/50 dark:bg-blue-950/20 border border-blue-200/50 dark:border-blue-800/50 invoice-item-row hover:shadow-sm transition';
-        
+
         // Build stock items dropdown
         let stockItemsHtml = '<option value="">{{ _("None") }}</option>';
         if (stockItems && Array.isArray(stockItems)) {
@@ -557,7 +617,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 stockItemsHtml += '<option value="' + item.id + '" data-price="' + price + '" data-unit="' + unit + '" data-description="' + desc.replace(/"/g, '&quot;') + '">' + item.sku + ' - ' + item.name + '</option>';
             });
         }
-        
+
         // Build warehouses dropdown
         let warehousesHtml = '<option value="">{{ _("None") }}</option>';
         if (warehouses && Array.isArray(warehouses)) {
@@ -565,11 +625,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 warehousesHtml += '<option value="' + wh.id + '">' + wh.code + ' - ' + wh.name + '</option>';
             });
         }
-        
+
+        // Determine position for new row (after existing items)
+        const existingRows = itemsContainer.querySelectorAll('.invoice-item-row');
+        const newPos = existingRows.length;
         row.innerHTML = `
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-3 p-3">
             <input type="hidden" name="item_stock_item_id[]" value="">
             <input type="hidden" name="item_warehouse_id[]" value="">
             <input type="hidden" name="item_time_entry_ids[]" value="">
+            <input type="hidden" name="item_position[]" value="${newPos}">
             <div class="md:col-span-2 min-w-0 flex flex-col">
                 <select class="form-input item-stock-select text-sm">
                     ${stockItemsHtml}
@@ -594,16 +659,34 @@ document.addEventListener('DOMContentLoaded', function() {
                     <i class="fas fa-trash"></i>
                 </button>
             </div>
+            </div>
+            <div class="flex flex-wrap items-center gap-2 px-3 pb-2 text-xs">
+                <span class="text-gray-400">{{ _('Line:') }}</span>
+                <label class="flex items-center gap-1 text-gray-500">{{ _('Tax%') }} <input type="number" name="item_tax_rate[]" step="0.01" min="0" max="100" class="form-input text-xs py-0.5 w-16" placeholder="—"></label>
+                <label class="flex items-center gap-1 text-gray-500">{{ _('Disc%') }} <input type="number" name="item_discount_percent[]" value="" step="0.01" min="0" max="100" class="form-input text-xs py-0.5 w-16" placeholder="0" data-calc-trigger></label>
+                <label class="flex items-center gap-1 text-gray-500">{{ _('Disc amt') }} <input type="number" name="item_discount_amount[]" value="" step="0.01" min="0" class="form-input text-xs py-0.5 w-20" placeholder="0.00" data-calc-trigger></label>
+                <label class="flex items-center gap-1 text-gray-500" title="{{ _('VAT category') }}">{{ _('VAT') }}
+                    <select name="item_vat_category[]" class="form-input text-xs py-0.5">
+                        <option value="">—</option>
+                        <option value="S">S</option><option value="Z">Z</option><option value="E">E</option>
+                        <option value="AE">AE</option><option value="K">K</option><option value="G">G</option><option value="O">O</option>
+                    </select>
+                </label>
+                <span class="ml-auto flex gap-1">
+                    <button type="button" class="item-move-up text-gray-400 hover:text-blue-600 px-1 py-0.5 rounded" title="{{ _('Move up') }}">▲</button>
+                    <button type="button" class="item-move-down text-gray-400 hover:text-blue-600 px-1 py-0.5 rounded" title="{{ _('Move down') }}">▼</button>
+                </span>
+            </div>
         `;
         itemsContainer.appendChild(row);
-        
+
         // Setup handlers for new row
         const stockSelect = row.querySelector('.item-stock-select');
         stockSelect.addEventListener('change', function() {
             const selectedOption = this.options[this.selectedIndex];
             const hiddenStockInput = row.querySelector('input[name="item_stock_item_id[]"]');
             hiddenStockInput.value = this.value || '';
-            
+
             if (this.value && selectedOption) {
                 const price = parseFloat(selectedOption.dataset.price || 0);
                 const description = selectedOption.dataset.description || '';
@@ -612,26 +695,26 @@ document.addEventListener('DOMContentLoaded', function() {
                 calculateTotals();
             }
         });
-        
+
         const warehouseSelect = row.querySelector('.item-warehouse-select');
         warehouseSelect.addEventListener('change', function() {
             const hiddenWarehouseInput = row.querySelector('input[name="item_warehouse_id[]"]');
             hiddenWarehouseInput.value = this.value || '';
         });
-        
+
         // Setup calculation triggers
         row.querySelectorAll('[data-calc-trigger]').forEach(input => {
             input.addEventListener('input', calculateTotals);
         });
-        
+
         calculateTotals();
         setupStockItemHandlers();
         row.querySelector('.item-stock-select').focus();
     });
-    
+
     // Initialize stock item handlers for existing rows
     setupStockItemHandlers();
-    
+
     // Setup warehouse handlers
     document.querySelectorAll('.item-warehouse-select').forEach(select => {
         select.addEventListener('change', function() {
@@ -691,11 +774,39 @@ document.addEventListener('DOMContentLoaded', function() {
                 row.style.transform = 'scale(0.95)';
                 setTimeout(() => {
                     row.remove();
+                    _renumberItemPositions();
                     calculateTotals();
                 }, 200);
             }
         }
+        // Move up / down handlers
+        if (e.target.closest('.item-move-up') || e.target.closest('.item-move-down')) {
+            const btn = e.target.closest('.item-move-up') || e.target.closest('.item-move-down');
+            const row = btn.closest('.invoice-item-row');
+            if (!row) return;
+            const container = row.parentElement;
+            if (btn.classList.contains('item-move-up')) {
+                const prev = row.previousElementSibling;
+                if (prev && prev.classList.contains('invoice-item-row')) {
+                    container.insertBefore(row, prev);
+                }
+            } else {
+                const next = row.nextElementSibling;
+                if (next && next.classList.contains('invoice-item-row')) {
+                    container.insertBefore(next, row);
+                }
+            }
+            _renumberItemPositions();
+        }
     });
+
+    function _renumberItemPositions() {
+        const rows = itemsContainer ? itemsContainer.querySelectorAll('.invoice-item-row') : [];
+        rows.forEach((row, idx) => {
+            const posInput = row.querySelector('input[name="item_position[]"]');
+            if (posInput) posInput.value = idx;
+        });
+    }
 
     // Add expense button - redirect to generate from time page which includes expenses
     const addExpenseBtn = document.getElementById('add-expense');
@@ -743,24 +854,24 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
     });
-    
+
     // Live calculation on input changes
     document.addEventListener('input', function(e) {
         if (e.target.hasAttribute('data-calc-trigger') || e.target.id === 'tax_rate') {
             calculateTotals();
         }
     });
-    
+
     // Initial calculation
     calculateTotals();
-    
+
     // Form validation before submit
     const form = document.getElementById('editInvoiceForm');
     form && form.addEventListener('submit', function(e) {
         const itemRows = document.querySelectorAll('.invoice-item-row');
         const expenseRows = document.querySelectorAll('.invoice-expense-row');
         const goodRows = document.querySelectorAll('.invoice-good-row');
-        
+
         if (itemRows.length === 0 && expenseRows.length === 0 && goodRows.length === 0) {
             e.preventDefault();
             alert('{{ _("Please add at least one item, expense, or extra good to the invoice") }}');
@@ -818,13 +929,13 @@ function sendInvoiceEmail(event) {
   event.preventDefault();
   const form = event.target;
   const formData = new FormData(form);
-  
+
   // Show loading state
   const submitBtn = form.querySelector('button[type="submit"]');
   const originalText = submitBtn.textContent;
   submitBtn.disabled = true;
   submitBtn.textContent = {{ _('Sending...')|tojson }};
-  
+
   fetch("{{ url_for('invoices.send_invoice_email_route', invoice_id=invoice.id) }}", {
     method: 'POST',
     body: formData
@@ -833,7 +944,7 @@ function sendInvoiceEmail(event) {
     // Check content type to determine how to parse
     const contentType = response.headers.get('content-type') || '';
     const isJson = contentType.includes('application/json');
-    
+
     // Always try JSON first if content-type suggests it, otherwise read as text
     if (isJson) {
       const data = await response.json();

@@ -222,18 +222,23 @@ The invoice tables are automatically created when the application starts. For ex
 - **Database**: PostgreSQL/SQLite (already supported)
 - **Frontend**: Bootstrap 5, Font Awesome (already included)
 
+## Recurring invoices, overdue reminders, and dunning
+
+Automated recurring billing, past-due detection, multi-step reminder policies (with optional late fees), and `invoice.overdue` webhooks are implemented. See **[Invoice reminders and recurring](features/INVOICE_REMINDERS_AND_RECURRING.md)**.
+
+Also shipped with recent invoicing work:
+
+- Per-line tax rates, discounts, and line ordering
+- Credit notes (web + `/api/v1/credit-notes`, PDF/UBL/FatturaPA)
+- E-invoicing exports: Peppol/UBL, Factur-X/ZUGFeRD, XRechnung, FatturaPA/SDI — see [PEPPOL_EINVOICING.md](admin/configuration/PEPPOL_EINVOICING.md) and [FATTURAPA_SDI.md](admin/configuration/FATTURAPA_SDI.md)
+
 ## Future Enhancements
 
 ### Planned Features
-- **PDF Generation**: Professional PDF invoice output
-- **Email Integration**: Send invoices directly to clients
-- **Payment Tracking**: Integration with payment gateways
-- **Recurring Invoices**: Automated recurring billing
-- **Client Portal**: Client access to invoice history
+- Fixed line items on recurring invoice templates (today: unbilled time only)
+- Deeper installment / payment-plan workflows (see [Payment tracking](PAYMENT_TRACKING.md))
 
 ### API Extensions
-- **REST API**: Full CRUD operations via API
-- **Webhook Support**: Notifications for status changes
 - **Bulk Operations**: Mass invoice operations
 - **Reporting API**: Invoice analytics and reporting
 

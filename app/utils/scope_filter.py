@@ -102,9 +102,7 @@ def get_active_projects_for_user(user, *, status="active"):
     """Return projects visible to user (respects scope)."""
     from app.models import Project
 
-    query = Project.query.filter_by(status=status).order_by(
-        Project.last_used_at.desc().nullslast(), Project.name
-    )
+    query = Project.query.filter_by(status=status).order_by(Project.last_used_at.desc().nullslast(), Project.name)
     scope = apply_project_scope_to_model(Project, user)
     if scope is not None:
         query = query.filter(scope)
@@ -122,9 +120,11 @@ def get_accessible_project_and_client_ids_for_user(user_id: int) -> Tuple[Set[in
 
     time_entry_repo = TimeEntryRepository()
     user_project_ids = set(time_entry_repo.get_distinct_project_ids_for_user(user_id))
+    from app.services.task_service import task_assigned_to_user_clause
+
     task_project_rows = (
         Task.query.with_entities(Task.project_id)
-        .filter_by(assigned_to=user_id)
+        .filter(task_assigned_to_user_clause(user_id))
         .filter(Task.project_id.isnot(None))
         .distinct()
         .all()

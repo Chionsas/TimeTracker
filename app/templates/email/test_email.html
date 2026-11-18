@@ -23,11 +23,11 @@
         .header {
             text-align: center;
             padding-bottom: 20px;
-            border-bottom: 3px solid #3b82f6;
+            border-bottom: 3px solid #4F46E5;
             margin-bottom: 30px;
         }
         .header h1 {
-            color: #3b82f6;
+            color: #4F46E5;
             margin: 0;
             font-size: 28px;
         }
@@ -48,14 +48,14 @@
         }
         .info-section {
             background-color: #f9fafb;
-            border-left: 4px solid #3b82f6;
+            border-left: 4px solid #4F46E5;
             padding: 15px;
             margin: 20px 0;
             border-radius: 4px;
         }
         .info-section h2 {
             margin-top: 0;
-            color: #3b82f6;
+            color: #4F46E5;
             font-size: 18px;
         }
         .info-item {
@@ -98,19 +98,19 @@
             <h1>TimeTracker</h1>
             <p>{{ _('Email Configuration Test') }}</p>
         </div>
-        
+
         <div class="checkmark">✓</div>
-        
+
         <div class="success-badge">
             {{ _('Email Configuration Working!') }}
         </div>
-        
+
         <p>{{ _('Hello,') }}</p>
-        
+
         <p>{{ _('This is a test email from %(app)s to verify that your email configuration is working correctly.', app='<strong>TimeTracker</strong>')|safe }}</p>
-        
+
         <p>{{ _('If you received this email, congratulations! Your email settings are properly configured and emails are being delivered successfully.') }}</p>
-        
+
         <div class="info-section">
             <h2>{{ _('Test Details') }}</h2>
             <div class="info-item">
@@ -134,7 +134,7 @@
                 <span class="info-value">{{ _('Yes') if use_ssl else _('No') }}</span>
             </div>
         </div>
-        
+
         <p>{{ _('You can now use email features in TimeTracker, including:') }}</p>
         <ul>
             <li>{{ _('Invoice notifications') }}</li>
@@ -143,7 +143,7 @@
             <li>{{ _('Comment mentions') }}</li>
             <li>{{ _('System alerts') }}</li>
         </ul>
-        
+
         <div class="footer">
             <p><strong>TimeTracker</strong> - {{ _('Time Tracking & Project Management') }}</p>
             <p>{{ _('This is an automated test email. Please do not reply to this message.') }}</p>
@@ -151,4 +151,3 @@
     </div>
 </body>
 </html>
-

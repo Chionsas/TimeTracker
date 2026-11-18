@@ -38,7 +38,7 @@ export function AuthFlow(props) {
           <div>
             <p className="eyebrow">Desktop workspace</p>
             <h1>Connect to TimeTracker</h1>
-            <p>Use your server URL and normal TimeTracker account.</p>
+            <p>Timer-first desktop client. Navigation follows your server Focus/Solo module preset.</p>
           </div>
         </div>
         <div className="stepper" aria-label="Setup progress">
@@ -71,7 +71,7 @@ export function AuthFlow(props) {
             </label>
             <div className="button-row">
               <button type="button" className="btn ghost" onClick={onBackFrom2fa}>
-                Back
+                {t('common.back')}
               </button>
               <button className="btn primary" type="submit">
                 Verify
@@ -100,7 +100,7 @@ export function AuthFlow(props) {
               </label>
               <div className="button-row">
                 <button type="button" className="btn ghost" onClick={() => setStep('server')}>
-                  Back
+                  {t('common.back')}
                 </button>
                 <button className="btn primary" type="submit">
                   Sign in
@@ -148,6 +148,26 @@ export function AuthFlow(props) {
   );
 }
 
+/** Map desktop views to server module ids (any match keeps the item visible). */
+export const VIEW_MODULE_REQUIREMENTS = {
+  dashboard: ['main'],
+  projects: ['projects'],
+  entries: ['timer'],
+  kanban: ['kanban'],
+  reports: ['reports'],
+  crm: ['deals', 'contacts', 'leads'],
+  invoices: ['invoices'],
+  expenses: ['expenses'],
+  payments: ['payments'],
+  mileage: ['mileage'],
+  quotes: ['quotes'],
+  recurring: ['recurring_invoices'],
+  credit: ['invoices'],
+  // Workday / Belgium attendance is not a separate module; always offer Workforce.
+  workforce: null,
+  settings: null,
+};
+
 export const NAV_GROUPS = [
   {
     labelKey: 'nav.groups.work',
@@ -185,18 +205,34 @@ export const NAV_GROUPS = [
   },
 ];
 
-export function Sidebar({ activeView, onChange }) {
+export function isViewEnabled(viewId, enabledModules) {
+  const req = VIEW_MODULE_REQUIREMENTS[viewId];
+  if (req == null) return true;
+  if (!Array.isArray(enabledModules) || enabledModules.length === 0) return true;
+  const set = new Set(enabledModules);
+  return req.some((m) => set.has(m));
+}
+
+export function filterNavGroups(enabledModules) {
+  return NAV_GROUPS.map((group) => ({
+    ...group,
+    items: group.items.filter((item) => isViewEnabled(item.id, enabledModules)),
+  })).filter((group) => group.items.length > 0);
+}
+
+export function Sidebar({ activeView, onChange, enabledModules }) {
+  const groups = filterNavGroups(enabledModules);
   return (
     <aside className="sidebar">
       <div className="sidebar-brand">
         <img src="../assets/logo.svg" alt="" />
         <div>
           <strong>TimeTracker</strong>
-          <span>{`Desktop ${APP_VERSION}`}</span>
+          <span>{t('shell.desktopVersion', { version: APP_VERSION })}</span>
         </div>
       </div>
       <nav>
-        {NAV_GROUPS.map((group) => (
+        {groups.map((group) => (
           <div className="nav-group" key={group.labelKey}>
             <p className="nav-group-label">{t(group.labelKey)}</p>
             {group.items.map((view) => (
@@ -216,21 +252,39 @@ export function Sidebar({ activeView, onChange }) {
   );
 }
 
-export function TopBar({ connection, user, syncStatus, theme, setTheme, onSyncNow, onLogout }) {
+export function TopBar({ connection, user, syncStatus, theme, setTheme, onSyncNow, onLogout, onOpenSettings }) {
+  const failedDepth = Number(syncStatus?.failedDepth || 0);
+  const welcome = user?.username
+    ? t('shell.welcomeNamed', { name: user.username })
+    : t('shell.welcome');
+
   return (
     <header className="topbar">
       <div>
-        <p className="eyebrow">Welcome{user?.username ? `, ${user.username}` : ''}</p>
+        <p className="eyebrow">{welcome}</p>
         <h1>{new Date().toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' })}</h1>
       </div>
       <div className="topbar-actions">
         <ConnectionPill connection={connection} />
-        <button className="sync-pill" onClick={onSyncNow} title={syncStatus.lastError || 'Sync now'}>
-          {syncStatus.syncing ? 'Syncing…' : `Queue ${syncStatus.queueDepth}`}
+        <button className="sync-pill" onClick={onSyncNow} title={syncStatus.lastError || t('shell.syncNow')}>
+          {syncStatus.syncing ? t('shell.syncing') : t('shell.queue', { count: syncStatus.queueDepth })}
+          {failedDepth > 0 && (
+            <span
+              className="sync-failed-badge"
+              role="status"
+              title={t('settings.syncProblems')}
+              onClick={(e) => {
+                e.stopPropagation();
+                onOpenSettings?.();
+              }}
+            >
+              {t('shell.failedBadge', { count: failedDepth })}
+            </span>
+          )}
         </button>
         <ThemeSwitch theme={theme} setTheme={setTheme} />
         <button className="btn ghost" onClick={onLogout}>
-          Sign out
+          {t('common.signOut')}
         </button>
       </div>
     </header>

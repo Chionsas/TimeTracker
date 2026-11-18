@@ -437,6 +437,7 @@ class TimeTrackingService:
         billable: bool = True,
         paid: bool = False,
         invoice_number: Optional[str] = None,
+        custom_fields: Optional[dict] = None,
         skip_entry_requirements: bool = False,
     ) -> Dict[str, Any]:
         """
@@ -462,6 +463,13 @@ class TimeTrackingService:
             project = self.project_repo.get_by_id(project_id)
             if not project:
                 return {"success": False, "message": _("Invalid project"), "error": "invalid_project"}
+
+            if project.status == "archived":
+                return {
+                    "success": False,
+                    "message": "Cannot create time entries for an archived project. Please unarchive the project first.",
+                    "error": "project_archived",
+                }
 
             # Validate task if provided (only valid when project_id is set)
             if task_id:
@@ -544,19 +552,13 @@ class TimeTrackingService:
             # is derived from rounded start/end (apply_user_rounding alone would leave
             # raw timestamps).
             from app.models import User
-            from app.utils.time_rounding import (
-                apply_user_rounding,
-                get_user_rounding_settings,
-                round_entry_boundaries,
-            )
+            from app.utils.time_rounding import apply_user_rounding, get_user_rounding_settings, round_entry_boundaries
 
             rounding_user = db.session.get(User, user_id)
             if rounding_user is not None:
                 settings = get_user_rounding_settings(rounding_user)
                 if settings["enabled"] and settings["method"] == "boundary" and settings["minutes"] > 1:
-                    start_time, end_time = round_entry_boundaries(
-                        start_time, end_time, settings["minutes"]
-                    )
+                    start_time, end_time = round_entry_boundaries(start_time, end_time, settings["minutes"])
                     duration_seconds = None
                 else:
                     duration_seconds = apply_user_rounding(duration_seconds, rounding_user)
@@ -578,6 +580,7 @@ class TimeTrackingService:
             billable=billable,
             paid=paid,
             invoice_number=invoice_number,
+            custom_fields=custom_fields,
         )
 
         commit_data = {"user_id": user_id}
@@ -659,6 +662,7 @@ class TimeTrackingService:
         invoice_number: Optional[str] = None,
         reason: Optional[str] = None,
         expected_updated_at: Optional[datetime] = None,
+        custom_fields: Optional[dict] = None,
     ) -> Dict[str, Any]:
         """
         Update a time entry.
@@ -783,6 +787,10 @@ class TimeTrackingService:
                 entry.invoice_number = None
         if invoice_number is not None:
             entry.invoice_number = invoice_number.strip() if invoice_number else None
+        if custom_fields is not None:
+            from app.services.custom_field_service import CustomFieldService
+
+            CustomFieldService().apply_from_dict(entry, "time_entry", custom_fields, merge=True)
 
         # Validate time entry requirements on updated state (entry reflects changes applied above)
         settings = Settings.get_settings()

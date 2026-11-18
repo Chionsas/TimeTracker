@@ -14,24 +14,25 @@
 <div class="bg-card-light dark:bg-card-dark p-6 rounded-xl border border-border-light dark:border-border-dark shadow-sm">
     <form method="POST" action="{{ url_for('payment_gateways.create_gateway') }}" novalidate>
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-        
+
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
             <div>
                 <label for="name" class="form-label">{{ _('Gateway Name') }} *</label>
                 <input type="text" id="name" name="name" required class="form-input" placeholder="{{ _('e.g., Stripe Production') }}">
                 <p class="text-xs text-text-muted-light dark:text-text-muted-dark mt-1">{{ _('A descriptive name for this gateway configuration') }}</p>
             </div>
-            
+
             <div>
                 <label for="provider" class="form-label">{{ _('Provider') }} *</label>
                 <select id="provider" name="provider" required class="form-input" onchange="updateProviderFields()">
                     <option value="">{{ _('Select provider...') }}</option>
                     <option value="stripe">Stripe</option>
                     <option value="paypal">PayPal</option>
+                    <option value="mollie">Mollie</option>
                 </select>
             </div>
         </div>
-        
+
         <div id="stripeFields" class="hidden border-t border-border-light dark:border-border-dark pt-4 mb-6">
             <h3 class="text-lg font-semibold mb-4">{{ _('Stripe Configuration') }}</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -52,7 +53,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div id="paypalFields" class="hidden border-t border-border-light dark:border-border-dark pt-4 mb-6">
             <h3 class="text-lg font-semibold mb-4">{{ _('PayPal Configuration') }}</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -64,9 +65,25 @@
                     <label for="client_secret" class="form-label">{{ _('Client Secret') }} *</label>
                     <input type="password" id="client_secret" name="client_secret" class="form-input">
                 </div>
+                <div class="md:col-span-2">
+                    <label for="webhook_id" class="form-label">{{ _('Webhook ID') }}</label>
+                    <input type="text" id="webhook_id" name="webhook_id" class="form-input">
+                    <p class="text-xs text-text-muted-light dark:text-text-muted-dark mt-1">{{ _('PayPal webhook ID for signature verification (from PayPal Developer Dashboard)') }}</p>
+                </div>
             </div>
         </div>
-        
+
+        <div id="mollieFields" class="hidden border-t border-border-light dark:border-border-dark pt-4 mb-6">
+            <h3 class="text-lg font-semibold mb-4">{{ _('Mollie Configuration') }}</h3>
+            <div class="grid grid-cols-1 gap-4">
+                <div>
+                    <label for="mollie_api_key" class="form-label">{{ _('API Key') }} *</label>
+                    <input type="password" id="mollie_api_key" name="api_key" class="form-input" placeholder="live_... or test_...">
+                    <p class="text-xs text-text-muted-light dark:text-text-muted-dark mt-1">{{ _('Your Mollie API key (live_ for production, test_ for test mode)') }}</p>
+                </div>
+            </div>
+        </div>
+
         <div class="border-t border-border-light dark:border-border-dark pt-4 mb-6">
             <label class="inline-flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
                 <input type="checkbox" id="is_test_mode" name="is_test_mode" class="rounded border-gray-300 text-primary shadow-sm">
@@ -74,7 +91,7 @@
             </label>
             <p class="text-xs text-text-muted-light dark:text-text-muted-dark mt-1">{{ _('Enable test mode for development and testing') }}</p>
         </div>
-        
+
         <div class="flex justify-end gap-4">
             <a href="{{ url_for('payment_gateways.list_gateways') }}" class="px-4 py-2 border border-border-light dark:border-border-dark rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">{{ _('Cancel') }}</a>
             <button type="submit" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors">{{ _('Save Gateway') }}</button>
@@ -87,13 +104,15 @@ function updateProviderFields() {
     const provider = document.getElementById('provider').value;
     document.getElementById('stripeFields').classList.add('hidden');
     document.getElementById('paypalFields').classList.add('hidden');
-    
+
+    document.getElementById('mollieFields').classList.add('hidden');
     if (provider === 'stripe') {
         document.getElementById('stripeFields').classList.remove('hidden');
     } else if (provider === 'paypal') {
         document.getElementById('paypalFields').classList.remove('hidden');
+    } else if (provider === 'mollie') {
+        document.getElementById('mollieFields').classList.remove('hidden');
     }
 }
 </script>
 {% endblock %}
-

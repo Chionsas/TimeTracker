@@ -29,6 +29,7 @@ from app.models import (
     Invoice,
     InvoiceImage,
     InvoiceItem,
+    PeppolInboundDocument,
     Project,
     ProjectCost,
     RateOverride,
@@ -37,7 +38,7 @@ from app.models import (
     User,
 )
 from app.utils.db import safe_commit
-from app.utils.safe_redirect import safe_redirect, safe_redirect_target
+from app.utils.error_handling import DEFAULT_CLIENT_ERROR, client_error_payload, client_error_response
 from app.utils.excel_export import create_invoices_list_excel
 from app.utils.module_helpers import module_enabled
 from app.utils.posthog_funnels import (
@@ -47,7 +48,7 @@ from app.utils.posthog_funnels import (
     track_invoice_project_selected,
 )
 from app.utils.prepaid_hours import PrepaidHoursAllocator
-from app.utils.error_handling import client_error_response, client_error_payload, DEFAULT_CLIENT_ERROR
+from app.utils.safe_redirect import safe_redirect, safe_redirect_target
 
 invoices_bp = Blueprint("invoices", __name__)
 logger = logging.getLogger(__name__)
@@ -109,6 +110,8 @@ def create_invoice():
             vat_category = None
         vat_exemption_reason = (request.form.get("vat_exemption_reason", "") or "").strip() or None
         vat_exemption_code = (request.form.get("vat_exemption_code", "") or "").strip() or None
+        cig = (request.form.get("cig", "") or "").strip() or None
+        cup = (request.form.get("cup", "") or "").strip() or None
         due_date_str = request.form.get("due_date", "").strip()
         tax_rate = request.form.get("tax_rate", "0").strip()
         notes = request.form.get("notes", "").strip()
@@ -130,6 +133,16 @@ def create_invoice():
         except ValueError:
             flash(_("Invalid tax rate format"), "error")
             return render_template("invoices/create.html")
+
+        # Invoice-level discount (optional)
+        try:
+            discount_percent = Decimal(request.form.get("discount_percent", "0") or "0")
+        except Exception:
+            discount_percent = Decimal("0")
+        try:
+            discount_amount = Decimal(request.form.get("discount_amount", "0") or "0")
+        except Exception:
+            discount_amount = Decimal("0")
 
         # Get project
         project = Project.query.get(project_id)
@@ -195,6 +208,10 @@ def create_invoice():
             vat_category=vat_category,
             vat_exemption_reason=vat_exemption_reason,
             vat_exemption_code=vat_exemption_code,
+            cig=cig,
+            cup=cup,
+            discount_percent=discount_percent,
+            discount_amount=discount_amount,
         )
 
         db.session.add(invoice)
@@ -320,6 +337,40 @@ def view_invoice(invoice_id):
         )
         peppol_history = []
 
+    # SDI / FatturaPA history and readiness
+    sdi_history = []
+    sdi_enabled_flag = False
+    sdi_recipient_ready = False
+    try:
+        from app.models import InvoiceSdiTransmission
+        from app.utils.fatturapa import resolve_codice_destinatario
+
+        settings_for_sdi = Settings.get_settings()
+        sdi_enabled_flag = bool(getattr(settings_for_sdi, "sdi_enabled", False))
+        sdi_history = (
+            InvoiceSdiTransmission.query.filter_by(invoice_id=invoice_id)
+            .order_by(InvoiceSdiTransmission.created_at.desc())
+            .all()
+        )
+        try:
+            client = invoice.client
+            code, pec = resolve_codice_destinatario(client) if client else ("", None)
+            sdi_recipient_ready = bool(client and code)
+        except Exception:
+            current_app.logger.debug(
+                "Could not determine SDI recipient readiness for invoice %s",
+                invoice_id,
+                exc_info=True,
+            )
+            sdi_recipient_ready = False
+    except Exception:
+        current_app.logger.debug(
+            "SDI history unavailable for invoice %s (migration may be pending)",
+            invoice_id,
+            exc_info=True,
+        )
+        sdi_history = []
+
     # PEPPOL compliance warnings when invoices_peppol_compliant is on
     peppol_compliance_warnings = []
     try:
@@ -392,6 +443,9 @@ def view_invoice(invoice_id):
         peppol_recipient_ready=peppol_recipient_ready,
         peppol_compliance_warnings=peppol_compliance_warnings,
         invoices_peppol_compliant=getattr(Settings.get_settings(), "invoices_peppol_compliant", False),
+        sdi_history=sdi_history,
+        sdi_enabled=sdi_enabled_flag,
+        sdi_recipient_ready=sdi_recipient_ready,
         approval=approval,
         link_templates_by_field=link_templates_by_field,
     )
@@ -408,7 +462,34 @@ def edit_invoice(invoice_id):
         flash(_("You do not have permission to edit this invoice"), "error")
         return redirect(url_for("invoices.list_invoices"))
 
+    financial_locked = invoice.status != "draft"
+
     if request.method == "POST":
+        # Non-draft invoices are immutable for financial fields (GoBD-style).
+        # Only notes, terms and due date may still be updated; use a credit note
+        # for corrections to amounts or line items.
+        if financial_locked:
+            due_date_str = request.form.get("due_date", "").strip()
+            if due_date_str:
+                try:
+                    invoice.due_date = datetime.strptime(due_date_str, "%Y-%m-%d").date()
+                except ValueError:
+                    flash(_("Invalid due date"), "error")
+                    return redirect(url_for("invoices.edit_invoice", invoice_id=invoice.id))
+            invoice.notes = request.form.get("notes", "").strip()
+            invoice.terms = request.form.get("terms", "").strip()
+            if not safe_commit("edit_invoice_locked", {"invoice_id": invoice.id}):
+                flash(_("Could not update invoice due to a database error. Please check server logs."), "error")
+                return redirect(url_for("invoices.edit_invoice", invoice_id=invoice.id))
+            flash(
+                _(
+                    "Only notes, terms and due date were updated. Sent invoices cannot change "
+                    "amounts or line items — issue a credit note instead."
+                ),
+                "warning",
+            )
+            return redirect(url_for("invoices.view_invoice", invoice_id=invoice.id))
+
         # Update invoice details
         invoice.client_name = request.form.get("client_name", "").strip()
         invoice.client_email = request.form.get("client_email", "").strip()
@@ -419,6 +500,8 @@ def edit_invoice(invoice_id):
         if _vc and _vc not in ("S", "Z", "E", "AE", "K", "G", "O", "L", "M"):
             _vc = None
         invoice.vat_category = _vc
+        invoice.cig = (request.form.get("cig", "") or "").strip() or None
+        invoice.cup = (request.form.get("cup", "") or "").strip() or None
         invoice.vat_exemption_reason = (request.form.get("vat_exemption_reason", "") or "").strip() or None
         invoice.vat_exemption_code = (request.form.get("vat_exemption_code", "") or "").strip() or None
         invoice.due_date = datetime.strptime(request.form.get("due_date"), "%Y-%m-%d").date()
@@ -426,12 +509,27 @@ def edit_invoice(invoice_id):
         invoice.notes = request.form.get("notes", "").strip()
         invoice.terms = request.form.get("terms", "").strip()
 
+        # Read invoice-level discount (draft only since we're in the full edit path)
+        try:
+            invoice.discount_percent = Decimal(request.form.get("discount_percent", "0") or "0")
+        except Exception:
+            invoice.discount_percent = Decimal("0")
+        try:
+            invoice.discount_amount = Decimal(request.form.get("discount_amount", "0") or "0")
+        except Exception:
+            invoice.discount_amount = Decimal("0")
+
         # Update items
         item_ids = request.form.getlist("item_id[]")
         descriptions = request.form.getlist("description[]")
         quantities = request.form.getlist("quantity[]")
         unit_prices = request.form.getlist("unit_price[]")
         item_time_entry_ids_list = request.form.getlist("item_time_entry_ids[]")
+        item_tax_rates = request.form.getlist("item_tax_rate[]")
+        item_vat_categories = request.form.getlist("item_vat_category[]")
+        item_discount_percents = request.form.getlist("item_discount_percent[]")
+        item_discount_amounts = request.form.getlist("item_discount_amount[]")
+        item_positions = request.form.getlist("item_position[]")
 
         # Remove existing items
         invoice.items.delete()
@@ -477,6 +575,41 @@ def edit_invoice(invoice_id):
                         else None
                     )
 
+                    # Per-line tax / discount / position
+                    _item_tax_rate = None
+                    if i < len(item_tax_rates) and item_tax_rates[i].strip():
+                        try:
+                            _item_tax_rate = Decimal(item_tax_rates[i].strip())
+                        except Exception:
+                            _item_tax_rate = None
+
+                    _item_vat_cat = None
+                    if i < len(item_vat_categories) and item_vat_categories[i].strip():
+                        _item_vat_cat = item_vat_categories[i].strip().upper() or None
+                        if _item_vat_cat and _item_vat_cat not in ("S", "Z", "E", "AE", "K", "G", "O", "L", "M"):
+                            _item_vat_cat = None
+
+                    _disc_pct = Decimal("0")
+                    if i < len(item_discount_percents) and item_discount_percents[i].strip():
+                        try:
+                            _disc_pct = Decimal(item_discount_percents[i].strip())
+                        except Exception:
+                            _disc_pct = Decimal("0")
+
+                    _disc_amt = Decimal("0")
+                    if i < len(item_discount_amounts) and item_discount_amounts[i].strip():
+                        try:
+                            _disc_amt = Decimal(item_discount_amounts[i].strip())
+                        except Exception:
+                            _disc_amt = Decimal("0")
+
+                    _position = i  # default to form order
+                    if i < len(item_positions) and item_positions[i].strip():
+                        try:
+                            _position = int(item_positions[i].strip())
+                        except Exception:
+                            _position = i
+
                     item = InvoiceItem(
                         invoice_id=invoice.id,
                         description=descriptions[i].strip(),
@@ -485,6 +618,11 @@ def edit_invoice(invoice_id):
                         time_entry_ids=time_entry_ids_val,
                         stock_item_id=stock_item_id_val,
                         warehouse_id=warehouse_id_val,
+                        tax_rate=_item_tax_rate,
+                        vat_category=_item_vat_cat,
+                        discount_percent=_disc_pct,
+                        discount_amount=_disc_amt,
+                        position=_position,
                     )
                     db.session.add(item)
                 except ValueError:
@@ -603,6 +741,7 @@ def edit_invoice(invoice_id):
                 "invoices/edit.html",
                 invoice=invoice,
                 projects=Project.query.filter_by(status="active").order_by(Project.name).all(),
+                financial_locked=False,
             )
 
         flash(_("Invoice updated successfully"), "success")
@@ -645,6 +784,7 @@ def edit_invoice(invoice_id):
         warehouses=warehouses,
         stock_items_json=stock_items_json,
         warehouses_json=warehouses_json,
+        financial_locked=financial_locked,
     )
 
 
@@ -816,6 +956,23 @@ def update_invoice_status(invoice_id):
             current_app.logger.debug("Client survey on invoice paid skipped: %s", survey_exc)
 
     try:
+        from app.constants import WebhookEvent
+        from app.utils.invoice_events import emit_invoice_event
+
+        emit_invoice_event(
+            WebhookEvent.INVOICE_UPDATED.value,
+            invoice,
+            previous_status=previous_status,
+            new_status=new_status,
+        )
+        if new_status == "sent" and previous_status != "sent":
+            emit_invoice_event(WebhookEvent.INVOICE_SENT.value, invoice)
+        if new_status == "paid" and previous_status != "paid":
+            emit_invoice_event(WebhookEvent.INVOICE_PAID.value, invoice)
+    except Exception:
+        current_app.logger.debug("Failed to emit invoice status webhook for %s", invoice.id, exc_info=True)
+
+    try:
         log_event(
             "invoice.status_changed",
             user_id=current_user.id,
@@ -824,9 +981,7 @@ def update_invoice_status(invoice_id):
             new_status=new_status,
         )
     except Exception:
-        current_app.logger.warning(
-            "Failed to log invoice.status_changed for invoice %s", invoice.id, exc_info=True
-        )
+        current_app.logger.warning("Failed to log invoice.status_changed for invoice %s", invoice.id, exc_info=True)
 
     return jsonify({"success": True, "status": new_status})
 
@@ -847,10 +1002,23 @@ def delete_invoice(invoice_id):
         return redirect(url_for("invoices.edit_invoice", invoice_id=invoice.id))
 
     invoice_number = invoice.invoice_number
+    invoice_id_for_event = invoice.id
+    invoice.release_invoiced_costs_and_expenses()
     db.session.delete(invoice)
-    if not safe_commit("delete_invoice", {"invoice_id": invoice.id}):
+    if not safe_commit("delete_invoice", {"invoice_id": invoice_id_for_event}):
         flash(_("Could not delete invoice due to a database error. Please check server logs."), "error")
         return redirect(url_for("invoices.list_invoices"))
+
+    try:
+        from app.constants import WebhookEvent
+        from app.utils.event_bus import emit_event
+
+        emit_event(
+            WebhookEvent.INVOICE_DELETED.value,
+            {"invoice_id": invoice_id_for_event, "invoice_number": invoice_number},
+        )
+    except Exception:
+        current_app.logger.debug("Failed to emit invoice.deleted for %s", invoice_id_for_event, exc_info=True)
 
     flash(_("Invoice %(invoice_number)s deleted successfully", invoice_number=invoice_number), "success")
     return redirect(url_for("invoices.list_invoices"))
@@ -890,13 +1058,12 @@ def bulk_delete_invoices():
                 continue
 
             invoice_number = invoice.invoice_number
+            invoice.release_invoiced_costs_and_expenses()
             db.session.delete(invoice)
             deleted_count += 1
 
         except Exception as e:
-            current_app.logger.warning(
-                "Skipping invoice %s during bulk delete", invoice_id_str, exc_info=True
-            )
+            current_app.logger.warning("Skipping invoice %s during bulk delete", invoice_id_str, exc_info=True)
             try:
                 db.session.rollback()
             except Exception:
@@ -981,9 +1148,7 @@ def bulk_update_status():
             updated_count += 1
 
         except Exception:
-            current_app.logger.warning(
-                "Skipping invoice %s during bulk status update", invoice_id_str, exc_info=True
-            )
+            current_app.logger.warning("Skipping invoice %s during bulk status update", invoice_id_str, exc_info=True)
             try:
                 db.session.rollback()
             except Exception:
@@ -1038,9 +1203,20 @@ def generate_from_time(invoice_id):
             flash(_("No time entries, costs, expenses, or extra goods selected"), "error")
             return redirect(url_for("invoices.generate_from_time", invoice_id=invoice.id))
 
-        # Only regenerate invoice items when time entries or project costs are selected
-        if selected_entries or selected_costs:
-            invoice.items.delete()
+        # The picker hides what is already on this invoice, so keep it: manual and cost
+        # lines stay, and time lines are rebuilt from their entries plus the new selection.
+        entry_ids = set(selected_entries)
+        if selected_entries:
+            from app.models import ClientPrepaidConsumption
+
+            for item in invoice.items.all():
+                item_entry_ids = [p.strip() for p in (item.time_entry_ids or "").split(",") if p.strip().isdigit()]
+                if item_entry_ids:
+                    entry_ids.update(item_entry_ids)
+                    db.session.delete(item)
+            # Entries fully covered by prepaid hours have no line, only a ledger row
+            for row in ClientPrepaidConsumption.query.filter_by(invoice_id=invoice.id).all():
+                entry_ids.add(str(row.time_entry_id))
 
         total_prepaid_allocated = Decimal("0")
         prepaid_allocator = None
@@ -1053,7 +1229,7 @@ def generate_from_time(invoice_id):
                 resolve_group_time_entries_from_form,
             )
 
-            time_entries = TimeEntry.query.filter(TimeEntry.id.in_(selected_entries)).all()
+            time_entries = TimeEntry.query.filter(TimeEntry.id.in_(entry_ids)).all()
 
             prepaid_allocator = PrepaidHoursAllocator(client=invoice.client, invoice=invoice)
             processed_entries = prepaid_allocator.process(time_entries)
@@ -1079,6 +1255,8 @@ def generate_from_time(invoice_id):
         # Process project costs
         if selected_costs:
             costs = ProjectCost.query.filter(ProjectCost.id.in_(selected_costs)).all()
+            # A cost already on this invoice keeps its line; a resubmitted form must not add a second one
+            costs = [cost for cost in costs if cost.invoice_id != invoice.id]
 
             for cost in costs:
                 # Create invoice item for each cost
@@ -1249,7 +1427,9 @@ def export_invoice_ubl(invoice_id):
     invoice = Invoice.query.get_or_404(invoice_id)
     if not current_user.is_admin and invoice.created_by != current_user.id:
         flash(_("You do not have permission to export this invoice"), "error")
-        return safe_redirect(request.referrer, allow_absolute_same_host=True, fallback=url_for("invoices.list_invoices"))
+        return safe_redirect(
+            request.referrer, allow_absolute_same_host=True, fallback=url_for("invoices.list_invoices")
+        )
     try:
         from app.integrations.peppol import build_peppol_ubl_invoice_xml
         from app.services.peppol_service import PeppolService
@@ -1276,6 +1456,92 @@ def export_invoice_ubl(invoice_id):
             level="exception",
         )
         flash(_("UBL export failed. Please try again."), "error")
+        return redirect(url_for("invoices.view_invoice", invoice_id=invoice_id))
+
+
+@invoices_bp.route("/invoices/<int:invoice_id>/export/xrechnung")
+@login_required
+def export_invoice_xrechnung(invoice_id):
+    """Export invoice as XRechnung 3.0 UBL XML (CIUS-DE)."""
+    from app.models import Settings
+    from app.utils.xrechnung import build_xrechnung_ubl_invoice_xml, validate_xrechnung_ready
+
+    invoice = Invoice.query.get_or_404(invoice_id)
+    if not current_user.is_admin and invoice.created_by != current_user.id:
+        flash(_("You do not have permission to export this invoice"), "error")
+        return safe_redirect(
+            request.referrer, allow_absolute_same_host=True, fallback=url_for("invoices.list_invoices")
+        )
+
+    settings = Settings.get_settings()
+    client = getattr(invoice, "client", None)
+    errors = validate_xrechnung_ready(invoice, settings, client)
+    if errors:
+        return Response(
+            json.dumps({"error": "xrechnung_not_ready", "messages": errors}),
+            status=400,
+            mimetype="application/json",
+        )
+
+    try:
+        xml, _sha = build_xrechnung_ubl_invoice_xml(invoice, settings, client)
+        fn = f"{invoice.invoice_number}-xrechnung.xml"
+        return Response(xml, mimetype="application/xml", headers={"Content-Disposition": f"attachment; filename={fn}"})
+    except Exception as e:
+        from app.utils.error_reporting import log_and_capture
+
+        log_and_capture(
+            current_app.logger,
+            "XRechnung export failed for invoice %s",
+            invoice_id,
+            exc=e,
+            level="exception",
+        )
+        flash(_("XRechnung export failed. Please try again."), "error")
+        return redirect(url_for("invoices.view_invoice", invoice_id=invoice_id))
+
+
+@invoices_bp.route("/invoices/<int:invoice_id>/export/fatturapa")
+@login_required
+def export_invoice_fatturapa(invoice_id):
+    """Export invoice as FatturaPA 1.2 XML (FPR12 / FPA12)."""
+    from app.models import Settings
+    from app.utils.fatturapa import build_fatturapa_xml, progressivo_from_id, validate_fatturapa_ready
+
+    invoice = Invoice.query.get_or_404(invoice_id)
+    if not current_user.is_admin and invoice.created_by != current_user.id:
+        flash(_("You do not have permission to export this invoice"), "error")
+        return safe_redirect(
+            request.referrer, allow_absolute_same_host=True, fallback=url_for("invoices.list_invoices")
+        )
+
+    settings = Settings.get_settings()
+    client = getattr(invoice, "client", None)
+    errors = validate_fatturapa_ready(invoice, settings, client)
+    if errors:
+        return Response(
+            json.dumps({"error": "fatturapa_not_ready", "messages": errors}),
+            status=400,
+            mimetype="application/json",
+        )
+
+    try:
+        progressivo = progressivo_from_id(invoice.id or 1)
+        xml, filename, _sha = build_fatturapa_xml(invoice, settings, client, progressivo)
+        return Response(
+            xml, mimetype="application/xml", headers={"Content-Disposition": f"attachment; filename={filename}"}
+        )
+    except Exception as e:
+        from app.utils.error_reporting import log_and_capture
+
+        log_and_capture(
+            current_app.logger,
+            "FatturaPA export failed for invoice %s",
+            invoice_id,
+            exc=e,
+            level="exception",
+        )
+        flash(_("FatturaPA export failed. Please try again."), "error")
         return redirect(url_for("invoices.view_invoice", invoice_id=invoice_id))
 
 
@@ -1309,7 +1575,9 @@ def export_invoice_pdf(invoice_id):
             f"[PDF_EXPORT] Permission denied - InvoiceID: {invoice_id}, User: {current_user.username}"
         )
         flash(_("You do not have permission to export this invoice"), "error")
-        return safe_redirect(request.referrer, allow_absolute_same_host=True, fallback=url_for("invoices.list_invoices"))
+        return safe_redirect(
+            request.referrer, allow_absolute_same_host=True, fallback=url_for("invoices.list_invoices")
+        )
 
     # Get page size from query parameter, default to A4
     page_size_raw = request.args.get("size", "A4")
@@ -1340,7 +1608,11 @@ def export_invoice_pdf(invoice_id):
             if not ok:
                 for msg in fx_issues[:5]:
                     flash(msg, "error")
-                return safe_redirect(request.referrer, allow_absolute_same_host=True, fallback=url_for("invoices.view_invoice", invoice_id=invoice.id))
+                return safe_redirect(
+                    request.referrer,
+                    allow_absolute_same_host=True,
+                    fallback=url_for("invoices.view_invoice", invoice_id=invoice.id),
+                )
 
         current_app.logger.info(
             f"[PDF_EXPORT] Creating InvoicePDFGenerator - PageSize: '{page_size}', InvoiceID: {invoice_id}"
@@ -1372,7 +1644,11 @@ def export_invoice_pdf(invoice_id):
                 ),
                 "error",
             )
-            return safe_redirect(request.referrer, allow_absolute_same_host=True, fallback=url_for("invoices.view_invoice", invoice_id=invoice.id))
+            return safe_redirect(
+                request.referrer,
+                allow_absolute_same_host=True,
+                fallback=url_for("invoices.view_invoice", invoice_id=invoice.id),
+            )
         if pdfa_err:
             current_app.logger.warning(
                 f"[PDF_EXPORT] PDF/A-3 conversion failed - InvoiceID: {invoice_id}, Error: {pdfa_err}"
@@ -1381,7 +1657,11 @@ def export_invoice_pdf(invoice_id):
                 _("PDF/A-3 normalization failed: %(err)s. Export aborted.", err=pdfa_err),
                 "error",
             )
-            return safe_redirect(request.referrer, allow_absolute_same_host=True, fallback=url_for("invoices.view_invoice", invoice_id=invoice.id))
+            return safe_redirect(
+                request.referrer,
+                allow_absolute_same_host=True,
+                fallback=url_for("invoices.view_invoice", invoice_id=invoice.id),
+            )
         pdf_size_bytes = len(pdf_bytes)
         # Optional: run veraPDF and surface summary (does not block)
         if getattr(settings, "invoices_validate_export", False):
@@ -1440,10 +1720,18 @@ def export_invoice_pdf(invoice_id):
                     _("Factur-X embedding is enabled but failed: %(err)s. Export aborted.", err=embed_err),
                     "error",
                 )
-                return safe_redirect(request.referrer, allow_absolute_same_host=True, fallback=url_for("invoices.view_invoice", invoice_id=invoice.id))
+                return safe_redirect(
+                    request.referrer,
+                    allow_absolute_same_host=True,
+                    fallback=url_for("invoices.view_invoice", invoice_id=invoice.id),
+                )
             if pdfa_err:
                 flash(_("PDF/A-3 normalization failed: %(err)s. Export aborted.", err=pdfa_err), "error")
-                return safe_redirect(request.referrer, allow_absolute_same_host=True, fallback=url_for("invoices.view_invoice", invoice_id=invoice.id))
+                return safe_redirect(
+                    request.referrer,
+                    allow_absolute_same_host=True,
+                    fallback=url_for("invoices.view_invoice", invoice_id=invoice.id),
+                )
             pdf_size_bytes = len(pdf_bytes)
             current_app.logger.info(
                 f"[PDF_EXPORT] Fallback PDF generated successfully - PageSize: '{page_size}', InvoiceID: {invoice_id}, PDFSize: {pdf_size_bytes} bytes"
@@ -1459,7 +1747,11 @@ def export_invoice_pdf(invoice_id):
                 exc_info=True,
             )
             flash(_("PDF generation failed. Please try again."), "error")
-            return safe_redirect(request.referrer, allow_absolute_same_host=True, fallback=url_for("invoices.view_invoice", invoice_id=invoice.id))
+            return safe_redirect(
+                request.referrer,
+                allow_absolute_same_host=True,
+                fallback=url_for("invoices.view_invoice", invoice_id=invoice.id),
+            )
 
 
 @invoices_bp.route("/invoices/<int:invoice_id>/duplicate")
@@ -1634,13 +1926,55 @@ def send_invoice_peppol_route(invoice_id):
             return jsonify(
                 {"success": True, "message": _("Invoice sent via Peppol"), "peppol_tx_id": tx.id if tx else None}
             )
-        return jsonify(
-            {"error": _("Failed to send invoice via Peppol"), "peppol_tx_id": tx.id if tx else None}
-        ), 400
+        return jsonify({"error": _("Failed to send invoice via Peppol"), "peppol_tx_id": tx.id if tx else None}), 400
     except Exception as e:
         logger.error(f"Error sending invoice via Peppol: {type(e).__name__}: {str(e)}")
         logger.exception("Full error traceback:")
         return client_error_response(status=500)
+
+
+@invoices_bp.route("/invoices/<int:invoice_id>/send-sdi", methods=["POST"])
+@login_required
+def send_invoice_sdi_route(invoice_id):
+    """Send invoice via SDI intermediary (FatturaPA)."""
+    invoice = Invoice.query.get_or_404(invoice_id)
+
+    if not current_user.is_admin and invoice.created_by != current_user.id:
+        return jsonify({"error": "Permission denied"}), 403
+
+    try:
+        from app.services import SdiService
+
+        service = SdiService()
+        success, tx, _message = service.send_invoice(invoice=invoice, triggered_by_user_id=current_user.id)
+        if success:
+            flash(_("Invoice sent via SDI"), "success")
+            return jsonify({"success": True, "message": "Invoice sent via SDI", "sdi_tx_id": tx.id if tx else None})
+        # Static client copy only — do not echo service/exception text (CodeQL).
+        return jsonify({"error": "Failed to send invoice via SDI", "sdi_tx_id": tx.id if tx else None}), 400
+    except Exception as e:
+        logger.error(f"Error sending invoice via SDI: {type(e).__name__}: {str(e)}")
+        logger.exception("Full error traceback:")
+        return client_error_response(status=500)
+
+
+@invoices_bp.route("/invoices/sdi/<int:tx_id>/refresh", methods=["POST"])
+@login_required
+def refresh_sdi_transmission(tx_id):
+    """Refresh status of an SDI transmission from the intermediary."""
+    from app.models import InvoiceSdiTransmission
+    from app.services import SdiService
+
+    tx = InvoiceSdiTransmission.query.get_or_404(tx_id)
+    invoice = Invoice.query.get_or_404(tx.invoice_id)
+    if not current_user.is_admin and invoice.created_by != current_user.id:
+        return jsonify({"error": "Permission denied"}), 403
+
+    result = SdiService().refresh_status(tx)
+    if not result.get("ok"):
+        # Do not forward intermediary/exception detail to the browser (CodeQL).
+        return jsonify({"error": "Refresh failed"}), 400
+    return jsonify({"success": True, "status": result.get("status"), "transmission": tx.to_dict()})
 
 
 @invoices_bp.route("/invoices/<int:invoice_id>/email-history", methods=["GET"])
@@ -1938,13 +2272,14 @@ def delete_invoice_image(invoice_id, image_id):
         flash(_("You do not have permission to delete images from this invoice"), "error")
         return redirect(url_for("invoices.edit_invoice", invoice_id=invoice_id))
 
-    # Delete file from disk
-    file_path = os.path.join(current_app.root_path, "..", image.file_path)
-    if os.path.exists(file_path):
-        try:
+    from app.utils.paths import PathEscapeError, resolve_stored_upload_path
+
+    try:
+        file_path = resolve_stored_upload_path(current_app.root_path, image.file_path)
+        if os.path.exists(file_path):
             os.remove(file_path)
-        except OSError as e:
-            current_app.logger.warning(f"Failed to delete image file {file_path}: {e}")
+    except (PathEscapeError, OSError) as e:
+        current_app.logger.warning(f"Failed to delete image file: {e}")
 
     image_id_for_log = image.id
     db.session.delete(image)
@@ -1991,7 +2326,12 @@ def get_invoice_image_base64(invoice_id, image_id):
     if not current_user.is_admin and invoice.created_by != current_user.id:
         return jsonify({"error": "Permission denied"}), 403
 
-    file_path = os.path.join(current_app.root_path, "..", image.file_path)
+    from app.utils.paths import PathEscapeError, resolve_stored_upload_path
+
+    try:
+        file_path = resolve_stored_upload_path(current_app.root_path, image.file_path)
+    except PathEscapeError:
+        return jsonify({"error": "File not found"}), 404
     if not os.path.exists(file_path):
         return jsonify({"error": "File not found"}), 404
 
@@ -2027,3 +2367,79 @@ def get_invoice_image_base64(invoice_id, image_id):
     except Exception as e:
         current_app.logger.error(f"Error serving image file: {e}")
         return jsonify({"error": "Error serving image file"}), 500
+
+
+@invoices_bp.route("/invoices/peppol-inbox")
+@login_required
+@module_enabled("invoices")
+def peppol_inbox():
+    """List inbound Peppol documents received via the bridge inbox."""
+    status = (request.args.get("status") or "").strip().lower()
+    query = PeppolInboundDocument.query.order_by(PeppolInboundDocument.created_at.desc())
+    if status in {"new", "acknowledged", "error"}:
+        query = query.filter(PeppolInboundDocument.status == status)
+    documents = query.limit(200).all()
+    settings = Settings.get_settings()
+    inbox_enabled = bool(getattr(settings, "peppol_inbox_enabled", False))
+    return render_template(
+        "invoices/peppol_inbox.html",
+        documents=documents,
+        status_filter=status,
+        inbox_enabled=inbox_enabled,
+    )
+
+
+@invoices_bp.route("/invoices/peppol-inbox/<int:doc_id>")
+@login_required
+@module_enabled("invoices")
+def peppol_inbox_detail(doc_id: int):
+    doc = PeppolInboundDocument.query.get_or_404(doc_id)
+    return render_template("invoices/peppol_inbox_detail.html", document=doc)
+
+
+@invoices_bp.route("/invoices/peppol-inbox/<int:doc_id>/ubl")
+@login_required
+@module_enabled("invoices")
+def peppol_inbox_download_ubl(doc_id: int):
+    doc = PeppolInboundDocument.query.get_or_404(doc_id)
+    if not doc.ubl_xml:
+        flash(_("No UBL XML is stored for this document."), "error")
+        return redirect(url_for("invoices.peppol_inbox_detail", doc_id=doc.id))
+    filename = f"{doc.document_number or doc.external_id or 'inbound'}.xml"
+    return Response(
+        doc.ubl_xml,
+        mimetype="application/xml",
+        headers={"Content-Disposition": f'attachment; filename="{filename}"'},
+    )
+
+
+@invoices_bp.route("/invoices/peppol-inbox/poll", methods=["POST"])
+@login_required
+@module_enabled("invoices")
+def peppol_inbox_poll_now():
+    """Manually trigger an inbox poll (admins / invoice managers)."""
+    if not (getattr(current_user, "is_admin", False) or current_user.has_permission("manage_invoices")):
+        flash(_("You do not have permission to poll the Peppol inbox."), "error")
+        return redirect(url_for("invoices.peppol_inbox"))
+    try:
+        from app.services.peppol_inbound_service import PeppolInboundService
+
+        result = PeppolInboundService().poll_and_import()
+        if result.get("skipped"):
+            flash(_("Peppol inbox polling is disabled. Enable it in Peppol settings."), "warning")
+        elif result.get("ok"):
+            flash(
+                _("Peppol inbox poll finished: %(fetched)s fetched, %(created)s new, %(updated)s updated.")
+                % {
+                    "fetched": result.get("fetched", 0),
+                    "created": result.get("created", 0),
+                    "updated": result.get("updated", 0),
+                },
+                "success",
+            )
+        else:
+            flash(_("Peppol inbox poll completed with errors."), "warning")
+    except Exception:
+        current_app.logger.exception("Manual Peppol inbox poll failed")
+        flash(_("Failed to poll Peppol inbox."), "error")
+    return redirect(url_for("invoices.peppol_inbox"))

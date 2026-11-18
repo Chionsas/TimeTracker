@@ -5,7 +5,7 @@ Routes under /api/v1/invoices.
 
 import io
 
-from flask import Blueprint, current_app, g, jsonify, request, send_file
+from flask import Blueprint, Response, current_app, g, jsonify, request, send_file
 
 from app import db
 from app.routes.api_v1_common import _parse_date
@@ -19,6 +19,19 @@ def _invoice_service():
     from app.services import InvoiceService
 
     return InvoiceService()
+
+
+def _load_invoice_for_api(invoice_id):
+    """Load invoice with access check; return (invoice, error_response) tuple."""
+    from app.models import Invoice
+
+    invoice = Invoice.query.get(invoice_id)
+    if not invoice:
+        return None, error_response("Invoice not found", status_code=404)
+    svc = _invoice_service()
+    if not svc.user_can_access_invoice(invoice, g.api_user.id, g.api_user.is_admin):
+        return None, error_response("Permission denied", status_code=403)
+    return invoice, None
 
 
 @api_v1_invoices_bp.route("/invoices", methods=["GET"])
@@ -116,14 +129,20 @@ def create_invoice():
 @require_api_token("write:invoices")
 def update_invoice(invoice_id):
     """Update an invoice."""
-    from decimal import Decimal, InvalidOperation
-
     from app.services import InvoiceService
 
     data = request.get_json() or {}
     update_kwargs = {}
-    # API update dropped; also recompute totals after a tax_rate change (see below).
-    for field in ("client_name", "client_email", "client_address", "notes", "terms", "status", "currency_code", "buyer_reference"):
+    # status / amount_paid are not mass-assignable via generic update (use cancel/payment flows).
+    for field in (
+        "client_name",
+        "client_email",
+        "client_address",
+        "notes",
+        "terms",
+        "currency_code",
+        "buyer_reference",
+    ):
         if field in data:
             update_kwargs[field] = data[field]
     if "issue_date" in data:
@@ -139,18 +158,10 @@ def update_invoice(invoice_id):
             update_kwargs["tax_rate"] = float(data["tax_rate"])
         except (ValueError, TypeError) as e:
             current_app.logger.warning("Invalid tax_rate value in invoice update: %s - %s", data.get("tax_rate"), e)
-    if "amount_paid" in data:
-        try:
-            update_kwargs["amount_paid"] = Decimal(str(data["amount_paid"]))
-        except (ValueError, TypeError, InvalidOperation) as e:
-            current_app.logger.warning(
-                "Invalid amount_paid value in invoice update: %s - %s", data.get("amount_paid"), e
-            )
     invoice_service = InvoiceService()
     result = invoice_service.update_invoice(invoice_id=invoice_id, user_id=g.api_user.id, **update_kwargs)
     if not result.get("success"):
         return error_response(result.get("message", "Could not update invoice"), status_code=400)
-    # InvoiceService.update_invoice — set them directly (same pattern as amount_paid below).
     direct_dirty = False
     if "buyer_reference" in data:
         result["invoice"].buyer_reference = data["buyer_reference"]
@@ -165,9 +176,14 @@ def update_invoice(invoice_id):
         direct_dirty = True
     if direct_dirty:
         db.session.commit()
-    if "amount_paid" in data:
-        result["invoice"].update_payment_status()
-        db.session.commit()
+        try:
+            from app.constants import WebhookEvent
+            from app.utils.invoice_events import emit_invoice_event
+
+            # Service already emitted after its commit; re-emit once final fields are saved.
+            emit_invoice_event(WebhookEvent.INVOICE_UPDATED.value, result["invoice"])
+        except Exception:
+            pass
     try:
         from app.utils.integration_sync_hooks import trigger_invoice_sync
 
@@ -181,7 +197,9 @@ def update_invoice(invoice_id):
 @require_api_token("write:invoices")
 def delete_invoice(invoice_id):
     """Cancel an invoice (soft-delete)."""
-    result = _invoice_service().update_invoice(invoice_id=invoice_id, user_id=g.api_user.id, status="cancelled")
+    result = _invoice_service().update_invoice(
+        invoice_id=invoice_id, user_id=g.api_user.id, status="cancelled", _allow_status=True
+    )
     if not result.get("success"):
         return error_response(result.get("message", "Could not cancel invoice"), status_code=400)
     return jsonify({"message": "Invoice cancelled successfully"})
@@ -435,9 +453,7 @@ def send_invoice_peppol_api(invoice_id):
         return error_response("Invoice not found", status_code=404)
     try:
         service = PeppolService()
-        success, tx, message = service.send_invoice(
-            invoice=invoice, triggered_by_user_id=g.api_user.id
-        )
+        success, tx, message = service.send_invoice(invoice=invoice, triggered_by_user_id=g.api_user.id)
     except Exception as e:
         current_app.logger.error(f"API Peppol send failed: {type(e).__name__}: {e}")
         return error_response("Failed to send via Peppol", status_code=502)
@@ -456,3 +472,163 @@ def send_invoice_peppol_api(invoice_id):
         return jsonify(payload)
     payload["message"] = "Failed to send via Peppol"
     return jsonify(payload), 400
+
+
+@api_v1_invoices_bp.route("/invoices/<int:invoice_id>/send-sdi", methods=["POST"])
+@require_api_token("write:invoices")
+def send_invoice_sdi_api(invoice_id):
+    """Token-auth SDI send — API twin of send_invoice_sdi_route."""
+    from app.models import Invoice
+    from app.services import SdiService
+
+    invoice = Invoice.query.get(invoice_id)
+    if not invoice:
+        return error_response("Invoice not found", status_code=404)
+    try:
+        service = SdiService()
+        success, tx, _message = service.send_invoice(invoice=invoice, triggered_by_user_id=g.api_user.id)
+    except Exception as e:
+        current_app.logger.error(f"API SDI send failed: {type(e).__name__}: {e}")
+        return error_response("Failed to send via SDI", status_code=502)
+    payload = {
+        "success": success,
+        "sdi_tx_id": tx.id if tx else None,
+        "status": tx.status if tx else None,
+        "filename": tx.filename if tx else None,
+    }
+    if success:
+        payload["message"] = "Invoice sent via SDI"
+        return jsonify(payload)
+    payload["message"] = "Failed to send via SDI"
+    return jsonify(payload), 400
+
+
+@api_v1_invoices_bp.route("/invoices/<int:invoice_id>/send-email", methods=["POST"])
+@require_api_token("write:invoices")
+def send_invoice_email_api(invoice_id):
+    """Send invoice via email. Body: optional recipient_email/recipient, subject, custom_message."""
+    invoice, err = _load_invoice_for_api(invoice_id)
+    if err:
+        return err
+
+    data = request.get_json(silent=True) or {}
+    recipient_email = (data.get("recipient_email") or data.get("recipient") or invoice.client_email or "").strip()
+    if not recipient_email:
+        return validation_error_response(
+            errors={"recipient_email": ["Recipient email is required"]},
+            message="Recipient email address is required",
+        )
+
+    subject = (data.get("subject") or "").strip() or None
+    custom_message = (data.get("custom_message") or data.get("message") or "").strip() or None
+    email_template_id = data.get("email_template_id")
+
+    try:
+        from app.utils.email import send_invoice_email
+
+        success, invoice_email, message = send_invoice_email(
+            invoice=invoice,
+            recipient_email=recipient_email,
+            sender_user=g.api_user,
+            custom_message=custom_message,
+            email_template_id=email_template_id,
+            subject=subject,
+        )
+    except Exception as e:
+        current_app.logger.error("API invoice email failed: %s: %s", type(e).__name__, e)
+        return error_response("Failed to send invoice email", status_code=500)
+
+    if not success:
+        return error_response(message or "Failed to send invoice email", status_code=500)
+
+    return jsonify(
+        {
+            "success": True,
+            "message": "Invoice email sent successfully",
+            "invoice_email_id": invoice_email.id if invoice_email else None,
+        }
+    )
+
+
+@api_v1_invoices_bp.route("/invoices/<int:invoice_id>/ubl", methods=["GET"])
+@require_api_token("read:invoices")
+def export_invoice_ubl_api(invoice_id):
+    """Download invoice as PEPPOL UBL 2.1 XML."""
+    invoice, err = _load_invoice_for_api(invoice_id)
+    if err:
+        return err
+    try:
+        from app.integrations.peppol import build_peppol_ubl_invoice_xml
+        from app.services.peppol_service import PeppolService
+
+        svc = PeppolService()
+        sender = svc._get_sender_party()
+        recipient_party, _ign, _ign2 = svc._get_recipient_party(invoice)
+        ubl_xml, _ign3 = build_peppol_ubl_invoice_xml(invoice=invoice, supplier=sender, customer=recipient_party)
+        fn = f"{invoice.invoice_number}.xml"
+        return Response(
+            ubl_xml,
+            mimetype="application/xml",
+            headers={"Content-Disposition": f"attachment; filename={fn}"},
+        )
+    except ValueError as e:
+        return error_response(str(e) or "Cannot generate UBL", status_code=400)
+    except Exception as e:
+        current_app.logger.error("API UBL export failed for invoice %s: %s", invoice_id, e, exc_info=True)
+        return error_response("UBL export failed", status_code=500)
+
+
+@api_v1_invoices_bp.route("/invoices/<int:invoice_id>/xrechnung", methods=["GET"])
+@require_api_token("read:invoices")
+def export_invoice_xrechnung_api(invoice_id):
+    """Download invoice as XRechnung 3.0 UBL XML."""
+    invoice, err = _load_invoice_for_api(invoice_id)
+    if err:
+        return err
+    from app.models import Settings
+    from app.utils.xrechnung import build_xrechnung_ubl_invoice_xml, validate_xrechnung_ready
+
+    settings = Settings.get_settings()
+    client_obj = getattr(invoice, "client", None)
+    errors = validate_xrechnung_ready(invoice, settings, client_obj)
+    if errors:
+        return jsonify({"error": "xrechnung_not_ready", "messages": errors}), 400
+    try:
+        xml, _sha = build_xrechnung_ubl_invoice_xml(invoice, settings, client_obj)
+        fn = f"{invoice.invoice_number}-xrechnung.xml"
+        return Response(
+            xml,
+            mimetype="application/xml",
+            headers={"Content-Disposition": f"attachment; filename={fn}"},
+        )
+    except Exception as e:
+        current_app.logger.error("API XRechnung export failed for invoice %s: %s", invoice_id, e, exc_info=True)
+        return error_response("XRechnung export failed", status_code=500)
+
+
+@api_v1_invoices_bp.route("/invoices/<int:invoice_id>/fatturapa", methods=["GET"])
+@require_api_token("read:invoices")
+def export_invoice_fatturapa_api(invoice_id):
+    """Download invoice as FatturaPA 1.2 XML."""
+    invoice, err = _load_invoice_for_api(invoice_id)
+    if err:
+        return err
+    from app.models import Settings
+    from app.utils.fatturapa import build_fatturapa_xml, progressivo_from_id, validate_fatturapa_ready
+
+    settings = Settings.get_settings()
+    client_obj = getattr(invoice, "client", None)
+    errors = validate_fatturapa_ready(invoice, settings, client_obj)
+    if errors:
+        return jsonify({"error": "fatturapa_not_ready", "messages": errors}), 400
+    try:
+        progressivo = progressivo_from_id(invoice.id or 1)
+        xml, filename, _sha = build_fatturapa_xml(invoice, settings, client_obj, progressivo)
+        return Response(
+            xml,
+            mimetype="application/xml",
+            headers={"Content-Disposition": f"attachment; filename={filename}"},
+        )
+    except Exception as e:
+        current_app.logger.error("API FatturaPA export failed for invoice %s: %s", invoice_id, e, exc_info=True)
+        return error_response("FatturaPA export failed", status_code=500)

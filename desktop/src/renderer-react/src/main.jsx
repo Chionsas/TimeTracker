@@ -7,7 +7,7 @@ import { buildDiagnostics } from './services/diagnostics.js';
 import { createSyncEngine } from './sync/syncEngine.js';
 import { LoadingScreen, Toast } from './components/ui.jsx';
 import { formatDuration, isTimerPaused, timerElapsedSeconds } from './utils/format.js';
-import { AuthFlow, Sidebar, TopBar } from './views/Shell.jsx';
+import { AuthFlow, Sidebar, TopBar, isViewEnabled } from './views/Shell.jsx';
 import { DashboardView } from './views/DashboardView.jsx';
 import { ProjectsView } from './views/ProjectsView.jsx';
 import { EntriesView } from './views/EntriesView.jsx';
@@ -21,6 +21,7 @@ import { CrmView } from './views/CrmView.jsx';
 import { FinanceExtraView } from './views/FinanceExtraView.jsx';
 import { StartTimerDialog, TimeEntryDialog } from './views/Dialogs.jsx';
 import { formatAttendanceError, runAttendanceAction } from './views/WorkdayCard.jsx';
+import { onLocaleChange, setLocale } from './i18n/i18n.js';
 
 const defaultConnection = {
   state: 'not_configured',
@@ -41,6 +42,7 @@ const emptyData = {
   workforce: {},
   invoiceApprovals: [],
   timeEntryApprovals: [],
+  enabledModules: [],
 };
 
 function App() {
@@ -67,6 +69,7 @@ function App() {
   const [settings, setSettings] = useState({ autoSync: true, syncInterval: 60 });
   const [syncStatus, setSyncStatus] = useState({
     queueDepth: 0,
+    failedDepth: 0,
     syncing: false,
     lastSyncAt: null,
     lastError: '',
@@ -76,6 +79,7 @@ function App() {
   const [attendance, setAttendance] = useState(null);
   const [attendanceLoading, setAttendanceLoading] = useState(false);
   const [idlePrompt, setIdlePrompt] = useState(null);
+  const [localeTick, setLocaleTick] = useState(0);
   const syncEngineRef = useRef(null);
 
   const showToast = useCallback((message, type = 'info') => {
@@ -94,8 +98,17 @@ function App() {
       const tokenServer = await storeGet('api_token_server_url');
       const autoSync = await storeGet('auto_sync');
       const syncInterval = await storeGet('sync_interval');
+      let savedLocale = (await storeGet('locale')) || null;
+      if (!savedLocale) {
+        try {
+          savedLocale = window.localStorage?.getItem('tt_desktop_locale') || 'en';
+        } catch {
+          savedLocale = 'en';
+        }
+      }
 
       if (cancelled) return;
+      setLocale(savedLocale || 'en');
       setTheme(savedTheme);
       setServerUrl(savedUrl || '');
       setUsername(savedUsername || '');
@@ -155,6 +168,9 @@ function App() {
     storeSet('theme_mode', theme);
   }, [theme]);
 
+  useEffect(() => onLocaleChange(() => setLocaleTick((n) => n + 1)), []);
+  void localeTick;
+
   const refreshAttendance = useCallback(async () => {
     if (!apiClient) return;
     setAttendanceLoading(true);
@@ -183,6 +199,7 @@ function App() {
       setData((current) => ({
         ...current,
         user: user.user || null,
+        enabledModules: Array.isArray(user.enabled_modules) ? user.enabled_modules : current.enabledModules || [],
         timer,
         projects: projects.projects || projects.items || [],
         tasks: tasks.tasks || tasks.items || [],
@@ -588,6 +605,10 @@ function App() {
   );
 
   const changeView = (view) => {
+    if (!isViewEnabled(view, data.enabledModules)) {
+      setActiveView('dashboard');
+      return;
+    }
     setActiveView(view);
     loadView(view);
   };
@@ -766,7 +787,7 @@ function App() {
 
   return (
     <div className="app-shell">
-      <Sidebar activeView={activeView} onChange={changeView} />
+      <Sidebar activeView={activeView} onChange={changeView} enabledModules={data.enabledModules} />
       <main className="workspace">
         <TopBar
           connection={connection}
@@ -776,6 +797,7 @@ function App() {
           setTheme={setTheme}
           onSyncNow={() => syncEngineRef.current?.syncNow()}
           onLogout={handleLogout}
+          onOpenSettings={() => setActiveView('settings')}
         />
         <section className="view-frame">
           {activeView === 'dashboard' && (
@@ -923,6 +945,7 @@ function App() {
               syncStatus={syncStatus}
               theme={theme}
               setTheme={setTheme}
+              syncEngine={syncEngineRef.current}
               onSave={async ({ nextUrl, nextUsername, nextPassword, nextSettings }) => {
                 setServerUrl(nextUrl);
                 setUsername(nextUsername);

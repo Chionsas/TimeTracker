@@ -284,7 +284,7 @@ class WorkflowEngine:
         if not task:
             raise ValueError(f"Task not found: {task_id}")
 
-        task.assigned_to = int(user_id)
+        task.set_assignees([int(user_id)])
         if not safe_commit("workflow_assign_task", {"task_id": task_id, "user_id": user_id}):
             db.session.rollback()
             raise ValueError(f"Failed to assign task {task_id} to user {user_id}")
@@ -358,6 +358,8 @@ class WorkflowEngine:
         """Trigger webhook"""
         import requests
 
+        from app.utils.outbound_url import UnsafeOutboundURL, validate_outbound_url
+
         url = action.get("url")
         method = action.get("method", "POST")
         payload = action.get("payload", {})
@@ -365,10 +367,17 @@ class WorkflowEngine:
         if not url:
             return {"sent": False, "error": "missing url"}
 
-        # Resolve template variables in payload
+        # Resolve template variables in URL and payload, then block SSRF targets
+        url = WorkflowEngine._resolve_template(url, context)
+        try:
+            url = validate_outbound_url(url)
+        except UnsafeOutboundURL:
+            logger.warning("Blocked unsafe outbound webhook URL for workflow action")
+            return {"sent": False, "error": "unsafe url"}
+
         resolved_payload = {k: WorkflowEngine._resolve_template(v, context) for k, v in payload.items()}
 
-        response = requests.request(method=method, url=url, json=resolved_payload, timeout=10)
+        response = requests.request(method=method, url=url, json=resolved_payload, timeout=10, allow_redirects=False)
 
         return {"sent": True, "status_code": response.status_code}
 
@@ -420,6 +429,8 @@ class WorkflowEngine:
                 results.append({"rule_id": rule.id, "rule_name": rule.name, **result})
             except Exception:
                 logger.exception("Error executing rule %s", rule.id)
-                results.append({"rule_id": rule.id, "rule_name": rule.name, "success": False, "error": "Workflow execution failed"})
+                results.append(
+                    {"rule_id": rule.id, "rule_name": rule.name, "success": False, "error": "Workflow execution failed"}
+                )
 
         return results

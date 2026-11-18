@@ -76,7 +76,7 @@
         <div class="content">
             <p>{{ _('Hello %(name)s,', name=user.display_name or user.username) }}</p>
             <p>{{ _('Your quote approval request has been rejected.') }}</p>
-            
+
             <div class="quote-details">
                 <p><strong>{{ _('Quote Number:') }}</strong> {{ quote.quote_number }}</p>
                 <p><strong>{{ _('Title:') }}</strong> {{ quote.title }}</p>
@@ -85,16 +85,16 @@
                 <p><strong>{{ _('Rejected By:') }}</strong> {{ quote.rejecter.full_name or quote.rejecter.username if quote.rejecter else _('N/A') }}</p>
                 <p><strong>{{ _('Rejected At:') }}</strong> {{ quote.rejected_at|user_datetime if quote.rejected_at else _('N/A') }}</p>
             </div>
-            
+
             {% if quote.rejection_reason %}
             <div class="rejection-reason">
                 <strong>{{ _('Rejection Reason:') }}</strong>
                 <p>{{ quote.rejection_reason|e }}</p>
             </div>
             {% endif %}
-            
+
             <p>{{ _('Please review the feedback and update the quote as needed.') }}</p>
-            
+
             {% if quote_url %}
             <a href="{{ quote_url }}" class="button">{{ _('View Quote') }}</a>
             {% endif %}
@@ -105,4 +105,3 @@
     </div>
 </body>
 </html>
-

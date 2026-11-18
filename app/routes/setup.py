@@ -24,6 +24,12 @@ IDLE_TIMEOUT_MIN, IDLE_TIMEOUT_MAX = 1, 480
 @setup_bp.route("/setup", methods=["GET", "POST"])
 def initial_setup():
     """Initial setup page for first-time users (guided wizard)."""
+    from flask import current_app
+
+    # Public demos never use the first-run wizard
+    if current_app.config.get("DEMO_MODE"):
+        return redirect(url_for("auth.login"))
+
     installation_config = get_installation_config()
 
     # If setup is already complete, redirect to dashboard
@@ -163,8 +169,11 @@ def _module_preset_choices():
     choices = [
         (
             ModulePreset.SOLO.value,
-            _("Just me"),
-            _("Track time, organise it by project and client, and bill it. The leanest setup."),
+            _("Focus mode (just me)"),
+            _(
+                "Timer-first: track time, Focus/Pomodoro sessions, weekly goals, "
+                "projects, clients, and invoices. Hides CRM, inventory, and team tools."
+            ),
         ),
         (
             ModulePreset.TEAM.value,
@@ -203,7 +212,7 @@ def _render_setup(settings, timezones):
         settings=settings,
         timezones=timezones,
         module_presets=_module_preset_choices(),
-        default_module_preset=ModulePreset.TEAM.value,
+        default_module_preset=ModulePreset.SOLO.value,
         rounding_methods=get_available_rounding_methods(),
         rounding_minimums=get_available_minimum_durations(),
     )

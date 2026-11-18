@@ -3,10 +3,10 @@ Test suite for route/endpoint testing.
 Tests all major routes and API endpoints.
 """
 
-import pytest
-from datetime import datetime, timedelta, date
+from datetime import date, datetime, timedelta
 from decimal import Decimal
 
+import pytest
 
 # ============================================================================
 # Smoke Tests - Critical Routes
@@ -141,7 +141,7 @@ def test_projects_create_page_contains_client_modal_trigger(admin_authenticated_
 def test_create_project_post_does_not_500_and_logs_activity(admin_authenticated_client, test_client, app):
     """Regression: creating a project should not 500 due to project.client being a string property."""
     from app import db
-    from app.models import Project, Activity
+    from app.models import Activity, Project
 
     with app.app_context():
         name = "Project Name test"
@@ -220,8 +220,8 @@ def test_create_project_api(client_with_token, test_client, app):
 @pytest.mark.routes
 def test_edit_project_description(admin_authenticated_client, project, app):
     """Test that project description changes are saved correctly."""
-    from app.models import Project
     from app import db
+    from app.models import Project
 
     with app.app_context():
         # Get the project ID
@@ -773,6 +773,42 @@ def test_export_time_entries_csv(authenticated_client, multiple_time_entries, ap
             },
         )
         assert response.status_code in [200, 404]
+
+
+@pytest.mark.integration
+@pytest.mark.routes
+def test_export_csv_applies_filters(authenticated_client, user, project, app):
+    """The export form's billable and tags filters limit the exported rows."""
+    from datetime import datetime, timedelta
+
+    from app import db
+    from app.models import TimeEntry
+
+    with app.app_context():
+        start = datetime.utcnow() - timedelta(days=1)
+        for notes, billable, tags in (("paid-work", True, "a"), ("free-work", False, "b")):
+            db.session.add(
+                TimeEntry(
+                    user_id=user.id,
+                    project_id=project.id,
+                    start_time=start,
+                    end_time=start + timedelta(hours=1),
+                    notes=notes,
+                    tags=tags,
+                    billable=billable,
+                )
+            )
+        db.session.commit()
+
+        dates = {
+            "start_date": (start - timedelta(days=1)).strftime("%Y-%m-%d"),
+            "end_date": datetime.utcnow().strftime("%Y-%m-%d"),
+        }
+        for extra in ({"billable": "yes"}, {"tags": "a"}):
+            response = authenticated_client.get("/reports/export/csv", query_string={**dates, **extra})
+            assert response.status_code == 200
+            assert b"paid-work" in response.data
+            assert b"free-work" not in response.data
 
 
 @pytest.mark.integration

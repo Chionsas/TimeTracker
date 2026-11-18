@@ -169,6 +169,7 @@ junit.xml
 *.xml
 !mobile/android/app/src/main/AndroidManifest.xml
 !templates/unraid/*.xml
+!ca_profile.xml
 test-results/
 .pytest_tmp*/
 bandit-report.json
@@ -201,8 +202,9 @@ desktop/*.p12
 desktop/*.spc
 desktop/*.pvk
 
-# Android release signing (never commit)
+# Android release signing / local SDK path (never commit)
 mobile/android/key.properties
+mobile/android/local.properties
 mobile/android/*.jks
 mobile/android/*.keystore
 
@@ -238,6 +240,7 @@ scripts/generate_donate_hide_code.py
 mobile/android/app/build/
 mobile/android/.gradle/
 mobile/ios/build/
+mobile/**/ephemeral/
 mobile/ios/Pods/
 mobile/ios/Podfile.lock
 mobile/ios/Podfile.lock.lock
@@ -270,3 +273,7 @@ mobile/.flutter-plugins-dependencies.lock.lock.lock.lock.lock.lock.lock.lock.loc
 ## License Files
 donate_hide_private.pem
 .claude/skills/
+
+# Flutter iOS generated (machine-local FLUTTER_ROOT)
+mobile/ios/Flutter/Generated.xcconfig
+mobile/ios/Flutter/flutter_export_environment.sh
