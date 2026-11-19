@@ -13,6 +13,7 @@ import requests
 from flask_babel import gettext as _
 
 from app.integrations.base import BaseConnector
+from app.utils.i18n_helpers import N_
 
 # In-process rate limit for Bot Framework messages (per conversation).
 _TEAMS_BOT_RATE_LIMIT = 20
@@ -36,7 +37,7 @@ class MicrosoftTeamsConnector(BaseConnector):
     """Microsoft Teams integration connector using Microsoft Graph API."""
 
     display_name = "Microsoft Teams"
-    description = "Send notifications and sync with Microsoft Teams"
+    description = N_("Send notifications and sync with Microsoft Teams")
     icon = "microsoft-teams"
 
     # Microsoft Graph API endpoints

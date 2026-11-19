@@ -8,6 +8,7 @@ from flask_babel import gettext as _
 
 from app.integrations.base import BaseConnector
 from app.utils.datev_export import build_datev_buchungsstapel
+from app.utils.i18n_helpers import N_
 
 logger = logging.getLogger(__name__)
 
@@ -16,7 +17,7 @@ class DatevConnector(BaseConnector):
     """DATEV export connector — generates EXTF CSV for Buchungsstapel import."""
 
     display_name = "DATEV"
-    description = "Export invoices as DATEV EXTF Buchungsstapel CSV"
+    description = N_("Export invoices as DATEV EXTF Buchungsstapel CSV")
     icon = "datev"
 
     @property

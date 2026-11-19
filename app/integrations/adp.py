@@ -10,6 +10,7 @@ import requests
 from flask_babel import gettext as _
 
 from app.integrations.base import BaseConnector
+from app.utils.i18n_helpers import N_
 
 logger = logging.getLogger(__name__)
 
@@ -18,7 +19,7 @@ class AdpConnector(BaseConnector):
     """ADP Workforce Now — OAuth2 client credentials / auth code + payroll batches."""
 
     display_name = "ADP Workforce Now"
-    description = "Push payroll batches to ADP Workforce Now"
+    description = N_("Push payroll batches to ADP Workforce Now")
     icon = "adp"
 
     AUTH_URL = "https://accounts.adp.com/auth/oauth/v2/authorize"

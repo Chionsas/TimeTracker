@@ -10,13 +10,14 @@ import requests
 from flask_babel import gettext as _
 
 from app.integrations.base import BaseConnector
+from app.utils.i18n_helpers import N_
 
 
 class SlackConnector(BaseConnector):
     """Slack integration connector."""
 
     display_name = "Slack"
-    description = "Send notifications and sync with Slack"
+    description = N_("Send notifications and sync with Slack")
     icon = "slack"
 
     @property

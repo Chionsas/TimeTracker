@@ -14,13 +14,14 @@ import requests
 from flask_babel import gettext as _
 
 from app.integrations.base import BaseConnector
+from app.utils.i18n_helpers import N_
 
 
 class TrelloConnector(BaseConnector):
     """Trello integration connector."""
 
     display_name = "Trello"
-    description = "Sync boards and cards with Trello"
+    description = N_("Sync boards and cards with Trello")
     icon = "trello"
 
     BASE_URL = "https://api.trello.com/1"

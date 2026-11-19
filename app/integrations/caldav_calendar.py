@@ -31,6 +31,7 @@ from flask_babel import gettext
 from icalendar import Calendar
 
 from app.integrations.base import BaseConnector
+from app.utils.i18n_helpers import N_
 from app.utils.timezone import get_timezone_obj, local_to_utc, now_in_app_timezone, utc_to_local
 
 DAV_NS = "DAV:"
@@ -635,7 +636,7 @@ class CalDAVCalendarConnector(BaseConnector):
     """CalDAV integration connector."""
 
     display_name = "CalDAV Calendar"
-    description = "Import/sync with a CalDAV calendar (e.g., Zimbra)"
+    description = N_("Import/sync with a CalDAV calendar (e.g., Zimbra)")
     icon = "calendar"
 
     @property

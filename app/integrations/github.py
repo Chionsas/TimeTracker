@@ -11,6 +11,7 @@ import requests
 from flask_babel import gettext as _
 
 from app.integrations.base import BaseConnector
+from app.utils.i18n_helpers import N_
 
 logger = logging.getLogger(__name__)
 
@@ -19,7 +20,7 @@ class GitHubConnector(BaseConnector):
     """GitHub integration connector."""
 
     display_name = "GitHub"
-    description = "Sync issues and track time from GitHub"
+    description = N_("Sync issues and track time from GitHub")
     icon = "github"
 
     @property

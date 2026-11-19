@@ -12,36 +12,35 @@
 </head>
 <body>
   <div class="header">
-    <h2>{% if days_offset >= 0 %}Payment Reminder{% else %}Upcoming Invoice Due{% endif %}</h2>
+    <h2>{% if days_offset >= 0 %}{{ _('Payment Reminder') }}{% else %}{{ _('Upcoming Invoice Due') }}{% endif %}</h2>
   </div>
   <div class="content">
-    <p>Dear {% if invoice.client %}{{ invoice.client.name }}{% else %}{{ invoice.client_name }}{% endif %},</p>
+    <p>{{ _('Dear %(name)s,', name=(invoice.client.name if invoice.client else invoice.client_name)) }}</p>
 
-    {% if days_offset >= 0 %}
-    <p>This is a friendly reminder that invoice <strong>{{ invoice.invoice_number }}</strong> is
-      {% if days_offset == 0 %}due today{% else %}{{ days_offset }} day{{ 's' if days_offset != 1 }} overdue{% endif %}.
-    </p>
+    {% set number_html = ('<strong>'|safe) ~ invoice.invoice_number ~ ('</strong>'|safe) %}
+    {% if days_offset == 0 %}
+    <p>{{ _('This is a friendly reminder that invoice %(number)s is due today.', number=number_html)|safe }}</p>
+    {% elif days_offset > 0 %}
+    <p>{{ ngettext('This is a friendly reminder that invoice %(number)s is %(num)d day overdue.', 'This is a friendly reminder that invoice %(number)s is %(num)d days overdue.', days_offset, number=number_html)|safe }}</p>
     {% else %}
-    <p>This is a reminder that invoice <strong>{{ invoice.invoice_number }}</strong> is due in
-      {{ days_offset | abs }} day{{ 's' if (days_offset | abs) != 1 }}.
-    </p>
+    <p>{{ ngettext('This is a reminder that invoice %(number)s is due in %(num)d day.', 'This is a reminder that invoice %(number)s is due in %(num)d days.', days_offset|abs, number=number_html)|safe }}</p>
     {% endif %}
 
     <div class="invoice-details">
-      <strong>Invoice:</strong> {{ invoice.invoice_number }}<br>
-      <strong>Amount due:</strong> {{ invoice.currency_code }} {{ "%.2f"|format(invoice.outstanding_amount) }}<br>
-      <strong>Due date:</strong> {{ invoice.due_date }}<br>
+      <strong>{{ _('Invoice:') }}</strong> {{ invoice.invoice_number }}<br>
+      <strong>{{ _('Amount due:') }}</strong> {{ invoice.outstanding_amount|format_currency(invoice.currency_code) }}<br>
+      <strong>{{ _('Due date:') }}</strong> {{ invoice.due_date|format_date }}<br>
       {% if invoice.late_fee_amount and invoice.late_fee_amount > 0 %}
-      <strong>Late fee accrued:</strong> {{ invoice.currency_code }} {{ "%.2f"|format(invoice.late_fee_amount) }}<br>
+      <strong>{{ _('Late fee accrued:') }}</strong> {{ invoice.late_fee_amount|format_currency(invoice.currency_code) }}<br>
       {% endif %}
     </div>
 
     {% if invoice_url %}
-    <p><a href="{{ invoice_url }}" class="btn">View Invoice</a></p>
+    <p><a href="{{ invoice_url }}" class="btn">{{ _('View Invoice') }}</a></p>
     {% endif %}
 
-    <p>Please arrange payment at your earliest convenience. If you have already paid, please disregard this reminder.</p>
-    <p>Thank you,<br>The TimeTracker Team</p>
+    <p>{{ _('Please arrange payment at your earliest convenience. If you have already paid, please disregard this reminder.') }}</p>
+    <p>{{ _('Thank you,') }}<br>{{ company_name or _('The TimeTracker Team') }}</p>
   </div>
 </body>
 </html>

@@ -10,6 +10,7 @@ import requests
 from flask_babel import gettext as _
 
 from app.integrations.base import BaseConnector
+from app.utils.i18n_helpers import N_
 
 logger = logging.getLogger(__name__)
 
@@ -18,7 +19,7 @@ class SageConnector(BaseConnector):
     """Sage Business Cloud Accounting (OAuth2 + REST)."""
 
     display_name = "Sage Business Cloud"
-    description = "Sync invoices, contacts, and payments with Sage"
+    description = N_("Sync invoices, contacts, and payments with Sage")
     icon = "sage"
 
     AUTH_URL = "https://www.sageone.com/oauth2/auth/central"

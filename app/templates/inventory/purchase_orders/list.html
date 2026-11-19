@@ -108,9 +108,9 @@
     {% endif %}
     {% endset %}
     {% if selected_status or selected_supplier_id %}
-        {{ empty_state('fas fa-file-invoice', 'No Purchase Orders Match Your Filters', 'Try adjusting your filters to see more results.', actions, type='no-results') }}
+        {{ empty_state('fas fa-file-invoice', _('No Purchase Orders Match Your Filters'), _('Try adjusting your filters to see more results.'), actions, type='no-results') }}
     {% else %}
-        {{ empty_state('fas fa-file-invoice', 'No Purchase Orders Yet', 'Create purchase orders to restock inventory from suppliers.', actions, type='no-data') }}
+        {{ empty_state('fas fa-file-invoice', _('No Purchase Orders Yet'), _('Create purchase orders to restock inventory from suppliers.'), actions, type='no-data') }}
     {% endif %}
     {% endif %}
 </div>

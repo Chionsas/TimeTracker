@@ -3,9 +3,9 @@
 
 {% block content %}
 {% set breadcrumbs = [
-    {'text': 'Issues', 'url': url_for('issues.list_issues')},
+    {'text': _('Issues'), 'url': url_for('issues.list_issues')},
     {'text': issue.title, 'url': url_for('issues.view_issue', issue_id=issue.id)},
-    {'text': 'Edit'}
+    {'text': _('Edit')}
 ] %}
 
 {{ page_header(

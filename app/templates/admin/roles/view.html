@@ -13,7 +13,7 @@
 <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
     <div>
         <h1 class="text-2xl font-bold">{{ role.name }}</h1>
-        <p class="text-text-muted-light dark:text-text-muted-dark">{{ role.description or _('No description') }}</p>
+        <p class="text-text-muted-light dark:text-text-muted-dark">{{ _(role.description) if role.description else _('No description') }}</p>
     </div>
     <div class="flex gap-2 mt-4 md:mt-0">
         {% if current_user.is_admin or has_permission('manage_roles') %}
@@ -87,7 +87,7 @@
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         {% for category, perms in categories.items() %}
         <div class="border border-border-light dark:border-border-dark rounded-lg p-4">
-            <h3 class="font-semibold text-primary mb-3 capitalize">{{ category.replace('_', ' ') }}</h3>
+            <h3 class="font-semibold text-primary mb-3 capitalize">{{ _(category.replace('_', ' ')|capitalize) }}</h3>
             <ul class="space-y-2">
                 {% for permission in perms %}
                 <li class="flex items-start gap-2">
@@ -97,7 +97,7 @@
                     <div class="flex-1">
                         <div class="text-sm font-medium">{{ permission.name.replace('_', ' ').title() }}</div>
                         {% if permission.description %}
-                        <div class="text-xs text-text-muted-light dark:text-text-muted-dark">{{ permission.description }}</div>
+                        <div class="text-xs text-text-muted-light dark:text-text-muted-dark">{{ _(permission.description) }}</div>
                         {% endif %}
                     </div>
                 </li>

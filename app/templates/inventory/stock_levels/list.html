@@ -81,9 +81,9 @@
     {% else %}
     {% set actions %}{% endset %}
     {% if selected_warehouse_id or selected_category %}
-        {{ empty_state('fas fa-layer-group', 'No Stock Levels Match Your Filters', 'Try adjusting your filters to see more results.', actions, type='no-results') }}
+        {{ empty_state('fas fa-layer-group', _('No Stock Levels Match Your Filters'), _('Try adjusting your filters to see more results.'), actions, type='no-results') }}
     {% else %}
-        {{ empty_state('fas fa-layer-group', 'No Stock Levels Yet', 'Stock levels appear once items are received into warehouses.', actions, type='no-data') }}
+        {{ empty_state('fas fa-layer-group', _('No Stock Levels Yet'), _('Stock levels appear once items are received into warehouses.'), actions, type='no-data') }}
     {% endif %}
     {% endif %}
 </div>

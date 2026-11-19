@@ -20,7 +20,7 @@
     {% for category, permissions in permissions_by_category.items() %}
     <div class="bg-card-light dark:bg-card-dark rounded-lg shadow">
         <div class="bg-primary/10 px-6 py-4 border-b border-border-light dark:border-border-dark">
-            <h2 class="text-lg font-semibold capitalize">{{ category.replace('_', ' ') }}</h2>
+            <h2 class="text-lg font-semibold capitalize">{{ _(category.replace('_', ' ')|capitalize) }}</h2>
             <p class="text-sm text-text-muted-light dark:text-text-muted-dark">{{ permissions|length }} {{ _('permissions') }}</p>
         </div>
         <div class="p-6">
@@ -35,7 +35,7 @@
                     <div class="flex-1">
                         <h3 class="font-medium text-sm">{{ permission.name.replace('_', ' ').title() }}</h3>
                         <p class="text-xs text-text-muted-light dark:text-text-muted-dark mt-1">
-                            {{ permission.description or _('No description available') }}
+                            {{ _(permission.description) if permission.description else _('No description available') }}
                         </p>
                         <div class="mt-2">
                             <span class="text-xs bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">{{ permission.name }}</span>

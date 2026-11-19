@@ -5,9 +5,9 @@
 
 {% block content %}
 {% set breadcrumbs = [
-    {'text': 'Clients', 'url': url_for('clients.list_clients')},
+    {'text': _('Clients'), 'url': url_for('clients.list_clients')},
     {'text': contact.client.name, 'url': url_for('clients.view_client', client_id=contact.client_id)},
-    {'text': 'Contacts', 'url': url_for('contacts.list_contacts', client_id=contact.client_id)},
+    {'text': _('Contacts'), 'url': url_for('contacts.list_contacts', client_id=contact.client_id)},
     {'text': contact.full_name}
 ] %}
 

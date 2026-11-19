@@ -24,6 +24,7 @@ import requests
 from flask_babel import gettext as _
 
 from app.integrations.base import BaseConnector
+from app.utils.i18n_helpers import N_
 from app.utils.secret_crypto import decrypt_if_needed, encrypt_if_possible
 from app.utils.secret_crypto import is_configured as secrets_encryption_configured
 
@@ -70,7 +71,7 @@ class SlackConnector(BaseConnector):
     """Per-user Slack notifier + slash command handler."""
 
     display_name = "Slack"
-    description = "Notify a Slack channel on timer events and run /tt slash commands"
+    description = N_("Notify a Slack channel on timer events and run /tt slash commands")
     icon = "slack"
 
     def __init__(self, integration=None, credentials=None):

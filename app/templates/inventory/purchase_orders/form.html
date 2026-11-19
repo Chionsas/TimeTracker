@@ -4,8 +4,8 @@
 {% block content %}
 {% set is_edit = purchase_order is not none %}
 {% set breadcrumbs = [
-    {'text': 'Inventory', 'url': url_for('inventory.list_stock_items')},
-    {'text': 'Purchase Orders', 'url': url_for('inventory.list_purchase_orders')},
+    {'text': _('Inventory'), 'url': url_for('inventory.list_stock_items')},
+    {'text': _('Purchase Orders'), 'url': url_for('inventory.list_purchase_orders')},
     {'text': _('Edit Purchase Order') if is_edit else _('New Purchase Order')}
 ] %}
 

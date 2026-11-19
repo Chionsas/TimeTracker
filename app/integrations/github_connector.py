@@ -27,6 +27,7 @@ import requests
 from flask_babel import gettext as _
 
 from app.integrations.base import BaseConnector
+from app.utils.i18n_helpers import N_
 from app.utils.secret_crypto import decrypt_if_needed, encrypt_if_possible
 from app.utils.secret_crypto import is_configured as secrets_encryption_configured
 
@@ -81,7 +82,7 @@ class GitHubConnector(BaseConnector):
     """Webhook-driven GitHub integration (per-user, PAT-based)."""
 
     display_name = "GitHub"
-    description = "Auto-create tasks from GitHub issues and run a timer on assignment"
+    description = N_("Auto-create tasks from GitHub issues and run a timer on assignment")
     icon = "github"
 
     def __init__(self, integration=None, credentials=None):

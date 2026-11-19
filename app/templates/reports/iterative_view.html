@@ -5,9 +5,9 @@
 
 {% block content %}
 {% set breadcrumbs = [
-    {'text': 'Reports', 'url': url_for('reports.reports')},
-    {'text': 'Report Builder', 'url': url_for('custom_reports.report_builder')},
-    {'text': 'Saved Views', 'url': url_for('custom_reports.list_saved_views')},
+    {'text': _('Reports'), 'url': url_for('reports.reports')},
+    {'text': _('Report Builder'), 'url': url_for('custom_reports.report_builder')},
+    {'text': _('Saved Views'), 'url': url_for('custom_reports.list_saved_views')},
     {'text': saved_view.name}
 ] %}
 

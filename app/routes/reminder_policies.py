@@ -1,6 +1,7 @@
 """Admin UI routes for reminder policies (Phase 4 – invoicing gaps)."""
 
 from flask import Blueprint, flash, redirect, render_template, request, url_for
+from flask_babel import gettext as _
 from flask_login import login_required
 
 from app import db
@@ -25,7 +26,7 @@ def create_policy():
     if request.method == "POST":
         name = (request.form.get("name") or "").strip()
         if not name:
-            flash("Policy name is required.", "error")
+            flash(_("Policy name is required."), "error")
             return redirect(url_for("reminder_policies.create_policy"))
 
         is_default = bool(request.form.get("is_default"))
@@ -39,7 +40,7 @@ def create_policy():
 
         _save_levels(policy, request.form)
         db.session.commit()
-        flash(f"Reminder policy '{name}' created.", "success")
+        flash(_("Reminder policy '%(name)s' created.", name=name), "success")
         return redirect(url_for("reminder_policies.list_policies"))
 
     return render_template("reminder_policies/edit.html", policy=None)
@@ -54,7 +55,7 @@ def edit_policy(policy_id):
     if request.method == "POST":
         name = (request.form.get("name") or "").strip()
         if not name:
-            flash("Policy name is required.", "error")
+            flash(_("Policy name is required."), "error")
             return redirect(url_for("reminder_policies.edit_policy", policy_id=policy_id))
 
         is_default = bool(request.form.get("is_default"))
@@ -72,7 +73,7 @@ def edit_policy(policy_id):
 
         _save_levels(policy, request.form)
         db.session.commit()
-        flash(f"Reminder policy '{name}' updated.", "success")
+        flash(_("Reminder policy '%(name)s' updated.", name=name), "success")
         return redirect(url_for("reminder_policies.list_policies"))
 
     return render_template("reminder_policies/edit.html", policy=policy)
@@ -85,7 +86,7 @@ def delete_policy(policy_id):
     policy = ReminderPolicy.query.get_or_404(policy_id)
     db.session.delete(policy)
     db.session.commit()
-    flash(f"Reminder policy '{policy.name}' deleted.", "success")
+    flash(_("Reminder policy '%(name)s' deleted.", name=policy.name), "success")
     return redirect(url_for("reminder_policies.list_policies"))
 
 

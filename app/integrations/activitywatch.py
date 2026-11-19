@@ -22,6 +22,7 @@ import requests
 from flask_babel import gettext as _
 
 from app.integrations.base import BaseConnector
+from app.utils.i18n_helpers import N_
 from app.utils.integration_http import integration_session, session_request
 from app.utils.timezone import get_timezone_obj, utc_to_local
 
@@ -64,7 +65,7 @@ class ActivityWatchConnector(BaseConnector):
     """ActivityWatch integration: import aw-server events as time entries."""
 
     display_name = "ActivityWatch"
-    description = "Import window and web activity from ActivityWatch (aw-server) as automatic time entries"
+    description = N_("Import window and web activity from ActivityWatch (aw-server) as automatic time entries")
     icon = "desktop"
 
     @property

@@ -7,6 +7,8 @@ from datetime import date, timedelta
 from decimal import Decimal, InvalidOperation
 from typing import Any, Dict, List, Optional
 
+from flask_babel import gettext as _
+
 from app import db
 from app.constants import InvoiceStatus, PaymentStatus, WebhookEvent
 from app.models import Invoice, InvoiceItem, TimeEntry
@@ -857,7 +859,7 @@ class InvoiceService:
             return {
                 "ok": False,
                 "error": "no_project_entries",
-                "message": "Unbilled time without a project cannot be invoiced; assign a project first.",
+                "message": _("Unbilled time without a project cannot be invoiced; assign a project first."),
                 "unbilled_entries": [],
                 "groups": {},
                 "projects_by_id": projects_by_id,
@@ -870,7 +872,7 @@ class InvoiceService:
             return {
                 "ok": False,
                 "error": "no_unbilled_entries",
-                "message": "No unbilled time entries for this client.",
+                "message": _("No unbilled time entries for this client."),
                 "unbilled_entries": [],
                 "groups": {},
                 "projects_by_id": projects_by_id,
@@ -952,14 +954,14 @@ class InvoiceService:
 
         state = self._client_unbilled_invoice_state(client_id)
         if state.get("error") == "not_found":
-            return {"success": False, "error": "not_found", "message": "Client not found"}
+            return {"success": False, "error": "not_found", "message": _("Client not found")}
 
         if not state.get("ok"):
             err = state.get("error", "unknown")
             return {
                 "success": False,
                 "error": err,
-                "message": state.get("message", "Cannot create invoice."),
+                "message": state.get("message", _("Cannot create invoice.")),
             }
 
         groups: Dict[int, List[TimeEntry]] = state["groups"]
@@ -980,7 +982,7 @@ class InvoiceService:
             return {
                 "success": False,
                 "error": "no_unbilled_entries",
-                "message": "No unbilled time entries for this client.",
+                "message": _("No unbilled time entries for this client."),
             }
 
         client = Client.query.get(client_id)

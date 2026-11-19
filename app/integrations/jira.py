@@ -15,6 +15,7 @@ import requests
 from flask_babel import gettext as _
 
 from app.integrations.base import BaseConnector
+from app.utils.i18n_helpers import N_
 
 logger = logging.getLogger(__name__)
 
@@ -26,7 +27,7 @@ class JiraConnector(BaseConnector):
     """Jira integration connector."""
 
     display_name = "Jira"
-    description = "Sync issues and track time in Jira"
+    description = N_("Sync issues and track time in Jira")
     icon = "jira"
 
     @property

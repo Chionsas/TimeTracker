@@ -11,6 +11,7 @@ import requests
 from flask_babel import gettext as _
 
 from app.integrations.base import BaseConnector
+from app.utils.i18n_helpers import N_
 
 logger = logging.getLogger(__name__)
 
@@ -19,7 +20,7 @@ class GmailConnector(BaseConnector):
     """Gmail API connector — syncs threads matched to CRM contacts."""
 
     display_name = "Gmail"
-    description = "Sync Gmail threads into CRM (clients, leads, deals)"
+    description = N_("Sync Gmail threads into CRM (clients, leads, deals)")
     icon = "gmail"
 
     AUTH_URL = "https://accounts.google.com/o/oauth2/v2/auth"

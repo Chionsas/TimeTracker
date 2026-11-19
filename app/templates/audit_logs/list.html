@@ -181,9 +181,9 @@
         <a href="{{ url_for('audit_logs.list_audit_logs') }}" class="btn btn-secondary btn-sm">{{ _('Clear Filters') }}</a>
     {% endset %}
     {% if entity_type or entity_id or user_id or action or days != 30 %}
-        {{ empty_state('fas fa-search', 'No Audit Logs Match Your Filters', 'Try adjusting your filters or time range to see more activity.', actions, type='no-results') }}
+        {{ empty_state('fas fa-search', _('No Audit Logs Match Your Filters'), _('Try adjusting your filters or time range to see more activity.'), actions, type='no-results') }}
     {% else %}
-        {{ empty_state('fas fa-history', 'No Audit Logs Yet', 'Changes to records will appear here once activity is logged.', None, type='no-data') }}
+        {{ empty_state('fas fa-history', _('No Audit Logs Yet'), _('Changes to records will appear here once activity is logged.'), None, type='no-data') }}
     {% endif %}
     {% endif %}
 </div>

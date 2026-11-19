@@ -3,8 +3,8 @@
 
 {% block content %}
 {% set breadcrumbs = [
-    {'text': 'Inventory', 'url': url_for('inventory.list_stock_items')},
-    {'text': 'Purchase Orders', 'url': url_for('inventory.list_purchase_orders')},
+    {'text': _('Inventory'), 'url': url_for('inventory.list_stock_items')},
+    {'text': _('Purchase Orders'), 'url': url_for('inventory.list_purchase_orders')},
     {'text': purchase_order.po_number}
 ] %}
 

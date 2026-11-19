@@ -24,6 +24,7 @@ if TYPE_CHECKING:
     from app.models import Integration
 
 from app.integrations.base import BaseConnector
+from app.utils.i18n_helpers import N_
 from app.utils.secret_crypto import decrypt_if_needed, encrypt_if_possible
 from app.utils.secret_crypto import is_configured as secrets_encryption_configured
 
@@ -86,7 +87,7 @@ class GoogleCalendarConnector(BaseConnector):
     """Per-user Google Calendar import/export connector."""
 
     display_name = "Google Calendar"
-    description = "Import calendar events as time entries and (optionally) export back"
+    description = N_("Import calendar events as time entries and (optionally) export back")
     icon = "google"
 
     def __init__(self, integration=None, credentials=None):

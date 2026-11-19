@@ -11,13 +11,14 @@ import requests
 from flask_babel import gettext as _
 
 from app.integrations.base import BaseConnector
+from app.utils.i18n_helpers import N_
 
 
 class AsanaConnector(BaseConnector):
     """Asana integration connector."""
 
     display_name = "Asana"
-    description = "Sync tasks and projects with Asana"
+    description = N_("Sync tasks and projects with Asana")
     icon = "asana"
 
     BASE_URL = "https://app.asana.com/api/1.0"

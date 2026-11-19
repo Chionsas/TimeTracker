@@ -11,13 +11,14 @@ import requests
 from flask_babel import gettext as _
 
 from app.integrations.base import BaseConnector
+from app.utils.i18n_helpers import N_
 
 
 class OutlookCalendarConnector(BaseConnector):
     """Outlook Calendar integration connector using Microsoft Graph API."""
 
     display_name = "Outlook Calendar"
-    description = "Two-way sync with Outlook Calendar"
+    description = N_("Two-way sync with Outlook Calendar")
     icon = "microsoft"
 
     # Microsoft Graph API endpoints

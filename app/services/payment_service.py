@@ -162,19 +162,22 @@ class PaymentService:
             return
 
         from app.utils.email import send_template_email
+        from app.utils.i18n_helpers import client_locale
 
-        send_template_email(
-            to=invoice.client_email,
-            subject=f"Payment Receipt — Invoice {invoice.invoice_number}",
-            template="email/payment_receipt.html",
-            client_name=invoice.client_name or "",
-            invoice_number=invoice.invoice_number or str(invoice.id),
-            amount=payment.amount,
-            currency=payment.currency or invoice.currency_code or "EUR",
-            payment_date=str(payment.payment_date),
-            payment_method=payment.method or "",
-            reference=payment.reference or "",
-        )
+        invoice_number = invoice.invoice_number or str(invoice.id)
+        with client_locale(invoice.client):
+            send_template_email(
+                to=invoice.client_email,
+                subject=_("Payment Receipt — Invoice %(number)s", number=invoice_number),
+                template="email/payment_receipt.html",
+                client_name=invoice.client_name or "",
+                invoice_number=invoice_number,
+                amount=payment.amount,
+                currency=payment.currency or invoice.currency_code or "EUR",
+                payment_date=payment.payment_date,
+                payment_method=payment.method or "",
+                reference=payment.reference or "",
+            )
 
     def get_invoice_payments(self, invoice_id: int) -> List[Payment]:
         """Get all payments for an invoice"""

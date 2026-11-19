@@ -16,13 +16,14 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
 from app.integrations.base import BaseConnector
+from app.utils.i18n_helpers import N_
 
 
 class GoogleCalendarConnector(BaseConnector):
     """Google Calendar integration connector."""
 
     display_name = "Google Calendar"
-    description = "Two-way sync with Google Calendar"
+    description = N_("Two-way sync with Google Calendar")
     icon = "google"
 
     # OAuth 2.0 scopes required

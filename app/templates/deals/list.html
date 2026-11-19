@@ -92,9 +92,9 @@
         </a>
     {% endset %}
     {% if stage %}
-        {{ empty_state('fas fa-search', 'No Deals Match Your Filters', 'Try adjusting your filters to see more results. You can clear filters or create a new deal that matches your criteria.', actions, type='no-results') }}
+        {{ empty_state('fas fa-search', _('No Deals Match Your Filters'), _('Try adjusting your filters to see more results. You can clear filters or create a new deal that matches your criteria.'), actions, type='no-results') }}
     {% else %}
-        {{ empty_state('fas fa-handshake', 'No Deals Yet', 'Deals help you manage your sales pipeline from first contact to close. Create your first deal to get started!', actions, type='no-data') }}
+        {{ empty_state('fas fa-handshake', _('No Deals Yet'), _('Deals help you manage your sales pipeline from first contact to close. Create your first deal to get started!'), actions, type='no-data') }}
     {% endif %}
     {% endif %}
 </div>

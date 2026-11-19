@@ -10,6 +10,7 @@ import requests
 from flask_babel import gettext as _
 
 from app.integrations.base import BaseConnector
+from app.utils.i18n_helpers import N_
 
 logger = logging.getLogger(__name__)
 
@@ -18,7 +19,7 @@ class OutlookEmailConnector(BaseConnector):
     """Microsoft Graph mail connector."""
 
     display_name = "Outlook Email"
-    description = "Sync Outlook / Microsoft 365 mail into CRM"
+    description = N_("Sync Outlook / Microsoft 365 mail into CRM")
     icon = "outlook"
 
     AUTH_URL = "https://login.microsoftonline.com/common/oauth2/v2.0/authorize"

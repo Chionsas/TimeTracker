@@ -13,6 +13,7 @@ from app.models import Role, User
 from app.utils.config_manager import ConfigManager
 from app.utils.db import safe_commit
 from app.utils.deleted_usernames import is_username_reserved
+from app.utils.i18n_helpers import N_
 from app.utils.posthog_funnels import track_onboarding_started
 
 
@@ -86,7 +87,7 @@ def provision_external_user(
     full_name = (full_name or "").strip() or None
 
     if not subject or not issuer:
-        return ProvisionResult(user=None, error="missing_subject_or_issuer", error_flash="Invalid identity assertion.")
+        return ProvisionResult(user=None, error="missing_subject_or_issuer", error_flash=N_("Invalid identity assertion."))
 
     username = _normalize_username(username, email, subject)
 
@@ -105,20 +106,20 @@ def provision_external_user(
             return ProvisionResult(
                 user=None,
                 error="demo_mode_no_create",
-                error_flash="Demo mode: only the demo account can be used. Please use the credentials on the login page.",
+                error_flash=N_("Demo mode: only the demo account can be used. Please use the credentials on the login page."),
             )
         allow_self_register = ConfigManager.get_setting("allow_self_register", Config.ALLOW_SELF_REGISTER)
         if not allow_self_register:
             return ProvisionResult(
                 user=None,
                 error="self_registration_disabled",
-                error_flash="User account does not exist and self-registration is disabled.",
+                error_flash=N_("User account does not exist and self-registration is disabled."),
             )
         if is_username_reserved(username):
             return ProvisionResult(
                 user=None,
                 error="deleted_username_reserved",
-                error_flash="User account does not exist and self-registration is disabled.",
+                error_flash=N_("User account does not exist and self-registration is disabled."),
             )
 
         role_name = "user"
@@ -162,7 +163,7 @@ def provision_external_user(
             return ProvisionResult(
                 user=None,
                 error="db_create_user_failed",
-                error_flash="Could not create your account due to a database error.",
+                error_flash=N_("Could not create your account due to a database error."),
             )
     else:
         changed = False

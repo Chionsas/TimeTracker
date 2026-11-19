@@ -11,13 +11,14 @@ import requests
 from flask_babel import gettext as _
 
 from app.integrations.base import BaseConnector
+from app.utils.i18n_helpers import N_
 
 
 class GitLabConnector(BaseConnector):
     """GitLab integration connector."""
 
     display_name = "GitLab"
-    description = "Sync issues and track time from GitLab"
+    description = N_("Sync issues and track time from GitLab")
     icon = "gitlab"
 
     @property

@@ -12,6 +12,10 @@ from datetime import date, datetime
 from decimal import ROUND_HALF_UP, Decimal
 from typing import Optional
 
+from flask_babel import ngettext
+
+from app.utils.i18n_helpers import client_locale
+
 logger = logging.getLogger(__name__)
 
 # Cap annual interest at 100 % to avoid runaway compound rounding
@@ -192,8 +196,18 @@ def _get_recipient(invoice) -> Optional[str]:
 def _reminder_subject(invoice, level) -> str:
     days = abs(level.days_offset)
     if level.days_offset >= 0:
-        return f"Payment reminder – invoice {invoice.invoice_number} ({days} day{'s' if days != 1 else ''} overdue)"
-    return f"Upcoming invoice due – {invoice.invoice_number} (due in {days} day{'s' if days != 1 else ''})"
+        return ngettext(
+            "Payment reminder – invoice %(number)s (%(num)d day overdue)",
+            "Payment reminder – invoice %(number)s (%(num)d days overdue)",
+            days,
+            number=invoice.invoice_number,
+        )
+    return ngettext(
+        "Upcoming invoice due – %(number)s (due in %(num)d day)",
+        "Upcoming invoice due – %(number)s (due in %(num)d days)",
+        days,
+        number=invoice.invoice_number,
+    )
 
 
 def _send_reminder_email(invoice, level) -> bool:
@@ -206,7 +220,6 @@ def _send_reminder_email(invoice, level) -> bool:
             logger.warning("No recipient email for invoice %s, skipping reminder", invoice.invoice_number)
             return False
 
-        subject = _reminder_subject(invoice, level)
         days_offset = level.days_offset
 
         # Try to use send_invoice_email (attaches PDF) first; fall back to plain email
@@ -222,18 +235,21 @@ def _send_reminder_email(invoice, level) -> bool:
 
         # Fallback: plain-text reminder
         try:
+            from app.models import Settings
             from app.utils.email import send_template_email
             from app.utils.urls import safe_external_url_for
 
             invoice_url = safe_external_url_for("invoices.view_invoice", invoice_id=invoice.id)
-            send_template_email(
-                to=recipient,
-                subject=subject,
-                template="email/invoice_reminder.html",
-                invoice=invoice,
-                days_offset=days_offset,
-                invoice_url=invoice_url,
-            )
+            with client_locale(getattr(invoice, "client", None)):
+                send_template_email(
+                    to=recipient,
+                    subject=_reminder_subject(invoice, level),
+                    template="email/invoice_reminder.html",
+                    invoice=invoice,
+                    days_offset=days_offset,
+                    invoice_url=invoice_url,
+                    company_name=getattr(Settings.get_settings(), "company_name", None),
+                )
             return True
         except Exception as exc:
             logger.warning("Fallback reminder email failed for invoice %s: %s", invoice.invoice_number, exc)

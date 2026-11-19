@@ -55,51 +55,51 @@
 </head>
 <body>
     <div class="header">
-        <h2>✓ Payment Received</h2>
-        <p>Thank you — your payment has been recorded.</p>
+        <h2>✓ {{ _('Payment Received') }}</h2>
+        <p>{{ _('Thank you — your payment has been recorded.') }}</p>
     </div>
 
     <div class="content">
-        <p>Dear {{ client_name or 'Valued Customer' }},</p>
-        <p>We have received your payment. Here is your receipt:</p>
+        <p>{% if client_name %}{{ _('Dear %(name)s,', name=client_name) }}{% else %}{{ _('Dear Valued Customer,') }}{% endif %}</p>
+        <p>{{ _('We have received your payment. Here is your receipt:') }}</p>
 
         <div class="receipt-details">
-            <div class="amount">{{ currency }} {{ "%.2f"|format(amount) }}</div>
+            <div class="amount">{{ amount|format_currency(currency) }}</div>
 
             <div style="margin-top: 15px;">
                 <div class="row">
-                    <span class="label">Invoice Number</span>
+                    <span class="label">{{ _('Invoice Number') }}</span>
                     <span class="value">{{ invoice_number }}</span>
                 </div>
                 <div class="row">
-                    <span class="label">Payment Date</span>
-                    <span class="value">{{ payment_date }}</span>
+                    <span class="label">{{ _('Payment Date') }}</span>
+                    <span class="value">{{ payment_date|format_date }}</span>
                 </div>
                 {% if payment_method %}
                 <div class="row">
-                    <span class="label">Payment Method</span>
+                    <span class="label">{{ _('Payment Method') }}</span>
                     <span class="value">{{ payment_method }}</span>
                 </div>
                 {% endif %}
                 {% if reference %}
                 <div class="row">
-                    <span class="label">Reference</span>
+                    <span class="label">{{ _('Reference') }}</span>
                     <span class="value">{{ reference }}</span>
                 </div>
                 {% endif %}
                 <div class="row">
-                    <span class="label">Status</span>
-                    <span class="value" style="color: #16a34a;">Completed</span>
+                    <span class="label">{{ _('Status') }}</span>
+                    <span class="value" style="color: #16a34a;">{{ _('Completed') }}</span>
                 </div>
             </div>
         </div>
 
-        <p>If you have any questions about this payment, please don't hesitate to contact us.</p>
-        <p>Thank you for your business!</p>
+        <p>{{ _("If you have any questions about this payment, please don't hesitate to contact us.") }}</p>
+        <p>{{ _('Thank you for your business!') }}</p>
     </div>
 
     <div class="footer">
-        <p>This is an automated payment receipt. Please do not reply to this email.</p>
+        <p>{{ _('This is an automated payment receipt. Please do not reply to this email.') }}</p>
     </div>
 </body>
 </html>

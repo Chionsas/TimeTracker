@@ -10,6 +10,7 @@ import requests
 from flask_babel import gettext as _
 
 from app.integrations.base import BaseConnector
+from app.utils.i18n_helpers import N_
 
 logger = logging.getLogger(__name__)
 
@@ -18,7 +19,7 @@ class GustoConnector(BaseConnector):
     """Gusto Partner API — push payroll hours / pay runs."""
 
     display_name = "Gusto"
-    description = "Push time entries as payroll hours to Gusto"
+    description = N_("Push time entries as payroll hours to Gusto")
     icon = "gusto"
 
     AUTH_URL = "https://api.gusto.com/oauth/authorize"

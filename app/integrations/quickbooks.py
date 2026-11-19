@@ -20,6 +20,7 @@ from app.integrations.sync_config import (
     should_sync_time_entries,
     sync_window_start,
 )
+from app.utils.i18n_helpers import N_
 from app.utils.integration_metadata import get_integration_ref, set_integration_ref
 
 logger = logging.getLogger(__name__)
@@ -29,7 +30,7 @@ class QuickBooksConnector(BaseConnector):
     """QuickBooks Online integration connector."""
 
     display_name = "QuickBooks Online"
-    description = "Sync invoices, expenses, and payments with QuickBooks"
+    description = N_("Sync invoices, expenses, and payments with QuickBooks")
     icon = "quickbooks"
 
     BASE_URL = "https://sandbox-quickbooks.api.intuit.com"  # Sandbox

@@ -226,7 +226,7 @@
                         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                         <input type="hidden" name="reason" id="refundReason" value="">
                         <button type="button" onclick="confirmRefundPayment()" class="block w-full text-center bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-2 rounded-lg transition-colors">
-                            <i class="fas fa-undo mr-2"></i>Refund Payment
+                            <i class="fas fa-undo mr-2"></i>{{ _('Refund Payment') }}
                         </button>
                     </form>
                     {% endif %}
@@ -260,11 +260,11 @@ async function confirmDeletePayment() {
 }
 
 async function confirmRefundPayment() {
-    const message = 'Are you sure you want to refund this payment? This will attempt to issue a refund via the payment gateway (if applicable) and mark the payment as refunded.';
+    const message = {{ _('Are you sure you want to refund this payment? This will attempt to issue a refund via the payment gateway (if applicable) and mark the payment as refunded.')|tojson }};
     const confirmed = await showConfirm(message, {
-        title: 'Refund Payment',
-        confirmText: 'Refund',
-        cancelText: 'Cancel',
+        title: {{ _('Refund Payment')|tojson }},
+        confirmText: {{ _('Refund')|tojson }},
+        cancelText: {{ _('Cancel')|tojson }},
         variant: 'warning'
     });
     if (confirmed) {

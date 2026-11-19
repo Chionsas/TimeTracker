@@ -12,6 +12,7 @@ from typing import Any, Dict, List, Optional
 from flask_babel import gettext
 
 from app.integrations.base import BaseConnector
+from app.utils.i18n_helpers import N_
 from app.utils.integration_http import integration_session, session_request
 
 logger = logging.getLogger(__name__)
@@ -23,7 +24,7 @@ class LinearConnector(BaseConnector):
     """Linear connector (API key; issues → tasks)."""
 
     display_name = "Linear"
-    description = "Import Linear issues as tasks"
+    description = N_("Import Linear issues as tasks")
     icon = "tasks"
 
     @property

@@ -13,6 +13,15 @@ from flask_babel import gettext as _
 from flask_babel import lazy_gettext as _l
 
 
+def N_(message):
+    """Mark a message for extraction without translating it here.
+
+    For text stored or passed around in English (seed data, class attributes,
+    service results) and translated with ``_()`` where it is shown.
+    """
+    return message
+
+
 def client_locale(client):
     """Context for text sent to a client (emails, portal notifications, attached PDFs).
 
