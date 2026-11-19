@@ -36,7 +36,7 @@
             <i class="fas fa-chart-pie fa-2x opacity-80"></i>
         </div>
         <h3 class="text-3xl font-bold">{{ budget_status.consumed_amount|format_currency }}</h3>
-        <p class="text-sm opacity-90">{{ _('Consumed') }} ({{ "%.1f"|format(budget_status.consumed_percentage) }}%)</p>
+        <p class="text-sm opacity-90">{{ _('Consumed') }} ({{ "%.1f"|format(budget_status.consumed_percentage)|locale_decimal }}%)</p>
     </div>
 
     <!-- Remaining -->
@@ -168,7 +168,7 @@
             {{ _('Average') }}: {{ cost_trends.average_cost_per_period|format_currency }}
         </span>
         <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400">
-            {{ _('Change') }}: {{ "%.1f"|format(cost_trends.trend_percentage) }}%
+            {{ _('Change') }}: {{ "%.1f"|format(cost_trends.trend_percentage)|locale_decimal }}%
         </span>
     </div>
     <div class="chart-container" style="position: relative; height: 300px;">
@@ -187,7 +187,7 @@
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
         <div class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
             <h6 class="text-sm text-text-muted-light dark:text-text-muted-dark mb-1">{{ _('Total Hours') }}</h6>
-            <p class="text-2xl font-bold text-blue-600 dark:text-blue-400">{{ "%.2f"|format(resource_allocation.total_hours) }}</p>
+            <p class="text-2xl font-bold text-blue-600 dark:text-blue-400">{{ "%.2f"|format(resource_allocation.total_hours)|locale_decimal }}</p>
         </div>
         <div class="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg">
             <h6 class="text-sm text-text-muted-light dark:text-text-muted-dark mb-1">{{ _('Total Cost') }}</h6>
@@ -216,14 +216,14 @@
                     <td class="p-4" data-label="Team Member">
                         <strong>{{ user.username }}</strong>
                     </td>
-                    <td class="p-4" data-label="Hours">{{ "%.2f"|format(user.hours) }}</td>
+                    <td class="p-4" data-label="Hours">{{ "%.2f"|format(user.hours)|locale_decimal }}</td>
                     <td class="p-4" data-label="Cost">{{ user.cost|format_currency }}</td>
                     <td class="p-4" data-label="Hours %">
                         <div class="flex items-center gap-2">
                             <div class="flex-grow bg-gray-200 dark:bg-gray-700 rounded-full h-4 overflow-hidden" style="min-width: 100px;">
                                 <div class="h-full bg-cyan-500 rounded-full transition-all duration-300 flex items-center justify-center text-xs text-white font-semibold"
                                      style="width: {{ user.hours_percentage }}%">
-                                    {{ "%.1f"|format(user.hours_percentage) }}%
+                                    {{ "%.1f"|format(user.hours_percentage)|locale_decimal }}%
                                 </div>
                             </div>
                         </div>
@@ -233,7 +233,7 @@
                             <div class="flex-grow bg-gray-200 dark:bg-gray-700 rounded-full h-4 overflow-hidden" style="min-width: 100px;">
                                 <div class="h-full bg-green-500 rounded-full transition-all duration-300 flex items-center justify-center text-xs text-white font-semibold"
                                      style="width: {{ user.cost_percentage }}%">
-                                    {{ "%.1f"|format(user.cost_percentage) }}%
+                                    {{ "%.1f"|format(user.cost_percentage)|locale_decimal }}%
                                 </div>
                             </div>
                         </div>

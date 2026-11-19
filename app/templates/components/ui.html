@@ -118,12 +118,12 @@
                 {% if trend > 0 %}
                 <span class="text-green-600 dark:text-green-400 flex items-center">
                     <i class="fas fa-arrow-up mr-1"></i>
-                    {{ "%.1f"|format(trend) }}%
+                    {{ "%.1f"|format(trend)|locale_decimal }}%
                 </span>
                 {% elif trend < 0 %}
                 <span class="text-red-600 dark:text-red-400 flex items-center">
                     <i class="fas fa-arrow-down mr-1"></i>
-                    {{ "%.1f"|format(trend|abs) }}%
+                    {{ "%.1f"|format(trend|abs)|locale_decimal }}%
                 </span>
                 {% else %}
                 <span class="text-text-muted-light dark:text-text-muted-dark flex items-center">
@@ -394,7 +394,7 @@
     {% if show_label %}
     <div class="flex justify-between text-sm">
         <span class="text-text-muted-light dark:text-text-muted-dark">{{ current }} / {{ total }}</span>
-        <span class="font-semibold text-{{ color }}">{{ "%.0f"|format(percentage) }}%</span>
+        <span class="font-semibold text-{{ color }}">{{ "%.0f"|format(percentage)|locale_decimal }}%</span>
     </div>
     {% endif %}
     <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5 overflow-hidden">

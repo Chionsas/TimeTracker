@@ -10,10 +10,10 @@
 {{ page_header('fas fa-percentage', _('Utilization Report'), subtitle_text=_('Billable hours as a share of time tracked'), breadcrumbs=breadcrumbs) }}
 
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-    {{ info_card(_("Avg utilization"), "%.1f%%"|format(avg_rate), _("Selected period")) }}
-    {{ info_card(_("Billable hours"), "%.2f"|format(billable_hours), _("Selected period")) }}
-    {{ info_card(_("Non-billable hours"), "%.2f"|format(non_billable_hours), _("Selected period")) }}
-    {{ info_card(_("Total hours"), "%.2f"|format(total_hours), _("Selected period")) }}
+    {{ info_card(_("Avg utilization"), "%.1f%%"|format(avg_rate)|locale_decimal, _("Selected period")) }}
+    {{ info_card(_("Billable hours"), "%.2f"|format(billable_hours)|locale_decimal, _("Selected period")) }}
+    {{ info_card(_("Non-billable hours"), "%.2f"|format(non_billable_hours)|locale_decimal, _("Selected period")) }}
+    {{ info_card(_("Total hours"), "%.2f"|format(total_hours)|locale_decimal, _("Selected period")) }}
 </div>
 
 <div class="bg-card-light dark:bg-card-dark p-6 rounded-xl border border-border-light dark:border-border-dark shadow-sm mb-6">
@@ -69,15 +69,15 @@
             {% for row in rows %}
             <tr class="border-b border-border-light dark:border-border-dark">
                 <td class="p-3">{{ row.name }}</td>
-                <td class="p-3">{{ "%.2f"|format(row.billable_hours) }}</td>
-                <td class="p-3">{{ "%.2f"|format(row.non_billable_hours) }}</td>
-                <td class="p-3">{{ "%.2f"|format(row.total_hours) }}</td>
+                <td class="p-3">{{ "%.2f"|format(row.billable_hours)|locale_decimal }}</td>
+                <td class="p-3">{{ "%.2f"|format(row.non_billable_hours)|locale_decimal }}</td>
+                <td class="p-3">{{ "%.2f"|format(row.total_hours)|locale_decimal }}</td>
                 <td class="p-3">
                     <div class="flex items-center gap-2">
                         <div class="flex-1 bg-background-light dark:bg-background-dark rounded-full h-2 overflow-hidden">
                             <div class="bg-primary h-2" style="width: {{ row.utilization_rate }}%"></div>
                         </div>
-                        <span class="text-sm w-14 text-right">{{ "%.1f"|format(row.utilization_rate) }}%</span>
+                        <span class="text-sm w-14 text-right">{{ "%.1f"|format(row.utilization_rate)|locale_decimal }}%</span>
                     </div>
                 </td>
             </tr>

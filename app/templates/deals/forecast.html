@@ -24,11 +24,11 @@
     </div>
     <div class="bg-card-light dark:bg-card-dark p-4 rounded-lg border border-border-light dark:border-border-dark">
         <p class="text-sm text-text-muted-light dark:text-text-muted-dark">{{ _('Open pipeline value') }}</p>
-        <p class="text-2xl font-semibold">{{ '%.2f'|format(total_value) }}</p>
+        <p class="text-2xl font-semibold">{{ '%.2f'|format(total_value)|locale_decimal }}</p>
     </div>
     <div class="bg-card-light dark:bg-card-dark p-4 rounded-lg border border-border-light dark:border-border-dark">
         <p class="text-sm text-text-muted-light dark:text-text-muted-dark">{{ _('Weighted forecast') }}</p>
-        <p class="text-2xl font-semibold text-primary">{{ '%.2f'|format(total_weighted) }}</p>
+        <p class="text-2xl font-semibold text-primary">{{ '%.2f'|format(total_weighted)|locale_decimal }}</p>
     </div>
 </div>
 
@@ -47,8 +47,8 @@
             <tr class="border-b border-border-light dark:border-border-dark">
                 <td class="px-4 py-3">{{ stage|replace('_', ' ')|title }}</td>
                 <td class="px-4 py-3">{{ by_stage[stage].count }}</td>
-                <td class="px-4 py-3">{{ '%.2f'|format(by_stage[stage].value) }}</td>
-                <td class="px-4 py-3">{{ '%.2f'|format(by_stage[stage].weighted) }}</td>
+                <td class="px-4 py-3">{{ '%.2f'|format(by_stage[stage].value)|locale_decimal }}</td>
+                <td class="px-4 py-3">{{ '%.2f'|format(by_stage[stage].weighted)|locale_decimal }}</td>
             </tr>
             {% endfor %}
         </tbody>

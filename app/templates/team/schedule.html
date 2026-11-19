@@ -45,8 +45,8 @@
                 {% for cell in lane.cells %}
                 <td class="p-2 {% if cell.over_capacity %}bg-red-50 dark:bg-red-900/20{% endif %}">
                     <div class="text-xs mb-1 {% if cell.over_capacity %}text-red-600{% else %}text-text-muted-light dark:text-text-muted-dark{% endif %}">
-                        {{ "%.1f"|format(cell.planned_hours) }}h / {{ "%.0f"|format(cell.capacity) }}h
-                        {% if cell.actual_hours %}<span class="ml-1">({{ "%.1f"|format(cell.actual_hours) }}h {{ _('logged') }})</span>{% endif %}
+                        {{ "%.1f"|format(cell.planned_hours)|locale_decimal }}h / {{ "%.0f"|format(cell.capacity)|locale_decimal }}h
+                        {% if cell.actual_hours %}<span class="ml-1">({{ "%.1f"|format(cell.actual_hours)|locale_decimal }}h {{ _('logged') }})</span>{% endif %}
                     </div>
                     <div class="space-y-1">
                         {% for task in cell.tasks %}

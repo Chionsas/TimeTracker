@@ -44,7 +44,7 @@
                         </div>
                         <div>
                             <p class="text-sm font-medium text-text-muted-light dark:text-text-muted-dark">{{ _('Total Hours') }}</p>
-                            <p class="text-lg font-bold text-text-light dark:text-text-dark">{{ "%.2f"|format(stat.total_hours) }}h</p>
+                            <p class="text-lg font-bold text-text-light dark:text-text-dark">{{ "%.2f"|format(stat.total_hours)|locale_decimal }}h</p>
                         </div>
                     </div>
                 </div>
@@ -71,7 +71,7 @@
                         </div>
                         <div>
                             <p class="text-sm font-medium text-text-muted-light dark:text-text-muted-dark">{{ _('Hourly Rate') }}</p>
-                            <p class="text-lg font-bold text-text-light dark:text-text-dark">{{ "%.2f"|format(stat.project.hourly_rate) }} {{ stat.project.client_obj.default_hourly_rate and 'EUR' or '' }}</p>
+                            <p class="text-lg font-bold text-text-light dark:text-text-dark">{{ "%.2f"|format(stat.project.hourly_rate)|locale_decimal }} {{ stat.project.client_obj.default_hourly_rate and 'EUR' or '' }}</p>
                         </div>
                     </div>
                 </div>

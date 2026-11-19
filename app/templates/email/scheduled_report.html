@@ -70,7 +70,7 @@
             {% if report_data.summary %}
             <p><strong>{{ _('Total Entries:') }}</strong> {{ report_data.summary.get('total_entries', 0) }}</p>
             {% if report_data.summary.get('total_hours') %}
-            <p><strong>{{ _('Total Hours:') }}</strong> {{ "%.2f"|format(report_data.summary.get('total_hours', 0)) }}</p>
+            <p><strong>{{ _('Total Hours:') }}</strong> {{ "%.2f"|format(report_data.summary.get('total_hours', 0))|locale_decimal }}</p>
             {% endif %}
             {% if report_data.summary.get('total_amount') is not none %}
             <p><strong>{{ _('Total Amount:') }}</strong> {{ report_data.summary.get('total_amount', 0)|format_currency }}</p>
@@ -100,7 +100,7 @@
                     {% for key, value in row.items() %}
                     <td>
                         {% if value is number %}
-                            {{ "%.2f"|format(value) if value % 1 else value|int }}
+                            {{ "%.2f"|format(value)|locale_decimal if value % 1 else value|int }}
                         {% else %}
                             {{ value or '' }}
                         {% endif %}

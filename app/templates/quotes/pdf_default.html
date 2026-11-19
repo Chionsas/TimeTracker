@@ -122,7 +122,7 @@
                         <td colspan="3" class="num">
                             {{ _('Discount') }}
                             {% if quote.discount_type == 'percentage' %}
-                                ({{ "%.2f"|format(quote.discount_amount) }}%)
+                                ({{ "%.2f"|format(quote.discount_amount)|locale_decimal }}%)
                             {% endif %}
                             {% if quote.coupon_code %}
                                 - {{ quote.coupon_code }}

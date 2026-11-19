@@ -142,7 +142,7 @@
                             <div class="flex-grow bg-gray-200 dark:bg-gray-700 rounded-full h-4 overflow-hidden" style="min-width: 150px;">
                                 <div class="h-full {% if project.consumed_percentage >= 100 %}bg-red-500{% elif project.consumed_percentage >= project.threshold_percent %}bg-yellow-500{% else %}bg-green-500{% endif %} rounded-full transition-all duration-300 flex items-center justify-center text-xs text-white font-semibold"
                                      style="width: {{ [project.consumed_percentage, 100]|min }}%">
-                                    {{ "%.1f"|format(project.consumed_percentage) }}%
+                                    {{ "%.1f"|format(project.consumed_percentage)|locale_decimal }}%
                                 </div>
                             </div>
                         </div>

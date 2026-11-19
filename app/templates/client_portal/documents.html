@@ -55,7 +55,7 @@
                 {% if attachment.file_size %}
                 <div class="flex items-center text-sm text-text-muted-light dark:text-text-muted-dark">
                     <i class="fas fa-hdd text-primary mr-2 w-4"></i>
-                    <span>{{ attachment.file_size_display if hasattr(attachment, 'file_size_display') else ("%.2f"|format(attachment.file_size / 1024) + " KB") }}</span>
+                    <span>{{ attachment.file_size_display if hasattr(attachment, 'file_size_display') else ("%.2f"|format(attachment.file_size / 1024)|locale_decimal + " KB") }}</span>
                 </div>
                 {% endif %}
             </div>

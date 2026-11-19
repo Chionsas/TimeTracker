@@ -64,7 +64,7 @@
                     {% for item in invoice.items %}
                     <tr class="border-b border-border-light dark:border-border-dark">
                         <td class="p-3" data-label="{{ _('Description') }}">{{ item.description }}</td>
-                        <td class="p-3" data-label="{{ _('Quantity') }}">{{ "%.2f"|format(item.quantity) }}</td>
+                        <td class="p-3" data-label="{{ _('Quantity') }}">{{ "%.2f"|format(item.quantity)|locale_decimal }}</td>
                         <td class="p-3" data-label="{{ _('Unit Price') }}">{{ item.unit_price|format_currency(invoice.currency_code) }}</td>
                         <td class="p-3 font-medium" data-label="{{ _('Total') }}">{{ item.total_amount|format_currency(invoice.currency_code) }}</td>
                     </tr>
@@ -84,7 +84,7 @@
                 </div>
                 {% if invoice.tax_rate > 0 %}
                 <div class="flex justify-between">
-                    <span class="text-text-muted-light dark:text-text-muted-dark">{{ _('Tax') }} ({{ "%.2f"|format(invoice.tax_rate) }}%):</span>
+                    <span class="text-text-muted-light dark:text-text-muted-dark">{{ _('Tax') }} ({{ "%.2f"|format(invoice.tax_rate)|locale_decimal }}%):</span>
                     <span>{{ invoice.tax_amount|format_currency(invoice.currency_code) }}</span>
                 </div>
                 {% endif %}

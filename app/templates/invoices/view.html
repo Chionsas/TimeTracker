@@ -185,7 +185,7 @@
                 {% for item in invoice.items %}
                 <tr class="border-b border-border-light dark:border-border-dark">
                     <td class="p-2">{{ item.description }}</td>
-                    <td class="p-2">{{ "%.2f"|format(item.quantity) }}</td>
+                    <td class="p-2">{{ "%.2f"|format(item.quantity)|locale_decimal }}</td>
                     <td class="p-2">{{ item.unit_price|format_currency(invoice.currency_code) }}</td>
                     <td class="p-2">{{ item.total_amount|format_currency(invoice.currency_code) }}</td>
                 </tr>
@@ -244,7 +244,7 @@
                     <td class="p-2">{{ good.name }}</td>
                     <td class="p-2">{{ good.description or '-' }}</td>
                     <td class="p-2">{{ good.category|capitalize }}</td>
-                    <td class="p-2">{{ "%.2f"|format(good.quantity) }}</td>
+                    <td class="p-2">{{ "%.2f"|format(good.quantity)|locale_decimal }}</td>
                     <td class="p-2">{{ good.unit_price|format_currency(invoice.currency_code) }}</td>
                     <td class="p-2">{{ good.total_amount|format_currency(invoice.currency_code) }}</td>
                 </tr>
@@ -586,7 +586,7 @@
         {% for cn in credit_notes %}
         <tr class="border-b border-border-light dark:border-border-dark">
           <td class="p-2"><a class="text-primary hover:underline" href="{{ url_for('credit_notes.view_credit_note', cn_id=cn.id) }}">{{ cn.credit_number }}</a></td>
-          <td class="p-2">{{ '%.2f'|format(cn.total_amount or cn.amount or 0) }}</td>
+          <td class="p-2">{{ '%.2f'|format(cn.total_amount or cn.amount or 0)|locale_decimal }}</td>
           <td class="p-2">{{ cn.status }}</td>
           <td class="p-2"><a href="{{ url_for('credit_notes.download_pdf', cn_id=cn.id) }}" class="text-primary hover:underline">{{ _('PDF') }}</a></td>
         </tr>

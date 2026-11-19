@@ -20,7 +20,7 @@
         <div class="flex items-center justify-between">
             <div>
                 <p class="text-sm text-gray-600 dark:text-gray-400">{{ _('Total Distance') }}</p>
-                <p class="text-2xl font-bold">{{ '%.2f'|format(total_distance) }} km</p>
+                <p class="text-2xl font-bold">{{ '%.2f'|format(total_distance)|locale_decimal }} km</p>
             </div>
             <div class="text-primary text-3xl">
                 <i class="fas fa-route"></i>
@@ -209,7 +209,7 @@
                                 <span class="text-gray-600 dark:text-gray-400">{{ entry.end_location }}</span>
                             </div>
                         </td>
-                        <td class="p-4 table-number font-medium" data-label="Distance">{{ '%.2f'|format(entry.distance_km) }} km</td>
+                        <td class="p-4 table-number font-medium" data-label="Distance">{{ '%.2f'|format(entry.distance_km)|locale_decimal }} km</td>
                         <td class="p-4 table-number font-medium" data-label="Amount">{{ (entry.total_amount or entry.calculated_amount or 0)|format_currency(entry.currency_code) }}</td>
                         <td class="p-4" data-label="Status">
                             {% if entry.status == 'pending' %}

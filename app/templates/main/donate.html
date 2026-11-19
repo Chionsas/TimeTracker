@@ -172,7 +172,7 @@
 
             {% if total_hours > 0 %}
             <div class="text-center p-4 bg-background-light dark:bg-background-dark rounded-lg">
-                <div class="text-3xl font-bold text-primary">{{ "%.1f"|format(total_hours) }}</div>
+                <div class="text-3xl font-bold text-primary">{{ "%.1f"|format(total_hours)|locale_decimal }}</div>
                 <div class="text-sm text-text-muted-light dark:text-text-muted-dark mt-1">
                     {{ _('Hours tracked') }}
                 </div>

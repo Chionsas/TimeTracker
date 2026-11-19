@@ -1,6 +1,7 @@
 from datetime import datetime
 
-from flask_babel import format_currency, format_decimal
+from babel.numbers import get_decimal_symbol
+from flask_babel import format_currency, format_decimal, get_locale
 
 from app.utils.timezone import (
     convert_app_datetime_to_user,
@@ -368,6 +369,22 @@ def register_template_filters(app):
             return format_decimal(float(value), format="#,##0.00")
         except Exception:
             return str(value)
+
+    @app.template_filter("locale_decimal")
+    def locale_decimal_filter(value):
+        """Give an already formatted number the request locale's decimal separator.
+
+        For text shown to people: ``"%.2f"|format(hours)|locale_decimal`` prints
+        "7.50" in en and "7,50" in lt or de. Form values and data attributes read
+        back by code keep the dot and do not use this filter.
+        """
+        try:
+            separator = get_decimal_symbol(get_locale())
+        except Exception:
+            return value
+        if separator == ".":
+            return value
+        return str(value).replace(".", separator)
 
     @app.template_filter("format_currency")
     def format_currency_filter(value, currency_code=None):

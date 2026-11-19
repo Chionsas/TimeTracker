@@ -127,7 +127,7 @@
                     <span class="text-text-muted-light dark:text-text-muted-dark">—</span>
                     {% endfor %}
                 </td>
-                <td class="px-4 py-3">{{ "%.2f"|format((record.total_work_seconds or 0) / 3600) }}h</td>
+                <td class="px-4 py-3">{{ "%.2f"|format((record.total_work_seconds or 0) / 3600)|locale_decimal }}h</td>
                 <td class="px-4 py-3">
                     {% for w in day_warnings %}
                     <div class="text-xs text-amber-700 dark:text-amber-300">{{ w.message }}</div>

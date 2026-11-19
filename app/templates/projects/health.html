@@ -21,9 +21,9 @@
 </div>
 
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-    {{ info_card(_("Budget burn"), "%.1f%%"|format(health.budget.burn_percent), _("Consumed vs budget")) }}
-    {{ info_card(_("Task completion"), "%.1f%%"|format(health.tasks.completion_percent), _("%(done)s of %(total)s done", done=health.tasks.done, total=health.tasks.total)) }}
-    {{ info_card(_("Hours remaining"), ("%.1f"|format(health.hours.remaining) if health.hours.remaining is not none else '—'), _("Budgeted vs tracked")) }}
+    {{ info_card(_("Budget burn"), "%.1f%%"|format(health.budget.burn_percent)|locale_decimal, _("Consumed vs budget")) }}
+    {{ info_card(_("Task completion"), "%.1f%%"|format(health.tasks.completion_percent)|locale_decimal, _("%(done)s of %(total)s done", done=health.tasks.done, total=health.tasks.total)) }}
+    {{ info_card(_("Hours remaining"), ("%.1f"|format(health.hours.remaining)|locale_decimal if health.hours.remaining is not none else '—'), _("Budgeted vs tracked")) }}
     {{ info_card(_("Milestones"), _("%(upcoming)s upcoming / %(missed)s missed", upcoming=health.milestones.upcoming, missed=health.milestones.missed), _("%(completed)s completed", completed=health.milestones.completed)) }}
 </div>
 
@@ -45,7 +45,7 @@
         <h2 class="text-lg font-semibold mt-6 mb-4">{{ _('Top contributors this month') }}</h2>
         <ul class="space-y-2">
             {% for person in health.contributors %}
-            <li class="flex justify-between"><span>{{ person.name }}</span><span>{{ "%.1f"|format(person.hours) }}h</span></li>
+            <li class="flex justify-between"><span>{{ person.name }}</span><span>{{ "%.1f"|format(person.hours)|locale_decimal }}h</span></li>
             {% else %}
             <li class="text-text-muted-light dark:text-text-muted-dark">{{ _('No time logged this month.') }}</li>
             {% endfor %}

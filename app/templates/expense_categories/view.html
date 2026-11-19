@@ -62,7 +62,7 @@
 
                 <div>
                     <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">{{ _('Default Tax Rate') }}</p>
-                    <p class="font-semibold">{{ '%.2f'|format(category.default_tax_rate) if category.default_tax_rate else '-' }}%</p>
+                    <p class="font-semibold">{{ '%.2f'|format(category.default_tax_rate)|locale_decimal if category.default_tax_rate else '-' }}%</p>
                 </div>
             </div>
         </div>

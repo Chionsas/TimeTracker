@@ -44,7 +44,7 @@
                     </svg>
                 </div>
                 <div class="min-w-0">
-                    <p class="text-3xl font-bold text-text-light dark:text-text-dark" id="productivityTodayHours">{{ '%.1f'|format(summary.today_hours or 0) }}</p>
+                    <p class="text-3xl font-bold text-text-light dark:text-text-dark" id="productivityTodayHours">{{ '%.1f'|format(summary.today_hours or 0)|locale_decimal }}</p>
                     <p class="text-xs text-text-muted-light dark:text-text-muted-dark">{{ _('today') }}</p>
                 </div>
             </div>
@@ -61,8 +61,8 @@
                 <i class="fas fa-calendar-week text-emerald-500" aria-hidden="true"></i>
             </div>
             <p class="text-3xl font-bold text-text-light dark:text-text-dark">
-                <span id="productivityWeekHours">{{ '%.1f'|format(summary.week_hours or 0) }}</span>
-                <span class="text-base font-medium text-text-muted-light dark:text-text-muted-dark"> / <span id="productivityWeekGoal">{{ '%.0f'|format(summary.week_goal_hours or 0) }}</span> h</span>
+                <span id="productivityWeekHours">{{ '%.1f'|format(summary.week_hours or 0)|locale_decimal }}</span>
+                <span class="text-base font-medium text-text-muted-light dark:text-text-muted-dark"> / <span id="productivityWeekGoal">{{ '%.0f'|format(summary.week_goal_hours or 0)|locale_decimal }}</span> h</span>
             </p>
             <p class="text-xs text-text-muted-light dark:text-text-muted-dark mb-3">{{ _('this week') }}</p>
             <div class="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden flex">
@@ -83,11 +83,11 @@
             <div class="grid grid-cols-2 gap-3 text-center">
                 <div>
                     <p class="text-xs text-text-muted-light dark:text-text-muted-dark">{{ _('At work today') }}</p>
-                    <p class="text-2xl font-bold text-emerald-700 dark:text-emerald-300" id="productivityWorkdayToday">{{ '%.1f'|format(summary.workday_today_hours or 0) }}</p>
+                    <p class="text-2xl font-bold text-emerald-700 dark:text-emerald-300" id="productivityWorkdayToday">{{ '%.1f'|format(summary.workday_today_hours or 0)|locale_decimal }}</p>
                 </div>
                 <div>
                     <p class="text-xs text-text-muted-light dark:text-text-muted-dark">{{ _('On projects today') }}</p>
-                    <p class="text-2xl font-bold text-blue-700 dark:text-blue-300">{{ '%.1f'|format(summary.today_hours or 0) }}</p>
+                    <p class="text-2xl font-bold text-blue-700 dark:text-blue-300">{{ '%.1f'|format(summary.today_hours or 0)|locale_decimal }}</p>
                 </div>
             </div>
             <p class="text-xs text-text-muted-light dark:text-text-muted-dark mt-2 text-center">{{ _('Shown separately — not summed') }}</p>

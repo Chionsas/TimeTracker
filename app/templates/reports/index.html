@@ -23,8 +23,8 @@
 {% endif %}
 
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-    {{ info_card(_("Total Hours"), "%.2f"|format(summary.total_hours), _("All time")) }}
-    {{ info_card(_("Billable Hours"), "%.2f"|format(summary.billable_hours), _("All time")) }}
+    {{ info_card(_("Total Hours"), "%.2f"|format(summary.total_hours)|locale_decimal, _("All time")) }}
+    {{ info_card(_("Billable Hours"), "%.2f"|format(summary.billable_hours)|locale_decimal, _("All time")) }}
     {{ info_card(_("Active Projects"), summary.active_projects, _("Currently active")) }}
     {{ info_card(_("Active Users"), summary.total_users, _("Currently active")) }}
 </div>

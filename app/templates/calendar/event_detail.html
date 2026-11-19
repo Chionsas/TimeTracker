@@ -54,7 +54,7 @@
                         {% endif %}
                         {% endif %}
                     </p>
-                    <p class="text-sm text-muted">{{ _('Duration') }}: {{ _('%(hours)s hours', hours='%.2f'|format(event.duration_hours())) }}</p>
+                    <p class="text-sm text-muted">{{ _('Duration') }}: {{ _('%(hours)s hours', hours='%.2f'|format(event.duration_hours())|locale_decimal) }}</p>
                 </div>
             </div>
 

@@ -78,7 +78,7 @@
                     </td>
                     <td class="p-4 font-mono text-sm" data-label="{{ _('SKU') }}">{{ item_data.stock.stock_item.sku }}</td>
                     <td class="p-4" data-label="{{ _('Category') }}">{{ item_data.stock.stock_item.category or '—' }}</td>
-                    <td class="p-4" data-label="{{ _('Quantity') }}">{{ "%.2f"|format(item_data.quantity) if item_data.quantity is not none else item_data.stock.quantity_on_hand }}</td>
+                    <td class="p-4" data-label="{{ _('Quantity') }}">{{ "%.2f"|format(item_data.quantity)|locale_decimal if item_data.quantity is not none else item_data.stock.quantity_on_hand }}</td>
                     <td class="p-4" data-label="{{ _('Unit Cost') }}">{{ (item_data.cost if item_data.cost is not none else (item_data.stock.stock_item.default_cost or 0))|format_currency(item_data.stock.stock_item.currency_code) }}</td>
                     <td class="p-4 font-semibold" data-label="{{ _('Total Value') }}">{{ item_data.value|format_currency(item_data.stock.stock_item.currency_code) }}</td>
                 </tr>

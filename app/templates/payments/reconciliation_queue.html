@@ -37,7 +37,7 @@
             {% for txn in transactions %}
             <tr class="border-b border-border-light dark:border-border-dark align-top">
                 <td class="px-4 py-3 whitespace-nowrap">{{ txn.booking_date }}</td>
-                <td class="px-4 py-3 whitespace-nowrap">{{ txn.currency }} {{ '%.2f'|format(txn.amount) }}</td>
+                <td class="px-4 py-3 whitespace-nowrap">{{ txn.currency }} {{ '%.2f'|format(txn.amount)|locale_decimal }}</td>
                 <td class="px-4 py-3">{{ txn.counterparty or '—' }}</td>
                 <td class="px-4 py-3">{{ txn.reference or '—' }}</td>
                 <td class="px-4 py-3">
@@ -46,7 +46,7 @@
                         {% if sug %}
                         <ul class="space-y-1">
                             {% for s in sug %}
-                            <li>{{ s.invoice_number }} — {{ s.currency }} {{ '%.2f'|format(s.outstanding_amount) }} <span class="text-gray-500">(score {{ s.score }})</span></li>
+                            <li>{{ s.invoice_number }} — {{ s.currency }} {{ '%.2f'|format(s.outstanding_amount)|locale_decimal }} <span class="text-gray-500">(score {{ s.score }})</span></li>
                             {% endfor %}
                         </ul>
                         {% else %}
@@ -65,7 +65,7 @@
                         <select name="invoice_id" class="form-input text-sm" required>
                             <option value="">{{ _('Select invoice') }}</option>
                             {% for s in suggestions.get(txn.id, []) %}
-                            <option value="{{ s.invoice_id }}">{{ s.invoice_number }} ({{ '%.2f'|format(s.outstanding_amount) }})</option>
+                            <option value="{{ s.invoice_id }}">{{ s.invoice_number }} ({{ '%.2f'|format(s.outstanding_amount)|locale_decimal }})</option>
                             {% endfor %}
                         </select>
                         <button type="submit" class="bg-green-600 text-white px-3 py-1.5 rounded-lg text-sm">{{ _('Confirm') }}</button>

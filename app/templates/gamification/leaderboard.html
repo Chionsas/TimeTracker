@@ -47,7 +47,7 @@
       <tr class="border-b border-border-light dark:border-border-dark">
         <td class="py-2">{{ e.rank }}</td>
         <td class="py-2">{{ e.user.username if e.user else (e.get('user', {}) or {}).get('username', e.user_id) }}</td>
-        <td class="py-2">{{ '%.2f'|format(e.score or 0) }}</td>
+        <td class="py-2">{{ '%.2f'|format(e.score or 0)|locale_decimal }}</td>
       </tr>
       {% else %}
       <tr><td colspan="3" class="py-4 text-text-muted-light dark:text-text-muted-dark">{{ _('No rankings yet.') }}</td></tr>

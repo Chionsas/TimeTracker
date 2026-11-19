@@ -97,7 +97,7 @@
 
         <div class="summary-box">
             <p>{{ _('Total Hours Worked') }}</p>
-            <h2>{{ "%.1f"|format(hours_worked) }}</h2>
+            <h2>{{ "%.1f"|format(hours_worked)|locale_decimal }}</h2>
             <p>{{ _('hours') }}</p>
         </div>
 
@@ -115,7 +115,7 @@
                     {% for project in projects_data %}
                     <tr>
                         <td>{{ project.name }}</td>
-                        <td style="text-align: right;"><strong>{{ "%.1f"|format(project.hours) }}</strong></td>
+                        <td style="text-align: right;"><strong>{{ "%.1f"|format(project.hours)|locale_decimal }}</strong></td>
                     </tr>
                     {% endfor %}
                 </tbody>

@@ -75,11 +75,11 @@
         </div>
         <div class="bg-card-light dark:bg-card-dark rounded-tt border border-border-light dark:border-border-dark p-4">
             <p class="text-xs font-medium text-text-muted-light dark:text-text-muted-dark">{{ _('Total Hours') }}</p>
-            <p class="text-xl font-semibold mt-1">{{ "%.1f"|format(stats.total_hours / 3600 if stats.total_hours else 0) }}</p>
+            <p class="text-xl font-semibold mt-1">{{ "%.1f"|format(stats.total_hours / 3600 if stats.total_hours else 0)|locale_decimal }}</p>
         </div>
         <div class="bg-card-light dark:bg-card-dark rounded-tt border border-border-light dark:border-border-dark p-4">
             <p class="text-xs font-medium text-text-muted-light dark:text-text-muted-dark">{{ _('Billable Hours') }}</p>
-            <p class="text-xl font-semibold mt-1">{{ "%.1f"|format(stats.billable_hours / 3600 if stats.billable_hours else 0) }}</p>
+            <p class="text-xl font-semibold mt-1">{{ "%.1f"|format(stats.billable_hours / 3600 if stats.billable_hours else 0)|locale_decimal }}</p>
         </div>
     </div>
 </details>

@@ -36,8 +36,8 @@
             <tr class="border-b border-border-light dark:border-border-dark">
                 <td class="px-4 py-3">{{ row.source }}</td>
                 <td class="px-4 py-3">{{ row.count }}</td>
-                <td class="px-4 py-3">{{ '%.2f'|format(row.estimated_value_total) }}</td>
-                <td class="px-4 py-3">{{ '%.1f'|format(row.average_score) }}</td>
+                <td class="px-4 py-3">{{ '%.2f'|format(row.estimated_value_total)|locale_decimal }}</td>
+                <td class="px-4 py-3">{{ '%.1f'|format(row.average_score)|locale_decimal }}</td>
             </tr>
             {% endfor %}
             {% else %}

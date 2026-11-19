@@ -58,9 +58,9 @@
                     </a>
                 </td>
                 <td class="p-4 font-mono text-sm" data-label="{{ _('SKU') }}">{{ data.item.sku }}</td>
-                <td class="p-4" data-label="{{ _('Total Sold') }}">{{ "%.2f"|format(data.total_sold) }}</td>
-                <td class="p-4" data-label="{{ _('Avg Stock Level') }}">{{ "%.2f"|format(data.avg_stock) }}</td>
-                <td class="p-4 font-semibold" data-label="{{ _('Turnover Rate') }}">{{ "%.2f"|format(data.turnover_rate) }}</td>
+                <td class="p-4" data-label="{{ _('Total Sold') }}">{{ "%.2f"|format(data.total_sold)|locale_decimal }}</td>
+                <td class="p-4" data-label="{{ _('Avg Stock Level') }}">{{ "%.2f"|format(data.avg_stock)|locale_decimal }}</td>
+                <td class="p-4 font-semibold" data-label="{{ _('Turnover Rate') }}">{{ "%.2f"|format(data.turnover_rate)|locale_decimal }}</td>
                 <td class="p-4" data-label="{{ _('Status') }}">
                     {% if data.turnover_rate >= 4 %}
                         <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">{{ _('Fast Moving') }}</span>

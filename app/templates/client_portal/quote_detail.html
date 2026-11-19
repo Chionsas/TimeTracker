@@ -85,7 +85,7 @@
                             {% if item.line_kind == 'expense' and item.category %}<br><span class="text-xs opacity-70">{{ item.category }}</span>{% endif %}
                             {% if item.line_kind == 'good' and item.sku %}<br><span class="text-xs opacity-70">{{ _('SKU') }}: {{ item.sku }}</span>{% endif %}
                         </td>
-                        <td class="p-3" data-label="{{ _('Quantity') }}">{{ "%.2f"|format(item.quantity) }} {% if item.unit %}{{ item.unit }}{% endif %}</td>
+                        <td class="p-3" data-label="{{ _('Quantity') }}">{{ "%.2f"|format(item.quantity)|locale_decimal }} {% if item.unit %}{{ item.unit }}{% endif %}</td>
                         <td class="p-3" data-label="{{ _('Unit Price') }}">{{ item.unit_price|format_currency(quote.currency_code) }}</td>
                         <td class="p-3 font-medium" data-label="{{ _('Total') }}">{{ item.total_amount|format_currency(quote.currency_code) }}</td>
                     </tr>
@@ -105,7 +105,7 @@
                 </div>
                 {% if quote.tax_rate > 0 %}
                 <div class="flex justify-between">
-                    <span class="text-text-muted-light dark:text-text-muted-dark">{{ _('Tax') }} ({{ "%.2f"|format(quote.tax_rate) }}%):</span>
+                    <span class="text-text-muted-light dark:text-text-muted-dark">{{ _('Tax') }} ({{ "%.2f"|format(quote.tax_rate)|locale_decimal }}%):</span>
                     <span>{{ quote.tax_amount|format_currency(quote.currency_code) }}</span>
                 </div>
                 {% endif %}

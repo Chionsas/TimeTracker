@@ -154,7 +154,7 @@
                 </div>
                 <div>
                     <h3 class="text-sm font-medium text-text-muted-light dark:text-text-muted-dark">{{ _('Billing') }}</h3>
-                    <p>{{ _('Billable') if project.billable else _('Not Billable') }} {% if project.hourly_rate %}({{ "%.2f"|format(project.hourly_rate) }}/hr){% endif %}</p>
+                    <p>{{ _('Billable') if project.billable else _('Not Billable') }} {% if project.hourly_rate %}({{ "%.2f"|format(project.hourly_rate)|locale_decimal }}/hr){% endif %}</p>
                 </div>
                 {% if project.is_archived and project.archived_at %}
                 <div class="pt-4 border-t border-border-light dark:border-border-dark">
@@ -273,7 +273,7 @@
             <div class="mb-4">
                 <div class="flex justify-between text-sm mb-2">
                     <span class="text-text-muted-light dark:text-text-muted-dark">{{ _('Budget Used') }}</span>
-                    <span class="font-semibold">{{ "%.1f"|format(percentage) }}%</span>
+                    <span class="font-semibold">{{ "%.1f"|format(percentage)|locale_decimal }}%</span>
                 </div>
                 <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 overflow-hidden">
                     <div class="h-full {% if percentage >= 100 %}bg-gradient-to-r from-red-500 to-pink-600{% elif percentage >= threshold %}bg-gradient-to-r from-yellow-400 to-orange-500{% else %}bg-gradient-to-r from-green-500 to-emerald-600{% endif %} transition-all duration-300 rounded-full"
@@ -341,7 +341,7 @@
                 {% for user_total in user_totals %}
                 <li class="flex justify-between py-2 border-b border-border-light dark:border-border-dark">
                     <span>{{ user_total.username }}</span>
-                    <span class="font-semibold">{{ _('%(hours)s hrs', hours="%.2f"|format(user_total.total_hours)) }}</span>
+                    <span class="font-semibold">{{ _('%(hours)s hrs', hours="%.2f"|format(user_total.total_hours)|locale_decimal) }}</span>
                 </li>
                 {% else %}
                 <li>{{ _('No hours logged yet.') }}</li>

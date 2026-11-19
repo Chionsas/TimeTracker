@@ -29,7 +29,7 @@
             #{{ cn.invoice_id }}
             {% endif %}
           </td>
-          <td class="p-3">{{ '%.2f'|format(cn.total_amount or cn.amount or 0) }} {{ cn.currency_code or '' }}</td>
+          <td class="p-3">{{ '%.2f'|format(cn.total_amount or cn.amount or 0)|locale_decimal }} {{ cn.currency_code or '' }}</td>
           <td class="p-3"><span class="px-2 py-1 rounded text-xs font-medium bg-gray-100 dark:bg-gray-700">{{ cn.status }}</span></td>
           <td class="p-3 text-sm">{{ cn.created_at|user_datetime if cn.created_at else '—' }}</td>
           <td class="p-3">

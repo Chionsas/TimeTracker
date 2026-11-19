@@ -47,9 +47,9 @@
             {% for item in items %}
             <tr class="border-b border-border-light dark:border-border-dark">
               <td class="p-2">{{ item.description }}</td>
-              <td class="p-2 text-right">{{ '%.2f'|format(item.quantity) }}</td>
-              <td class="p-2 text-right">{{ '%.2f'|format(item.unit_price) }}</td>
-              <td class="p-2 text-right">{{ '%.2f'|format(item.total_amount) }}</td>
+              <td class="p-2 text-right">{{ '%.2f'|format(item.quantity)|locale_decimal }}</td>
+              <td class="p-2 text-right">{{ '%.2f'|format(item.unit_price)|locale_decimal }}</td>
+              <td class="p-2 text-right">{{ '%.2f'|format(item.total_amount)|locale_decimal }}</td>
             </tr>
             {% endfor %}
           </tbody>
@@ -65,9 +65,9 @@
     <div class="bg-card-light dark:bg-card-dark p-6 rounded-xl border border-border-light dark:border-border-dark shadow-sm">
       <h2 class="text-lg font-semibold mb-4">{{ _('Totals') }}</h2>
       <dl class="space-y-2 text-sm">
-        <div class="flex justify-between"><dt>{{ _('Subtotal') }}</dt><dd>{{ '%.2f'|format(cn.subtotal or 0) }}</dd></div>
-        <div class="flex justify-between"><dt>{{ _('Tax') }}</dt><dd>{{ '%.2f'|format(cn.tax_amount or 0) }}</dd></div>
-        <div class="flex justify-between font-semibold text-base border-t border-border-light dark:border-border-dark pt-2"><dt>{{ _('Total credit') }}</dt><dd>{{ '%.2f'|format(cn.total_amount or cn.amount or 0) }}</dd></div>
+        <div class="flex justify-between"><dt>{{ _('Subtotal') }}</dt><dd>{{ '%.2f'|format(cn.subtotal or 0)|locale_decimal }}</dd></div>
+        <div class="flex justify-between"><dt>{{ _('Tax') }}</dt><dd>{{ '%.2f'|format(cn.tax_amount or 0)|locale_decimal }}</dd></div>
+        <div class="flex justify-between font-semibold text-base border-t border-border-light dark:border-border-dark pt-2"><dt>{{ _('Total credit') }}</dt><dd>{{ '%.2f'|format(cn.total_amount or cn.amount or 0)|locale_decimal }}</dd></div>
       </dl>
     </div>
   </div>

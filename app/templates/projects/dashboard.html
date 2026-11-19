@@ -51,10 +51,10 @@
         <div class="flex items-center justify-between">
             <div>
                 <p class="text-text-muted-light dark:text-text-muted-dark text-xs sm:text-sm">{{ _('Total Hours') }}</p>
-                <p class="text-xl sm:text-3xl font-bold mt-1 sm:mt-2">{{ "%.1f"|format(project.total_hours) }}</p>
+                <p class="text-xl sm:text-3xl font-bold mt-1 sm:mt-2">{{ "%.1f"|format(project.total_hours)|locale_decimal }}</p>
                 {% if budget_data.estimated_hours > 0 %}
                 <p class="text-xs text-text-muted-light dark:text-text-muted-dark mt-1">
-                    {{ _('of') }} {{ "%.0f"|format(budget_data.estimated_hours) }} {{ _('estimated') }}
+                    {{ _('of') }} {{ "%.0f"|format(budget_data.estimated_hours)|locale_decimal }} {{ _('estimated') }}
                 </p>
                 {% endif %}
             </div>
@@ -72,7 +72,7 @@
                 <p class="text-xl sm:text-3xl font-bold mt-1 sm:mt-2">{{ budget_data.consumed_amount|format_currency }}</p>
                 {% if budget_data.budget_amount > 0 %}
                 <p class="text-xs {% if budget_data.threshold_exceeded %}text-red-500{% else %}text-text-muted-light dark:text-text-muted-dark{% endif %} mt-1">
-                    {{ "%.1f"|format(budget_data.percentage) }}% {{ _('of budget') }}
+                    {{ "%.1f"|format(budget_data.percentage)|locale_decimal }}% {{ _('of budget') }}
                 </p>
                 {% endif %}
             </div>
@@ -89,7 +89,7 @@
                 <p class="text-text-muted-light dark:text-text-muted-dark text-xs sm:text-sm">{{ _('Tasks Complete') }}</p>
                 <p class="text-xl sm:text-3xl font-bold mt-1 sm:mt-2">{{ task_stats.completed }}/{{ task_stats.total }}</p>
                 <p class="text-xs text-text-muted-light dark:text-text-muted-dark mt-1">
-                    {{ "%.1f"|format(task_stats.completion_rate) }}% {{ _('completion') }}
+                    {{ "%.1f"|format(task_stats.completion_rate)|locale_decimal }}% {{ _('completion') }}
                 </p>
             </div>
             <div class="text-2xl sm:text-4xl text-purple-500">
@@ -196,8 +196,8 @@
                     <span>{{ member.username }}</span>
                 </div>
                 <div class="flex items-center gap-4">
-                    <span class="text-text-muted-light dark:text-text-muted-dark">{{ "%.1f"|format(member.total_hours) }}h</span>
-                    <span class="font-semibold">{{ "%.1f"|format(member.percentage) }}%</span>
+                    <span class="text-text-muted-light dark:text-text-muted-dark">{{ "%.1f"|format(member.total_hours)|locale_decimal }}h</span>
+                    <span class="font-semibold">{{ "%.1f"|format(member.percentage)|locale_decimal }}%</span>
                 </div>
             </div>
             {% endfor %}
@@ -282,7 +282,7 @@
             <div class="p-4 bg-bg-light dark:bg-bg-dark rounded-lg">
                 <div class="flex items-center justify-between mb-2">
                     <h3 class="font-medium">{{ member.username }}</h3>
-                    <span class="text-sm font-semibold text-primary">{{ "%.1f"|format(member.total_hours) }}h</span>
+                    <span class="text-sm font-semibold text-primary">{{ "%.1f"|format(member.total_hours)|locale_decimal }}h</span>
                 </div>
                 <div class="grid grid-cols-3 gap-2 text-sm text-text-muted-light dark:text-text-muted-dark">
                     <div>
@@ -295,7 +295,7 @@
                     </div>
                     <div>
                         <i class="fas fa-percentage mr-1"></i>
-                        {{ "%.1f"|format(member.percentage) }}%
+                        {{ "%.1f"|format(member.percentage)|locale_decimal }}%
                     </div>
                 </div>
                 <!-- Progress bar -->

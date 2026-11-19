@@ -453,7 +453,7 @@
                     </div>
                     <div class="flex justify-between text-sm">
                         <span class="text-text-muted-light dark:text-text-muted-dark">
-                            {{ _('Tax') }} (<span id="preview-tax-rate">{{ '%.2f'|format(invoice.tax_rate) }}</span>%)
+                            {{ _('Tax') }} (<span id="preview-tax-rate">{{ '%.2f'|format(invoice.tax_rate)|locale_decimal }}</span>%)
                         </span>
                         <span class="font-medium" id="preview-tax-amount">{{ 0|format_currency(invoice.currency_code) }}</span>
                     </div>

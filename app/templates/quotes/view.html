@@ -118,7 +118,7 @@
                                     {% if item.line_kind == 'expense' and item.category %}<div class="text-xs text-text-muted-light dark:text-text-muted-dark mt-1">{{ item.category }}</div>{% endif %}
                                     {% if item.line_kind == 'good' and item.sku %}<div class="text-xs text-text-muted-light dark:text-text-muted-dark mt-1">{{ _('SKU') }}: {{ item.sku }}</div>{% endif %}
                                 </td>
-                                <td class="p-3">{{ "%.2f"|format(item.quantity) }} {% if item.unit %}{{ item.unit }}{% endif %}</td>
+                                <td class="p-3">{{ "%.2f"|format(item.quantity)|locale_decimal }} {% if item.unit %}{{ item.unit }}{% endif %}</td>
                                 <td class="p-3">{{ item.unit_price|format_currency(quote.currency_code) }}</td>
                                 <td class="p-3 font-medium">{{ item.total_amount|format_currency(quote.currency_code) }}</td>
                             </tr>
@@ -134,7 +134,7 @@
                                 <td colspan="3" class="p-3 text-right font-medium text-red-600 dark:text-red-400">
                                     {{ _('Discount') }}
                                     {% if quote.discount_type == 'percentage' %}
-                                        ({{ "%.2f"|format(quote.discount_amount) }}%)
+                                        ({{ "%.2f"|format(quote.discount_amount)|locale_decimal }}%)
                                     {% endif %}
                                     {% if quote.coupon_code %}
                                         - {{ quote.coupon_code }}
@@ -152,7 +152,7 @@
                             {% endif %}
                             {% if quote.tax_amount > 0 %}
                             <tr>
-                                <td colspan="3" class="p-3 text-right font-medium">{{ _('Tax') }} ({{ "%.2f"|format(quote.tax_rate) }}%):</td>
+                                <td colspan="3" class="p-3 text-right font-medium">{{ _('Tax') }} ({{ "%.2f"|format(quote.tax_rate)|locale_decimal }}%):</td>
                                 <td class="p-3 font-medium">{{ quote.tax_amount|format_currency(quote.currency_code) }}</td>
                             </tr>
                             {% endif %}

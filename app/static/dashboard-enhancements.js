@@ -366,9 +366,9 @@
             if (todayOvertimeEl && data.standard_hours_per_day !== undefined) {
                 if (data.today_overtime_hours > 0) {
                     todayOvertimeEl.style.display = '';
-                    todayOvertimeEl.innerHTML = '<span class="font-medium">+ ' + Number(data.today_overtime_hours).toFixed(2) + 'h overtime</span>';
+                    todayOvertimeEl.innerHTML = '<span class="font-medium">+ ' + formatNumber(data.today_overtime_hours) + 'h ' + gettext('overtime') + '</span>';
                 } else {
-                    todayOvertimeEl.innerHTML = '<span class="text-blue-600/70 dark:text-blue-400/70">' + Number(data.today_hours).toFixed(2) + 'h / ' + Number(data.standard_hours_per_day).toFixed(1) + 'h</span>';
+                    todayOvertimeEl.innerHTML = '<span class="text-blue-600/70 dark:text-blue-400/70">' + formatNumber(data.today_hours) + 'h / ' + formatNumber(data.standard_hours_per_day, 1) + 'h</span>';
                     todayOvertimeEl.style.display = data.today_hours > 0 ? '' : 'none';
                 }
             }
@@ -376,7 +376,7 @@
             if (weekOvertimeEl && data.week_overtime_hours !== undefined) {
                 if (data.week_overtime_hours > 0) {
                     weekOvertimeEl.style.display = '';
-                    weekOvertimeEl.innerHTML = '<span class="font-medium">+ ' + Number(data.week_overtime_hours).toFixed(2) + 'h overtime</span>';
+                    weekOvertimeEl.innerHTML = '<span class="font-medium">+ ' + formatNumber(data.week_overtime_hours) + 'h ' + gettext('overtime') + '</span>';
                 } else {
                     weekOvertimeEl.style.display = 'none';
                 }
@@ -393,7 +393,7 @@
         const valueEl = document.getElementById(id);
         if (valueEl) {
             // Animate value change
-            const oldValue = parseFloat(valueEl.textContent) || 0;
+            const oldValue = parseFloat(String(valueEl.textContent).replace(',', '.')) || 0;
             animateValue(valueEl, oldValue, value, 1000);
         }
     }
@@ -409,10 +409,10 @@
         const timer = setInterval(() => {
             current += increment;
             if ((increment > 0 && current >= end) || (increment < 0 && current <= end)) {
-                element.textContent = end.toFixed(2);
+                element.textContent = formatNumber(end);
                 clearInterval(timer);
             } else {
-                element.textContent = current.toFixed(2);
+                element.textContent = formatNumber(current);
             }
         }, 16);
     }
@@ -552,7 +552,7 @@
                             callbacks: {
                                 label: function (ctx) {
                                     var v = ctx.parsed.y != null ? ctx.parsed.y : ctx.parsed;
-                                    return (ctx.dataset.label || '') + ': ' + Number(v).toFixed(2) + ' h';
+                                    return (ctx.dataset.label || '') + ': ' + formatNumber(v) + ' h';
                                 }
                             }
                         }
@@ -582,7 +582,7 @@
                 summaryEl.textContent = '';
 
                 var prefix = document.createTextNode(
-                    total.toFixed(1) + ' ' + hrsSuffix + ' — '
+                    formatNumber(total, 1) + ' ' + hrsSuffix + ' — '
                 );
                 summaryEl.appendChild(prefix);
 
@@ -662,7 +662,7 @@
             if (contentEl) contentEl.classList.remove('hidden');
 
             const th = document.getElementById('valueDashboardTotalHours');
-            if (th) th.textContent = Number(data.total_hours).toFixed(1);
+            if (th) th.textContent = formatNumber(data.total_hours, 1);
             const ec = document.getElementById('valueDashboardEntriesCount');
             if (ec) ec.textContent = String(entries);
             const ad = document.getElementById('valueDashboardActiveDays');
@@ -672,7 +672,7 @@
             if (mpd) mpd.textContent = data.most_productive_day || '—';
 
             const avg = document.getElementById('valueDashboardAvgSession');
-            if (avg) avg.textContent = Number(data.avg_session_length).toFixed(1);
+            if (avg) avg.textContent = formatNumber(data.avg_session_length, 1);
 
             renderValueDashboardChart(document.getElementById('valueDashboardChart'), data.last_7_days || []);
 
@@ -719,7 +719,7 @@
             bar.className = 'w-full max-w-[3rem] mx-auto rounded-t-md bg-primary/80 dark:bg-primary/60 transition-all';
             bar.style.height = barH + 'px';
             bar.style.minHeight = '3px';
-            bar.title = (day.date || '') + ': ' + h.toFixed(1) + ' h';
+            bar.title = (day.date || '') + ': ' + formatNumber(h, 1) + ' h';
 
             var lbl = document.createElement('span');
             lbl.className = 'mt-2 text-[10px] sm:text-xs text-text-muted-light dark:text-text-muted-dark truncate w-full text-center';

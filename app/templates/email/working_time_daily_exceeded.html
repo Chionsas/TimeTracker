@@ -2,9 +2,9 @@
 <p>{{ _('You have exceeded your %(strong_open)sdaily%(strong_close)s working time limit.', strong_open='<strong>', strong_close='</strong>')|safe }}</p>
 <ul>
     <li><strong>{{ _('Date:') }}</strong> {{ violation.period_start }}</li>
-    <li><strong>{{ _('Limit:') }}</strong> {{ _('%(hours)s hours', hours="%.1f"|format(violation.limit_hours)) }}</li>
-    <li><strong>{{ _('Actual:') }}</strong> {{ _('%(hours)s hours', hours="%.1f"|format(violation.actual_hours)) }}</li>
-    <li><strong>{{ _('Over by:') }}</strong> {{ _('%(hours)s hours', hours="%.1f"|format(violation.hours_over)) }}</li>
+    <li><strong>{{ _('Limit:') }}</strong> {{ _('%(hours)s hours', hours="%.1f"|format(violation.limit_hours)|locale_decimal) }}</li>
+    <li><strong>{{ _('Actual:') }}</strong> {{ _('%(hours)s hours', hours="%.1f"|format(violation.actual_hours)|locale_decimal) }}</li>
+    <li><strong>{{ _('Over by:') }}</strong> {{ _('%(hours)s hours', hours="%.1f"|format(violation.hours_over)|locale_decimal) }}</li>
 </ul>
 <p>{{ _('Please provide a brief justification in TimeTracker:') }}</p>
 <p><a href="{{ justify_url }}">{{ _('Submit justification') }}</a></p>
