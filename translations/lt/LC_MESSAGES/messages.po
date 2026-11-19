@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  TimeTracker\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-11-18 23:44+0200\n"
+"POT-Creation-Date: 2026-11-19 12:13+0200\n"
 "PO-Revision-Date: 2026-10-12 02:33+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: lt\n"
@@ -23,7 +23,7 @@ msgstr ""
 #: app/routes/client_portal.py:296 app/routes/client_portal.py:305
 #: app/routes/client_portal.py:309 app/routes/client_portal.py:337
 msgid "Please log in to access the client portal."
-msgstr "Prisijunk, kad galėtum naudotis klientų portalu."
+msgstr "Prisijunkite, kad galėtumėte naudotis klientų portalu."
 
 #: app/__init__.py:1205 app/__init__.py:1252
 msgid "Your session expired or the page was open too long. Please try again."
@@ -31,66 +31,75 @@ msgstr ""
 "Tavo sesija baigėsi arba puslapis buvo atidarytas per ilgai. Bandyk dar "
 "kartą."
 
-#: app/integrations/activitywatch.py:89
+#: app/integrations/activitywatch.py:68
+#: app/templates/integrations/activitywatch_setup.html:15
+msgid ""
+"Import window and web activity from ActivityWatch (aw-server) as "
+"automatic time entries"
+msgstr ""
+"Langų ir žiniatinklio veiklos importavimas iš ActivityWatch (aw-server) "
+"kaip automatinių laiko įrašų"
+
+#: app/integrations/activitywatch.py:90
 msgid "ActivityWatch server_url is required in integration config."
 msgstr "Integracijos konfigūracijoje įvesk ActivityWatch server_url."
 
-#: app/integrations/activitywatch.py:101
+#: app/integrations/activitywatch.py:102
 #, python-format
 msgid "Invalid JSON from ActivityWatch: %(error)s"
 msgstr "Netinkamas ActivityWatch JSON atsakymas: %(error)s"
 
-#: app/integrations/activitywatch.py:103
+#: app/integrations/activitywatch.py:104
 #, python-format
 msgid "Cannot reach ActivityWatch at %(url)s: %(error)s"
 msgstr "Nepavyko pasiekti ActivityWatch adresu %(url)s: %(error)s"
 
-#: app/integrations/activitywatch.py:105
+#: app/integrations/activitywatch.py:106
 #, python-format
 msgid "ActivityWatch request timed out: %(error)s"
 msgstr "Baigėsi ActivityWatch užklausos laikas: %(error)s"
 
-#: app/integrations/activitywatch.py:107
+#: app/integrations/activitywatch.py:108
 #, python-format
 msgid "ActivityWatch API error: %(error)s"
 msgstr "ActivityWatch API klaida: %(error)s"
 
-#: app/integrations/activitywatch.py:113
+#: app/integrations/activitywatch.py:114
 msgid "Connected to ActivityWatch."
 msgstr "Prisijungta prie ActivityWatch."
 
-#: app/integrations/activitywatch.py:117 app/integrations/asana.py:171
-#: app/integrations/caldav_calendar.py:726
-#: app/integrations/google_calendar.py:199
-#: app/integrations/microsoft_teams.py:229
-#: app/integrations/outlook_calendar.py:208 app/integrations/quickbooks.py:204
-#: app/integrations/trello.py:126 app/integrations/trello.py:128
-#: app/integrations/xero.py:205
+#: app/integrations/activitywatch.py:118 app/integrations/asana.py:172
+#: app/integrations/caldav_calendar.py:727
+#: app/integrations/google_calendar.py:200
+#: app/integrations/microsoft_teams.py:230
+#: app/integrations/outlook_calendar.py:209 app/integrations/quickbooks.py:205
+#: app/integrations/trello.py:127 app/integrations/trello.py:129
+#: app/integrations/xero.py:206
 #, python-format
 msgid "Connection test failed: %(error)s"
 msgstr "Ryšio patikra nepavyko: %(error)s"
 
-#: app/integrations/activitywatch.py:129
+#: app/integrations/activitywatch.py:130
 msgid "ActivityWatch integration must be per-user."
 msgstr "ActivityWatch integracija turi būti atskira kiekvienam naudotojui."
 
-#: app/integrations/activitywatch.py:134
+#: app/integrations/activitywatch.py:135
 msgid "server_url is required."
 msgstr "Įvesk server_url."
 
-#: app/integrations/activitywatch.py:184
+#: app/integrations/activitywatch.py:185
 #, python-format
 msgid "Failed to list buckets: %(error)s"
 msgstr "Nepavyko gauti talpyklų (bucket) sąrašo: %(error)s"
 
-#: app/integrations/activitywatch.py:200
+#: app/integrations/activitywatch.py:201
 #, python-format
 msgid "None of the configured bucket_ids exist. Available: %(buckets)s%(more)s."
 msgstr ""
 "Nė vienos sukonfigūruotos bucket_ids talpyklos nėra. Galimos: "
 "%(buckets)s%(more)s."
 
-#: app/integrations/activitywatch.py:222
+#: app/integrations/activitywatch.py:223
 msgid ""
 "No aw-watcher-window or aw-watcher-web buckets found. Install and run "
 "ActivityWatch watchers."
@@ -98,56 +107,64 @@ msgstr ""
 "Nerasta aw-watcher-window ar aw-watcher-web talpyklų. Įdiek ir paleisk "
 "ActivityWatch stebėjimo programas (watchers)."
 
-#: app/integrations/activitywatch.py:420
+#: app/integrations/activitywatch.py:421
 #, python-format
 msgid "Imported %(imported)d events, skipped %(skipped)d."
 msgstr "Importuota įvykių: %(imported)d, praleista: %(skipped)d."
 
-#: app/integrations/activitywatch.py:422
+#: app/integrations/activitywatch.py:423
 #, python-format
 msgid "Errors: %(count)d."
 msgstr "Klaidų: %(count)d."
 
-#: app/integrations/adp.py:111 app/integrations/gmail.py:116
-#: app/integrations/gusto.py:118 app/integrations/outlook_email.py:123
-#: app/integrations/sage.py:135
+#: app/integrations/adp.py:22
+msgid "Push payroll batches to ADP Workforce Now"
+msgstr "Siųsk darbo užmokesčio paketus į ADP Workforce Now"
+
+#: app/integrations/adp.py:112 app/integrations/gmail.py:117
+#: app/integrations/gusto.py:119 app/integrations/outlook_email.py:124
+#: app/integrations/sage.py:136
 msgid "Not authenticated"
 msgstr "Neautentifikuota"
 
-#: app/integrations/adp.py:121
+#: app/integrations/adp.py:122
 msgid "ADP connection OK"
 msgstr "ADP ryšys veikia"
 
-#: app/integrations/adp.py:122
+#: app/integrations/adp.py:123
 #, python-format
 msgid "ADP reachable (HTTP %(status)s — check scopes)"
 msgstr "ADP pasiekiamas (HTTP %(status)s — patikrink aprėptis)"
 
-#: app/integrations/adp.py:137
+#: app/integrations/adp.py:138
 msgid "Missing access token"
 msgstr "Trūksta prieigos rakto"
 
-#: app/integrations/asana.py:163
+#: app/integrations/asana.py:21
+msgid "Sync tasks and projects with Asana"
+msgstr "Sinchronizuok užduotis ir projektus su Asana"
+
+#: app/integrations/asana.py:164
 #, python-format
 msgid "Connected to Asana as %(name)s"
 msgstr "Prisijungta prie Asana kaip %(name)s"
 
-#: app/integrations/asana.py:168
+#: app/integrations/asana.py:169
 #, python-format
 msgid "Connection test failed: %(status)s"
 msgstr "Ryšio patikra nepavyko: %(status)s"
 
-#: app/integrations/asana.py:196
+#: app/integrations/asana.py:197
 msgid "Workspace GID not configured"
 msgstr "Darbo erdvės GID nesukonfigūruotas"
 
-#: app/integrations/asana.py:303 app/integrations/caldav_calendar.py:868
-#: app/integrations/github.py:385 app/integrations/gitlab.py:353
-#: app/integrations/google_calendar.py:668 app/integrations/jira.py:319
-#: app/integrations/microsoft_teams.py:442
-#: app/integrations/outlook_calendar.py:270 app/integrations/quickbooks.py:380
-#: app/integrations/slack.py:229 app/integrations/trello.py:197
-#: app/integrations/xero.py:325
+#: app/integrations/asana.py:304 app/integrations/caldav_calendar.py:869
+#: app/integrations/github.py:386 app/integrations/gitlab.py:354
+#: app/integrations/google_calendar.py:669 app/integrations/jira.py:320
+#: app/integrations/microsoft_teams.py:443
+#: app/integrations/outlook_calendar.py:271 app/integrations/quickbooks.py:381
+#: app/integrations/slack.py:230 app/integrations/trello.py:198
+#: app/integrations/xero.py:326
 #, python-format
 msgid "Sync failed: %(error)s"
 msgstr "Sinchronizavimas nepavyko: %(error)s"
@@ -156,7 +173,7 @@ msgstr "Sinchronizavimas nepavyko: %(error)s"
 msgid "Sync not implemented for this connector"
 msgstr "Ši jungtis sinchronizavimo nepalaiko"
 
-#: app/integrations/caldav_calendar.py:136
+#: app/integrations/caldav_calendar.py:137
 #, python-format
 msgid ""
 "SSL certificate verification failed. If using a self-signed certificate, "
@@ -165,7 +182,7 @@ msgstr ""
 "Nepavyko patikrinti SSL sertifikato. Jei naudoji savarankiškai pasirašytą"
 " sertifikatą, išjunk SSL tikrinimą nustatymuose. Klaida: %(error)s"
 
-#: app/integrations/caldav_calendar.py:143
+#: app/integrations/caldav_calendar.py:144
 #, python-format
 msgid ""
 "Request timeout after %(timeout)s seconds. The server may be slow or "
@@ -174,30 +191,30 @@ msgstr ""
 "Užklausos laikas baigėsi po %(timeout)s s. Serveris gali būti lėtas arba "
 "nepasiekiamas."
 
-#: app/integrations/caldav_calendar.py:150
+#: app/integrations/caldav_calendar.py:151
 #, python-format
 msgid ""
 "Connection error: %(error)s. Please check the server URL and network "
 "connectivity."
 msgstr "Ryšio klaida: %(error)s. Patikrink serverio URL ir tinklo ryšį."
 
-#: app/integrations/caldav_calendar.py:164
+#: app/integrations/caldav_calendar.py:165
 #, python-format
 msgid "Empty response from PROPFIND request to %(url)s"
 msgstr "Tuščias atsakymas į PROPFIND užklausą adresu %(url)s"
 
-#: app/integrations/caldav_calendar.py:168
-#: app/integrations/caldav_calendar.py:184
+#: app/integrations/caldav_calendar.py:169
+#: app/integrations/caldav_calendar.py:185
 #, python-format
 msgid "Invalid XML response from server: %(error)s"
 msgstr "Netinkamas serverio XML atsakymas: %(error)s"
 
-#: app/integrations/caldav_calendar.py:210
+#: app/integrations/caldav_calendar.py:211
 #, python-format
 msgid "Failed to discover current-user-principal from %(url)s: %(error)s"
 msgstr "Nepavyko aptikti current-user-principal adresu %(url)s: %(error)s"
 
-#: app/integrations/caldav_calendar.py:227
+#: app/integrations/caldav_calendar.py:228
 msgid ""
 "Could not discover calendar-home-set from CalDAV server. The server may "
 "not support CalDAV or the credentials may be incorrect."
@@ -205,68 +222,72 @@ msgstr ""
 "Nepavyko aptikti calendar-home-set CalDAV serveryje. Serveris gali "
 "nepalaikyti CalDAV arba prisijungimo duomenys gali būti neteisingi."
 
-#: app/integrations/caldav_calendar.py:233
+#: app/integrations/caldav_calendar.py:234
 #, python-format
 msgid "Failed to discover calendar-home-set from %(url)s: %(error)s"
 msgstr "Nepavyko aptikti calendar-home-set adresu %(url)s: %(error)s"
 
-#: app/integrations/caldav_calendar.py:658
+#: app/integrations/caldav_calendar.py:639
+msgid "Import/sync with a CalDAV calendar (e.g., Zimbra)"
+msgstr "Importuok arba sinchronizuok su CalDAV kalendoriumi (pvz., Zimbra)"
+
+#: app/integrations/caldav_calendar.py:659
 msgid "Missing CalDAV credentials."
 msgstr "Trūksta CalDAV prisijungimo duomenų."
 
-#: app/integrations/caldav_calendar.py:662
+#: app/integrations/caldav_calendar.py:663
 msgid "Missing CalDAV username/password."
 msgstr "Trūksta CalDAV naudotojo vardo arba slaptažodžio."
 
-#: app/integrations/caldav_calendar.py:678
-#: app/integrations/caldav_calendar.py:746
+#: app/integrations/caldav_calendar.py:679
+#: app/integrations/caldav_calendar.py:747
 msgid "No credentials configured. Please set up username and password."
 msgstr ""
 "Prisijungimo duomenys nesukonfigūruoti. Nustatyk naudotojo vardą ir "
 "slaptažodį."
 
-#: app/integrations/caldav_calendar.py:686
-#: app/integrations/caldav_calendar.py:753
+#: app/integrations/caldav_calendar.py:687
+#: app/integrations/caldav_calendar.py:754
 #, python-format
 msgid "Missing credentials: %(error)s. Please configure username and password."
 msgstr ""
 "Trūksta prisijungimo duomenų: %(error)s. Sukonfigūruok naudotojo vardą ir"
 " slaptažodį."
 
-#: app/integrations/caldav_calendar.py:695
+#: app/integrations/caldav_calendar.py:696
 msgid "Either server URL or calendar URL must be configured."
 msgstr "Sukonfigūruok serverio URL arba kalendoriaus URL."
 
-#: app/integrations/caldav_calendar.py:706
+#: app/integrations/caldav_calendar.py:707
 #, python-format
 msgid "Failed to discover calendars from server: %(error)s"
 msgstr "Nepavyko aptikti kalendorių serveryje: %(error)s"
 
-#: app/integrations/caldav_calendar.py:714
+#: app/integrations/caldav_calendar.py:715
 #, python-format
 msgid "Failed to access calendar at %(url)s: %(error)s"
 msgstr "Nepavyko pasiekti kalendoriaus adresu %(url)s: %(error)s"
 
-#: app/integrations/caldav_calendar.py:719
+#: app/integrations/caldav_calendar.py:720
 #, python-format
 msgid "Connected to CalDAV. Found %(count)s calendars."
 msgstr "Prisijungta prie CalDAV. Rasta kalendorių: %(count)s."
 
-#: app/integrations/caldav_calendar.py:721
+#: app/integrations/caldav_calendar.py:722
 msgid "Connected to CalDAV calendar."
 msgstr "Prisijungta prie CalDAV kalendoriaus."
 
-#: app/integrations/caldav_calendar.py:742
+#: app/integrations/caldav_calendar.py:743
 msgid "CalDAV integration must be a per-user integration."
 msgstr "CalDAV integracija turi būti atskira kiekvienam naudotojui."
 
-#: app/integrations/caldav_calendar.py:781
+#: app/integrations/caldav_calendar.py:782
 msgid "No calendars found on server. Please configure calendar URL manually."
 msgstr ""
 "Serveryje kalendorių nerasta. Sukonfigūruok kalendoriaus URL rankiniu "
 "būdu."
 
-#: app/integrations/caldav_calendar.py:788
+#: app/integrations/caldav_calendar.py:789
 #, python-format
 msgid ""
 "Could not discover calendars: %(error)s. Please configure calendar URL "
@@ -275,13 +296,13 @@ msgstr ""
 "Nepavyko aptikti kalendorių: %(error)s. Sukonfigūruok kalendoriaus URL "
 "rankiniu būdu."
 
-#: app/integrations/caldav_calendar.py:794
+#: app/integrations/caldav_calendar.py:795
 msgid "No calendar selected. Please configure calendar URL or server URL first."
 msgstr ""
 "Kalendorius nepasirinktas. Pirmiausia sukonfigūruok kalendoriaus URL arba"
 " serverio URL."
 
-#: app/integrations/caldav_calendar.py:824
+#: app/integrations/caldav_calendar.py:825
 #, python-format
 msgid ""
 "Bidirectional sync: Calendar→TimeTracker: %(calendar)s | "
@@ -290,7 +311,7 @@ msgstr ""
 "Sinchronizavimas abiem kryptimis: Kalendorius→TimeTracker: %(calendar)s |"
 " TimeTracker→Kalendorius: %(tracker)s"
 
-#: app/integrations/caldav_calendar.py:837
+#: app/integrations/caldav_calendar.py:838
 #, python-format
 msgid ""
 "Both sync directions failed. Calendar→TimeTracker: %(calendar)s, "
@@ -299,25 +320,25 @@ msgstr ""
 "Nepavyko sinchronizuoti nė viena kryptimi. Kalendorius→TimeTracker: "
 "%(calendar)s, TimeTracker→Kalendorius: %(tracker)s"
 
-#: app/integrations/caldav_calendar.py:851 app/integrations/trello.py:194
+#: app/integrations/caldav_calendar.py:852 app/integrations/trello.py:195
 #, python-format
 msgid "Unknown sync direction: %(direction)s"
 msgstr "Nežinoma sinchronizavimo kryptis: %(direction)s"
 
-#: app/integrations/caldav_calendar.py:941
+#: app/integrations/caldav_calendar.py:942
 #, python-format
 msgid "Failed to fetch events from calendar: %(error)s"
 msgstr "Nepavyko gauti įvykių iš kalendoriaus: %(error)s"
 
-#: app/integrations/caldav_calendar.py:963
-#: app/integrations/caldav_calendar.py:1126
+#: app/integrations/caldav_calendar.py:964
+#: app/integrations/caldav_calendar.py:1127
 #, python-format
 msgid ""
 "No events found in calendar for the specified time range (%(start)s to "
 "%(end)s)."
 msgstr "Nurodytu laikotarpiu (%(start)s–%(end)s) kalendoriuje įvykių nerasta."
 
-#: app/integrations/caldav_calendar.py:1117
+#: app/integrations/caldav_calendar.py:1118
 #, python-format
 msgid ""
 "No new events imported (%(skipped)s already imported: %(duplicates)s "
@@ -328,7 +349,7 @@ msgstr ""
 "%(duplicates)s, netinkamas laikas: %(invalid)s, kita: %(other)s; iš viso "
 "rasta: %(total)s)."
 
-#: app/integrations/caldav_calendar.py:1132
+#: app/integrations/caldav_calendar.py:1133
 #, python-format
 msgid ""
 "Imported %(imported)s events (%(skipped)s skipped: %(duplicates)s "
@@ -339,12 +360,12 @@ msgstr ""
 "%(duplicates)s, netinkamas laikas: %(invalid)s, kita: %(other)s; iš viso "
 "rasta: %(total)s)."
 
-#: app/integrations/caldav_calendar.py:1256
+#: app/integrations/caldav_calendar.py:1257
 #, python-format
 msgid "No time entries found in the specified time range (%(start)s to %(end)s)."
 msgstr "Nurodytu laikotarpiu (%(start)s–%(end)s) laiko įrašų nerasta."
 
-#: app/integrations/caldav_calendar.py:1579
+#: app/integrations/caldav_calendar.py:1580
 #, python-format
 msgid ""
 "Synced %(synced)s new events, updated %(updated)s events to CalDAV "
@@ -353,107 +374,121 @@ msgstr ""
 "Į CalDAV kalendorių sinchronizuota naujų įvykių: %(synced)s, atnaujinta: "
 "%(updated)s."
 
-#: app/integrations/datev.py:48
+#: app/integrations/datev.py:20
+msgid "Export invoices as DATEV EXTF Buchungsstapel CSV"
+msgstr "Eksportuok sąskaitas faktūras DATEV EXTF Buchungsstapel CSV formatu"
+
+#: app/integrations/datev.py:49
 msgid "Configure consultant number (Berater-Nr) and client number (Mandanten-Nr)"
 msgstr ""
 "Sukonfigūruok konsultanto numerį (Berater-Nr) ir kliento numerį "
 "(Mandanten-Nr)"
 
-#: app/integrations/datev.py:52
+#: app/integrations/datev.py:53
 #, python-format
 msgid "DATEV ready (Berater %(consultant)s, Mandant %(client)s)"
 msgstr "DATEV paruoštas (Berater %(consultant)s, Mandant %(client)s)"
 
-#: app/integrations/datev.py:85
+#: app/integrations/datev.py:86
 #, python-format
 msgid "Generated DATEV export with %(count)d invoices"
 msgstr "Sugeneruotas DATEV eksportas, sąskaitų faktūrų: %(count)d"
 
-#: app/integrations/github.py:126 app/integrations/gitlab.py:181
-#: app/integrations/gitlab.py:214 app/integrations/jira.py:147
-#: app/integrations/jira.py:263 app/integrations/microsoft_teams.py:212
-#: app/integrations/microsoft_teams.py:400
-#: app/integrations/microsoft_teams.py:422
-#: app/integrations/outlook_calendar.py:194
-#: app/integrations/outlook_calendar.py:220 app/integrations/slack.py:134
-#: app/integrations/slack.py:158
+#: app/integrations/github.py:23
+msgid "Sync issues and track time from GitHub"
+msgstr "Sinchronizuok problemas ir apskaityk laiką iš GitHub"
+
+#: app/integrations/github.py:127 app/integrations/gitlab.py:182
+#: app/integrations/gitlab.py:215 app/integrations/jira.py:148
+#: app/integrations/jira.py:264 app/integrations/microsoft_teams.py:213
+#: app/integrations/microsoft_teams.py:401
+#: app/integrations/microsoft_teams.py:423
+#: app/integrations/outlook_calendar.py:195
+#: app/integrations/outlook_calendar.py:221 app/integrations/slack.py:135
+#: app/integrations/slack.py:159
 msgid "No access token available"
 msgstr "Prieigos rakto nėra"
 
-#: app/integrations/github.py:141 app/integrations/github_connector.py:182
+#: app/integrations/github.py:142 app/integrations/github_connector.py:183
 #, python-format
 msgid "Connected as %(login)s"
 msgstr "Prisijungta kaip %(login)s"
 
-#: app/integrations/github.py:144 app/integrations/gitlab.py:196
-#: app/integrations/jira.py:164 app/integrations/microsoft_teams.py:227
-#: app/integrations/microsoft_teams.py:414
-#: app/integrations/microsoft_teams.py:440
-#: app/integrations/outlook_calendar.py:206
+#: app/integrations/github.py:145 app/integrations/gitlab.py:197
+#: app/integrations/jira.py:165 app/integrations/microsoft_teams.py:228
+#: app/integrations/microsoft_teams.py:415
+#: app/integrations/microsoft_teams.py:441
+#: app/integrations/outlook_calendar.py:207
 #, python-format
 msgid "API returned status %(status)s"
 msgstr "API grąžino būseną %(status)s"
 
-#: app/integrations/github.py:146 app/integrations/gitlab.py:198
-#: app/integrations/jira.py:166 app/integrations/slack.py:152
-#: app/integrations/slack_attendance_connector.py:99
-#: app/integrations/slack_connector.py:105
+#: app/integrations/github.py:147 app/integrations/gitlab.py:199
+#: app/integrations/jira.py:167 app/integrations/slack.py:153
+#: app/integrations/slack_attendance_connector.py:100
+#: app/integrations/slack_connector.py:106
 #, python-format
 msgid "Connection error: %(error)s"
 msgstr "Ryšio klaida: %(error)s"
 
-#: app/integrations/github.py:167 app/integrations/google_calendar.py:207
-#: app/integrations/quickbooks.py:279
+#: app/integrations/github.py:168 app/integrations/google_calendar.py:208
+#: app/integrations/quickbooks.py:280
 msgid "No access token available. Please reconnect the integration."
 msgstr "Prieigos rakto nėra. Prijunk integraciją iš naujo."
 
-#: app/integrations/github.py:190
+#: app/integrations/github.py:191
 msgid "GitHub authentication failed. Please reconnect the integration."
 msgstr "GitHub autentifikavimas nepavyko. Prijunk integraciją iš naujo."
 
-#: app/integrations/github.py:199
+#: app/integrations/github.py:200
 msgid "GitHub API request timed out. Please try again."
 msgstr "Baigėsi GitHub API užklausos laikas. Bandyk dar kartą."
 
-#: app/integrations/github.py:201
+#: app/integrations/github.py:202
 #, python-format
 msgid "Failed to connect to GitHub API: %(error)s"
 msgstr "Nepavyko prisijungti prie GitHub API: %(error)s"
 
-#: app/integrations/github.py:204
+#: app/integrations/github.py:205
 #, python-format
 msgid "Error fetching repositories: %(error)s"
 msgstr "Nepavyko gauti saugyklų: %(error)s"
 
-#: app/integrations/github.py:209
+#: app/integrations/github.py:210
 msgid "No repositories configured or found"
 msgstr "Saugyklų nesukonfigūruota arba nerasta"
 
-#: app/integrations/github.py:363
+#: app/integrations/github.py:364
 #, python-format
 msgid "Sync completed with %(errors)s error(s). Synced %(count)s issues."
 msgstr ""
 "Sinchronizavimas baigtas, klaidų: %(errors)s. Sinchronizuota problemų: "
 "%(count)s."
 
-#: app/integrations/github.py:373
+#: app/integrations/github.py:374
 #, python-format
 msgid "Sync completed. Synced %(count)s issues."
 msgstr "Sinchronizavimas baigtas. Sinchronizuota problemų: %(count)s."
 
-#: app/integrations/github_connector.py:168
-#: app/integrations/google_calendar_connector.py:169
-#: app/integrations/google_calendar_connector.py:218
-#: app/integrations/google_calendar_connector.py:244
-#: app/integrations/google_calendar_connector.py:276
-#: app/integrations/google_calendar_connector.py:364
-#: app/integrations/google_calendar_connector.py:573
-#: app/integrations/slack_attendance_connector.py:91
-#: app/integrations/slack_attendance_connector.py:120
-#: app/integrations/slack_attendance_connector.py:294
-#: app/integrations/slack_connector.py:97
-#: app/integrations/slack_connector.py:131
-#: app/integrations/slack_connector.py:313
+#: app/integrations/github_connector.py:85
+msgid "Auto-create tasks from GitHub issues and run a timer on assignment"
+msgstr ""
+"Automatiškai kurk užduotis iš GitHub problemų ir paleisk laikmatį, kai "
+"jos priskiriamos"
+
+#: app/integrations/github_connector.py:169
+#: app/integrations/google_calendar_connector.py:170
+#: app/integrations/google_calendar_connector.py:219
+#: app/integrations/google_calendar_connector.py:245
+#: app/integrations/google_calendar_connector.py:277
+#: app/integrations/google_calendar_connector.py:365
+#: app/integrations/google_calendar_connector.py:574
+#: app/integrations/slack_attendance_connector.py:92
+#: app/integrations/slack_attendance_connector.py:121
+#: app/integrations/slack_attendance_connector.py:295
+#: app/integrations/slack_connector.py:98
+#: app/integrations/slack_connector.py:132
+#: app/integrations/slack_connector.py:314
 #: app/routes/integrations_webhooks.py:155
 #: app/routes/integrations_webhooks.py:180
 #: app/routes/integrations_webhooks.py:282
@@ -462,288 +497,358 @@ msgstr "Sinchronizavimas baigtas. Sinchronizuota problemų: %(count)s."
 msgid "Integration not configured"
 msgstr "Integracija nesukonfigūruota"
 
-#: app/integrations/github_connector.py:179
-#: app/integrations/google_calendar_connector.py:181
+#: app/integrations/github_connector.py:180
+#: app/integrations/google_calendar_connector.py:182
 msgid "Connection error"
 msgstr "Ryšio klaida"
 
-#: app/integrations/github_connector.py:183
+#: app/integrations/github_connector.py:184
 #, python-format
 msgid "GitHub returned HTTP %(status)s"
 msgstr "GitHub grąžino HTTP %(status)s"
 
-#: app/integrations/gitlab.py:193
+#: app/integrations/gitlab.py:21
+msgid "Sync issues and track time from GitLab"
+msgstr "Sinchronizuok problemas ir apskaityk laiką iš GitLab"
+
+#: app/integrations/gitlab.py:194
 #, python-format
 msgid "Connected as %(username)s"
 msgstr "Prisijungta kaip %(username)s"
 
-#: app/integrations/gitlab.py:252
+#: app/integrations/gitlab.py:253
 #, python-format
 msgid "Could not list GitLab projects: HTTP %(status)s"
 msgstr "Nepavyko gauti GitLab projektų sąrašo: HTTP %(status)s"
 
-#: app/integrations/gitlab.py:344
+#: app/integrations/gitlab.py:345
 #, python-format
 msgid "Sync completed. Upserted %(count)s issue(s)."
 msgstr "Sinchronizavimas baigtas. Įrašyta arba atnaujinta problemų: %(count)s."
 
-#: app/integrations/gitlab.py:346
+#: app/integrations/gitlab.py:347
 #, python-format
 msgid "%(count)s error(s)."
 msgstr "Klaidų: %(count)s."
 
-#: app/integrations/gmail.py:123
+#: app/integrations/gmail.py:23
+msgid "Sync Gmail threads into CRM (clients, leads, deals)"
+msgstr ""
+"Sinchronizuok Gmail pokalbius su CRM (klientai, potencialūs klientai, "
+"sandoriai)"
+
+#: app/integrations/gmail.py:124
 #, python-format
 msgid "Gmail OK (%(email)s)"
 msgstr "Gmail veikia (%(email)s)"
 
-#: app/integrations/google_calendar.py:175
-#: app/integrations/google_calendar.py:204
+#: app/integrations/google_calendar.py:26
+msgid "Two-way sync with Google Calendar"
+msgstr "Dvikryptis sinchronizavimas su Google Calendar"
+
+#: app/integrations/google_calendar.py:176
+#: app/integrations/google_calendar.py:205
 msgid "No credentials available. Please connect the integration first."
 msgstr "Prisijungimo duomenų nėra. Pirmiausia prijunk integraciją."
 
-#: app/integrations/google_calendar.py:195
+#: app/integrations/google_calendar.py:196
 #, python-format
 msgid "Connected to Google Calendar. Found %(count)d calendars."
 msgstr "Prisijungta prie Google Calendar. Rasta kalendorių: %(count)d."
 
-#: app/integrations/google_calendar.py:631
+#: app/integrations/google_calendar.py:632
 #, python-format
 msgid "Sync completed but failed to save results: %(error)s"
 msgstr "Sinchronizavimas baigtas, bet nepavyko išsaugoti rezultatų: %(error)s"
 
-#: app/integrations/google_calendar.py:639
+#: app/integrations/google_calendar.py:640
 #, python-format
 msgid "TimeTracker→Calendar: synced %(count)d items"
 msgstr "TimeTracker→Kalendorius: sinchronizuota elementų: %(count)d"
 
-#: app/integrations/google_calendar.py:643
+#: app/integrations/google_calendar.py:644
 #, python-format
 msgid "Calendar→TimeTracker: imported %(count)d events"
 msgstr "Kalendorius→TimeTracker: importuota įvykių: %(count)d"
 
-#: app/integrations/google_calendar.py:647
+#: app/integrations/google_calendar.py:648
 #, python-format
 msgid "(%(count)d skipped: %(summary)s)"
 msgstr "(praleista: %(count)d; %(summary)s)"
 
-#: app/integrations/google_calendar.py:652
+#: app/integrations/google_calendar.py:653
 #, python-format
 msgid "Synced %(count)d items"
 msgstr "Sinchronizuota elementų: %(count)d"
 
-#: app/integrations/google_calendar_connector.py:173
-#: app/integrations/google_calendar_connector.py:371
+#: app/integrations/google_calendar_connector.py:90
+msgid "Import calendar events as time entries and (optionally) export back"
+msgstr ""
+"Importuok kalendoriaus įvykius kaip laiko įrašus ir (jei nori) eksportuok"
+" atgal"
+
+#: app/integrations/google_calendar_connector.py:174
+#: app/integrations/google_calendar_connector.py:372
 msgid "Token refresh failed"
 msgstr "Nepavyko atnaujinti prieigos rakto"
 
-#: app/integrations/google_calendar_connector.py:183
+#: app/integrations/google_calendar_connector.py:184
 #, python-format
 msgid "Google returned HTTP %(status)s"
 msgstr "Google grąžino HTTP %(status)s"
 
-#: app/integrations/google_calendar_connector.py:186
+#: app/integrations/google_calendar_connector.py:187
 #, python-format
 msgid "Connected (%(count)s calendars)"
 msgstr "Prisijungta (kalendorių: %(count)s)"
 
-#: app/integrations/google_calendar_connector.py:235
+#: app/integrations/google_calendar_connector.py:236
 msgid "Database error while saving tokens"
 msgstr "Išsaugant prieigos raktus įvyko duomenų bazės klaida"
 
-#: app/integrations/google_calendar_connector.py:268 app/routes/admin.py:2288
+#: app/integrations/google_calendar_connector.py:269 app/routes/admin.py:2288
 msgid "Database error while saving settings"
 msgstr "Išsaugant nustatymus įvyko duomenų bazės klaida"
 
-#: app/integrations/gusto.py:121
+#: app/integrations/gusto.py:22
+msgid "Push time entries as payroll hours to Gusto"
+msgstr "Siųsk laiko įrašus į Gusto kaip darbo užmokesčio valandas"
+
+#: app/integrations/gusto.py:122
 msgid "Set company_uuid in integration config"
 msgstr "Integracijos konfigūracijoje nustatyk company_uuid"
 
-#: app/integrations/gusto.py:128
+#: app/integrations/gusto.py:129
 #, python-format
 msgid "Gusto company: %(name)s"
 msgstr "Gusto įmonė: %(name)s"
 
-#: app/integrations/gusto.py:144
+#: app/integrations/gusto.py:145
 msgid "Missing token or company_uuid"
 msgstr "Trūksta prieigos rakto arba company_uuid"
 
-#: app/integrations/jira.py:161 app/integrations/slack_connector.py:108
+#: app/integrations/jira.py:30
+msgid "Sync issues and track time in Jira"
+msgstr "Sinchronizuok problemas ir apskaityk laiką Jira sistemoje"
+
+#: app/integrations/jira.py:162 app/integrations/slack_connector.py:109
 #, python-format
 msgid "Connected as %(name)s"
 msgstr "Prisijungta kaip %(name)s"
 
-#: app/integrations/jira.py:299
+#: app/integrations/jira.py:300
 #, python-format
 msgid "Jira API returned status %(status)s"
 msgstr "Jira API grąžino būseną %(status)s"
 
-#: app/integrations/jira.py:314
+#: app/integrations/jira.py:315
 #, python-format
 msgid "Sync completed. Synced %(count)d issues."
 msgstr "Sinchronizavimas baigtas. Sinchronizuota problemų: %(count)d."
 
-#: app/integrations/linear.py:50
+#: app/integrations/linear.py:27
+msgid "Import Linear issues as tasks"
+msgstr "Importuok Linear problemas kaip užduotis"
+
+#: app/integrations/linear.py:51
 msgid "No Linear API key configured."
 msgstr "Linear API raktas nesukonfigūruotas."
 
-#: app/integrations/linear.py:71
+#: app/integrations/linear.py:72
 #, python-format
 msgid "Connected to Linear as %(name)s."
 msgstr "Prisijungta prie Linear kaip %(name)s."
 
-#: app/integrations/linear.py:90
+#: app/integrations/linear.py:91
 msgid "No Linear API key. Save your key under Integrations → Linear."
 msgstr "Linear API rakto nėra. Išsaugok raktą skiltyje Integracijos → Linear."
 
-#: app/integrations/linear.py:226
+#: app/integrations/linear.py:227
 #, python-format
 msgid "Database error: %(error)s"
 msgstr "Duomenų bazės klaida: %(error)s"
 
-#: app/integrations/linear.py:228
+#: app/integrations/linear.py:229
 #, python-format
 msgid "Processed %(count)s Linear issues."
 msgstr "Apdorota Linear problemų: %(count)s."
 
-#: app/integrations/linear.py:230
+#: app/integrations/linear.py:231
 #, python-format
 msgid "(%(count)s errors)"
 msgstr "(klaidų: %(count)s)"
 
-#: app/integrations/microsoft_teams.py:224
+#: app/integrations/microsoft_teams.py:40
+msgid "Send notifications and sync with Microsoft Teams"
+msgstr "Siųsk pranešimus ir sinchronizuok su Microsoft Teams"
+
+#: app/integrations/microsoft_teams.py:225
 #, python-format
 msgid "Connected to Microsoft Teams as %(name)s"
 msgstr "Prisijungta prie Microsoft Teams kaip %(name)s"
 
-#: app/integrations/microsoft_teams.py:412
+#: app/integrations/microsoft_teams.py:413
 msgid "Message sent successfully"
 msgstr "Žinutė išsiųsta"
 
-#: app/integrations/microsoft_teams.py:416
+#: app/integrations/microsoft_teams.py:417
 #, python-format
 msgid "Error sending message: %(error)s"
 msgstr "Nepavyko išsiųsti žinutės: %(error)s"
 
-#: app/integrations/microsoft_teams.py:436
+#: app/integrations/microsoft_teams.py:437
 #, python-format
 msgid "Sync completed. Found %(count)s teams."
 msgstr "Sinchronizavimas baigtas. Rasta komandų: %(count)s."
 
-#: app/integrations/outlook_calendar.py:204
+#: app/integrations/outlook_calendar.py:21
+msgid "Two-way sync with Outlook Calendar"
+msgstr "Dvikryptis sinchronizavimas su Outlook Calendar"
+
+#: app/integrations/outlook_calendar.py:205
 #, python-format
 msgid "Connected to Outlook Calendar. Found %(count)s calendars."
 msgstr "Prisijungta prie Outlook Calendar. Rasta kalendorių: %(count)s."
 
-#: app/integrations/outlook_email.py:133
+#: app/integrations/outlook_email.py:22
+msgid "Sync Outlook / Microsoft 365 mail into CRM"
+msgstr "Sinchronizuok Outlook / Microsoft 365 paštą su CRM"
+
+#: app/integrations/outlook_email.py:134
 #, python-format
 msgid "Outlook OK (%(account)s)"
 msgstr "Outlook veikia (%(account)s)"
 
-#: app/integrations/quickbooks.py:185 app/integrations/quickbooks.py:275
+#: app/integrations/quickbooks.py:33
+msgid "Sync invoices, expenses, and payments with QuickBooks"
+msgstr "Sinchronizuok sąskaitas faktūras, išlaidas ir mokėjimus su QuickBooks"
+
+#: app/integrations/quickbooks.py:186 app/integrations/quickbooks.py:276
 msgid "QuickBooks company not configured"
 msgstr "QuickBooks įmonė nesukonfigūruota"
 
-#: app/integrations/quickbooks.py:189
+#: app/integrations/quickbooks.py:190
 msgid "QuickBooks access token not available"
 msgstr "QuickBooks prieigos rakto nėra"
 
-#: app/integrations/quickbooks.py:199
+#: app/integrations/quickbooks.py:200
 #, python-format
 msgid "Connected to QuickBooks company: %(company)s"
 msgstr "Prisijungta prie QuickBooks įmonės: %(company)s"
 
-#: app/integrations/quickbooks.py:202
+#: app/integrations/quickbooks.py:203
 msgid "Failed to retrieve company information"
 msgstr "Nepavyko gauti įmonės informacijos"
 
-#: app/integrations/quickbooks.py:236
+#: app/integrations/quickbooks.py:237
 msgid "QuickBooks API request timed out. Please try again."
 msgstr "Baigėsi QuickBooks API užklausos laikas. Bandyk dar kartą."
 
-#: app/integrations/quickbooks.py:239
+#: app/integrations/quickbooks.py:240
 #, python-format
 msgid "Failed to connect to QuickBooks API: %(error)s"
 msgstr "Nepavyko prisijungti prie QuickBooks API: %(error)s"
 
-#: app/integrations/quickbooks.py:256
+#: app/integrations/quickbooks.py:257
 #, python-format
 msgid "QuickBooks API request failed: %(error)s"
 msgstr "QuickBooks API užklausa nepavyko: %(error)s"
 
-#: app/integrations/quickbooks.py:269 app/integrations/xero.py:250
+#: app/integrations/quickbooks.py:270 app/integrations/xero.py:251
 msgid "Export disabled by sync_direction"
 msgstr "Eksportavimas išjungtas nustatymu sync_direction"
 
-#: app/integrations/quickbooks.py:364
+#: app/integrations/quickbooks.py:365
 #, python-format
 msgid "Database error during sync: %(error)s"
 msgstr "Sinchronizuojant įvyko duomenų bazės klaida: %(error)s"
 
-#: app/integrations/quickbooks.py:369
+#: app/integrations/quickbooks.py:370
 #, python-format
 msgid "Successfully synced %(count)d items."
 msgstr "Sinchronizuota elementų: %(count)d."
 
-#: app/integrations/quickbooks.py:372
+#: app/integrations/quickbooks.py:373
 #, python-format
 msgid "Sync completed with %(errors)d error(s). Synced %(count)d items."
 msgstr ""
 "Sinchronizavimas baigtas, klaidų: %(errors)d. Sinchronizuota elementų: "
 "%(count)d."
 
-#: app/integrations/sage.py:118
+#: app/integrations/sage.py:22
+msgid "Sync invoices, contacts, and payments with Sage"
+msgstr "Sinchronizuok sąskaitas faktūras, kontaktus ir mokėjimus su Sage"
+
+#: app/integrations/sage.py:119
 msgid "No access token"
 msgstr "Prieigos rakto nėra"
 
-#: app/integrations/sage.py:126
+#: app/integrations/sage.py:127
 msgid "Connected to Sage Business Cloud"
 msgstr "Prisijungta prie Sage Business Cloud"
 
-#: app/integrations/sage.py:179
+#: app/integrations/sage.py:180
 #, python-format
 msgid "Synced %(count)d invoices"
 msgstr "Sinchronizuota sąskaitų faktūrų: %(count)d"
 
-#: app/integrations/slack.py:145
+#: app/integrations/slack.py:20
+msgid "Send notifications and sync with Slack"
+msgstr "Siųsk pranešimus ir sinchronizuok su Slack"
+
+#: app/integrations/slack.py:146
 #, python-format
 msgid "Connected to %(team)s"
 msgstr "Prisijungta prie %(team)s"
 
-#: app/integrations/slack.py:149
+#: app/integrations/slack.py:150
 #, python-format
 msgid "Slack API error: %(error)s"
 msgstr "Slack API klaida: %(error)s"
 
-#: app/integrations/slack.py:224
+#: app/integrations/slack.py:225
 #, python-format
 msgid "Sync completed. Found %(count)s items."
 msgstr "Sinchronizavimas baigtas. Rasta elementų: %(count)s."
 
-#: app/integrations/slack_attendance_connector.py:102
+#: app/integrations/slack_attendance_connector.py:71
+msgid "Clock in/out and breaks from Slack with /in, /brb, /back, /out"
+msgstr ""
+"Žymėk darbo pradžią, pabaigą ir pertraukas Slack komandomis /in, /brb, "
+"/back, /out"
+
+#: app/integrations/slack_attendance_connector.py:103
 #, python-format
 msgid "Connected as %(user)s"
 msgstr "Prisijungta kaip %(user)s"
 
-#: app/integrations/slack_attendance_connector.py:138
-#: app/integrations/slack_connector.py:165
+#: app/integrations/slack_attendance_connector.py:139
+#: app/integrations/slack_connector.py:166
 msgid "Database error while saving configuration"
 msgstr "Išsaugant konfigūraciją įvyko duomenų bazės klaida"
 
-#: app/integrations/slack_attendance_connector.py:297
+#: app/integrations/slack_attendance_connector.py:298
 msgid "Attendance channel ID is required for test messages"
 msgstr "Bandomosioms žinutėms reikia lankomumo kanalo ID"
 
-#: app/integrations/trello.py:123
+#: app/integrations/slack_connector.py:74
+msgid "Notify a Slack channel on timer events and run /tt slash commands"
+msgstr "Pranešk Slack kanalui apie laikmačio įvykius ir vykdyk /tt komandas"
+
+#: app/integrations/trello.py:24
+msgid "Sync boards and cards with Trello"
+msgstr "Sinchronizuok lentas ir korteles su Trello"
+
+#: app/integrations/trello.py:124
 #, python-format
 msgid "Connected to Trello as %(name)s"
 msgstr "Prisijungta prie Trello kaip %(name)s"
 
-#: app/integrations/trello.py:143
+#: app/integrations/trello.py:144
 msgid "Trello credentials not configured"
 msgstr "Trello prisijungimo duomenys nesukonfigūruoti"
 
-#: app/integrations/trello.py:170
+#: app/integrations/trello.py:171
 #, python-format
 msgid ""
 "Bidirectional sync: Trello→TimeTracker: %(imported)s items | "
@@ -752,7 +857,7 @@ msgstr ""
 "Sinchronizavimas abiem kryptimis: Trello→TimeTracker elementų: "
 "%(imported)s | TimeTracker→Trello elementų: %(exported)s"
 
-#: app/integrations/trello.py:183
+#: app/integrations/trello.py:184
 #, python-format
 msgid ""
 "Both sync directions failed. Trello→TimeTracker: %(import_error)s, "
@@ -761,20 +866,24 @@ msgstr ""
 "Nepavyko sinchronizuoti nė viena kryptimi. Trello→TimeTracker: "
 "%(import_error)s, TimeTracker→Trello: %(export_error)s"
 
-#: app/integrations/xero.py:191 app/integrations/xero.py:259
+#: app/integrations/xero.py:33
+msgid "Sync invoices, expenses, and payments with Xero"
+msgstr "Sinchronizuok sąskaitas faktūras, išlaidas ir mokėjimus su Xero"
+
+#: app/integrations/xero.py:192 app/integrations/xero.py:260
 msgid "Xero tenant not configured"
 msgstr "Xero nuomininkas nesukonfigūruotas"
 
-#: app/integrations/xero.py:195 app/integrations/xero.py:263
+#: app/integrations/xero.py:196 app/integrations/xero.py:264
 msgid "Xero access token not available"
 msgstr "Xero prieigos rakto nėra"
 
-#: app/integrations/xero.py:201
+#: app/integrations/xero.py:202
 #, python-format
 msgid "Connected to Xero organisation: %(name)s"
 msgstr "Prisijungta prie Xero organizacijos: %(name)s"
 
-#: app/integrations/xero.py:203
+#: app/integrations/xero.py:204
 msgid "Failed to retrieve organisation information"
 msgstr "Nepavyko gauti organizacijos informacijos"
 
@@ -2190,7 +2299,7 @@ msgstr "Avataras pašalintas"
 msgid "Failed to remove avatar."
 msgstr "Nepavyko pašalinti avataro."
 
-#: app/routes/auth.py:1135
+#: app/routes/auth.py:1135 app/services/external_identity_service.py:109
 msgid ""
 "Demo mode: only the demo account can be used. Please use the credentials "
 "on the login page."
@@ -2542,20 +2651,20 @@ msgid ""
 "You don't have permission to access this resource. Client portal access "
 "may not be enabled for your account."
 msgstr ""
-"Neturi leidimo pasiekti šio ištekliaus. Gali būti, kad tavo paskyrai "
+"Neturite leidimo pasiekti šio ištekliaus. Gali būti, kad jūsų paskyrai "
 "neįjungta klientų portalo prieiga."
 
 #: app/routes/client_portal.py:124
 msgid "Your account may not have client portal access enabled"
-msgstr "Tavo paskyrai gali būti neįjungta klientų portalo prieiga"
+msgstr "Jūsų paskyrai gali būti neįjungta klientų portalo prieiga"
 
 #: app/routes/client_portal.py:125
 msgid "Your account may be inactive"
-msgstr "Tavo paskyra gali būti neaktyvi"
+msgstr "Jūsų paskyra gali būti neaktyvi"
 
 #: app/routes/client_portal.py:126
 msgid "You may not be assigned to a client"
-msgstr "Tau gali būti nepriskirtas klientas"
+msgstr "Jums gali būti nepriskirtas klientas"
 
 #: app/routes/client_portal.py:144 app/templates/errors/404.html:3
 #: app/templates/errors/404.html:14
@@ -2584,20 +2693,20 @@ msgid ""
 "An unexpected error occurred. Please try again later or contact support "
 "if the problem persists."
 msgstr ""
-"Įvyko netikėta klaida. Bandyk vėliau arba, jei problema kartojasi, "
-"susisiek su palaikymo komanda."
+"Įvyko netikėta klaida. Bandykite vėliau arba, jei problema kartojasi, "
+"susisiekite su palaikymo komanda."
 
 #: app/routes/client_portal.py:272
 msgid "Client portal access is not enabled for your account."
-msgstr "Tavo paskyrai neįjungta klientų portalo prieiga."
+msgstr "Jūsų paskyrai neįjungta klientų portalo prieiga."
 
 #: app/routes/client_portal.py:277
 msgid "Your client account is inactive."
-msgstr "Tavo kliento paskyra neaktyvi."
+msgstr "Jūsų kliento paskyra neaktyvi."
 
 #: app/routes/client_portal.py:406
 msgid "Username and password are required."
-msgstr "Įvesk naudotojo vardą ir slaptažodį."
+msgstr "Įveskite naudotojo vardą ir slaptažodį."
 
 #: app/routes/client_portal.py:417
 msgid "Invalid username or password."
@@ -2620,11 +2729,11 @@ msgstr "Netinkamas arba trūkstamas slaptažodžio nustatymo prieigos raktas."
 msgid "Invalid or expired password setup token. Please request a new one."
 msgstr ""
 "Slaptažodžio nustatymo prieigos raktas netinkamas arba nebegalioja. "
-"Paprašyk naujo."
+"Paprašykite naujo."
 
 #: app/routes/client_portal.py:503 app/routes/integrations.py:620
 msgid "Password is required."
-msgstr "Įvesk slaptažodį."
+msgstr "Slaptažodis neįvestas."
 
 #: app/routes/client_portal.py:519
 msgid "Could not set password due to a database error."
@@ -2632,7 +2741,7 @@ msgstr "Nepavyko nustatyti slaptažodžio dėl duomenų bazės klaidos."
 
 #: app/routes/client_portal.py:522
 msgid "Password set successfully! You can now log in to the portal."
-msgstr "Slaptažodis nustatytas! Dabar gali prisijungti prie portalo."
+msgstr "Slaptažodis nustatytas! Dabar galite prisijungti prie portalo."
 
 #: app/routes/client_portal.py:548 app/routes/client_portal.py:685
 #: app/routes/client_portal.py:711 app/routes/client_portal.py:790
@@ -2676,7 +2785,7 @@ msgstr "Pranešti apie problemas negalima."
 #: app/routes/client_portal.py:890 app/routes/issues.py:189
 #: app/routes/issues.py:338
 msgid "Title is required."
-msgstr "Įvesk pavadinimą."
+msgstr "Pavadinimas neįvestas."
 
 #: app/routes/client_portal.py:907 app/routes/integrations.py:1165
 #: app/routes/integrations.py:1320 app/routes/issues.py:200
@@ -2717,7 +2826,7 @@ msgstr "Nepavyko patvirtinti laiko įrašo: %(error)s"
 
 #: app/routes/client_portal.py:1098
 msgid "Rejection reason is required."
-msgstr "Nurodyk atmetimo priežastį."
+msgstr "Nurodykite atmetimo priežastį."
 
 #: app/routes/client_portal.py:1111
 msgid "Time entry rejected."
@@ -2747,7 +2856,7 @@ msgstr "Šio komercinio pasiūlymo pasirašyti negalima."
 
 #: app/routes/client_portal.py:1186
 msgid "A signature is required to accept this quote."
-msgstr "Kad galėtum priimti šį komercinį pasiūlymą, reikia parašo."
+msgstr "Norint priimti šį komercinį pasiūlymą, reikia parašo."
 
 #: app/routes/client_portal.py:1199
 msgid "Could not save signature."
@@ -2764,7 +2873,7 @@ msgstr "Klientas pasirašė komercinį pasiūlymą %(quote_number)s"
 
 #: app/routes/client_portal.py:1218
 msgid "Could not sign quote. Please try again."
-msgstr "Nepavyko pasirašyti komercinio pasiūlymo. Bandyk dar kartą."
+msgstr "Nepavyko pasirašyti komercinio pasiūlymo. Bandykite dar kartą."
 
 #: app/routes/client_portal.py:1236
 msgid "This quote cannot be rejected."
@@ -2788,8 +2897,8 @@ msgid ""
 "Online payment is not currently available. Please contact us for payment "
 "instructions."
 msgstr ""
-"Mokėti internetu šiuo metu negalima. Dėl mokėjimo instrukcijų susisiek su"
-" mumis."
+"Mokėti internetu šiuo metu negalima. Dėl mokėjimo instrukcijų susisiekite"
+" su mumis."
 
 #: app/routes/client_portal.py:1333
 msgid "Payment could not be started."
@@ -2801,19 +2910,19 @@ msgstr "Netinkamas grįžimas po mokėjimo."
 
 #: app/routes/client_portal.py:1359
 msgid "Payment capture failed. Please contact support."
-msgstr "Nepavyko užbaigti mokėjimo. Kreipkis į pagalbos tarnybą."
+msgstr "Nepavyko užbaigti mokėjimo. Kreipkitės į pagalbos tarnybą."
 
 #: app/routes/client_portal.py:1364
 msgid "Thank you! Your payment has been received."
-msgstr "Ačiū! Tavo mokėjimas gautas."
+msgstr "Ačiū! Jūsų mokėjimas gautas."
 
 #: app/routes/client_portal.py:1367
 msgid "Your payment is being processed. We will confirm once it is complete."
-msgstr "Tavo mokėjimas apdorojamas. Patvirtinsime, kai jis bus baigtas."
+msgstr "Jūsų mokėjimas apdorojamas. Patvirtinsime, kai jis bus baigtas."
 
 #: app/routes/client_portal.py:1407
 msgid "PDF generation failed. Please try again later."
-msgstr "Nepavyko sugeneruoti PDF. Bandyk dar kartą vėliau."
+msgstr "Nepavyko sugeneruoti PDF. Bandykite dar kartą vėliau."
 
 #: app/routes/client_portal.py:1427
 msgid "Project not found."
@@ -2825,7 +2934,7 @@ msgstr "Komentaras negali būti tuščias."
 
 #: app/routes/client_portal.py:1439
 msgid "Unable to post comment. Please contact support."
-msgstr "Nepavyko paskelbti komentaro. Susisiek su palaikymo komanda."
+msgstr "Nepavyko paskelbti komentaro. Susisiekite su palaikymo komanda."
 
 #: app/routes/client_portal.py:1452
 msgid "Comment added successfully."
@@ -2921,8 +3030,8 @@ msgstr "Iš viso įtraukta į sąskaitas faktūras"
 #: app/templates/timer/time_entries_overview.html:105
 #: app/templates/timer/time_entries_overview.html:198
 #: app/templates/timer/view_timer.html:136
-#: app/templates/timer/view_timer.html:140 app/utils/i18n_helpers.py:98
-#: app/utils/i18n_helpers.py:110
+#: app/templates/timer/view_timer.html:140 app/utils/i18n_helpers.py:107
+#: app/utils/i18n_helpers.py:119
 msgid "Paid"
 msgstr "Apmokėta"
 
@@ -3149,7 +3258,7 @@ msgstr "Data"
 
 #: app/routes/client_portal.py:1765
 msgid "Could not save your feedback. Please try again."
-msgstr "Nepavyko išsaugoti tavo atsiliepimo. Bandyk dar kartą."
+msgstr "Nepavyko išsaugoti jūsų atsiliepimo. Bandykite dar kartą."
 
 #: app/routes/client_portal.py:1767
 msgid "Thank you for your feedback!"
@@ -4667,7 +4776,7 @@ msgstr "Išplėstiniai nustatymai"
 #: app/templates/integrations/wizard_linear.html:87
 #: app/templates/tasks/list.html:71 app/templates/tasks/list.html:197
 #: app/templates/tasks/my_tasks.html:74 app/templates/tasks/my_tasks.html:133
-#: app/utils/i18n_helpers.py:50 app/utils/i18n_helpers.py:62
+#: app/utils/i18n_helpers.py:59 app/utils/i18n_helpers.py:71
 msgid "Review"
 msgstr "Peržiūra"
 
@@ -4752,6 +4861,7 @@ msgstr "Darbo erdvė"
 #: app/templates/projects/view.html:6 app/templates/reports/builder.html:423
 #: app/templates/reports/unpaid_hours_report.html:76
 #: app/templates/reports/unpaid_hours_report.html:97
+#: app/utils/permissions_seed.py:17
 msgid "Projects"
 msgstr "Projektai"
 
@@ -6567,7 +6677,7 @@ msgstr ""
 "Nepavyko atnaujinti mokėjimo dėl duomenų bazės klaidos. Patikrink "
 "serverio žurnalus."
 
-#: app/routes/payments.py:443 app/services/payment_service.py:245
+#: app/routes/payments.py:443 app/services/payment_service.py:248
 msgid "Payment updated successfully"
 msgstr "Mokėjimas atnaujintas"
 
@@ -6583,7 +6693,7 @@ msgstr ""
 "Nepavyko ištrinti mokėjimo dėl duomenų bazės klaidos. Patikrink serverio "
 "žurnalus."
 
-#: app/routes/payments.py:485 app/services/payment_service.py:285
+#: app/routes/payments.py:485 app/services/payment_service.py:288
 msgid "Payment deleted successfully"
 msgstr "Mokėjimas ištrintas"
 
@@ -7811,6 +7921,25 @@ msgstr "Periodinės užduoties pabaigos data jau praėjo"
 #: app/routes/recurring_tasks.py:285
 msgid "Could not create task"
 msgstr "Nepavyko sukurti užduoties"
+
+#: app/routes/reminder_policies.py:29 app/routes/reminder_policies.py:58
+msgid "Policy name is required."
+msgstr "Įvesk tvarkos pavadinimą."
+
+#: app/routes/reminder_policies.py:43
+#, python-format
+msgid "Reminder policy '%(name)s' created."
+msgstr "Priminimų tvarka „%(name)s“ sukurta."
+
+#: app/routes/reminder_policies.py:76
+#, python-format
+msgid "Reminder policy '%(name)s' updated."
+msgstr "Priminimų tvarka „%(name)s“ atnaujinta."
+
+#: app/routes/reminder_policies.py:89
+#, python-format
+msgid "Reminder policy '%(name)s' deleted."
+msgstr "Priminimų tvarka „%(name)s“ ištrinta."
 
 #: app/routes/reports.py:134 app/routes/reports.py:208
 #: app/routes/reports.py:880 app/routes/timer.py:2643
@@ -9596,6 +9725,7 @@ msgid "Workflow template created"
 msgstr "Darbo eigos šablonas sukurtas"
 
 #: app/routes/workflows.py:275
+#: app/templates/admin/email_templates/create.html:8
 #: app/templates/admin/email_templates/create.html:121
 #: app/templates/admin/email_templates/list.html:15
 #: app/templates/admin/payroll_templates.html:58
@@ -9850,6 +9980,7 @@ msgid "Project has no associated client"
 msgstr "Projektas nesusietas su klientu"
 
 #: app/services/client_approval_service.py:35 app/services/client_service.py:93
+#: app/services/invoice_service.py:957
 msgid "Client not found"
 msgstr "Klientas nerastas"
 
@@ -9917,6 +10048,7 @@ msgstr "Išrašyta nauja sąskaita faktūra: %(amount)s %(currency)s."
 #: app/services/client_notification_service.py:115
 #: app/services/client_notification_service.py:140
 #: app/services/client_notification_service.py:166
+#: app/templates/email/invoice_reminder.html:39
 #: app/templates/email/overdue_invoice.html:109
 #: app/templates/invoice_approvals/view.html:13
 #: app/templates/invoices/view.html:69 app/templates/payments/view.html:208
@@ -10103,6 +10235,19 @@ msgstr "Nepavyko ištrinti išlaidos dėl duomenų bazės klaidos"
 msgid "Expense rejected successfully"
 msgstr "Išlaida atmesta"
 
+#: app/services/external_identity_service.py:90
+msgid "Invalid identity assertion."
+msgstr "Netinkamas tapatybės patvirtinimas."
+
+#: app/services/external_identity_service.py:116
+#: app/services/external_identity_service.py:122
+msgid "User account does not exist and self-registration is disabled."
+msgstr "Naudotojo paskyros nėra, o registracija išjungta."
+
+#: app/services/external_identity_service.py:166
+msgid "Could not create your account due to a database error."
+msgstr "Nepavyko sukurti tavo paskyros dėl duomenų bazės klaidos."
+
 #: app/services/gps_tracking_service.py:75
 msgid "Tracking already stopped"
 msgstr "Sekimas jau sustabdytas"
@@ -10211,6 +10356,50 @@ msgstr "Nepavyko patvirtinti sąskaitos faktūros"
 #: app/services/invoice_approval_service.py:204
 msgid "Error rejecting invoice"
 msgstr "Nepavyko atmesti sąskaitos faktūros"
+
+#: app/services/invoice_reminder_service.py:200
+#, python-format
+msgid "Payment reminder – invoice %(number)s (%(num)d day overdue)"
+msgid_plural "Payment reminder – invoice %(number)s (%(num)d days overdue)"
+msgstr[0] ""
+"Priminimas apmokėti – sąskaita faktūra %(number)s (pradelsta %(num)d "
+"dieną)"
+msgstr[1] ""
+"Priminimas apmokėti – sąskaita faktūra %(number)s (pradelsta %(num)d "
+"dienas)"
+msgstr[2] ""
+"Priminimas apmokėti – sąskaita faktūra %(number)s (pradelsta %(num)d "
+"dienų)"
+
+#: app/services/invoice_reminder_service.py:206
+#, python-format
+msgid "Upcoming invoice due – %(number)s (due in %(num)d day)"
+msgid_plural "Upcoming invoice due – %(number)s (due in %(num)d days)"
+msgstr[0] ""
+"Artėja sąskaitos faktūros apmokėjimo terminas – %(number)s (liko %(num)d "
+"diena)"
+msgstr[1] ""
+"Artėja sąskaitos faktūros apmokėjimo terminas – %(number)s (liko %(num)d "
+"dienos)"
+msgstr[2] ""
+"Artėja sąskaitos faktūros apmokėjimo terminas – %(number)s (liko %(num)d "
+"dienų)"
+
+#: app/services/invoice_service.py:862
+msgid ""
+"Unbilled time without a project cannot be invoiced; assign a project "
+"first."
+msgstr ""
+"Neįtraukto į sąskaitą laiko be projekto į sąskaitą faktūrą įtraukti "
+"negalima; pirmiausia priskirk projektą."
+
+#: app/services/invoice_service.py:875 app/services/invoice_service.py:985
+msgid "No unbilled time entries for this client."
+msgstr "Šis klientas neturi neįtrauktų į sąskaitą laiko įrašų."
+
+#: app/services/invoice_service.py:964
+msgid "Cannot create invoice."
+msgstr "Sąskaitos faktūros sukurti negalima."
 
 #: app/services/ldap_service.py:405
 msgid "ldap3 is not installed"
@@ -10390,15 +10579,20 @@ msgstr "Nepavyko sukurti mokėjimo dėl duomenų bazės klaidos"
 msgid "Payment created successfully"
 msgstr "Mokėjimas sukurtas"
 
-#: app/services/payment_service.py:196 app/services/payment_service.py:256
+#: app/services/payment_service.py:171
+#, python-format
+msgid "Payment Receipt — Invoice %(number)s"
+msgstr "Mokėjimo kvitas — sąskaita faktūra %(number)s"
+
+#: app/services/payment_service.py:199 app/services/payment_service.py:259
 msgid "Payment not found"
 msgstr "Mokėjimas nerastas"
 
-#: app/services/payment_service.py:231
+#: app/services/payment_service.py:234
 msgid "Could not update payment due to a database error"
 msgstr "Nepavyko atnaujinti mokėjimo dėl duomenų bazės klaidos"
 
-#: app/services/payment_service.py:281
+#: app/services/payment_service.py:284
 msgid "Could not delete payment due to a database error"
 msgstr "Nepavyko ištrinti mokėjimo dėl duomenų bazės klaidos"
 
@@ -11275,7 +11469,7 @@ msgstr "Terminas"
 #: app/templates/credit_notes/list.html:16
 #: app/templates/credit_notes/view.html:25
 #: app/templates/deals/activity_form.html:34 app/templates/deals/list.html:22
-#: app/templates/deals/view.html:55
+#: app/templates/deals/view.html:55 app/templates/email/payment_receipt.html:91
 #: app/templates/expense_categories/list.html:66
 #: app/templates/expense_categories/view.html:51
 #: app/templates/expenses/dashboard.html:179
@@ -11493,6 +11687,12 @@ msgstr[0] "prieš %(num)s dieną"
 msgstr[1] "prieš %(num)s dienas"
 msgstr[2] "prieš %(num)s dienų"
 
+#: app/static/dashboard-enhancements.js:369
+#: app/static/dashboard-enhancements.js:379
+#: app/templates/main/dashboard.html:388
+msgid "overtime"
+msgstr "viršvalandžių"
+
 #: app/static/data-tables-enhanced.js:119
 #, python-format
 msgid "Sort by %(column)s"
@@ -11642,6 +11842,7 @@ msgstr "pasirinkta"
 #: app/templates/recurring_invoices/list.html:66
 #: app/templates/recurring_tasks/list.html:141
 #: app/templates/recurring_tasks/view.html:21
+#: app/templates/reminder_policies/list.html:39
 #: app/templates/reports/index.html:435 app/templates/reports/index.html:588
 #: app/templates/reports/saved_views_list.html:78
 #: app/templates/reports/scheduled.html:100
@@ -11779,8 +11980,9 @@ msgstr "Rodoma %(start)s-%(end)s iš %(total)s"
 #: app/templates/payments/create.html:158 app/templates/payments/edit.html:122
 #: app/templates/payments/list.html:228 app/templates/payments/list.html:252
 #: app/templates/payments/reconciliation_upload.html:32
-#: app/templates/payments/view.html:254 app/templates/per_diem/form.html:212
-#: app/templates/per_diem/list.html:158 app/templates/per_diem/list.html:182
+#: app/templates/payments/view.html:254 app/templates/payments/view.html:267
+#: app/templates/per_diem/form.html:212 app/templates/per_diem/list.html:158
+#: app/templates/per_diem/list.html:182
 #: app/templates/per_diem/rate_form.html:170
 #: app/templates/per_diem/rates_list.html:113
 #: app/templates/project_templates/create.html:106
@@ -11803,6 +12005,7 @@ msgstr "Rodoma %(start)s-%(end)s iš %(total)s"
 #: app/templates/recurring_invoices/create.html:119
 #: app/templates/recurring_invoices/edit.html:110
 #: app/templates/recurring_tasks/_form_fields.html:107
+#: app/templates/reminder_policies/edit.html:84
 #: app/templates/reports/builder.html:268 app/templates/reports/index.html:499
 #: app/templates/reports/schedule_form.html:100
 #: app/templates/settings/keyboard_shortcuts.html:485
@@ -12049,6 +12252,8 @@ msgstr "Sėkmingai"
 #: app/static/error-handling-enhanced.js:686
 #: app/static/error-handling-enhanced.js:727
 #: app/templates/admin/email_support.html:108
+#: app/templates/admin/email_templates/create.html:87
+#: app/templates/admin/email_templates/edit.html:104
 #: app/templates/analytics/dashboard.html:20
 #: app/templates/analytics/dashboard_improved.html:22
 #: app/templates/budget/dashboard.html:18
@@ -12616,6 +12821,7 @@ msgstr "Rodyti greituosius veiksmus"
 #: app/templates/recurring_invoices/view.html:113
 #: app/templates/recurring_tasks/list.html:59
 #: app/templates/recurring_tasks/list.html:131
+#: app/templates/reminder_policies/list.html:25
 #: app/templates/reports/saved_views_list.html:32
 #: app/templates/reports/saved_views_list.html:65
 #: app/templates/reports/scheduled.html:31
@@ -12737,6 +12943,8 @@ msgstr "Tinkinti"
 
 #: app/static/keyboard-shortcuts-advanced.js:363
 #: app/static/kiosk-barcode.js:702 app/static/onboarding-enhanced.js:353
+#: app/templates/admin/email_templates/create.html:172
+#: app/templates/admin/email_templates/edit.html:189
 #: app/templates/admin/pdf_layout.html:2413
 #: app/templates/admin/quote_pdf_layout.html:2168
 #: app/templates/approvals/list.html:214 app/templates/approvals/view.html:148
@@ -13358,8 +13566,9 @@ msgstr ""
 #: app/templates/components/activity_feed_widget.html:43
 #: app/templates/contacts/communication_form.html:8
 #: app/templates/contacts/form.html:8 app/templates/contacts/list.html:8
+#: app/templates/contacts/view.html:8
 #: app/templates/partials/_bottom_nav.html:78
-#: app/templates/partials/_sidebar.html:246
+#: app/templates/partials/_sidebar.html:246 app/utils/permissions_seed.py:13
 msgid "Clients"
 msgstr "Klientai"
 
@@ -13388,7 +13597,7 @@ msgstr ""
 #: app/templates/reports/builder.html:424 app/templates/tasks/create.html:16
 #: app/templates/tasks/edit.html:17 app/templates/tasks/list.html:7
 #: app/templates/tasks/list.html:12 app/templates/tasks/overdue.html:8
-#: app/templates/tasks/view.html:47
+#: app/templates/tasks/view.html:47 app/utils/permissions_seed.py:20
 msgid "Tasks"
 msgstr "Užduotys"
 
@@ -13870,8 +14079,8 @@ msgstr "Uždaryti pranešimą"
 #: app/templates/budget/project_detail.html:67
 #: app/templates/main/dashboard.html:2100 app/templates/projects/view.html:315
 #: app/templates/timer/edit_timer.html:1075
-#: app/templates/timer/manual_entry.html:1173 app/utils/i18n_helpers.py:307
-#: app/utils/i18n_helpers.py:313
+#: app/templates/timer/manual_entry.html:1173 app/utils/i18n_helpers.py:316
+#: app/utils/i18n_helpers.py:322
 msgid "Warning"
 msgstr "Įspėjimas"
 
@@ -13903,11 +14112,12 @@ msgstr "Informacija"
 #: app/templates/expense_categories/list.html:136
 #: app/templates/expenses/view.html:7
 #: app/templates/invoices/_invoices_list.html:123
-#: app/templates/invoices/view.html:8 app/templates/kanban/columns.html:140
-#: app/templates/leads/view.html:14 app/templates/mileage/form.html:8
-#: app/templates/mileage/view.html:15 app/templates/milestones/form.html:9
-#: app/templates/milestones/list.html:36 app/templates/payments/view.html:13
-#: app/templates/per_diem/form.html:8 app/templates/per_diem/rate_form.html:8
+#: app/templates/invoices/view.html:8 app/templates/issues/edit.html:8
+#: app/templates/kanban/columns.html:140 app/templates/leads/view.html:14
+#: app/templates/mileage/form.html:8 app/templates/mileage/view.html:15
+#: app/templates/milestones/form.html:9 app/templates/milestones/list.html:36
+#: app/templates/payments/view.html:13 app/templates/per_diem/form.html:8
+#: app/templates/per_diem/rate_form.html:8
 #: app/templates/per_diem/rates_list.html:70
 #: app/templates/per_diem/view.html:15
 #: app/templates/project_templates/list.html:60
@@ -13921,6 +14131,7 @@ msgstr "Informacija"
 #: app/templates/recurring_tasks/edit.html:10
 #: app/templates/recurring_tasks/list.html:136
 #: app/templates/recurring_tasks/view.html:18
+#: app/templates/reminder_policies/list.html:36
 #: app/templates/reports/iterative_view.html:19
 #: app/templates/reports/saved_views_list.html:70
 #: app/templates/tasks/_tasks_list.html:44 app/templates/tasks/edit.html:17
@@ -14249,10 +14460,11 @@ msgstr "Naujas klientas"
 #: app/templates/reports/custom_view.html:8
 #: app/templates/reports/estimates_vs_actuals.html:6
 #: app/templates/reports/index.html:7 app/templates/reports/index.html:12
+#: app/templates/reports/iterative_view.html:8
 #: app/templates/reports/saved_views_list.html:8
 #: app/templates/reports/scheduled.html:8
 #: app/templates/reports/utilization.html:7
-#: app/templates/reports/week_in_review.html:6
+#: app/templates/reports/week_in_review.html:6 app/utils/permissions_seed.py:18
 msgid "Reports"
 msgstr "Ataskaitos"
 
@@ -14451,6 +14663,8 @@ msgstr "API prieigos raktai"
 #: app/templates/admin/client_surveys.html:5
 #: app/templates/admin/custom_field_definitions/form.html:6
 #: app/templates/admin/custom_field_definitions/list.html:6
+#: app/templates/admin/email_templates/create.html:6
+#: app/templates/admin/email_templates/edit.html:6
 #: app/templates/admin/email_templates/list.html:6
 #: app/templates/admin/email_templates/view.html:6
 #: app/templates/admin/gamification.html:6 app/templates/admin/geofences.html:6
@@ -14460,7 +14674,8 @@ msgstr "API prieigos raktai"
 #: app/templates/admin/link_templates/form.html:6
 #: app/templates/admin/link_templates/list.html:6
 #: app/templates/admin/modules.html:15 app/templates/admin/modules.html:19
-#: app/templates/admin/oauth_apps.html:4 app/templates/admin/oidc_debug.html:8
+#: app/templates/admin/oauth_apps.html:4 app/templates/admin/oauth_apps.html:8
+#: app/templates/admin/oidc_debug.html:8
 #: app/templates/admin/oidc_debug.html:152
 #: app/templates/admin/oidc_setup_wizard.html:8
 #: app/templates/admin/oidc_user_detail.html:26
@@ -14553,6 +14768,7 @@ msgstr "Visą REST API dokumentaciją rasi adresu"
 #: app/templates/recurring_invoices/list.html:36
 #: app/templates/recurring_tasks/list.html:53
 #: app/templates/recurring_tasks/list.html:73
+#: app/templates/reminder_policies/list.html:21
 #: app/templates/reports/saved_views_list.html:27
 #: app/templates/reports/saved_views_list.html:39
 #: app/templates/reports/utilization.html:61
@@ -14646,14 +14862,18 @@ msgstr "Prieigos raktas"
 #: app/templates/recurring_tasks/list.html:128
 #: app/templates/recurring_tasks/list.html:180
 #: app/templates/recurring_tasks/view.html:62
+#: app/templates/reminder_policies/edit.html:25
+#: app/templates/reminder_policies/edit.html:71
+#: app/templates/reminder_policies/edit.html:120
+#: app/templates/reminder_policies/list.html:22
 #: app/templates/reports/index.html:410 app/templates/reports/scheduled.html:74
 #: app/templates/tasks/_kanban.html:100 app/templates/timer/calendar.html:1002
 #: app/templates/weekly_goals/edit.html:88
 #: app/templates/weekly_goals/index.html:176
-#: app/templates/weekly_goals/view.html:69 app/utils/i18n_helpers.py:83
-#: app/utils/i18n_helpers.py:89 app/utils/i18n_helpers.py:276
-#: app/utils/i18n_helpers.py:287 app/utils/i18n_helpers.py:319
-#: app/utils/i18n_helpers.py:325
+#: app/templates/weekly_goals/view.html:69 app/utils/i18n_helpers.py:92
+#: app/utils/i18n_helpers.py:98 app/utils/i18n_helpers.py:285
+#: app/utils/i18n_helpers.py:296 app/utils/i18n_helpers.py:328
+#: app/utils/i18n_helpers.py:334
 msgid "Active"
 msgstr "Aktyvus"
 
@@ -14705,9 +14925,9 @@ msgstr "Nebegalioja"
 #: app/templates/recurring_tasks/list.html:180
 #: app/templates/recurring_tasks/view.html:62
 #: app/templates/reports/index.html:411 app/templates/reports/scheduled.html:76
-#: app/templates/timer/calendar.html:1002 app/utils/i18n_helpers.py:83
-#: app/utils/i18n_helpers.py:89 app/utils/i18n_helpers.py:319
-#: app/utils/i18n_helpers.py:325
+#: app/templates/timer/calendar.html:1002 app/utils/i18n_helpers.py:92
+#: app/utils/i18n_helpers.py:98 app/utils/i18n_helpers.py:328
+#: app/utils/i18n_helpers.py:334
 msgid "Inactive"
 msgstr "Neaktyvus"
 
@@ -14763,6 +14983,8 @@ msgstr "Aiškus šio prieigos rakto pavadinimas"
 
 #: app/templates/admin/api_tokens.html:140
 #: app/templates/admin/custom_field_definitions/form.html:47
+#: app/templates/admin/email_templates/create.html:30
+#: app/templates/admin/email_templates/edit.html:48
 #: app/templates/admin/email_templates/list.html:25
 #: app/templates/admin/email_templates/view.html:48
 #: app/templates/admin/gamification.html:23
@@ -15620,9 +15842,9 @@ msgstr "Komentaras"
 #: app/templates/payments/view.html:42 app/templates/per_diem/list.html:67
 #: app/templates/per_diem/list.html:176 app/templates/per_diem/list.html:255
 #: app/templates/per_diem/view.html:69
-#: app/templates/workday/admin_violations.html:9 app/utils/i18n_helpers.py:174
-#: app/utils/i18n_helpers.py:185 app/utils/i18n_helpers.py:252
-#: app/utils/i18n_helpers.py:264
+#: app/templates/workday/admin_violations.html:9 app/utils/i18n_helpers.py:183
+#: app/utils/i18n_helpers.py:194 app/utils/i18n_helpers.py:261
+#: app/utils/i18n_helpers.py:273
 msgid "Pending"
 msgstr "Laukiama"
 
@@ -15791,6 +16013,7 @@ msgstr "REST API"
 #: app/templates/integrations/activitywatch_inbox.html:6
 #: app/templates/integrations/activitywatch_rules.html:6
 #: app/templates/integrations/activitywatch_setup.html:8
+#: app/templates/integrations/caldav_setup.html:8
 #: app/templates/integrations/health.html:12
 #: app/templates/integrations/list.html:4
 #: app/templates/integrations/list.html:8
@@ -15811,6 +16034,8 @@ msgid "Email Configuration"
 msgstr "El. pašto konfigūracija"
 
 #: app/templates/admin/dashboard.html:186
+#: app/templates/admin/email_templates/create.html:7
+#: app/templates/admin/email_templates/edit.html:7
 #: app/templates/admin/email_templates/list.html:7
 #: app/templates/admin/email_templates/list.html:12
 #: app/templates/admin/email_templates/view.html:7
@@ -16311,7 +16536,7 @@ msgstr "Susiejimas"
 #: app/templates/components/activity_feed_widget.html:47
 #: app/templates/partials/_bottom_nav.html:66
 #: app/templates/partials/_sidebar.html:578
-#: app/templates/reports/utilization.html:38
+#: app/templates/reports/utilization.html:38 app/utils/permissions_seed.py:22
 msgid "Users"
 msgstr "Naudotojai"
 
@@ -16597,9 +16822,9 @@ msgstr "Įkeltas"
 #: app/templates/weekly_goals/index.html:51
 #: app/templates/weekly_goals/index.html:180
 #: app/templates/weekly_goals/view.html:71 app/templates/workflows/list.html:67
-#: app/templates/workflows/view.html:66 app/utils/i18n_helpers.py:255
-#: app/utils/i18n_helpers.py:267 app/utils/i18n_helpers.py:278
-#: app/utils/i18n_helpers.py:289
+#: app/templates/workflows/view.html:66 app/utils/i18n_helpers.py:264
+#: app/utils/i18n_helpers.py:276 app/utils/i18n_helpers.py:287
+#: app/utils/i18n_helpers.py:298
 msgid "Failed"
 msgstr "Nepavyko"
 
@@ -16728,7 +16953,9 @@ msgstr "Finansai ir išlaidos"
 #: app/templates/inventory/low_stock/list.html:6
 #: app/templates/inventory/movements/form.html:6
 #: app/templates/inventory/movements/list.html:6
+#: app/templates/inventory/purchase_orders/form.html:7
 #: app/templates/inventory/purchase_orders/list.html:6
+#: app/templates/inventory/purchase_orders/view.html:6
 #: app/templates/inventory/reports/dashboard.html:6
 #: app/templates/inventory/reports/low_stock.html:6
 #: app/templates/inventory/reports/movement_history.html:6
@@ -16738,16 +16965,19 @@ msgstr "Finansai ir išlaidos"
 #: app/templates/inventory/stock_items/form.html:6
 #: app/templates/inventory/stock_items/history.html:6
 #: app/templates/inventory/stock_items/list.html:6
+#: app/templates/inventory/stock_items/view.html:6
 #: app/templates/inventory/stock_levels/item.html:6
 #: app/templates/inventory/stock_levels/list.html:6
 #: app/templates/inventory/stock_levels/warehouse.html:6
 #: app/templates/inventory/suppliers/form.html:6
 #: app/templates/inventory/suppliers/list.html:6
+#: app/templates/inventory/suppliers/view.html:6
 #: app/templates/inventory/transfers/form.html:6
 #: app/templates/inventory/transfers/list.html:6
 #: app/templates/inventory/warehouses/form.html:6
 #: app/templates/inventory/warehouses/list.html:6
-#: app/templates/partials/_sidebar.html:408
+#: app/templates/inventory/warehouses/view.html:6
+#: app/templates/partials/_sidebar.html:408 app/utils/permissions_seed.py:14
 msgid "Inventory"
 msgstr "Atsargos"
 
@@ -16882,7 +17112,7 @@ msgstr ""
 msgid "Validation errors:"
 msgstr "Patikros klaidos:"
 
-#: app/templates/admin/oauth_apps.html:4
+#: app/templates/admin/oauth_apps.html:4 app/templates/admin/oauth_apps.html:9
 msgid "OAuth Apps"
 msgstr "OAuth programos"
 
@@ -17544,6 +17774,8 @@ msgstr "Laiko įrašai"
 #: app/templates/quotes/_edit_quote_form_scripts.html:62
 #: app/templates/quotes/_edit_quote_form_scripts.html:73
 #: app/templates/quotes/edit.html:93 app/templates/quotes/edit.html:99
+#: app/templates/reminder_policies/edit.html:55
+#: app/templates/reminder_policies/edit.html:104
 #: app/templates/tasks/edit.html:125 app/templates/tasks/view.html:121
 #: app/templates/tasks/view.html:131
 msgid "None"
@@ -17618,6 +17850,7 @@ msgstr "Diena"
 #: app/templates/admin/settings.html:867 app/templates/clients/create.html:57
 #: app/templates/clients/edit.html:64
 #: app/templates/components/theme_picker.html:60
+#: app/templates/reminder_policies/list.html:23
 msgid "Default"
 msgstr "Numatytasis"
 
@@ -17941,6 +18174,7 @@ msgstr "Sąskaitos faktūros duomenys"
 #: app/templates/admin/email_templates/edit.html:66
 #: app/templates/admin/pdf_layout.html:1842
 #: app/templates/client_portal/invoices.html:71
+#: app/templates/email/payment_receipt.html:71
 #: app/templates/payment_gateways/pay.html:11
 #: app/templates/payments/view.html:155
 #: app/templates/recurring_invoices/view.html:97
@@ -18061,6 +18295,7 @@ msgstr "Mokėjimas ir projektas"
 
 #: app/templates/admin/pdf_layout.html:1902
 #: app/templates/admin/quote_pdf_layout.html:1692
+#: app/templates/email/payment_receipt.html:75
 #: app/templates/expenses/form.html:179 app/templates/expenses/view.html:105
 #: app/templates/payments/create.html:84 app/templates/payments/edit.html:50
 #: app/templates/payments/view.html:58
@@ -18069,6 +18304,7 @@ msgstr "Mokėjimo data"
 
 #: app/templates/admin/pdf_layout.html:1906
 #: app/templates/admin/quote_pdf_layout.html:1696
+#: app/templates/email/payment_receipt.html:80
 #: app/templates/expenses/form.html:164 app/templates/expenses/view.html:96
 #: app/templates/payments/create.html:93 app/templates/payments/edit.html:59
 #: app/templates/payments/list.html:63 app/templates/payments/view.html:66
@@ -19059,6 +19295,8 @@ msgstr "Ar tikrai nori pašalinti šį paveikslėlį?"
 #: app/templates/quotes/_edit_quote_form_scripts.html:239
 #: app/templates/quotes/edit.html:171 app/templates/quotes/edit.html:229
 #: app/templates/quotes/template_form.html:102
+#: app/templates/reminder_policies/edit.html:75
+#: app/templates/reminder_policies/edit.html:124
 #: app/templates/reports/builder.html:489 app/templates/tasks/view.html:116
 msgid "Remove"
 msgstr "Pašalinti"
@@ -19409,8 +19647,8 @@ msgstr "Pirmiausia pasirink sąskaitą faktūrą"
 #: app/templates/invoices/list.html:63 app/templates/invoices/list.html:144
 #: app/templates/invoices/view.html:666
 #: app/templates/quotes/_quotes_list.html:65 app/templates/quotes/list.html:82
-#: app/templates/quotes/view.html:73 app/utils/i18n_helpers.py:97
-#: app/utils/i18n_helpers.py:109
+#: app/templates/quotes/view.html:73 app/utils/i18n_helpers.py:106
+#: app/utils/i18n_helpers.py:118
 msgid "Sent"
 msgstr "Išsiųsta"
 
@@ -19857,7 +20095,7 @@ msgstr "Laikmačiai"
 #: app/templates/invoices/view.html:69
 #: app/templates/partials/_bottom_nav.html:72
 #: app/templates/partials/_sidebar.html:326
-#: app/templates/reports/builder.html:425
+#: app/templates/reports/builder.html:425 app/utils/permissions_seed.py:15
 msgid "Invoices"
 msgstr "Sąskaitos faktūros"
 
@@ -19871,7 +20109,7 @@ msgstr "Sąskaitos faktūros"
 #: app/templates/partials/_sidebar.html:299 app/templates/quotes/create.html:9
 #: app/templates/quotes/edit.html:8 app/templates/quotes/list.html:6
 #: app/templates/quotes/list.html:11 app/templates/quotes/template_form.html:10
-#: app/templates/quotes/templates.html:18
+#: app/templates/quotes/templates.html:18 app/templates/quotes/view.html:8
 msgid "Quotes"
 msgstr "Komerciniai pasiūlymai"
 
@@ -21469,7 +21707,7 @@ msgstr "Sukurk naują naudotojo paskyrą."
 #: app/templates/audit_logs/view.html:36 app/templates/deals/view.html:206
 #: app/templates/kanban/columns.html:94 app/templates/kanban/columns.html:133
 #: app/templates/partials/_topbar.html:34
-#: app/templates/setup/initial_setup.html:201
+#: app/templates/setup/initial_setup.html:201 app/utils/permissions_seed.py:19
 msgid "System"
 msgstr "Sistema"
 
@@ -21858,6 +22096,16 @@ msgstr "Privalomas"
 msgid "Optional"
 msgstr "Nebūtina"
 
+#: app/templates/admin/custom_field_definitions/list.html:83
+msgid "No Custom Fields Yet"
+msgstr "Savų laukų dar nėra"
+
+#: app/templates/admin/custom_field_definitions/list.html:83
+msgid "Define global custom fields once and reuse them on every client."
+msgstr ""
+"Apibrėžk visuotinius savus laukus vieną kartą ir naudok juos kiekvienam "
+"klientui."
+
 #: app/templates/admin/custom_field_definitions/list.html:88
 msgid "How Custom Field Definitions Work"
 msgstr "Kaip veikia savų laukų apibrėžtys"
@@ -21939,6 +22187,36 @@ msgstr ""
 msgid "Are you sure you want to delete this custom field definition?"
 msgstr "Ar tikrai nori ištrinti šią savo lauko apibrėžtį?"
 
+#: app/templates/admin/email_templates/create.html:13
+#: app/templates/admin/email_templates/list.html:65
+msgid "Create Email Template"
+msgstr "Sukurti el. laiško šabloną"
+
+#: app/templates/admin/email_templates/create.html:14
+msgid "Create a new email template for invoice emails"
+msgstr "Naujas sąskaitų faktūrų el. laiškų šablonas"
+
+#: app/templates/admin/email_templates/create.html:24
+#: app/templates/admin/email_templates/edit.html:43
+#: app/templates/admin/link_templates/form.html:24
+#: app/templates/project_templates/create.html:20
+#: app/templates/project_templates/edit.html:20
+#: app/templates/quotes/template_form.html:26
+#: app/templates/recurring_invoices/create.html:23
+#: app/templates/recurring_invoices/edit.html:23
+#: app/templates/time_entry_templates/create.html:25
+#: app/templates/time_entry_templates/edit.html:25
+msgid "Template Name"
+msgstr "Šablono pavadinimas"
+
+#: app/templates/admin/email_templates/create.html:26
+msgid "A unique name to identify this template"
+msgstr "Unikalus šio šablono pavadinimas"
+
+#: app/templates/admin/email_templates/create.html:32
+msgid "Optional description of this template"
+msgstr "Nebūtinas šio šablono aprašymas"
+
 #: app/templates/admin/email_templates/create.html:38
 #: app/templates/admin/email_templates/edit.html:55
 msgid "Set as default template"
@@ -21961,6 +22239,72 @@ msgstr "Savas pranešimas"
 msgid "More Variables"
 msgstr "Daugiau kintamųjų"
 
+#: app/templates/admin/email_templates/create.html:68
+#: app/templates/admin/email_templates/edit.html:85
+msgid "Editor"
+msgstr "Redaktorius"
+
+#: app/templates/admin/email_templates/create.html:71
+#: app/templates/admin/email_templates/create.html:402
+#: app/templates/admin/email_templates/edit.html:88
+#: app/templates/admin/email_templates/edit.html:416
+#: app/templates/auth/two_factor.html:14
+#: app/templates/expense_categories/form.html:40
+#: app/templates/expense_categories/list.html:63
+#: app/templates/expense_categories/view.html:41
+#: app/templates/inventory/suppliers/list.html:43
+#: app/templates/inventory/suppliers/list.html:55
+#: app/templates/inventory/suppliers/view.html:26
+#: app/templates/inventory/warehouses/list.html:24
+#: app/templates/inventory/warehouses/list.html:35
+#: app/templates/inventory/warehouses/view.html:26
+#: app/templates/workforce/dashboard.html:335
+msgid "Code"
+msgstr "Kodas"
+
+#: app/templates/admin/email_templates/create.html:74
+#: app/templates/admin/email_templates/edit.html:91
+#: app/templates/kanban/edit_column.html:48
+#: app/templates/reports/builder.html:66 app/templates/tasks/create.html:80
+#: app/templates/tasks/edit.html:88 app/templates/timer/bulk_entry.html:192
+msgid "Preview"
+msgstr "Peržiūra"
+
+#: app/templates/admin/email_templates/create.html:85
+#: app/templates/admin/email_templates/edit.html:102
+#: app/templates/invoices/edit.html:402
+msgid "Live Preview"
+msgstr "Tiesioginė peržiūra"
+
+#: app/templates/admin/email_templates/create.html:93
+#: app/templates/admin/email_templates/edit.html:110
+msgid "Preview will appear here"
+msgstr "Peržiūra bus rodoma čia"
+
+#: app/templates/admin/email_templates/create.html:100
+#: app/templates/admin/email_templates/edit.html:117
+msgid "Use Jinja2 syntax for variables:"
+msgstr "Kintamiesiems naudok Jinja2 sintaksę:"
+
+#: app/templates/admin/email_templates/create.html:110
+#: app/templates/admin/email_templates/edit.html:127
+msgid "CSS Styles (Optional)"
+msgstr "CSS stiliai (nebūtina)"
+
+#: app/templates/admin/email_templates/create.html:112
+#: app/templates/admin/email_templates/edit.html:129
+msgid "Apply CSS"
+msgstr "Taikyti CSS"
+
+#: app/templates/admin/email_templates/create.html:116
+#: app/templates/admin/email_templates/edit.html:133
+msgid ""
+"CSS styles for the email template. Will be automatically wrapped in "
+"<style> tags."
+msgstr ""
+"El. laiško šablono CSS stiliai. Jie bus automatiškai apgaubti <style> "
+"žymomis."
+
 #: app/templates/admin/email_templates/create.html:130
 #: app/templates/admin/email_templates/edit.html:147
 msgid "Available Variables"
@@ -21976,10 +22320,37 @@ msgstr "Sąskaitos faktūros kintamieji"
 msgid "Other Variables"
 msgstr "Kiti kintamieji"
 
+#: app/templates/admin/email_templates/create.html:398
+#: app/templates/admin/email_templates/edit.html:413
+msgid "Visual"
+msgstr "Vaizdinis"
+
+#: app/templates/admin/email_templates/create.html:494
+#: app/templates/admin/email_templates/edit.html:514
+msgid "Sample Client"
+msgstr "Pavyzdinis klientas"
+
+#: app/templates/admin/email_templates/create.html:495
+#: app/templates/admin/email_templates/edit.html:515
+#: app/templates/setup/initial_setup.html:176
+msgid "Your Company Name"
+msgstr "Tavo įmonės pavadinimas"
+
+#: app/templates/admin/email_templates/create.html:496
+#: app/templates/admin/email_templates/edit.html:516
+#: app/templates/email/invoice.html:101
+#: app/templates/email/payment_receipt.html:98
+msgid "Thank you for your business!"
+msgstr "Dėkojame už bendradarbiavimą!"
+
 #: app/templates/admin/email_templates/create.html:514
 #: app/templates/admin/email_templates/edit.html:534
 msgid "Preview unavailable. Please check browser console."
 msgstr "Peržiūros parodyti nepavyko. Patikrink naršyklės konsolę."
+
+#: app/templates/admin/email_templates/edit.html:13
+msgid "Edit Email Template"
+msgstr "Redaguoti el. laiško šabloną"
 
 #: app/templates/admin/email_templates/edit.html:19
 #: app/templates/admin/email_templates/edit.html:31
@@ -22060,10 +22431,6 @@ msgstr "Sąskaitų faktūrų el. laiškų šablonų tvarkymas"
 #: app/templates/workflows/visual_builder.html:9
 msgid "View"
 msgstr "Peržiūrėti"
-
-#: app/templates/admin/email_templates/list.html:65
-msgid "Create Email Template"
-msgstr "Sukurti el. laiško šabloną"
 
 #: app/templates/admin/email_templates/list.html:68
 msgid "No Email Templates Yet"
@@ -22373,17 +22740,6 @@ msgstr "Sukurti nuorodos šabloną"
 msgid "Configure URL template for client custom fields"
 msgstr "Klientų savų laukų URL šablono konfigūravimas"
 
-#: app/templates/admin/link_templates/form.html:24
-#: app/templates/project_templates/create.html:20
-#: app/templates/project_templates/edit.html:20
-#: app/templates/quotes/template_form.html:26
-#: app/templates/recurring_invoices/create.html:23
-#: app/templates/recurring_invoices/edit.html:23
-#: app/templates/time_entry_templates/create.html:25
-#: app/templates/time_entry_templates/edit.html:25
-msgid "Template Name"
-msgstr "Šablono pavadinimas"
-
 #: app/templates/admin/link_templates/form.html:25
 msgid "e.g., ERP System Link"
 msgstr "pvz., ERP sistemos nuoroda"
@@ -22448,6 +22804,16 @@ msgstr "Klientų savų laukų URL šablonų tvarkymas"
 #: app/templates/admin/link_templates/list.html:68
 msgid "Are you sure you want to delete this link template?"
 msgstr "Ar tikrai nori ištrinti šį nuorodos šabloną?"
+
+#: app/templates/admin/link_templates/list.html:87
+msgid "No Link Templates Yet"
+msgstr "Nuorodų šablonų dar nėra"
+
+#: app/templates/admin/link_templates/list.html:87
+msgid "Create URL templates to turn custom field values into quick links."
+msgstr ""
+"Sukurk URL šablonus, kad savų laukų reikšmės virstų sparčiosiomis "
+"nuorodomis."
 
 #: app/templates/admin/link_templates/list.html:92
 msgid "How Link Templates Work"
@@ -22666,6 +23032,14 @@ msgstr "Leidimai vaidmeniui"
 msgid "No permissions assigned."
 msgstr "Leidimų nepriskirta."
 
+#: app/templates/admin/roles/list.html:206
+msgid "No Roles Yet"
+msgstr "Vaidmenų dar nėra"
+
+#: app/templates/admin/roles/list.html:206
+msgid "Create roles to group permissions and assign them to users."
+msgstr "Sukurk vaidmenis, kad sugrupuotum leidimus ir priskirtum juos naudotojams."
+
 #: app/templates/admin/roles/list.html:211
 msgid "About Roles & Permissions"
 msgstr "Apie vaidmenis ir leidimus"
@@ -22873,6 +23247,16 @@ msgstr "Iš viso"
 #: app/templates/admin/webhooks/list.html:90
 msgid "Create Your First Webhook"
 msgstr "Sukurti pirmąjį webhook"
+
+#: app/templates/admin/webhooks/list.html:93
+msgid "No Webhooks Yet"
+msgstr "Webhook dar nėra"
+
+#: app/templates/admin/webhooks/list.html:93
+msgid "Configure webhooks to notify external systems when events occur."
+msgstr ""
+"Sukonfigūruok webhook, kad išorinės sistemos gautų pranešimus apie "
+"įvykius."
 
 #: app/templates/admin/webhooks/view.html:14
 msgid "Webhook details"
@@ -23129,7 +23513,7 @@ msgstr "Atliktos užduotys"
 #: app/templates/milestones/form.html:32 app/templates/tasks/list.html:26
 #: app/templates/tasks/list.html:70 app/templates/tasks/list.html:196
 #: app/templates/tasks/my_tasks.html:57 app/templates/tasks/my_tasks.html:132
-#: app/utils/i18n_helpers.py:49 app/utils/i18n_helpers.py:61
+#: app/utils/i18n_helpers.py:58 app/utils/i18n_helpers.py:70
 msgid "In Progress"
 msgstr "Vykdoma"
 
@@ -23138,7 +23522,7 @@ msgstr "Vykdoma"
 #: app/templates/tasks/create.html:90 app/templates/tasks/list.html:25
 #: app/templates/tasks/list.html:69 app/templates/tasks/list.html:195
 #: app/templates/tasks/my_tasks.html:40 app/templates/tasks/my_tasks.html:131
-#: app/utils/i18n_helpers.py:48 app/utils/i18n_helpers.py:60
+#: app/utils/i18n_helpers.py:57 app/utils/i18n_helpers.py:69
 msgid "To Do"
 msgstr "Reikia atlikti"
 
@@ -23210,6 +23594,7 @@ msgstr "Neapmokestinamas"
 #: app/templates/components/bulk_actions_widget.html:30
 #: app/templates/contacts/communication_form.html:68
 #: app/templates/deals/activity_form.html:36
+#: app/templates/email/payment_receipt.html:92
 #: app/templates/invoices/view.html:346
 #: app/templates/leads/activity_form.html:36
 #: app/templates/milestones/form.html:32 app/templates/payments/create.html:114
@@ -23221,9 +23606,9 @@ msgstr "Neapmokestinamas"
 #: app/templates/tasks/my_tasks.html:91 app/templates/weekly_goals/edit.html:89
 #: app/templates/weekly_goals/index.html:39
 #: app/templates/weekly_goals/index.html:172
-#: app/templates/weekly_goals/view.html:67 app/utils/i18n_helpers.py:254
-#: app/utils/i18n_helpers.py:266 app/utils/i18n_helpers.py:277
-#: app/utils/i18n_helpers.py:288
+#: app/templates/weekly_goals/view.html:67 app/utils/i18n_helpers.py:263
+#: app/utils/i18n_helpers.py:275 app/utils/i18n_helpers.py:286
+#: app/utils/i18n_helpers.py:297
 msgid "Completed"
 msgstr "Atlikta"
 
@@ -23240,10 +23625,10 @@ msgstr "Atlikta"
 #: app/templates/projects/list.html:597 app/templates/tasks/list.html:73
 #: app/templates/tasks/list.html:199 app/templates/tasks/my_tasks.html:135
 #: app/templates/weekly_goals/edit.html:91
-#: app/templates/weekly_goals/view.html:73 app/utils/i18n_helpers.py:52
-#: app/utils/i18n_helpers.py:64 app/utils/i18n_helpers.py:100
-#: app/utils/i18n_helpers.py:112 app/utils/i18n_helpers.py:279
-#: app/utils/i18n_helpers.py:290
+#: app/templates/weekly_goals/view.html:73 app/utils/i18n_helpers.py:61
+#: app/utils/i18n_helpers.py:73 app/utils/i18n_helpers.py:109
+#: app/utils/i18n_helpers.py:121 app/utils/i18n_helpers.py:288
+#: app/utils/i18n_helpers.py:299
 msgid "Cancelled"
 msgstr "Atšaukta"
 
@@ -23635,6 +24020,22 @@ msgstr "Audito žurnalo puslapių navigacija"
 msgid "Clear Filters"
 msgstr "Išvalyti filtrus"
 
+#: app/templates/audit_logs/list.html:184
+msgid "No Audit Logs Match Your Filters"
+msgstr "Pagal filtrus audito žurnalo įrašų nerasta"
+
+#: app/templates/audit_logs/list.html:184
+msgid "Try adjusting your filters or time range to see more activity."
+msgstr "Pabandyk pakeisti filtrus arba laikotarpį, kad matytum daugiau veiklos."
+
+#: app/templates/audit_logs/list.html:186
+msgid "No Audit Logs Yet"
+msgstr "Audito žurnalo įrašų dar nėra"
+
+#: app/templates/audit_logs/list.html:186
+msgid "Changes to records will appear here once activity is logged."
+msgstr "Įrašų pakeitimai bus rodomi čia, kai veikla bus užregistruota."
+
 #: app/templates/audit_logs/view.html:4 app/templates/audit_logs/view.html:14
 msgid "Audit Log Details"
 msgstr "Audito žurnalo informacija"
@@ -23927,20 +24328,6 @@ msgstr "Įvesk autentifikavimo kodą"
 msgid "Open your authenticator app and enter the 6-digit code."
 msgstr "Atidaryk autentifikavimo programėlę ir įvesk 6 skaitmenų kodą."
 
-#: app/templates/auth/two_factor.html:14
-#: app/templates/expense_categories/form.html:40
-#: app/templates/expense_categories/list.html:63
-#: app/templates/expense_categories/view.html:41
-#: app/templates/inventory/suppliers/list.html:43
-#: app/templates/inventory/suppliers/list.html:55
-#: app/templates/inventory/suppliers/view.html:26
-#: app/templates/inventory/warehouses/list.html:24
-#: app/templates/inventory/warehouses/list.html:35
-#: app/templates/inventory/warehouses/view.html:26
-#: app/templates/workforce/dashboard.html:335
-msgid "Code"
-msgstr "Kodas"
-
 #: app/templates/auth/two_factor.html:19
 msgid "Verify"
 msgstr "Patvirtinti"
@@ -24103,14 +24490,14 @@ msgstr "viršyta"
 
 #: app/templates/budget/dashboard.html:153
 #: app/templates/budget/project_detail.html:48
-#: app/templates/budget/project_detail.html:65 app/utils/i18n_helpers.py:300
+#: app/templates/budget/project_detail.html:65 app/utils/i18n_helpers.py:309
 msgid "Over Budget"
 msgstr "Viršytas biudžetas"
 
 #: app/templates/budget/dashboard.html:157
 #: app/templates/budget/project_detail.html:66
 #: app/templates/projects/health.html:19 app/templates/projects/view.html:311
-#: app/utils/i18n_helpers.py:307 app/utils/i18n_helpers.py:313
+#: app/utils/i18n_helpers.py:316 app/utils/i18n_helpers.py:322
 msgid "Critical"
 msgstr "Kritinė"
 
@@ -24812,11 +25199,11 @@ msgstr "Komentaras (nebūtina)"
 
 #: app/templates/client_portal/approval_detail.html:147
 msgid "Add a comment..."
-msgstr "Pridėk komentarą..."
+msgstr "Pridėkite komentarą..."
 
 #: app/templates/client_portal/approval_detail.html:151
 msgid "Are you sure you want to approve this time entry?"
-msgstr "Ar tikrai nori patvirtinti šį laiko įrašą?"
+msgstr "Ar tikrai norite patvirtinti šį laiko įrašą?"
 
 #: app/templates/client_portal/approval_detail.html:152
 msgid "Approve Time Entry"
@@ -24824,11 +25211,11 @@ msgstr "Patvirtinti laiko įrašą"
 
 #: app/templates/client_portal/approval_detail.html:163
 msgid "Please provide a reason for rejecting this time entry..."
-msgstr "Nurodyk, kodėl atmeti šį laiko įrašą..."
+msgstr "Nurodykite, kodėl atmetate šį laiko įrašą..."
 
 #: app/templates/client_portal/approval_detail.html:167
 msgid "Are you sure you want to reject this time entry?"
-msgstr "Ar tikrai nori atmesti šį laiko įrašą?"
+msgstr "Ar tikrai norite atmesti šį laiko įrašą?"
 
 #: app/templates/client_portal/approval_detail.html:178
 msgid "Back to Approvals"
@@ -24842,8 +25229,8 @@ msgstr "Atgal į patvirtinimus"
 #: app/templates/mileage/list.html:87 app/templates/mileage/list.html:218
 #: app/templates/mileage/view.html:196 app/templates/per_diem/list.html:68
 #: app/templates/per_diem/list.html:177 app/templates/per_diem/list.html:257
-#: app/templates/per_diem/view.html:73 app/utils/i18n_helpers.py:175
-#: app/utils/i18n_helpers.py:186
+#: app/templates/per_diem/view.html:73 app/utils/i18n_helpers.py:184
+#: app/utils/i18n_helpers.py:195
 msgid "Approved"
 msgstr "Patvirtinta"
 
@@ -24857,8 +25244,8 @@ msgstr "Patvirtinta"
 #: app/templates/per_diem/list.html:178 app/templates/per_diem/list.html:259
 #: app/templates/per_diem/view.html:77
 #: app/templates/quotes/_quotes_list.html:69 app/templates/quotes/list.html:84
-#: app/templates/quotes/view.html:77 app/utils/i18n_helpers.py:176
-#: app/utils/i18n_helpers.py:187
+#: app/templates/quotes/view.html:77 app/utils/i18n_helpers.py:185
+#: app/utils/i18n_helpers.py:196
 msgid "Rejected"
 msgstr "Atmesta"
 
@@ -24906,7 +25293,7 @@ msgstr "Patvirtinimų nėra"
 
 #: app/templates/client_portal/approvals.html:189
 msgid "You have no pending time entry approvals. All caught up!"
-msgstr "Neturi laukiančių laiko įrašų patvirtinimų. Viskas padaryta!"
+msgstr "Laukiančių laiko įrašų patvirtinimų nėra. Viskas padaryta!"
 
 #: app/templates/client_portal/approvals.html:191
 msgid "No approvals found for this status."
@@ -24920,8 +25307,9 @@ msgstr "Šios būsenos patvirtinimų nerasta."
 #: app/templates/client_portal/new_issue.html:9
 #: app/templates/integrations/wizard_github.html:100
 #: app/templates/integrations/wizard_gitlab.html:136
-#: app/templates/issues/list.html:7 app/templates/issues/list.html:12
-#: app/templates/issues/new.html:7 app/templates/partials/_sidebar.html:184
+#: app/templates/issues/edit.html:6 app/templates/issues/list.html:7
+#: app/templates/issues/list.html:12 app/templates/issues/new.html:7
+#: app/templates/partials/_sidebar.html:184 app/utils/permissions_seed.py:16
 msgid "Issues"
 msgstr "Problemos"
 
@@ -24981,7 +25369,7 @@ msgstr "Labas, %(client_name)s"
 
 #: app/templates/client_portal/dashboard.html:25
 msgid "Welcome to your client portal"
-msgstr "Labas! Čia tavo klientų portalas"
+msgstr "Sveiki! Čia jūsų klientų portalas"
 
 #: app/templates/client_portal/dashboard.html:27
 #, python-format
@@ -24990,7 +25378,7 @@ msgid ""
 "entries will appear here once your team shares them with you."
 msgstr ""
 "Prisijungta kaip %(client_name)s. Projektai, sąskaitos faktūros ir laiko "
-"įrašai bus rodomi čia, kai tavo komanda jais su tavimi pasidalins."
+"įrašai bus rodomi čia, kai jūsų komanda jais su jumis pasidalins."
 
 #: app/templates/client_portal/dashboard.html:37
 #: app/templates/client_portal/dashboard.html:83
@@ -24999,7 +25387,7 @@ msgstr "Tinkinti apžvalgą"
 
 #: app/templates/client_portal/dashboard.html:84
 msgid "Choose which widgets to show and their order."
-msgstr "Pasirink, kuriuos valdiklius rodyti ir kokia tvarka."
+msgstr "Pasirinkite, kuriuos valdiklius rodyti ir kokia tvarka."
 
 #: app/templates/client_portal/dashboard.html:90
 msgid "Statistics cards"
@@ -25019,7 +25407,7 @@ msgstr "Naujausi laiko įrašai"
 
 #: app/templates/client_portal/dashboard.html:143
 msgid "Select at least one widget."
-msgstr "Pasirink bent vieną valdiklį."
+msgstr "Pasirinkite bent vieną valdiklį."
 
 #: app/templates/client_portal/dashboard.html:167
 msgid "Failed to save."
@@ -25054,9 +25442,9 @@ msgid ""
 "If you believe you should have access to the client portal, please "
 "contact your administrator or use the login link above."
 msgstr ""
-"Jei manai, kad tau turėtų būti suteikta prieiga prie klientų portalo, "
-"susisiek su administratoriumi arba naudok aukščiau esančią prisijungimo "
-"nuorodą."
+"Jei manote, kad jums turėtų būti suteikta prieiga prie klientų portalo, "
+"susisiekite su administratoriumi arba naudokite aukščiau esančią "
+"prisijungimo nuorodą."
 
 #: app/templates/client_portal/invoice_detail.html:16
 #: app/templates/client_portal/invoice_detail.html:33
@@ -25168,8 +25556,8 @@ msgstr "%(client_name)s sąskaitos faktūros"
 #: app/templates/timer/_time_entries_list.html:168
 #: app/templates/timer/time_entries_overview.html:106
 #: app/templates/timer/time_entries_overview.html:199
-#: app/templates/timer/view_timer.html:144 app/utils/i18n_helpers.py:120
-#: app/utils/i18n_helpers.py:131
+#: app/templates/timer/view_timer.html:144 app/utils/i18n_helpers.py:129
+#: app/utils/i18n_helpers.py:140
 msgid "Unpaid"
 msgstr "Neapmokėta"
 
@@ -25179,8 +25567,8 @@ msgstr "Neapmokėta"
 #: app/templates/invoices/list.html:28 app/templates/invoices/list.html:69
 #: app/templates/invoices/list.html:146 app/templates/main/dashboard.html:687
 #: app/templates/tasks/_kanban.html:105 app/templates/tasks/list.html:51
-#: app/templates/tasks/overdue.html:35 app/utils/i18n_helpers.py:99
-#: app/utils/i18n_helpers.py:111
+#: app/templates/tasks/overdue.html:35 app/utils/i18n_helpers.py:108
+#: app/utils/i18n_helpers.py:120
 msgid "Overdue"
 msgstr "Pradelsta"
 
@@ -25250,8 +25638,8 @@ msgid ""
 "There are no invoices matching this filter. Try selecting a different "
 "status."
 msgstr ""
-"Šį filtrą atitinkančių sąskaitų faktūrų nėra. Pabandyk pasirinkti kitą "
-"būseną."
+"Šį filtrą atitinkančių sąskaitų faktūrų nėra. Pabandykite pasirinkti kitą"
+" būseną."
 
 #: app/templates/client_portal/invoices.html:173
 msgid "View All Invoices"
@@ -25324,7 +25712,7 @@ msgstr "Pranešimai apie problemas"
 #: app/templates/client_portal/issues.html:15
 #, python-format
 msgid "Report and track issues for %(client_name)s"
-msgstr "Pranešk apie %(client_name)s problemas ir stebėk jas"
+msgstr "%(client_name)s problemų registravimas ir stebėjimas"
 
 #: app/templates/client_portal/issues.html:27 app/templates/deals/list.html:24
 #: app/templates/issues/edit.html:39 app/templates/issues/list.html:39
@@ -25362,11 +25750,11 @@ msgstr "logotipas"
 
 #: app/templates/client_portal/login.html:42
 msgid "Sign in to your dedicated portal"
-msgstr "Prisijunk prie savo asmeninio portalo"
+msgstr "Prisijunkite prie savo asmeninio portalo"
 
 #: app/templates/client_portal/login.html:42
 msgid "View your projects and invoices"
-msgstr "Peržiūrėk savo projektus ir sąskaitas faktūras"
+msgstr "Jūsų projektai ir sąskaitos faktūros"
 
 #: app/templates/client_portal/login.html:51
 msgid "Sign in to Client Portal"
@@ -25375,8 +25763,8 @@ msgstr "Prisijungti prie klientų portalo"
 #: app/templates/client_portal/login.html:52
 msgid "Enter your portal credentials to access your projects and invoices"
 msgstr ""
-"Įvesk portalo prisijungimo duomenis, kad pasiektum savo projektus ir "
-"sąskaitas faktūras"
+"Įveskite portalo prisijungimo duomenis, kad pasiektumėte savo projektus "
+"ir sąskaitas faktūras"
 
 #: app/templates/client_portal/login.html:62
 #: app/templates/clients/edit.html:182
@@ -25386,15 +25774,15 @@ msgstr "portal_username"
 #: app/templates/client_portal/login.html:68
 #: app/templates/client_portal/set_password.html:63
 msgid "Enter your password"
-msgstr "Įvesk slaptažodį"
+msgstr "Įveskite slaptažodį"
 
 #: app/templates/client_portal/login.html:75
 msgid "If you have a TimeTracker user account with portal access,"
-msgstr "Jei turi TimeTracker naudotojo paskyrą su prieiga prie portalo,"
+msgstr "Jei turite TimeTracker naudotojo paskyrą su prieiga prie portalo,"
 
 #: app/templates/client_portal/login.html:76
 msgid "log in here instead"
-msgstr "prisijunk čia"
+msgstr "prisijunkite čia"
 
 #: app/templates/client_portal/messages.html:18
 msgid "No messages yet."
@@ -25403,11 +25791,11 @@ msgstr "Žinučių dar nėra."
 #: app/templates/client_portal/messages.html:23
 #: app/templates/clients/messages.html:28
 msgid "Write a message…"
-msgstr "Rašyk žinutę…"
+msgstr "Žinutės tekstas…"
 
 #: app/templates/client_portal/new_issue.html:16
 msgid "Report a bug or issue you've encountered"
-msgstr "Pranešk apie pastebėtą klaidą ar problemą"
+msgstr "Praneškite apie pastebėtą klaidą ar problemą"
 
 #: app/templates/client_portal/new_issue.html:29
 msgid "Brief description of the issue"
@@ -25424,7 +25812,7 @@ msgstr "Išsamus problemos aprašymas, atkūrimo veiksmai ir kt."
 #: app/templates/timer/manual_entry.html:120
 #: app/templates/timer/timer_page.html:204
 msgid "Select a project (optional)"
-msgstr "Pasirink projektą (nebūtina)"
+msgstr "Projektas (nebūtina)"
 
 #: app/templates/client_portal/new_issue.html:55
 #: app/templates/components/bulk_actions_widget.html:51
@@ -25437,8 +25825,8 @@ msgstr "Pasirink projektą (nebūtina)"
 #: app/templates/tasks/create.html:63 app/templates/tasks/create.html:82
 #: app/templates/tasks/create.html:476 app/templates/tasks/edit.html:72
 #: app/templates/tasks/edit.html:662 app/templates/tasks/list.html:80
-#: app/templates/tasks/my_tasks.html:142 app/utils/i18n_helpers.py:71
-#: app/utils/i18n_helpers.py:77
+#: app/templates/tasks/my_tasks.html:142 app/utils/i18n_helpers.py:80
+#: app/utils/i18n_helpers.py:86
 msgid "Low"
 msgstr "Žemas"
 
@@ -25453,8 +25841,8 @@ msgstr "Žemas"
 #: app/templates/tasks/create.html:64 app/templates/tasks/create.html:82
 #: app/templates/tasks/create.html:477 app/templates/tasks/edit.html:73
 #: app/templates/tasks/edit.html:663 app/templates/tasks/list.html:81
-#: app/templates/tasks/my_tasks.html:143 app/utils/i18n_helpers.py:71
-#: app/utils/i18n_helpers.py:77
+#: app/templates/tasks/my_tasks.html:143 app/utils/i18n_helpers.py:80
+#: app/utils/i18n_helpers.py:86
 msgid "Medium"
 msgstr "Vidutinis"
 
@@ -25469,8 +25857,8 @@ msgstr "Vidutinis"
 #: app/templates/tasks/create.html:65 app/templates/tasks/create.html:82
 #: app/templates/tasks/create.html:478 app/templates/tasks/edit.html:74
 #: app/templates/tasks/edit.html:664 app/templates/tasks/list.html:82
-#: app/templates/tasks/my_tasks.html:144 app/utils/i18n_helpers.py:71
-#: app/utils/i18n_helpers.py:77
+#: app/templates/tasks/my_tasks.html:144 app/utils/i18n_helpers.py:80
+#: app/utils/i18n_helpers.py:86
 msgid "High"
 msgstr "Aukštas"
 
@@ -25482,26 +25870,26 @@ msgstr "Aukštas"
 #: app/templates/tasks/create.html:66 app/templates/tasks/create.html:82
 #: app/templates/tasks/create.html:479 app/templates/tasks/edit.html:75
 #: app/templates/tasks/edit.html:665 app/templates/tasks/list.html:83
-#: app/templates/tasks/my_tasks.html:145 app/utils/i18n_helpers.py:71
-#: app/utils/i18n_helpers.py:77
+#: app/templates/tasks/my_tasks.html:145 app/utils/i18n_helpers.py:80
+#: app/utils/i18n_helpers.py:86
 msgid "Urgent"
 msgstr "Skubus"
 
 #: app/templates/client_portal/new_issue.html:65
 msgid "Your Name"
-msgstr "Tavo vardas"
+msgstr "Jūsų vardas"
 
 #: app/templates/client_portal/new_issue.html:68
 msgid "Your name (optional)"
-msgstr "Tavo vardas (nebūtina)"
+msgstr "Jūsų vardas (nebūtina)"
 
 #: app/templates/client_portal/new_issue.html:72
 msgid "Your Email"
-msgstr "Tavo el. paštas"
+msgstr "Jūsų el. paštas"
 
 #: app/templates/client_portal/new_issue.html:75
 msgid "Your email (optional)"
-msgstr "Tavo el. paštas (nebūtina)"
+msgstr "Jūsų el. paštas (nebūtina)"
 
 #: app/templates/client_portal/new_issue.html:85
 msgid "Submit Issue"
@@ -25537,7 +25925,7 @@ msgid ""
 "You have no notifications yet. Notifications will appear here when there "
 "are updates to your projects or invoices."
 msgstr ""
-"Pranešimų dar nėra. Pranešimai bus rodomi čia, kai atsiras tavo projektų "
+"Pranešimų dar nėra. Pranešimai bus rodomi čia, kai atsiras jūsų projektų "
 "ar sąskaitų faktūrų naujienų."
 
 #: app/templates/client_portal/project_comments.html:4
@@ -25562,11 +25950,11 @@ msgstr "Pridėti komentarą"
 #: app/templates/comments/_comments_section.html:28
 #: app/templates/quotes/view.html:290
 msgid "Your Comment"
-msgstr "Tavo komentaras"
+msgstr "Komentaras"
 
 #: app/templates/client_portal/project_comments.html:29
 msgid "Enter your comment..."
-msgstr "Įvesk komentarą..."
+msgstr "Įveskite komentarą..."
 
 #: app/templates/client_portal/project_comments.html:33
 #: app/templates/comments/_comments_section.html:41
@@ -25580,7 +25968,7 @@ msgstr "Komentarų nėra"
 
 #: app/templates/client_portal/project_comments.html:73
 msgid "Be the first to comment on this project."
-msgstr "Parašyk pirmą šio projekto komentarą."
+msgstr "Parašykite pirmą šio projekto komentarą."
 
 #: app/templates/client_portal/project_comments.html:81
 #: app/templates/projects/create.html:17
@@ -25607,7 +25995,7 @@ msgid ""
 "once they are created and assigned to your account."
 msgstr ""
 "Šiuo metu projektų nėra. Jie bus rodomi čia, kai bus sukurti ir priskirti"
-" tavo paskyrai."
+" jūsų paskyrai."
 
 #: app/templates/client_portal/quote_detail.html:16
 #: app/templates/client_portal/quote_detail.html:33
@@ -25697,7 +26085,7 @@ msgstr "Atgal į komercinius pasiūlymus"
 
 #: app/templates/client_portal/quote_detail.html:181
 msgid "Please sign before accepting."
-msgstr "Pirma pasirašyk, tada priimk."
+msgstr "Pirma pasirašykite, tada priimkite."
 
 #: app/templates/client_portal/quote_detail.html:196
 msgid "Reason (optional)"
@@ -25705,7 +26093,7 @@ msgstr "Priežastis (nebūtina)"
 
 #: app/templates/client_portal/quote_detail.html:199
 msgid "Please provide a reason for rejecting this quote..."
-msgstr "Nurodyk, kodėl atmeti šį komercinį pasiūlymą..."
+msgstr "Nurodykite, kodėl atmetate šį komercinį pasiūlymą..."
 
 #: app/templates/client_portal/quotes.html:15
 #, python-format
@@ -25776,7 +26164,7 @@ msgstr "Nustatyti slaptažodį"
 
 #: app/templates/client_portal/set_password.html:40
 msgid "Set your password to get started"
-msgstr "Nustatyk slaptažodį, kad galėtum pradėti"
+msgstr "Nustatykite slaptažodį, kad galėtumėte pradėti"
 
 #: app/templates/client_portal/set_password.html:44
 #: app/templates/email/client_portal_password_setup.html:97
@@ -25785,15 +26173,15 @@ msgstr "Nustatyti slaptažodį"
 
 #: app/templates/client_portal/set_password.html:46
 msgid "Set a password for your client portal account"
-msgstr "Nustatyk savo klientų portalo paskyros slaptažodį"
+msgstr "Nustatykite savo klientų portalo paskyros slaptažodį"
 
 #: app/templates/client_portal/set_password.html:67
 msgid "Confirm Password"
-msgstr "Pakartok slaptažodį"
+msgstr "Pakartokite slaptažodį"
 
 #: app/templates/client_portal/set_password.html:70
 msgid "Confirm your password"
-msgstr "Dar kartą įvesk slaptažodį"
+msgstr "Dar kartą įveskite slaptažodį"
 
 #: app/templates/client_portal/survey.html:7
 msgid "Feedback"
@@ -25806,11 +26194,11 @@ msgstr "Kaip mums sekėsi?"
 
 #: app/templates/client_portal/survey.html:32
 msgid "Thanks — your feedback was recorded."
-msgstr "Ačiū — tavo atsiliepimas užregistruotas."
+msgstr "Ačiū — jūsų atsiliepimas užregistruotas."
 
 #: app/templates/client_portal/survey.html:34
 msgid "Your score:"
-msgstr "Tavo įvertinimas:"
+msgstr "Jūsų įvertinimas:"
 
 #: app/templates/client_portal/survey.html:37
 msgid "This feedback link has expired."
@@ -25818,7 +26206,7 @@ msgstr "Ši atsiliepimo nuoroda nebegalioja."
 
 #: app/templates/client_portal/survey.html:42
 msgid "How likely are you to recommend us? (0–10)"
-msgstr "Kiek tikėtina, kad rekomenduotum mus? (0–10)"
+msgstr "Kiek tikėtina, kad mus rekomenduotumėte? (0–10)"
 
 #: app/templates/client_portal/survey.html:53
 msgid "Anything else? (optional)"
@@ -25826,7 +26214,7 @@ msgstr "Ką nors dar? (nebūtina)"
 
 #: app/templates/client_portal/survey.html:54
 msgid "Tell us what went well or what we could improve"
-msgstr "Papasakok, kas pavyko gerai arba ką galėtume patobulinti"
+msgstr "Papasakokite, kas pavyko gerai arba ką galėtume patobulinti"
 
 #: app/templates/client_portal/survey.html:56
 msgid "Submit feedback"
@@ -25878,7 +26266,9 @@ msgstr "Iš viso valandų"
 msgid ""
 "No time entries match your current filters. Try adjusting your filter "
 "criteria."
-msgstr "Pagal dabartinius filtrus laiko įrašų nerasta. Pabandyk pakeisti filtrus."
+msgstr ""
+"Pagal dabartinius filtrus laiko įrašų nerasta. Pabandykite pakeisti "
+"filtrus."
 
 #: app/templates/client_portal/time_entries.html:172
 msgid ""
@@ -25886,7 +26276,7 @@ msgid ""
 "appear here once they are logged for your projects."
 msgstr ""
 "Šiuo metu laiko įrašų nėra. Laiko įrašai bus rodomi čia, kai bus "
-"užregistruoti tavo projektams."
+"užregistruoti jūsų projektams."
 
 #: app/templates/client_portal/widgets/invoices.html:8
 msgid "Recent Invoices"
@@ -25909,7 +26299,7 @@ msgstr "Reikia veiksmo"
 
 #: app/templates/client_portal/widgets/pending_actions.html:10
 msgid "Time entries awaiting your review"
-msgstr "Tavo peržiūros laukiantys laiko įrašai"
+msgstr "Jūsų peržiūros laukiantys laiko įrašai"
 
 #: app/templates/client_portal/widgets/pending_actions.html:14
 msgid "Review Now"
@@ -25921,7 +26311,7 @@ msgstr "Naujienos"
 
 #: app/templates/client_portal/widgets/pending_actions.html:25
 msgid "Notifications waiting for you"
-msgstr "Tavęs laukiantys pranešimai"
+msgstr "Jūsų laukiantys pranešimai"
 
 #: app/templates/client_portal/widgets/projects.html:42
 msgid "Projects will appear here once they are created"
@@ -26479,6 +26869,7 @@ msgstr "Kliento informacija ir susiję projektai."
 #: app/templates/contacts/communication_form.html:10
 #: app/templates/contacts/form.html:10 app/templates/contacts/list.html:4
 #: app/templates/contacts/list.html:10 app/templates/contacts/list.html:15
+#: app/templates/contacts/view.html:10
 #: app/templates/integrations/wizard_xero.html:102
 #: app/templates/partials/_sidebar.html:260
 msgid "Contacts"
@@ -26589,7 +26980,7 @@ msgstr "Priedų dar nėra"
 #: app/templates/projects/_projects_list.html:93
 #: app/templates/projects/list.html:50 app/templates/projects/list.html:187
 #: app/templates/projects/list.html:631 app/templates/projects/view.html:150
-#: app/utils/i18n_helpers.py:83 app/utils/i18n_helpers.py:89
+#: app/utils/i18n_helpers.py:92 app/utils/i18n_helpers.py:98
 msgid "Archived"
 msgstr "Archyvuotas"
 
@@ -28021,6 +28412,30 @@ msgstr "Numatomas uždarymas"
 msgid "Create First Deal"
 msgstr "Sukurti pirmąjį sandorį"
 
+#: app/templates/deals/list.html:95
+msgid "No Deals Match Your Filters"
+msgstr "Pagal filtrus sandorių nerasta"
+
+#: app/templates/deals/list.html:95
+msgid ""
+"Try adjusting your filters to see more results. You can clear filters or "
+"create a new deal that matches your criteria."
+msgstr ""
+"Pabandyk pakeisti filtrus, kad matytum daugiau rezultatų. Gali išvalyti "
+"filtrus arba sukurti naują sandorį, atitinkantį tavo kriterijus."
+
+#: app/templates/deals/list.html:97
+msgid "No Deals Yet"
+msgstr "Sandorių dar nėra"
+
+#: app/templates/deals/list.html:97
+msgid ""
+"Deals help you manage your sales pipeline from first contact to close. "
+"Create your first deal to get started!"
+msgstr ""
+"Sandoriai padeda valdyti pardavimų srautą nuo pirmojo kontakto iki "
+"sandorio sudarymo. Pradėk nuo pirmojo sandorio!"
+
 #: app/templates/deals/pipeline.html:4 app/templates/deals/pipeline.html:14
 msgid "Sales Pipeline"
 msgstr "Pardavimų srautas"
@@ -28143,7 +28558,7 @@ msgstr "Nustačius slaptažodį, portale bus galima:"
 
 #: app/templates/email/client_portal_password_setup.html:107
 msgid "View your projects and their status"
-msgstr "Peržiūrėti savo projektus ir jų būseną"
+msgstr "Jūsų projektai ir jų būsena"
 
 #: app/templates/email/client_portal_password_setup.html:108
 msgid "Access invoices and payment information"
@@ -28151,7 +28566,7 @@ msgstr "Matyti sąskaitas faktūras ir mokėjimų informaciją"
 
 #: app/templates/email/client_portal_password_setup.html:109
 msgid "Review time entries for your projects"
-msgstr "Peržiūrėti savo projektų laiko įrašus"
+msgstr "Jūsų projektų laiko įrašų peržiūra"
 
 #: app/templates/email/client_portal_password_setup.html:112
 msgid ""
@@ -28280,10 +28695,6 @@ msgstr "Žinutė:"
 msgid "Please remit payment by the due date."
 msgstr "Prašome apmokėti iki nurodytos datos."
 
-#: app/templates/email/invoice.html:101
-msgid "Thank you for your business!"
-msgstr "Dėkojame už bendradarbiavimą!"
-
 #: app/templates/email/invoice.html:106 app/templates/email/test_email.html:148
 #: app/templates/email/unpaid_hours_report.html:186
 msgid "Time Tracking & Project Management"
@@ -28294,6 +28705,91 @@ msgid ""
 "This invoice was sent automatically. Please contact us if you have any "
 "questions."
 msgstr "Ši sąskaita faktūra išsiųsta automatiškai. Rašykite, jei kyla klausimų."
+
+#: app/templates/email/invoice_reminder.html:15
+msgid "Payment Reminder"
+msgstr "Priminimas apmokėti"
+
+#: app/templates/email/invoice_reminder.html:15
+msgid "Upcoming Invoice Due"
+msgstr "Artėja apmokėjimo terminas"
+
+#: app/templates/email/invoice_reminder.html:18
+#: app/templates/email/payment_receipt.html:63
+#, python-format
+msgid "Dear %(name)s,"
+msgstr "Sveiki, %(name)s,"
+
+#: app/templates/email/invoice_reminder.html:22
+#, python-format
+msgid "This is a friendly reminder that invoice %(number)s is due today."
+msgstr ""
+"primename, kad sąskaitos faktūros %(number)s apmokėjimo terminas yra "
+"šiandien."
+
+#: app/templates/email/invoice_reminder.html:24
+#, python-format
+msgid ""
+"This is a friendly reminder that invoice %(number)s is %(num)d day "
+"overdue."
+msgid_plural ""
+"This is a friendly reminder that invoice %(number)s is %(num)d days "
+"overdue."
+msgstr[0] ""
+"primename, kad sąskaitos faktūros %(number)s apmokėjimo terminas praėjo "
+"prieš %(num)d dieną."
+msgstr[1] ""
+"primename, kad sąskaitos faktūros %(number)s apmokėjimo terminas praėjo "
+"prieš %(num)d dienas."
+msgstr[2] ""
+"primename, kad sąskaitos faktūros %(number)s apmokėjimo terminas praėjo "
+"prieš %(num)d dienų."
+
+#: app/templates/email/invoice_reminder.html:26
+#, python-format
+msgid "This is a reminder that invoice %(number)s is due in %(num)d day."
+msgid_plural "This is a reminder that invoice %(number)s is due in %(num)d days."
+msgstr[0] ""
+"primename, kad iki sąskaitos faktūros %(number)s apmokėjimo termino liko "
+"%(num)d diena."
+msgstr[1] ""
+"primename, kad iki sąskaitos faktūros %(number)s apmokėjimo termino liko "
+"%(num)d dienos."
+msgstr[2] ""
+"primename, kad iki sąskaitos faktūros %(number)s apmokėjimo termino liko "
+"%(num)d dienų."
+
+#: app/templates/email/invoice_reminder.html:30
+msgid "Invoice:"
+msgstr "Sąskaita faktūra:"
+
+#: app/templates/email/invoice_reminder.html:31
+msgid "Amount due:"
+msgstr "Mokėtina suma:"
+
+#: app/templates/email/invoice_reminder.html:32
+msgid "Due date:"
+msgstr "Apmokėti iki:"
+
+#: app/templates/email/invoice_reminder.html:34
+msgid "Late fee accrued:"
+msgstr "Priskaičiuoti delspinigiai:"
+
+#: app/templates/email/invoice_reminder.html:42
+msgid ""
+"Please arrange payment at your earliest convenience. If you have already "
+"paid, please disregard this reminder."
+msgstr ""
+"Prašome apmokėti artimiausiu metu. Jei jau apmokėjote, į šį priminimą "
+"nekreipkite dėmesio."
+
+#: app/templates/email/invoice_reminder.html:43
+msgid "Thank you,"
+msgstr "Dėkojame,"
+
+#: app/templates/email/invoice_reminder.html:43
+msgid "The TimeTracker Team"
+msgstr "TimeTracker komanda"
 
 #: app/templates/email/overdue_invoice.html:65
 msgid "Invoice Overdue"
@@ -28341,6 +28837,47 @@ msgid ""
 msgstr ""
 "Tai automatinis pranešimas. Pranešimų nuostatas gali pakeisti savo "
 "naudotojo nustatymuose."
+
+#: app/templates/email/payment_receipt.html:58
+msgid "Payment Received"
+msgstr "Mokėjimas gautas"
+
+#: app/templates/email/payment_receipt.html:59
+msgid "Thank you — your payment has been recorded."
+msgstr "Ačiū — jūsų mokėjimas užregistruotas."
+
+#: app/templates/email/payment_receipt.html:63
+msgid "Dear Valued Customer,"
+msgstr "Sveiki,"
+
+#: app/templates/email/payment_receipt.html:64
+msgid "We have received your payment. Here is your receipt:"
+msgstr "gavome jūsų mokėjimą. Siunčiame kvitą:"
+
+#: app/templates/email/payment_receipt.html:86
+#: app/templates/inventory/movements/list.html:62
+#: app/templates/inventory/movements/list.html:129
+#: app/templates/inventory/reports/movement_history.html:76
+#: app/templates/inventory/reports/movement_history.html:143
+#: app/templates/inventory/reservations/list.html:45
+#: app/templates/inventory/reservations/list.html:67
+#: app/templates/inventory/stock_items/history.html:67
+#: app/templates/inventory/stock_items/history.html:129
+#: app/templates/invoices/view.html:297
+#: app/templates/payments/reconciliation_queue.html:31
+#: app/templates/payments/view.html:79
+msgid "Reference"
+msgstr "Nuoroda"
+
+#: app/templates/email/payment_receipt.html:97
+msgid ""
+"If you have any questions about this payment, please don't hesitate to "
+"contact us."
+msgstr "Rašykite, jei kyla klausimų dėl šio mokėjimo."
+
+#: app/templates/email/payment_receipt.html:102
+msgid "This is an automated payment receipt. Please do not reply to this email."
+msgstr "Tai automatinis mokėjimo kvitas – prašome į šį laišką neatsakyti."
 
 #: app/templates/email/quote.html:63
 #: app/templates/inventory/movements/list.html:39
@@ -29258,8 +29795,8 @@ msgstr "Pagal būseną"
 #: app/templates/mileage/list.html:89 app/templates/mileage/list.html:222
 #: app/templates/mileage/view.html:204 app/templates/per_diem/list.html:70
 #: app/templates/per_diem/list.html:179 app/templates/per_diem/list.html:261
-#: app/templates/per_diem/view.html:81 app/utils/i18n_helpers.py:177
-#: app/utils/i18n_helpers.py:188
+#: app/templates/per_diem/view.html:81 app/utils/i18n_helpers.py:186
+#: app/utils/i18n_helpers.py:197
 msgid "Reimbursed"
 msgstr "Kompensuota"
 
@@ -30311,14 +30848,6 @@ msgstr "Šablonas"
 msgid "ActivityWatch Setup"
 msgstr "ActivityWatch sąranka"
 
-#: app/templates/integrations/activitywatch_setup.html:15
-msgid ""
-"Import window and web activity from ActivityWatch (aw-server) as "
-"automatic time entries"
-msgstr ""
-"Langų ir žiniatinklio veiklos importavimas iš ActivityWatch (aw-server) "
-"kaip automatinių laiko įrašų"
-
 #: app/templates/integrations/activitywatch_setup.html:25
 #: app/templates/integrations/caldav_setup.html:25
 msgid "Server Connection"
@@ -30478,6 +31007,7 @@ msgstr ""
 "integracijos puslapyje."
 
 #: app/templates/integrations/caldav_setup.html:4
+#: app/templates/integrations/caldav_setup.html:9
 #: app/templates/integrations/caldav_setup.html:14
 msgid "CalDAV Calendar Setup"
 msgstr "CalDAV kalendoriaus sąranka"
@@ -30649,8 +31179,8 @@ msgid "Last error"
 msgstr "Paskutinė klaida"
 
 #: app/templates/integrations/health.html:62
-#: app/templates/invoices/_invoices_list.html:85 app/utils/i18n_helpers.py:256
-#: app/utils/i18n_helpers.py:268
+#: app/templates/invoices/_invoices_list.html:85 app/utils/i18n_helpers.py:265
+#: app/utils/i18n_helpers.py:277
 msgid "Partial"
 msgstr "Iš dalies"
 
@@ -32294,20 +32824,6 @@ msgstr "Rankinis"
 msgid "Unit Cost"
 msgstr "Vieneto savikaina"
 
-#: app/templates/inventory/movements/list.html:62
-#: app/templates/inventory/movements/list.html:129
-#: app/templates/inventory/reports/movement_history.html:76
-#: app/templates/inventory/reports/movement_history.html:143
-#: app/templates/inventory/reservations/list.html:45
-#: app/templates/inventory/reservations/list.html:67
-#: app/templates/inventory/stock_items/history.html:67
-#: app/templates/inventory/stock_items/history.html:129
-#: app/templates/invoices/view.html:297
-#: app/templates/payments/reconciliation_queue.html:31
-#: app/templates/payments/view.html:79
-msgid "Reference"
-msgstr "Nuoroda"
-
 #: app/templates/inventory/movements/list.html:99
 #: app/templates/inventory/reports/movement_history.html:113
 #: app/templates/inventory/stock_items/history.html:99
@@ -32336,8 +32852,10 @@ msgid "No Movements Match Your Filters"
 msgstr "Pagal filtrus judėjimų nerasta"
 
 #: app/templates/inventory/movements/list.html:158
+#: app/templates/inventory/purchase_orders/list.html:111
 #: app/templates/inventory/reservations/list.html:132
 #: app/templates/inventory/stock_items/list.html:120
+#: app/templates/inventory/stock_levels/list.html:84
 #: app/templates/inventory/suppliers/list.html:107
 #: app/templates/inventory/transfers/list.html:89
 msgid "Try adjusting your filters to see more results."
@@ -32350,6 +32868,14 @@ msgstr "Atsargų judėjimų dar nėra"
 #: app/templates/inventory/movements/list.html:160
 msgid "Stock movements appear when you receive, transfer, or adjust inventory."
 msgstr "Atsargų judėjimai atsiranda, kai gauni, perkeli ar koreguoji atsargas."
+
+#: app/templates/inventory/purchase_orders/form.html:8
+#: app/templates/inventory/purchase_orders/list.html:7
+#: app/templates/inventory/purchase_orders/list.html:12
+#: app/templates/inventory/purchase_orders/view.html:7
+#: app/templates/partials/_sidebar.html:440
+msgid "Purchase Orders"
+msgstr "Pirkimo užsakymai"
 
 #: app/templates/inventory/purchase_orders/form.html:9
 #: app/templates/inventory/purchase_orders/form.html:14
@@ -32435,12 +32961,6 @@ msgstr "Atnaujinti pirkimo užsakymą"
 msgid "Create Purchase Order"
 msgstr "Sukurti pirkimo užsakymą"
 
-#: app/templates/inventory/purchase_orders/list.html:7
-#: app/templates/inventory/purchase_orders/list.html:12
-#: app/templates/partials/_sidebar.html:440
-msgid "Purchase Orders"
-msgstr "Pirkimo užsakymai"
-
 #: app/templates/inventory/purchase_orders/list.html:13
 msgid "Manage purchase orders to suppliers"
 msgstr "Pirkimo užsakymų tiekėjams tvarkymas"
@@ -32451,8 +32971,8 @@ msgstr "Pirkimo užsakymų tiekėjams tvarkymas"
 #: app/templates/invoices/_invoices_list.html:59
 #: app/templates/invoices/list.html:60 app/templates/invoices/list.html:143
 #: app/templates/quotes/_quotes_list.html:63 app/templates/quotes/list.html:81
-#: app/templates/quotes/view.html:71 app/utils/i18n_helpers.py:96
-#: app/utils/i18n_helpers.py:108
+#: app/templates/quotes/view.html:71 app/utils/i18n_helpers.py:105
+#: app/utils/i18n_helpers.py:117
 msgid "Draft"
 msgstr "Juodraštis"
 
@@ -32486,6 +33006,18 @@ msgstr "Pirkimo užsakymo numeris"
 #: app/templates/inventory/purchase_orders/view.html:65
 msgid "Expected Delivery"
 msgstr "Numatomas pristatymas"
+
+#: app/templates/inventory/purchase_orders/list.html:111
+msgid "No Purchase Orders Match Your Filters"
+msgstr "Pagal filtrus pirkimo užsakymų nerasta"
+
+#: app/templates/inventory/purchase_orders/list.html:113
+msgid "No Purchase Orders Yet"
+msgstr "Pirkimo užsakymų dar nėra"
+
+#: app/templates/inventory/purchase_orders/list.html:113
+msgid "Create purchase orders to restock inventory from suppliers."
+msgstr "Kurk pirkimo užsakymus, kad papildytum atsargas iš tiekėjų."
 
 #: app/templates/inventory/purchase_orders/view.html:21
 msgid "Are you sure you want to cancel this purchase order?"
@@ -32784,6 +33316,7 @@ msgstr "Rezervuok atsargas projektams ar užsakymams prieš juos įvykdant."
 #: app/templates/inventory/stock_items/history.html:7
 #: app/templates/inventory/stock_items/list.html:7
 #: app/templates/inventory/stock_items/list.html:12
+#: app/templates/inventory/stock_items/view.html:7
 #: app/templates/inventory/stock_levels/item.html:7
 #: app/templates/inventory/suppliers/view.html:174
 #: app/templates/partials/_sidebar.html:424
@@ -32838,6 +33371,7 @@ msgstr "Sekti atsargas"
 #: app/templates/inventory/suppliers/form.html:7
 #: app/templates/inventory/suppliers/list.html:7
 #: app/templates/inventory/suppliers/list.html:12
+#: app/templates/inventory/suppliers/view.html:7
 #: app/templates/partials/_sidebar.html:434
 msgid "Suppliers"
 msgstr "Tiekėjai"
@@ -32998,6 +33532,18 @@ msgstr "Šios prekės atsargų nerasta nė viename sandėlyje."
 msgid "View inventory levels across warehouses"
 msgstr "Atsargų likučiai visuose sandėliuose"
 
+#: app/templates/inventory/stock_levels/list.html:84
+msgid "No Stock Levels Match Your Filters"
+msgstr "Pagal filtrus atsargų likučių nerasta"
+
+#: app/templates/inventory/stock_levels/list.html:86
+msgid "No Stock Levels Yet"
+msgstr "Atsargų likučių dar nėra"
+
+#: app/templates/inventory/stock_levels/list.html:86
+msgid "Stock levels appear once items are received into warehouses."
+msgstr "Atsargų likučiai atsiras, kai prekės bus priimtos į sandėlius."
+
 #: app/templates/inventory/stock_levels/warehouse.html:13
 #, python-format
 msgid "Stock Levels - %(warehouse)s"
@@ -33111,6 +33657,7 @@ msgid "New Stock Transfer"
 msgstr "Naujas atsargų perkėlimas"
 
 #: app/templates/inventory/transfers/form.html:14
+#: app/utils/permissions_seed.py:124
 msgid "Transfer stock between warehouses"
 msgstr "Atsargų perkėlimas tarp sandėlių"
 
@@ -33180,6 +33727,7 @@ msgstr "Perkelk atsargas tarp sandėlių, kad subalansuotum likučius."
 #: app/templates/inventory/warehouses/form.html:7
 #: app/templates/inventory/warehouses/list.html:7
 #: app/templates/inventory/warehouses/list.html:12
+#: app/templates/inventory/warehouses/view.html:7
 #: app/templates/partials/_sidebar.html:429
 msgid "Warehouses"
 msgstr "Sandėliai"
@@ -33341,19 +33889,19 @@ msgstr "Mokėjimas"
 
 #: app/templates/invoices/_invoices_list.html:84
 #: app/templates/invoices/list.html:79 app/templates/payments/view.html:196
-#: app/utils/i18n_helpers.py:121 app/utils/i18n_helpers.py:132
+#: app/utils/i18n_helpers.py:130 app/utils/i18n_helpers.py:141
 msgid "Partially Paid"
 msgstr "Iš dalies apmokėta"
 
 #: app/templates/invoices/_invoices_list.html:88
 #: app/templates/invoices/list.html:80 app/templates/payments/view.html:192
-#: app/utils/i18n_helpers.py:122 app/utils/i18n_helpers.py:133
+#: app/utils/i18n_helpers.py:131 app/utils/i18n_helpers.py:142
 msgid "Fully Paid"
 msgstr "Visiškai apmokėta"
 
 #: app/templates/invoices/_invoices_list.html:93
-#: app/templates/invoices/list.html:81 app/utils/i18n_helpers.py:123
-#: app/utils/i18n_helpers.py:134
+#: app/templates/invoices/list.html:81 app/utils/i18n_helpers.py:132
+#: app/utils/i18n_helpers.py:143
 msgid "Overpaid"
 msgstr "Permokėta"
 
@@ -33611,58 +34159,58 @@ msgstr "Susietos išlaidos – kategorijos redaguoti negalima"
 #: app/templates/invoices/edit.html:275 app/templates/projects/add_cost.html:38
 #: app/templates/projects/edit_cost.html:45
 #: app/templates/quotes/_edit_quote_form_scripts.html:185
-#: app/templates/quotes/edit.html:161 app/utils/i18n_helpers.py:196
-#: app/utils/i18n_helpers.py:213
+#: app/templates/quotes/edit.html:161 app/utils/i18n_helpers.py:205
+#: app/utils/i18n_helpers.py:222
 msgid "Travel"
 msgstr "Kelionės"
 
 #: app/templates/invoices/edit.html:276
 #: app/templates/quotes/_edit_quote_form_scripts.html:186
-#: app/templates/quotes/edit.html:162 app/utils/i18n_helpers.py:197
-#: app/utils/i18n_helpers.py:214
+#: app/templates/quotes/edit.html:162 app/utils/i18n_helpers.py:206
+#: app/utils/i18n_helpers.py:223
 msgid "Meals"
 msgstr "Maitinimas"
 
-#: app/templates/invoices/edit.html:277 app/utils/i18n_helpers.py:198
-#: app/utils/i18n_helpers.py:215
+#: app/templates/invoices/edit.html:277 app/utils/i18n_helpers.py:207
+#: app/utils/i18n_helpers.py:224
 msgid "Accommodation"
 msgstr "Apgyvendinimas"
 
 #: app/templates/invoices/edit.html:278
 #: app/templates/quotes/_edit_quote_form_scripts.html:187
-#: app/templates/quotes/edit.html:163 app/utils/i18n_helpers.py:199
-#: app/utils/i18n_helpers.py:216
+#: app/templates/quotes/edit.html:163 app/utils/i18n_helpers.py:208
+#: app/utils/i18n_helpers.py:225
 msgid "Supplies"
 msgstr "Reikmenys"
 
-#: app/templates/invoices/edit.html:279 app/utils/i18n_helpers.py:200
-#: app/utils/i18n_helpers.py:217
+#: app/templates/invoices/edit.html:279 app/utils/i18n_helpers.py:209
+#: app/utils/i18n_helpers.py:226
 msgid "Software"
 msgstr "Programinė įranga"
 
 #: app/templates/invoices/edit.html:280 app/templates/projects/add_cost.html:41
 #: app/templates/projects/edit_cost.html:48
 #: app/templates/quotes/_edit_quote_form_scripts.html:189
-#: app/templates/quotes/edit.html:165 app/utils/i18n_helpers.py:201
-#: app/utils/i18n_helpers.py:218
+#: app/templates/quotes/edit.html:165 app/utils/i18n_helpers.py:210
+#: app/utils/i18n_helpers.py:227
 msgid "Equipment"
 msgstr "Įranga"
 
 #: app/templates/invoices/edit.html:281 app/templates/projects/add_cost.html:40
 #: app/templates/projects/edit_cost.html:47
 #: app/templates/quotes/_edit_quote_form_scripts.html:188
-#: app/templates/quotes/edit.html:164 app/utils/i18n_helpers.py:202
-#: app/utils/i18n_helpers.py:219
+#: app/templates/quotes/edit.html:164 app/utils/i18n_helpers.py:211
+#: app/utils/i18n_helpers.py:228
 msgid "Services"
 msgstr "Paslaugos"
 
-#: app/templates/invoices/edit.html:282 app/utils/i18n_helpers.py:203
-#: app/utils/i18n_helpers.py:220
+#: app/templates/invoices/edit.html:282 app/utils/i18n_helpers.py:212
+#: app/utils/i18n_helpers.py:229
 msgid "Marketing"
 msgstr "Rinkodara"
 
-#: app/templates/invoices/edit.html:283 app/utils/i18n_helpers.py:204
-#: app/utils/i18n_helpers.py:221
+#: app/templates/invoices/edit.html:283 app/utils/i18n_helpers.py:213
+#: app/utils/i18n_helpers.py:230
 msgid "Training"
 msgstr "Mokymai"
 
@@ -33676,8 +34224,8 @@ msgstr "Mokymai"
 #: app/templates/quotes/_edit_quote_form_scripts.html:190
 #: app/templates/quotes/_edit_quote_form_scripts.html:224
 #: app/templates/quotes/edit.html:166 app/templates/quotes/edit.html:223
-#: app/utils/i18n_helpers.py:150 app/utils/i18n_helpers.py:166
-#: app/utils/i18n_helpers.py:205 app/utils/i18n_helpers.py:222
+#: app/utils/i18n_helpers.py:159 app/utils/i18n_helpers.py:175
+#: app/utils/i18n_helpers.py:214 app/utils/i18n_helpers.py:231
 msgid "Other"
 msgstr "Kita"
 
@@ -33764,10 +34312,6 @@ msgstr "Pašalinti prekę"
 #: app/templates/invoices/edit.html:374
 msgid "Goods Subtotal"
 msgstr "Prekių tarpinė suma"
-
-#: app/templates/invoices/edit.html:402
-msgid "Live Preview"
-msgstr "Tiesioginė peržiūra"
 
 #: app/templates/invoices/edit.html:447
 msgid "Goods"
@@ -34447,6 +34991,8 @@ msgid "Full credit (cancel invoice)"
 msgstr "Visa suma (anuliuoti sąskaitą faktūrą)"
 
 #: app/templates/invoices/view.html:610
+#: app/templates/reminder_policies/edit.html:56
+#: app/templates/reminder_policies/edit.html:105
 msgid "Fixed amount"
 msgstr "Fiksuota suma"
 
@@ -34773,6 +35319,8 @@ msgstr ""
 "pritaikyti kitoms lentoms."
 
 #: app/templates/kanban/columns.html:198
+#: app/templates/reminder_policies/edit.html:49
+#: app/templates/reminder_policies/edit.html:98
 msgid "Template name"
 msgstr "Šablono pavadinimas"
 
@@ -34989,12 +35537,6 @@ msgstr "Tai konkrečiam projektui skirtas stulpelis"
 #: app/templates/kanban/edit_column.html:29
 msgid "This is a global column (for all projects)"
 msgstr "Tai bendras stulpelis (visiems projektams)"
-
-#: app/templates/kanban/edit_column.html:48
-#: app/templates/reports/builder.html:66 app/templates/tasks/create.html:80
-#: app/templates/tasks/edit.html:88 app/templates/timer/bulk_entry.html:192
-msgid "Preview"
-msgstr "Peržiūra"
 
 #: app/templates/kanban/edit_column.html:87
 msgid "Inactive columns are hidden from the kanban board"
@@ -35960,10 +36502,6 @@ msgstr "Savaitės ir mėnesio statistika, susikaupimas, ženkleliai ir tendencij
 msgid "Project hours this week"
 msgstr "Projektų valandos šią savaitę"
 
-#: app/templates/main/dashboard.html:388
-msgid "overtime"
-msgstr "viršvalandžių"
-
 #: app/templates/main/dashboard.html:401
 msgid "Month's Hours"
 msgstr "Mėnesio valandos"
@@ -36037,7 +36575,7 @@ msgstr "Iš viso apskaityta valandų"
 #: app/templates/main/dashboard.html:476
 #: app/templates/partials/_bottom_nav.html:123
 #: app/templates/partials/_bottom_nav.html:125
-#: app/templates/partials/_sidebar.html:77
+#: app/templates/partials/_sidebar.html:77 app/utils/permissions_seed.py:21
 msgid "Time entries"
 msgstr "Laiko įrašai"
 
@@ -38814,6 +39352,14 @@ msgstr "Ištrinti etapą"
 msgid "tasks"
 msgstr "užduotys"
 
+#: app/templates/milestones/list.html:60
+msgid "No Milestones Yet"
+msgstr "Etapų dar nėra"
+
+#: app/templates/milestones/list.html:60
+msgid "Break the project into milestones to track progress and due dates."
+msgstr "Suskaidyk projektą į etapus, kad galėtum sekti eigą ir terminus."
+
 #: app/templates/oauth/authorize.html:3
 msgid "Authorize application"
 msgstr "Suteikti prieigą programai"
@@ -39014,12 +39560,14 @@ msgstr "Rezervacijos"
 #: app/templates/reports/builder.html:9
 #: app/templates/reports/custom_view.html:9
 #: app/templates/reports/index.html:204
+#: app/templates/reports/iterative_view.html:9
 #: app/templates/reports/saved_views_list.html:9
 msgid "Report Builder"
 msgstr "Ataskaitų kūrimo įrankis"
 
 #: app/templates/partials/_sidebar.html:511
 #: app/templates/reports/builder.html:17
+#: app/templates/reports/iterative_view.html:10
 #: app/templates/reports/saved_views_list.html:10
 msgid "Saved Views"
 msgstr "Išsaugoti rodiniai"
@@ -39284,27 +39832,27 @@ msgid "Select method"
 msgstr "Pasirink būdą"
 
 #: app/templates/payments/create.html:97 app/templates/payments/edit.html:63
-#: app/utils/i18n_helpers.py:144 app/utils/i18n_helpers.py:160
+#: app/utils/i18n_helpers.py:153 app/utils/i18n_helpers.py:169
 msgid "Bank Transfer"
 msgstr "Banko pavedimas"
 
 #: app/templates/payments/create.html:98 app/templates/payments/edit.html:64
-#: app/utils/i18n_helpers.py:142 app/utils/i18n_helpers.py:158
+#: app/utils/i18n_helpers.py:151 app/utils/i18n_helpers.py:167
 msgid "Cash"
 msgstr "Grynieji pinigai"
 
 #: app/templates/payments/create.html:99 app/templates/payments/edit.html:65
-#: app/utils/i18n_helpers.py:143 app/utils/i18n_helpers.py:159
+#: app/utils/i18n_helpers.py:152 app/utils/i18n_helpers.py:168
 msgid "Check"
 msgstr "Čekis"
 
 #: app/templates/payments/create.html:100 app/templates/payments/edit.html:66
-#: app/utils/i18n_helpers.py:145 app/utils/i18n_helpers.py:161
+#: app/utils/i18n_helpers.py:154 app/utils/i18n_helpers.py:170
 msgid "Credit Card"
 msgstr "Kredito kortelė"
 
 #: app/templates/payments/create.html:101 app/templates/payments/edit.html:67
-#: app/utils/i18n_helpers.py:146 app/utils/i18n_helpers.py:162
+#: app/utils/i18n_helpers.py:155 app/utils/i18n_helpers.py:171
 msgid "Debit Card"
 msgstr "Debeto kortelė"
 
@@ -39529,6 +40077,10 @@ msgstr "Susijusi sąskaita"
 msgid "Edit Payment"
 msgstr "Redaguoti mokėjimą"
 
+#: app/templates/payments/view.html:229 app/templates/payments/view.html:265
+msgid "Refund Payment"
+msgstr "Grąžinti mokėjimą"
+
 #: app/templates/payments/view.html:237 app/templates/payments/view.html:252
 msgid "Delete Payment"
 msgstr "Ištrinti mokėjimą"
@@ -39540,6 +40092,20 @@ msgid ""
 msgstr ""
 "Ar tikrai nori ištrinti šį mokėjimą? Tai paveiks sąskaitos faktūros "
 "apmokėjimo būseną, o veiksmo atšaukti nebus galima."
+
+#: app/templates/payments/view.html:263
+msgid ""
+"Are you sure you want to refund this payment? This will attempt to issue "
+"a refund via the payment gateway (if applicable) and mark the payment as "
+"refunded."
+msgstr ""
+"Ar tikrai nori grąžinti šį mokėjimą? Bus bandoma grąžinti pinigus per "
+"mokėjimų tarpininką (jei taikoma), o mokėjimas bus pažymėtas kaip "
+"grąžintas."
+
+#: app/templates/payments/view.html:266
+msgid "Refund"
+msgstr "Grąžinti"
 
 #: app/templates/per_diem/form.html:13
 msgid "Edit Per Diem Claim"
@@ -41793,6 +42359,18 @@ msgstr "Vykdyti dabar"
 msgid "Are you sure you want to delete this recurring task?"
 msgstr "Ar tikrai nori ištrinti šią periodinę užduotį?"
 
+#: app/templates/recurring_tasks/list.html:156
+msgid "No recurring tasks"
+msgstr "Periodinių užduočių nėra"
+
+#: app/templates/recurring_tasks/list.html:157
+msgid ""
+"Create recurring task templates to automatically generate tasks on a "
+"schedule."
+msgstr ""
+"Kurk periodinių užduočių šablonus, kad užduotys būtų generuojamos "
+"automatiškai pagal grafiką."
+
 #: app/templates/recurring_tasks/list.html:209
 msgid "Could not update status"
 msgstr "Nepavyko atnaujinti būsenos"
@@ -41808,6 +42386,85 @@ msgstr "Periodinės užduoties šablonas"
 #: app/templates/recurring_tasks/view.html:89
 msgid "Creator (auto-assign)"
 msgstr "Kūrėjas (automatinis priskyrimas)"
+
+#: app/templates/reminder_policies/edit.html:2
+#: app/templates/reminder_policies/edit.html:5
+msgid "Edit Reminder Policy"
+msgstr "Redaguoti priminimų tvarką"
+
+#: app/templates/reminder_policies/edit.html:2
+#: app/templates/reminder_policies/edit.html:5
+msgid "New Reminder Policy"
+msgstr "Nauja priminimų tvarka"
+
+#: app/templates/reminder_policies/edit.html:18
+msgid "Policy Name"
+msgstr "Tvarkos pavadinimas"
+
+#: app/templates/reminder_policies/edit.html:29
+#: app/templates/user/settings.html:282 app/templates/user/settings.html:294
+#: app/templates/user/settings.html:593
+msgid "System Default"
+msgstr "Sistemos numatytasis"
+
+#: app/templates/reminder_policies/edit.html:34
+#: app/templates/reminder_policies/list.html:24
+msgid "Levels"
+msgstr "Lygiai"
+
+#: app/templates/reminder_policies/edit.html:36
+msgid "Days offset: negative = before due date, positive = after due date."
+msgstr "Dienų poslinkis: neigiamas — iki termino, teigiamas — po termino."
+
+#: app/templates/reminder_policies/edit.html:45
+#: app/templates/reminder_policies/edit.html:94
+msgid "Days offset"
+msgstr "Dienų poslinkis"
+
+#: app/templates/reminder_policies/edit.html:53
+#: app/templates/reminder_policies/edit.html:102
+msgid "Late fee type"
+msgstr "Delspinigių tipas"
+
+#: app/templates/reminder_policies/edit.html:57
+#: app/templates/reminder_policies/edit.html:106
+msgid "Annual interest (%)"
+msgstr "Metinės palūkanos (%)"
+
+#: app/templates/reminder_policies/edit.html:61
+#: app/templates/reminder_policies/edit.html:110
+msgid "Late fee value"
+msgstr "Delspinigių dydis"
+
+#: app/templates/reminder_policies/edit.html:65
+#: app/templates/reminder_policies/edit.html:114
+msgid "Sort order"
+msgstr "Rikiavimo tvarka"
+
+#: app/templates/reminder_policies/edit.html:80
+msgid "Add Level"
+msgstr "Pridėti lygį"
+
+#: app/templates/reminder_policies/edit.html:83
+msgid "Save Policy"
+msgstr "Išsaugoti"
+
+#: app/templates/reminder_policies/list.html:2
+#: app/templates/reminder_policies/list.html:6
+msgid "Reminder Policies"
+msgstr "Priminimų tvarkos"
+
+#: app/templates/reminder_policies/list.html:7
+msgid "New Policy"
+msgstr "Nauja tvarka"
+
+#: app/templates/reminder_policies/list.html:37
+msgid "Delete this policy?"
+msgstr "Ištrinti šią tvarką?"
+
+#: app/templates/reminder_policies/list.html:48
+msgid "No reminder policies defined yet."
+msgstr "Priminimų tvarkų dar nėra."
 
 #: app/templates/reports/builder.html:4
 #: app/templates/reports/custom_view.html:49
@@ -43332,10 +43989,6 @@ msgstr "Įmonės duomenys sąskaitoms faktūroms ir prekės ženklui."
 msgid "Company name"
 msgstr "Įmonės pavadinimas"
 
-#: app/templates/setup/initial_setup.html:176
-msgid "Your Company Name"
-msgstr "Tavo įmonės pavadinimas"
-
 #: app/templates/setup/initial_setup.html:180
 msgid "Your Company Address"
 msgstr "Tavo įmonės adresas"
@@ -43865,8 +44518,8 @@ msgid "e.g. bug, frontend"
 msgstr "pvz., klaida, sąsaja"
 
 #: app/templates/tasks/list.html:72 app/templates/tasks/list.html:198
-#: app/templates/tasks/my_tasks.html:134 app/utils/i18n_helpers.py:51
-#: app/utils/i18n_helpers.py:63
+#: app/templates/tasks/my_tasks.html:134 app/utils/i18n_helpers.py:60
+#: app/utils/i18n_helpers.py:72
 msgid "Done"
 msgstr "Atlikta"
 
@@ -45579,11 +46232,6 @@ msgstr "Suvestinės valanda (nebūtina, HH:MM)"
 msgid "Display Preferences"
 msgstr "Rodymo nuostatos"
 
-#: app/templates/user/settings.html:282 app/templates/user/settings.html:294
-#: app/templates/user/settings.html:593
-msgid "System Default"
-msgstr "Sistemos numatytasis"
-
 #: app/templates/user/settings.html:308
 msgid "Focus / Pomodoro Defaults"
 msgstr "Susikaupimo / Pomodoro numatytosios reikšmės"
@@ -46340,6 +46988,14 @@ msgstr "Vizualinis kūrimo įrankis"
 #: app/templates/workflows/list.html:81
 msgid "Delete this workflow?"
 msgstr "Ištrinti šią darbo eigą?"
+
+#: app/templates/workflows/list.html:100
+msgid "No workflows yet"
+msgstr "Darbo eigų dar nėra"
+
+#: app/templates/workflows/list.html:101
+msgid "Create automation rules or start from a template."
+msgstr "Sukurk automatizavimo taisykles arba pradėk nuo šablono."
 
 #: app/templates/workflows/template_form.html:4
 msgid "Workflow Template"
@@ -47753,31 +48409,31 @@ msgstr ""
 "Įvyko duomenų bazės klaida. Jei problema kartojasi, susisiek su palaikymo"
 " komanda."
 
-#: app/utils/i18n_helpers.py:147 app/utils/i18n_helpers.py:163
+#: app/utils/i18n_helpers.py:156 app/utils/i18n_helpers.py:172
 msgid "PayPal"
 msgstr "PayPal"
 
-#: app/utils/i18n_helpers.py:148 app/utils/i18n_helpers.py:164
+#: app/utils/i18n_helpers.py:157 app/utils/i18n_helpers.py:173
 msgid "Stripe"
 msgstr "Stripe"
 
-#: app/utils/i18n_helpers.py:149 app/utils/i18n_helpers.py:165
+#: app/utils/i18n_helpers.py:158 app/utils/i18n_helpers.py:174
 msgid "Company Card"
 msgstr "Įmonės kortelė"
 
-#: app/utils/i18n_helpers.py:253 app/utils/i18n_helpers.py:265
+#: app/utils/i18n_helpers.py:262 app/utils/i18n_helpers.py:274
 msgid "Processing"
 msgstr "Apdorojama"
 
-#: app/utils/i18n_helpers.py:298
+#: app/utils/i18n_helpers.py:307
 msgid "80% Budget Warning"
 msgstr "Įspėjimas: išnaudota 80 % biudžeto"
 
-#: app/utils/i18n_helpers.py:299
+#: app/utils/i18n_helpers.py:308
 msgid "Budget Limit Reached"
 msgstr "Pasiektas biudžeto limitas"
 
-#: app/utils/i18n_helpers.py:307 app/utils/i18n_helpers.py:313
+#: app/utils/i18n_helpers.py:316 app/utils/i18n_helpers.py:322
 msgid "Info"
 msgstr "Informacija"
 
@@ -47828,6 +48484,354 @@ msgstr "Iš viso:"
 #: app/utils/route_helpers.py:116
 msgid "Please log in to access this page"
 msgstr "Prisijunk, kad pasiektum šį puslapį"
+
+#: app/utils/permissions_seed.py:12
+msgid "Administration"
+msgstr "Administravimas"
+
+#: app/utils/permissions_seed.py:28
+msgid "View own time entries"
+msgstr "Peržiūrėti savo laiko įrašus"
+
+#: app/utils/permissions_seed.py:31
+msgid "View all time entries from all users"
+msgstr "Peržiūrėti visų naudotojų laiko įrašus"
+
+#: app/utils/permissions_seed.py:34
+msgid "Create time entries"
+msgstr "Kurti laiko įrašus"
+
+#: app/utils/permissions_seed.py:35
+msgid "Edit own time entries"
+msgstr "Redaguoti savo laiko įrašus"
+
+#: app/utils/permissions_seed.py:36
+msgid "Edit time entries from all users"
+msgstr "Redaguoti visų naudotojų laiko įrašus"
+
+#: app/utils/permissions_seed.py:37
+msgid "Delete own time entries"
+msgstr "Ištrinti savo laiko įrašus"
+
+#: app/utils/permissions_seed.py:40
+msgid "Delete time entries from all users"
+msgstr "Ištrinti visų naudotojų laiko įrašus"
+
+#: app/utils/permissions_seed.py:44
+msgid "View all projects (legacy alias)"
+msgstr "Peržiūrėti visus projektus (senasis pavadinimas)"
+
+#: app/utils/permissions_seed.py:45
+msgid "View own projects"
+msgstr "Peržiūrėti savo projektus"
+
+#: app/utils/permissions_seed.py:46
+msgid "View all projects"
+msgstr "Peržiūrėti visus projektus"
+
+#: app/utils/permissions_seed.py:47
+msgid "Create new projects"
+msgstr "Kurti naujus projektus"
+
+#: app/utils/permissions_seed.py:48
+msgid "Edit all projects (legacy alias)"
+msgstr "Redaguoti visus projektus (senasis pavadinimas)"
+
+#: app/utils/permissions_seed.py:49
+msgid "Edit own projects"
+msgstr "Redaguoti savo projektus"
+
+#: app/utils/permissions_seed.py:50
+msgid "Edit all projects"
+msgstr "Redaguoti visus projektus"
+
+#: app/utils/permissions_seed.py:51
+msgid "Delete all projects (legacy alias)"
+msgstr "Ištrinti visus projektus (senasis pavadinimas)"
+
+#: app/utils/permissions_seed.py:52
+msgid "Delete own projects"
+msgstr "Ištrinti savo projektus"
+
+#: app/utils/permissions_seed.py:53
+msgid "Delete all projects"
+msgstr "Ištrinti visus projektus"
+
+#: app/utils/permissions_seed.py:54
+msgid "Archive/unarchive projects"
+msgstr "Archyvuoti ir išarchyvuoti projektus"
+
+#: app/utils/permissions_seed.py:55
+msgid "Manage project costs and budgets"
+msgstr "Tvarkyti projektų sąnaudas ir biudžetus"
+
+#: app/utils/permissions_seed.py:57
+msgid "View own tasks"
+msgstr "Peržiūrėti savo užduotis"
+
+#: app/utils/permissions_seed.py:58
+msgid "View all tasks"
+msgstr "Peržiūrėti visas užduotis"
+
+#: app/utils/permissions_seed.py:59
+msgid "Create tasks"
+msgstr "Kurti užduotis"
+
+#: app/utils/permissions_seed.py:60
+msgid "Edit own tasks"
+msgstr "Redaguoti savo užduotis"
+
+#: app/utils/permissions_seed.py:61
+msgid "Edit all tasks"
+msgstr "Redaguoti visas užduotis"
+
+#: app/utils/permissions_seed.py:62
+msgid "Delete own tasks"
+msgstr "Ištrinti savo užduotis"
+
+#: app/utils/permissions_seed.py:63
+msgid "Delete all tasks"
+msgstr "Ištrinti visas užduotis"
+
+#: app/utils/permissions_seed.py:64
+msgid "Assign tasks to users"
+msgstr "Priskirti užduotis naudotojams"
+
+#: app/utils/permissions_seed.py:66
+msgid "View all clients (legacy alias)"
+msgstr "Peržiūrėti visus klientus (senasis pavadinimas)"
+
+#: app/utils/permissions_seed.py:67
+msgid "View own clients"
+msgstr "Peržiūrėti savo klientus"
+
+#: app/utils/permissions_seed.py:68
+msgid "View all clients"
+msgstr "Peržiūrėti visus klientus"
+
+#: app/utils/permissions_seed.py:69
+msgid "Create new clients"
+msgstr "Kurti naujus klientus"
+
+#: app/utils/permissions_seed.py:70
+msgid "Edit all clients (legacy alias)"
+msgstr "Redaguoti visus klientus (senasis pavadinimas)"
+
+#: app/utils/permissions_seed.py:71
+msgid "Edit own clients"
+msgstr "Redaguoti savo klientus"
+
+#: app/utils/permissions_seed.py:72
+msgid "Edit all clients"
+msgstr "Redaguoti visus klientus"
+
+#: app/utils/permissions_seed.py:73
+msgid "Delete all clients (legacy alias)"
+msgstr "Ištrinti visus klientus (senasis pavadinimas)"
+
+#: app/utils/permissions_seed.py:74
+msgid "Delete own clients"
+msgstr "Ištrinti savo klientus"
+
+#: app/utils/permissions_seed.py:75
+msgid "Delete all clients"
+msgstr "Ištrinti visus klientus"
+
+#: app/utils/permissions_seed.py:76
+msgid "Manage client notes"
+msgstr "Tvarkyti klientų pastabas"
+
+#: app/utils/permissions_seed.py:78
+msgid "View all issues from all clients"
+msgstr "Peržiūrėti visų klientų problemas"
+
+#: app/utils/permissions_seed.py:79
+msgid "View issues for assigned clients/projects"
+msgstr "Peržiūrėti priskirtų klientų ir projektų problemas"
+
+#: app/utils/permissions_seed.py:80
+msgid "Create new issues"
+msgstr "Kurti naujas problemas"
+
+#: app/utils/permissions_seed.py:81
+msgid "Edit all issues"
+msgstr "Redaguoti visas problemas"
+
+#: app/utils/permissions_seed.py:82
+msgid "Edit issues for assigned clients/projects"
+msgstr "Redaguoti priskirtų klientų ir projektų problemas"
+
+#: app/utils/permissions_seed.py:83
+msgid "Delete issues"
+msgstr "Ištrinti problemas"
+
+#: app/utils/permissions_seed.py:85
+msgid "View own invoices"
+msgstr "Peržiūrėti savo sąskaitas faktūras"
+
+#: app/utils/permissions_seed.py:86
+msgid "View all invoices"
+msgstr "Peržiūrėti visas sąskaitas faktūras"
+
+#: app/utils/permissions_seed.py:87
+msgid "Create invoices"
+msgstr "Kurti sąskaitas faktūras"
+
+#: app/utils/permissions_seed.py:88
+msgid "Edit invoices"
+msgstr "Redaguoti sąskaitas faktūras"
+
+#: app/utils/permissions_seed.py:89
+msgid "Delete invoices"
+msgstr "Ištrinti sąskaitas faktūras"
+
+#: app/utils/permissions_seed.py:90
+msgid "Send invoices to clients"
+msgstr "Siųsti sąskaitas faktūras klientams"
+
+#: app/utils/permissions_seed.py:91
+msgid "Manage invoice payments"
+msgstr "Tvarkyti sąskaitų faktūrų mokėjimus"
+
+#: app/utils/permissions_seed.py:92
+msgid "Manage payment gateway configurations"
+msgstr "Tvarkyti mokėjimų tarpininkų konfigūracijas"
+
+#: app/utils/permissions_seed.py:94
+msgid "View own reports"
+msgstr "Peržiūrėti savo ataskaitas"
+
+#: app/utils/permissions_seed.py:95
+msgid "View reports for all users"
+msgstr "Peržiūrėti visų naudotojų ataskaitas"
+
+#: app/utils/permissions_seed.py:96
+msgid "Export reports to CSV/PDF"
+msgstr "Eksportuoti ataskaitas į CSV/PDF"
+
+#: app/utils/permissions_seed.py:97
+msgid "Create and save custom reports"
+msgstr "Kurti ir išsaugoti savas ataskaitas"
+
+#: app/utils/permissions_seed.py:99
+msgid "View users list"
+msgstr "Peržiūrėti naudotojų sąrašą"
+
+#: app/utils/permissions_seed.py:100
+msgid "Create new users"
+msgstr "Kurti naujus naudotojus"
+
+#: app/utils/permissions_seed.py:101
+msgid "Edit user details"
+msgstr "Redaguoti naudotojų duomenis"
+
+#: app/utils/permissions_seed.py:102
+msgid "Delete users"
+msgstr "Ištrinti naudotojus"
+
+#: app/utils/permissions_seed.py:103
+msgid "Assign roles to users"
+msgstr "Priskirti vaidmenis naudotojams"
+
+#: app/utils/permissions_seed.py:105
+msgid "Manage system settings"
+msgstr "Tvarkyti sistemos nustatymus"
+
+#: app/utils/permissions_seed.py:106
+msgid "View system information"
+msgstr "Peržiūrėti sistemos informaciją"
+
+#: app/utils/permissions_seed.py:107
+msgid "Create and restore backups"
+msgstr "Kurti ir atkurti atsargines kopijas"
+
+#: app/utils/permissions_seed.py:108
+msgid "Manage telemetry settings"
+msgstr "Tvarkyti telemetrijos nustatymus"
+
+#: app/utils/permissions_seed.py:109
+msgid "View audit logs"
+msgstr "Peržiūrėti audito žurnalus"
+
+#: app/utils/permissions_seed.py:111
+msgid "Create, edit, and delete roles"
+msgstr "Kurti, redaguoti ir ištrinti vaidmenis"
+
+#: app/utils/permissions_seed.py:112
+msgid "Assign permissions to roles"
+msgstr "Priskirti leidimus vaidmenims"
+
+#: app/utils/permissions_seed.py:113
+msgid "View permissions and roles"
+msgstr "Peržiūrėti leidimus ir vaidmenis"
+
+#: app/utils/permissions_seed.py:115
+msgid "View inventory items and stock levels"
+msgstr "Peržiūrėti atsargų prekes ir likučius"
+
+#: app/utils/permissions_seed.py:116
+msgid "Create, edit, and delete stock items"
+msgstr "Kurti, redaguoti ir ištrinti atsargų prekes"
+
+#: app/utils/permissions_seed.py:117
+msgid "Create, edit, and delete warehouses"
+msgstr "Kurti, redaguoti ir ištrinti sandėlius"
+
+#: app/utils/permissions_seed.py:118
+msgid "View current stock levels"
+msgstr "Peržiūrėti dabartinius atsargų likučius"
+
+#: app/utils/permissions_seed.py:121
+msgid "Record stock movements and adjustments"
+msgstr "Registruoti atsargų judėjimą ir koregavimus"
+
+#: app/utils/permissions_seed.py:125
+msgid "View stock movement history"
+msgstr "Peržiūrėti atsargų judėjimo istoriją"
+
+#: app/utils/permissions_seed.py:128
+msgid "Create and manage stock reservations"
+msgstr "Kurti ir tvarkyti atsargų rezervacijas"
+
+#: app/utils/permissions_seed.py:131
+msgid "View inventory reports"
+msgstr "Peržiūrėti atsargų ataskaitas"
+
+#: app/utils/permissions_seed.py:134
+msgid "Approve stock adjustments (if approval workflow enabled)"
+msgstr "Tvirtinti atsargų koregavimus (jei įjungta tvirtinimo eiga)"
+
+#: app/utils/permissions_seed.py:137
+msgid "Create, edit, and delete suppliers"
+msgstr "Kurti, redaguoti ir ištrinti tiekėjus"
+
+#: app/utils/permissions_seed.py:140
+msgid "Create, edit, and manage purchase orders"
+msgstr "Kurti, redaguoti ir tvarkyti pirkimo užsakymus"
+
+#: app/utils/permissions_seed.py:149
+msgid "Super Administrator with full system access"
+msgstr "Vyriausiasis administratorius su visa prieiga prie sistemos"
+
+#: app/utils/permissions_seed.py:154
+msgid "Administrator with most privileges"
+msgstr "Administratorius su dauguma teisių"
+
+#: app/utils/permissions_seed.py:230
+msgid "Team Manager with oversight capabilities"
+msgstr "Komandos vadovas su priežiūros teisėmis"
+
+#: app/utils/permissions_seed.py:301
+msgid "Standard User"
+msgstr "Įprastas naudotojas"
+
+#: app/utils/permissions_seed.py:329
+msgid "Read-only User"
+msgstr "Naudotojas, galintis tik peržiūrėti"
+
+#: app/utils/permissions_seed.py:344
+msgid "User restricted to assigned clients and their projects"
+msgstr "Naudotojas, matantis tik priskirtus klientus ir jų projektus"
 
 #: app/utils/route_helpers.py:43
 msgid "Operation successful"
