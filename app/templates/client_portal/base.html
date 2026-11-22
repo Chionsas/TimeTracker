@@ -262,15 +262,21 @@
                     <a href="{{ url_for('client_portal.dashboard') }}" class="client-portal-nav-item {% if current_endpoint == 'client_portal.dashboard' %}active{% endif %}">
                         <i class="fas fa-home mr-2"></i>{{ _('Dashboard') }}
                     </a>
+                    {% if portal_sections.projects %}
                     <a href="{{ url_for('client_portal.projects') }}" class="client-portal-nav-item {% if current_endpoint == 'client_portal.projects' %}active{% endif %}">
                         <i class="fas fa-folder-open mr-2"></i>{{ _('Projects') }}
                     </a>
+                    {% endif %}
+                    {% if portal_sections.invoices %}
                     <a href="{{ url_for('client_portal.invoices') }}" class="client-portal-nav-item {% if current_endpoint == 'client_portal.invoices' or current_endpoint == 'client_portal.view_invoice' %}active{% endif %}">
                         <i class="fas fa-file-invoice mr-2"></i>{{ _('Invoices') }}
                     </a>
+                    {% endif %}
+                    {% if portal_sections.time_entries %}
                     <a href="{{ url_for('client_portal.time_entries') }}" class="client-portal-nav-item {% if current_endpoint == 'client_portal.time_entries' %}active{% endif %}">
                         <i class="fas fa-clock mr-2"></i>{{ _('Time Entries') }}
                     </a>
+                    {% endif %}
                     <a href="{{ url_for('client_portal.time_entry_approvals') }}" class="client-portal-nav-item relative {% if current_endpoint == 'client_portal.time_entry_approvals' or current_endpoint == 'client_portal.view_approval' %}active{% endif %}">
                         <i class="fas fa-check-circle mr-2"></i>{{ _('Approvals') }}
                         {% if pending_approvals_count > 0 %}
@@ -298,9 +304,11 @@
                         </button>
                         <div class="absolute right-0 mt-2 w-48 bg-card-light dark:bg-card-dark rounded-lg shadow-lg border border-border-light dark:border-border-dark opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
                             <div class="py-1">
+                                {% if portal_sections.quotes %}
                                 <a href="{{ url_for('client_portal.quotes') }}" class="block px-4 py-2 text-sm text-text-light dark:text-text-dark hover:bg-background-light dark:hover:bg-background-dark {% if current_endpoint == 'client_portal.quotes' or current_endpoint == 'client_portal.view_quote' %}text-primary font-semibold{% endif %}">
                                     <i class="fas fa-file-signature mr-2"></i>{{ _('Quotes') }}
                                 </a>
+                                {% endif %}
                                 <a href="{{ url_for('client_portal.documents') }}" class="block px-4 py-2 text-sm text-text-light dark:text-text-dark hover:bg-background-light dark:hover:bg-background-dark {% if current_endpoint == 'client_portal.documents' %}text-primary font-semibold{% endif %}">
                                     <i class="fas fa-file-alt mr-2"></i>{{ _('Documents') }}
                                 </a>
@@ -354,15 +362,21 @@
             <a href="{{ url_for('client_portal.dashboard') }}" onclick="closeMobileMenu()" class="flex items-center px-5 py-3.5 rounded-lg transition-all duration-200 {% if current_endpoint == 'client_portal.dashboard' %}bg-primary/15 text-primary font-semibold shadow-sm{% else %}text-text-light dark:text-text-dark hover:bg-background-light dark:hover:bg-background-dark hover:translate-x-1{% endif %}">
                 <i class="fas fa-home w-5 mr-3"></i>{{ _('Dashboard') }}
             </a>
+            {% if portal_sections.projects %}
             <a href="{{ url_for('client_portal.projects') }}" onclick="closeMobileMenu()" class="flex items-center px-5 py-3.5 rounded-lg transition-all duration-200 {% if current_endpoint == 'client_portal.projects' %}bg-primary/15 text-primary font-semibold shadow-sm{% else %}text-text-light dark:text-text-dark hover:bg-background-light dark:hover:bg-background-dark hover:translate-x-1{% endif %}">
                 <i class="fas fa-folder-open w-5 mr-3"></i>{{ _('Projects') }}
             </a>
+            {% endif %}
+            {% if portal_sections.invoices %}
             <a href="{{ url_for('client_portal.invoices') }}" onclick="closeMobileMenu()" class="flex items-center px-5 py-3.5 rounded-lg transition-all duration-200 {% if current_endpoint == 'client_portal.invoices' or current_endpoint == 'client_portal.view_invoice' %}bg-primary/15 text-primary font-semibold shadow-sm{% else %}text-text-light dark:text-text-dark hover:bg-background-light dark:hover:bg-background-dark hover:translate-x-1{% endif %}">
                 <i class="fas fa-file-invoice w-5 mr-3"></i>{{ _('Invoices') }}
             </a>
+            {% endif %}
+            {% if portal_sections.time_entries %}
             <a href="{{ url_for('client_portal.time_entries') }}" onclick="closeMobileMenu()" class="flex items-center px-5 py-3.5 rounded-lg transition-all duration-200 {% if current_endpoint == 'client_portal.time_entries' %}bg-primary/15 text-primary font-semibold shadow-sm{% else %}text-text-light dark:text-text-dark hover:bg-background-light dark:hover:bg-background-dark hover:translate-x-1{% endif %}">
                 <i class="fas fa-clock w-5 mr-3"></i>{{ _('Time Entries') }}
             </a>
+            {% endif %}
             <a href="{{ url_for('client_portal.time_entry_approvals') }}" onclick="closeMobileMenu()" class="flex items-center px-5 py-3.5 rounded-lg relative transition-all duration-200 {% if current_endpoint == 'client_portal.time_entry_approvals' or current_endpoint == 'client_portal.view_approval' %}bg-primary/15 text-primary font-semibold shadow-sm{% else %}text-text-light dark:text-text-dark hover:bg-background-light dark:hover:bg-background-dark hover:translate-x-1{% endif %}">
                 <i class="fas fa-check-circle w-5 mr-3"></i>{{ _('Approvals') }}
                 {% if pending_approvals_count > 0 %}
@@ -384,9 +398,11 @@
                 <i class="fas fa-comments w-5 mr-3"></i>{{ _('Messages') }}
             </a>
             <div class="border-t border-border-light dark:border-border-dark my-3"></div>
+            {% if portal_sections.quotes %}
             <a href="{{ url_for('client_portal.quotes') }}" onclick="closeMobileMenu()" class="flex items-center px-5 py-3.5 rounded-lg text-text-light dark:text-text-dark hover:bg-background-light dark:hover:bg-background-dark transition-all duration-200 hover:translate-x-1">
                 <i class="fas fa-file-signature w-5 mr-3"></i>{{ _('Quotes') }}
             </a>
+            {% endif %}
             <a href="{{ url_for('client_portal.documents') }}" onclick="closeMobileMenu()" class="flex items-center px-5 py-3.5 rounded-lg text-text-light dark:text-text-dark hover:bg-background-light dark:hover:bg-background-dark transition-all duration-200 hover:translate-x-1">
                 <i class="fas fa-file-alt w-5 mr-3"></i>{{ _('Documents') }}
             </a>

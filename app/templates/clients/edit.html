@@ -176,6 +176,13 @@
                                     {{ _('Allow clients to report bugs and issues through the portal') }}
                                 </p>
                             </div>
+                            {% if current_user.is_admin %}
+                            <div class="mt-4">
+                                <a href="{{ url_for('client_portal_customization.edit_customization', client_id=client.id) }}" class="text-sm text-primary hover:underline">
+                                    <i class="fas fa-sliders-h mr-1"></i>{{ _('Portal sections this client sees') }}
+                                </a>
+                            </div>
+                            {% endif %}
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
                                     <label for="portal_username" class="form-label">{{ _('Portal Username') }}</label>

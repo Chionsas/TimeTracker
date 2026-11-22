@@ -30,6 +30,7 @@ from app.models import (
     VALID_WIDGET_IDS,
     Client,
     ClientAttachment,
+    ClientPortalCustomization,
     ClientPortalDashboardPreference,
     Comment,
     Contact,
@@ -200,6 +201,22 @@ def get_current_client():
     return None
 
 
+PORTAL_SECTIONS = ("projects", "invoices", "time_entries", "quotes")
+
+
+def get_portal_sections(client):
+    """Which optional sections the client sees, as set in the admin's portal
+    customization for that client; all of them when nothing is saved."""
+    customization = ClientPortalCustomization.query.filter_by(client_id=client.id).first() if client else None
+    return {section: customization is None or getattr(customization, f"show_{section}") for section in PORTAL_SECTIONS}
+
+
+def require_portal_section(client, section):
+    """404 for a section switched off for this client, as if it did not exist."""
+    if not get_portal_sections(client)[section]:
+        abort(404)
+
+
 # Make get_current_client available to templates
 @client_portal_bp.app_context_processor
 def inject_get_current_client():
@@ -228,6 +245,7 @@ def inject_get_current_client():
 
     return dict(
         get_current_client=get_current_client,
+        portal_sections=get_portal_sections(client),
         pending_approvals_count=pending_approvals_count,
         unread_notifications_count=unread_notifications_count,
     )
@@ -589,6 +607,10 @@ def dashboard():
     # Dashboard widget layout (customizable)
     user_id = session.get("_user_id")
     widget_ids, widget_order = get_effective_widget_layout(client.id, user_id)
+    # The projects, invoices and time_entries widgets belong to the section of the same name.
+    sections = get_portal_sections(client)
+    widget_ids = [w for w in widget_ids if sections.get(w, True)]
+    widget_order = [w for w in widget_order if sections.get(w, True)]
 
     return render_template(
         "client_portal/dashboard.html",
@@ -679,6 +701,7 @@ def projects():
     if not isinstance(result, Client):
         return result
     client = result
+    require_portal_section(client, "projects")
     portal_data = get_portal_data(client)
 
     if not portal_data:
@@ -705,6 +728,7 @@ def invoices():
     if not isinstance(result, Client):
         return result
     client = result
+    require_portal_section(client, "invoices")
     portal_data = get_portal_data(client)
 
     if not portal_data:
@@ -734,6 +758,7 @@ def view_invoice(invoice_id):
     if not isinstance(result, Client):
         return result
     client = result
+    require_portal_section(client, "invoices")
 
     # Verify invoice belongs to this client
     invoice = Invoice.query.get_or_404(invoice_id)
@@ -751,6 +776,7 @@ def quotes():
     if not isinstance(result, Client):
         return result
     client = result
+    require_portal_section(client, "quotes")
 
     # Get quotes visible to client
     quotes_list = (
@@ -767,6 +793,7 @@ def view_quote(quote_id):
     if not isinstance(result, Client):
         return result
     client = result
+    require_portal_section(client, "quotes")
 
     # Verify quote belongs to this client and is visible
     quote = Quote.query.get_or_404(quote_id)
@@ -784,6 +811,7 @@ def time_entries():
     if not isinstance(result, Client):
         return result
     client = result
+    require_portal_section(client, "time_entries")
     portal_data = get_portal_data(client)
 
     if not portal_data:
@@ -1125,6 +1153,7 @@ def accept_quote(quote_id):
     if not isinstance(result, Client):
         return result
     client = result
+    require_portal_section(client, "quotes")
 
     quote = Quote.query.get_or_404(quote_id)
     if quote.client_id != client.id or not quote.visible_to_client:
@@ -1171,6 +1200,7 @@ def sign_quote(quote_id):
     if not isinstance(result, Client):
         return result
     client = result
+    require_portal_section(client, "quotes")
 
     quote = Quote.query.get_or_404(quote_id)
     if quote.client_id != client.id or not quote.visible_to_client:
@@ -1226,6 +1256,7 @@ def reject_quote(quote_id):
     if not isinstance(result, Client):
         return result
     client = result
+    require_portal_section(client, "quotes")
 
     quote = Quote.query.get_or_404(quote_id)
     if quote.client_id != client.id or not quote.visible_to_client:
@@ -1278,6 +1309,7 @@ def pay_invoice(invoice_id):
     if not isinstance(result, Client):
         return result
     client = result
+    require_portal_section(client, "invoices")
 
     invoice = Invoice.query.get_or_404(invoice_id)
     if invoice.client_id != client.id:
@@ -1307,6 +1339,7 @@ def checkout_invoice(invoice_id):
     if not isinstance(result, Client):
         return result
     client = result
+    require_portal_section(client, "invoices")
 
     invoice = Invoice.query.get_or_404(invoice_id)
     if invoice.client_id != client.id:
@@ -1377,6 +1410,7 @@ def invoice_pdf(invoice_id):
     if not isinstance(result, Client):
         return result
     client = result
+    require_portal_section(client, "invoices")
 
     invoice = Invoice.query.get_or_404(invoice_id)
     if invoice.client_id != client.id:
@@ -1421,6 +1455,7 @@ def project_comments(project_id):
     if not isinstance(result, Client):
         return result
     client = result
+    require_portal_section(client, "projects")
 
     project = Project.query.get_or_404(project_id)
     if project.client_id != client.id:

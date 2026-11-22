@@ -26646,6 +26646,10 @@ msgstr "Įjungti pranešimus apie problemas"
 msgid "Allow clients to report bugs and issues through the portal"
 msgstr "Leisti klientams pranešti apie klaidas ir problemas per portalą"
 
+#: app/templates/clients/edit.html:182
+msgid "Portal sections this client sees"
+msgstr "Portalo skiltys, kurias mato klientas"
+
 #: app/templates/clients/edit.html:181
 msgid "Portal Username"
 msgstr "Portalo naudotojo vardas"
