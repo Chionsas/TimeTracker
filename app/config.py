@@ -2,6 +2,16 @@ import os
 from datetime import timedelta
 
 
+def _enabled_languages(languages: dict) -> dict:
+    """The subset of ``languages`` named in ENABLED_LANGUAGES (comma-separated codes, e.g. "en,lt").
+
+    Every language picker and the browser-language match offer only these. Unknown codes are
+    ignored; when none are left (unset, or only typos), every language stays on.
+    """
+    enabled = {code.strip() for code in os.getenv("ENABLED_LANGUAGES", "").split(",") if code.strip()}
+    return {code: name for code, name in languages.items() if code in enabled} or languages
+
+
 def normalize_database_url(url: str | None) -> str | None:
     """Rewrite bare postgresql:// to postgresql+psycopg2:// for SQLAlchemy 2.1+.
 
@@ -343,6 +353,7 @@ class Config:
         "ar": "العربية",
         "he": "עברית",
     }
+    LANGUAGES = _enabled_languages(LANGUAGES)
     # RTL languages
     RTL_LANGUAGES = {"ar", "he"}
     BABEL_DEFAULT_LOCALE = os.getenv("DEFAULT_LOCALE", "en")

@@ -75,6 +75,8 @@ LANGUAGES = {
 BABEL_DEFAULT_LOCALE = 'en'
 ```
 
+To offer only some of them, set `ENABLED_LANGUAGES` to their codes, e.g. `ENABLED_LANGUAGES=en,lt`. Every language picker (profile, client form, client portal) and the browser-language match then use only those. Unknown codes are ignored; if none are valid, every language stays available.
+
 ### Locale Selection Priority
 
 The system determines the user's language in the following order:
